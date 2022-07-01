@@ -7,8 +7,7 @@
 ## Tech Stack
 
 - Language - Java11 (SpringBoot 2.7.0)
-  - Dependecies
-    - Lombok
+  - Library & Dependecy
     - SpringWeb
     - SpringDataJPA
     - QueryDSL
@@ -16,6 +15,7 @@
     - Thymeleaf
     - MySQL Driver
     - H2 Database
+    - Lombok
 - DB - H2 (Local), My SQL
 - Front - HTML5, CSS (Bootstrap)
 - View Template - Thymeleaf

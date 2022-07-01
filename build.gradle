@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 
+
 	// 타임 리프
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 

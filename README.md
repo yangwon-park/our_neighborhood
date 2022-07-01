@@ -6,7 +6,7 @@
 
 ## Tech Stack
 
-- Language - Java11 (SpringBoot 2.7.0)
+- Language - Java11 (SpringBoot 2.6.5)
   - Library & Dependecy
     - SpringWeb
     - SpringDataJPA
@@ -14,10 +14,10 @@
     - Hibernate Validation
     - Thymeleaf
     - MySQL Driver
-    - H2 Database
+    - H2 Database (1.4.200)
     - Lombok
 - DB - H2 (Local), My SQL
-- Front - HTML5, CSS (Bootstrap)
+- Front - HTML5, CSS (Bootstrap - 4.6.1)
 - View Template - Thymeleaf
 - CVS - Git (Github, SourceTree)
 

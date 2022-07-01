@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+# QueryDSL Q 클래스
+src/main/generated

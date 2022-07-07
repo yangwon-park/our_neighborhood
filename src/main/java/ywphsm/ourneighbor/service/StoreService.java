@@ -16,20 +16,24 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
 
+    // 매장 등록
     @Transactional
     public Long saveStore(Store store) {
         storeRepository.save(store);
         return store.getId();
     }
 
+    // 전체 매장 조회
     public List<Store> findStores() {
         return storeRepository.findAll();
     }
 
+    // 매장 하나 조회
     public Store findOne(Long storeId) {
         return storeRepository.findById(storeId).orElseThrow(NoSuchElementException::new);
     }
 
+    // 매장 이름으로 조회
     public List<Store> findByName(String name) {
         return storeRepository.findByName(name);
     }

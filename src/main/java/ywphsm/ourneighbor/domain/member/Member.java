@@ -4,17 +4,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ywphsm.ourneighbor.domain.BaseEntity;
+import ywphsm.ourneighbor.domain.BaseTimeEntity;
+import ywphsm.ourneighbor.domain.store.Store;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseEntity {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -48,4 +47,5 @@ public class Member extends BaseEntity {
     /*
         JPA 연관 관계 매핑
      */
+
 }

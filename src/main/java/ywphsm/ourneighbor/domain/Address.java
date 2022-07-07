@@ -11,7 +11,6 @@ import javax.persistence.Embeddable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
-
     private String city;        // 부산광역시
     private String street;      // 해운대구 좌동 ~~
     private String zipcode;     // 우편 번호

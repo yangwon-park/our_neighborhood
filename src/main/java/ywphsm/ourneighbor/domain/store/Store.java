@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -74,6 +75,10 @@ public class Store {
         this.address = address;
     }
 
+
+    /*
+        JPA 연관 관계 매핑
+     */
     /*
         Store (One) <==> Menu (Many)
         mappedBy가 없는 쪽이 연관 관계의 주인
@@ -86,6 +91,13 @@ public class Store {
      */
 //    @OneToMany(mappedBy = "store")
 //    private List<Menu> menuList = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+
+
 
 
     /*

@@ -118,6 +118,7 @@ class MenuServiceTest {
         }
     }
 
+    // 한 매장 내의 메뉴 불러오는 메소드
     private List<Menu> findMenuList(Store store) {
         return queryFactory
                 .select(menu)

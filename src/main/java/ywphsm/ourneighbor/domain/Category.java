@@ -20,9 +20,18 @@ public class Category {
     private Long id;
 
     private String name;
-//
-//    @ManyToOne
-//    private List<Store> stores = new ArrayList<>();
+
+
+
+    /*
+        JPA 연관 관계 매핑
+     */
+    /*
+        Store(다) : Category(다)
+     */
+
+
+
 
     /*
         계층형 구조 => 셀프로 양방향 연관 관계를 걸어줌
@@ -33,4 +42,6 @@ public class Category {
 
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
+
+    
 }

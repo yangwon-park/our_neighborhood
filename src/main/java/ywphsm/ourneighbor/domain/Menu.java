@@ -7,6 +7,7 @@ import lombok.ToString;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class Menu {
     @Column(name = "menu_id")
     private Long id;
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
     @NotNull

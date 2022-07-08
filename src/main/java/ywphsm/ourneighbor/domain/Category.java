@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
+    @NotBlank
     private String name;
 
 

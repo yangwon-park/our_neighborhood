@@ -35,5 +35,10 @@ public class Review extends BaseEntity{
     @JoinColumn(name = "store_id")
     private Store store;
 
-
+    public Review(String content, Integer rating, Member member, Store store) {
+        this.content = content;
+        this.rating = rating;
+        this.member = member;
+        this.store = store;
+    }
 }

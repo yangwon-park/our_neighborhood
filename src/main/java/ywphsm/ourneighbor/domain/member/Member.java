@@ -9,6 +9,7 @@ import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -35,12 +36,12 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     @NotEmpty
-    private int age;
-
-    @NotEmpty
     private String phoneNumber;
 
-    @NotEmpty
+    @NotNull
+    private int age;
+
+    @NotNull
     private int gender;         // 0 : 남자, 1 : 여자
 
     

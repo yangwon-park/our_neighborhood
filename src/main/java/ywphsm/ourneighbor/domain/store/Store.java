@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.BaseTimeEntity;
 import ywphsm.ourneighbor.domain.member.Member;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
         "breakStart", "breakEnd", "notice", "intro",
         "offDay", "status"
 })
-public class Store {
+public class Store extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -101,7 +102,7 @@ public class Store {
 
 
     /*
-        === 연관 관계 편의 메소드
+        === 연관 관계 편의 메소드 ===
      */
 //    public void addMenu(Menu menu) {
 //        menu.setStore(this);

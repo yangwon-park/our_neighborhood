@@ -51,10 +51,15 @@ public class Menu {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    // 데이터 필수 변경이므로 setter를 열었음
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
     /*
-        생성자를 강제하고 setter를 닫음으로써 값이 변경될 가능성을 차단함
-        수정이 필요한 경우의 메소드는 별도로 작성하자
-     */
+            생성자를 강제하고 setter를 닫음으로써 값이 변경될 가능성을 차단함
+            수정이 필요한 경우의 메소드는 별도로 작성하자
+         */
     public Menu(String name, Integer price, int discountPrice,
                 LocalDateTime discountStart, LocalDateTime discountEnd,
                 Store store) {

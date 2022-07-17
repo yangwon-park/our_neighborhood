@@ -53,17 +53,30 @@ public class Member extends BaseTimeEntity {
     @NotNull
     private int gender;         // 0 : 남자, 1 : 여자
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
 
-    public Member(String userId, String username, String password,
-                  String nickname, String email, String phoneNumber, int age, int gender) {
+    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
         this.userId = userId;
-        this.username = username;
         this.password = password;
+        this.username = username;
         this.nickname = nickname;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.age = age;
         this.gender = gender;
+    }
+
+    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender, MemberRole memberRole) {
+        this.userId = userId;
+        this.password = password;
+        this.username = username;
+        this.nickname = nickname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.age = age;
+        this.gender = gender;
+        this.memberRole = memberRole;
     }
 
     /*

@@ -1,11 +1,13 @@
 package ywphsm.ourneighbor;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,6 +17,12 @@ public class OurNeighborApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OurNeighborApplication.class, args);
+	}
+
+	// JPAQueryFactory 스프링 빈으로 등록
+	@Bean
+	JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
+		return new JPAQueryFactory(entityManager);
 	}
 
 	// 이게 있어야 작성자 수정자 받을 수 있음

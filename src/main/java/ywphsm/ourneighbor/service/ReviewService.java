@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Review;
-import ywphsm.ourneighbor.repository.ReviewRepository;
+import ywphsm.ourneighbor.repository.review.ReviewRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;

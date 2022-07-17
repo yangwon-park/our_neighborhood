@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.Address;
-import ywphsm.ourneighbor.domain.Menu;
-import ywphsm.ourneighbor.domain.QReview;
-import ywphsm.ourneighbor.domain.Review;
+import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.QMember;
 import ywphsm.ourneighbor.domain.store.QStore;
@@ -21,12 +18,17 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static ywphsm.ourneighbor.domain.QMenu.*;
 import static ywphsm.ourneighbor.domain.QReview.*;
 import static ywphsm.ourneighbor.domain.member.QMember.*;
 import static ywphsm.ourneighbor.domain.store.QStore.*;
@@ -113,6 +115,11 @@ class ReviewServiceTest {
         em.persist(menu4);
         em.persist(menu5);
 
+        store1.addMenu(menu1);
+        store1.addMenu(menu2);
+        store1.addMenu(menu3);
+        store2.addMenu(menu4);
+        store2.addMenu(menu5);
 
         Review review1 = new Review("맛있어요1", 5, member1, store1);
         Review review2 = new Review("맛있어요2", 4, member1, store1);
@@ -168,19 +175,33 @@ class ReviewServiceTest {
     }
 
     @Test
-    @DisplayName("첫번째 리뷰가 적힌 가게의 메뉴 불러오기")
+    @DisplayName("첫번째 리뷰가 적힌 가게의 메뉴 불러오기 - JPA")
     void findMenuWithReview() {
         Review firstReview = reviewService.findAllReviews().get(0);
 
-        Store store = firstReview.getStore();
+        Store st = firstReview.getStore();
 
-        System.out.println("store = " + store.getName());
-
-        List<Menu> menuList = store.getMenuList();
-        System.out.println("menuList = " + menuList);
+        List<Menu> menuList = st.getMenuList();
 
         for (Menu menu : menuList) {
             System.out.println("menu = " + menu);
+        }
+
+        assertThat(menuList.size()).isEqualTo(3);
+        assertThat(menuList).extracting("name")
+                .contains("마제 소바", "아우라 소바", "메밀 소바");
+    }
+
+    @Test
+    @DisplayName("첫번째 리뷰가 적힌 가게의 메뉴 불러오기 - Querydsl")
+    void findMenuWithReviewQuerydsl() {
+        List<Review> reviewList = queryFactory
+                .selectFrom(review)
+                .fetch();
+
+        List<Menu> menuList = reviewList.get(0).getStore().getMenuList();
+        for (Menu menu1 : menuList) {
+            System.out.println("menu1 = " + menu1);
         }
     }
 

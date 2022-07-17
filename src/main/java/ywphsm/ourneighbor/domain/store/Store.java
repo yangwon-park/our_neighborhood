@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ywphsm.ourneighbor.domain.Address;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
+import ywphsm.ourneighbor.domain.CategoryOfStore;
 import ywphsm.ourneighbor.domain.Menu;
 import ywphsm.ourneighbor.domain.member.Member;
 
@@ -88,9 +89,13 @@ public class Store extends BaseTimeEntity {
     @OneToMany(mappedBy = "store")
     private List<Menu> menuList = new ArrayList<>();
 
-    @ManyToOne
+    // Many To Many인듯
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    // Category와 양방향은 보류
+
 
 
     /*
@@ -115,16 +120,16 @@ public class Store extends BaseTimeEntity {
         this.address = address;
     }
 
-
-
-
     /*
         === 연관 관계 편의 메소드 ===
      */
-//    public void addMenu(Menu menu) {
-//        menu.setStore(this);
-//        menuList.add(menu);
-//    }
+    public void addMenu(Menu menu) {
+        menu.setStore(this);
+        menuList.add(menu);
+    }
+
+
+
 
 
     /*

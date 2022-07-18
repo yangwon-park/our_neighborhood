@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Menu;
-import ywphsm.ourneighbor.repository.MenuRepository;
+import ywphsm.ourneighbor.repository.menu.MenuRepository;
 
 import java.util.List;
 

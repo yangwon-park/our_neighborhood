@@ -3,6 +3,7 @@ package ywphsm.ourneighbor.domain.member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ywphsm.ourneighbor.domain.BaseEntity;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -16,6 +17,11 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {
+        "id", "userId", "password",
+        "username", "nickname", "email",
+        "phoneNumber", "age", "gender"
+})
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -36,19 +42,43 @@ public class Member extends BaseTimeEntity {
     private String nickname;
 
     @Email
-    @NotBlank
     private String email;
-
-    @NotNull
-    private int age;
 
     @NotBlank
     private String phoneNumber;
 
-    @NotBlank
+    @NotNull
+    private int age;
+
+    @NotNull
     private int gender;         // 0 : 남자, 1 : 여자
 
-    
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
+
+    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
+        this.userId = userId;
+        this.password = password;
+        this.username = username;
+        this.nickname = nickname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.age = age;
+        this.gender = gender;
+    }
+
+    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender, MemberRole memberRole) {
+        this.userId = userId;
+        this.password = password;
+        this.username = username;
+        this.nickname = nickname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.age = age;
+        this.gender = gender;
+        this.memberRole = memberRole;
+    }
+
     /*
         JPA 연관 관계 매핑
      */

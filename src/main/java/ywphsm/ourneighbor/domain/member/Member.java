@@ -8,7 +8,10 @@ import ywphsm.ourneighbor.domain.BaseTimeEntity;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -20,27 +23,29 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @NotEmpty
+    @NotBlank
     private String userId;
 
-    @NotEmpty
+    @NotBlank
     private String password;    // 암호화
 
-    @NotEmpty
+    @NotBlank
     private String username;
 
-    @NotEmpty
+    @NotBlank
     private String nickname;
 
+    @Email
+    @NotBlank
     private String email;
 
-    @NotEmpty
+    @NotNull
     private int age;
 
-    @NotEmpty
+    @NotBlank
     private String phoneNumber;
 
-    @NotEmpty
+    @NotBlank
     private int gender;         // 0 : 남자, 1 : 여자
 
     

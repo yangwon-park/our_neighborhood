@@ -56,6 +56,8 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
+    private boolean emailConfirm;
+
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
         this.userId = userId;
         this.password = password;
@@ -77,6 +79,22 @@ public class Member extends BaseTimeEntity {
         this.age = age;
         this.gender = gender;
         this.memberRole = memberRole;
+    }
+
+    //회원가입때 사용
+    public Member(String username, int age, String phoneNumber, int gender, String userId, String password, String email, String nickname) {
+        this.username = username;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.userId = userId;
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
+    }
+
+    public void emailConfirmSuccess() {
+        this.emailConfirm = true;
     }
 
     /*

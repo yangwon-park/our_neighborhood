@@ -33,6 +33,9 @@ dependencies {
 	// Spring Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+	// Spring Security
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+
 	// H2 데이터 베이스
 	runtimeOnly 'com.h2database:h2'
 
@@ -56,6 +59,9 @@ dependencies {
 	//테스트에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	//이메일인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

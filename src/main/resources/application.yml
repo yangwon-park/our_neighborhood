@@ -1,4 +1,21 @@
 spring:
+  messages:
+    basename: messages,errors
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hansungmoon1002@gmail.com
+    password: fklqiririikcrfxd
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
   #  profiles:
   #    active: local
   datasource:

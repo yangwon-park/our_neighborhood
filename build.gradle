@@ -25,6 +25,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
+//	annotationProcessor 'org.projectlombok:lombok' // 추가 lombok (cannot find symbol 에러)
 
 
 	// 타임 리프
@@ -33,12 +34,17 @@ dependencies {
 	// Spring Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+	// Spring Security
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+
 	// H2 데이터 베이스
 	runtimeOnly 'com.h2database:h2'
 
 	// MySQL
 	runtimeOnly 'mysql:mysql-connector-java'
 
+	//Gson
+	implementation 'com.google.code.gson:gson:2.8.7'
 
 	// QueryDSL
 	//Querydsl 추가
@@ -56,6 +62,9 @@ dependencies {
 	//테스트에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	//이메일인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

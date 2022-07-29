@@ -29,31 +29,31 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @NotBlank
+//    @NotBlank
     private String userId;
 
-    @NotBlank
+//    @NotBlank
     private String password;    // 암호화
 
-    @NotBlank
+//    @NotBlank
     private String username;
 
-    @NotBlank
+//    @NotBlank
     private String nickname;
 
-    @Email
+//    @Email
     private String email;
 
-    @NotBlank
+//    @NotBlank
     private String phoneNumber;
 
-    @NotNull
+//    @NotNull
     private int age;
 
-    @NotBlank
+//    @NotBlank
     private String birthDate;
 
-    @NotNull
+//    @NotNull
     private int gender;         // 0 : 남자, 1 : 여자
 
     @Enumerated(EnumType.STRING)
@@ -97,15 +97,25 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    public Member(Long id, String email, String username, int gender) {
-        this.id = id;
+    public Member(String email, String username, int gender) {
         this.email = email;
         this.username = username;
         this.gender = gender;
     }
 
+    //이메일 인증 성공
     public void emailConfirmSuccess() {
         this.emailConfirm = true;
+    }
+
+    //회원 수정
+    public void update(String nickname, String phoneNumber) {
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 
     /*

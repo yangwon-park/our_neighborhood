@@ -74,9 +74,10 @@ public class KakaoService {
         return access_Token;
     }
 
-    public void createKakaoUser(String token) {
+    public Member createKakaoUser(String token) {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
+        Member member = null;
 
         //access_token을 이용하여 사용자 정보 조회
         try {
@@ -128,9 +129,10 @@ public class KakaoService {
             log.info("nickname {}", username);
             log.info("gender {}", gender);
 
-            if (memberService.findOneV2(id) == null) {
-                Member member = new Member(id, email, username, gender);
-                member.emailConfirmSuccess();
+            member = new Member(email, username, gender);
+            Member findMember = memberService.findByEmail(email);
+            if (findMember == null) {
+                member.emailConfirmSuccess();   //이메일 인증 성공
                 memberService.join(member);
             }
             br.close();
@@ -139,5 +141,6 @@ public class KakaoService {
             e.printStackTrace();
         }
 
+        return member;
     }
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.KakaoService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
@@ -23,12 +24,12 @@ public class KakaoLoginController {
         log.info("code={}", code);
 
         String kakaoAccessToken = kakaoService.getKakaoAccessToken(code);
-        kakaoService.createKakaoUser(kakaoAccessToken);
+        Member kakaoUser = kakaoService.createKakaoUser(kakaoAccessToken);
 
         HttpSession session = request.getSession();
-//        session.setAttribute(SessionConst.LOGIN_MEMBER, kakaoUserId);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, kakaoUser);
 
-        return "home";
+        return "redirect:/";
     }
 
 }

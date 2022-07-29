@@ -9,6 +9,7 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.email.TokenService;
 
+import javax.persistence.EntityManager;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +24,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final EntityManager em;
 
     // 회원 가입
     @Transactional
@@ -36,10 +38,6 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
     }
 
-    public Member findOneV2(Long memberId) {
-        return memberRepository.findById(memberId).orElse(null);
-    }
-
     // 회원 전체 조회
     public List<Member> findMembers() {
         return memberRepository.findAll();
@@ -47,8 +45,7 @@ public class MemberService {
 
     // 닉네임 중복 체크
     public Member doubleCheck(String nickname) {
-        Optional<Member> findMembers = memberRepository.findByNickname(nickname);
-        return findMembers.orElse(null);
+        return memberRepository.findByNickname(nickname).orElse(null);
     }
 
     //생년월일 나이 계산
@@ -79,5 +76,31 @@ public class MemberService {
         return false;
     }
 
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElse(null);
+    }
 
+    //회원수정 변경 감지
+    @Transactional
+    public void update(Long id, String nickname, String phoneNumber) {
+        Member member = memberRepository.findById(id).get();
+
+        member.update(nickname, phoneNumber);
+        em.flush();
+        em.clear();
+    }
+
+    //비밀번호 확인
+    public boolean passwordCheck(String password, String beforePassword) {
+        return passwordEncoder.matches(beforePassword, password);
+    }
+
+    //비밀번호 수정 변경 감지
+    public void updatePassword(Long id, String encodedPassword) {
+        Member member = memberRepository.findById(id).get();
+
+        member.updatePassword(encodedPassword);
+        em.flush();
+        em.clear();
+    }
 }

@@ -65,6 +65,7 @@ public class SignUpController {
             return "redirect:/login";
         }
 
-        return "redirect:/";    //나중에 이메일 인증 실패 페이지로 바꿔야함(회원수정에서 재인증)
+        return "sign/emailFail";    //나중에 이메일 인증 실패 페이지로 바꿔야함(회원수정에서 재인증)
     }
+
 }

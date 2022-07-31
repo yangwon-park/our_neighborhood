@@ -57,6 +57,8 @@ public class Member extends BaseTimeEntity {
     private MemberRole memberRole;
 
     private boolean emailConfirm;
+    // 생성 메소드
+
 
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
         this.userId = userId;

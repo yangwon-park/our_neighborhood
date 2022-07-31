@@ -3,6 +3,7 @@ package ywphsm.ourneighbor.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
@@ -36,6 +37,11 @@ public class StoreService {
     // 매장 이름으로 조회
     public List<Store> findByName(String name) {
         return storeRepository.findByName(name);
+    }
+
+    // 검색어 포함 매장명 조회
+    public List<Store> searchByKeyword(StoreSearchCond cond) {
+        return storeRepository.searchByName(cond);
     }
 
 }

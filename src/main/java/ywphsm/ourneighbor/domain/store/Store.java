@@ -14,6 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,29 +38,27 @@ public class Store extends BaseTimeEntity {
     private String name;
 
     @NotNull
-    private Long longitude;                // 경도
+    private Double longitude;                // 경도
 
     @NotNull
-    private Long latitude;                 // 위도
+    private Double latitude;                 // 위도
 
     @NotBlank
     private String phoneNumber;
 
     @Column(name = "opening_time")
     @NotNull
-    private LocalDateTime openingTime;        // 여는 시간
+    private LocalTime openingTime;            // 여는 시간
 
     @Column(name = "closing_time")
     @NotNull
-    private LocalDateTime closingTime;        // 닫는 시간
+    private LocalTime closingTime;            // 닫는 시간
 
     @Column(name = "break_start")
-    @NotNull
-    private LocalDateTime breakStart;         // 쉬는 시간 시작
+    private LocalTime breakStart;             // 쉬는 시간 시작
 
     @Column(name = "break_end")
-    @NotNull
-    private LocalDateTime breakEnd;           // 쉬는 시간 끝
+    private LocalTime breakEnd;               // 쉬는 시간 끝
 
     private String notice;                    // 가게 소식
     private String intro;                     // 가게 소개
@@ -101,9 +100,9 @@ public class Store extends BaseTimeEntity {
     /*
         생성자
      */
-    public Store(String name, Long longitude, Long latitude,
-                 String phoneNumber, LocalDateTime openingTime, LocalDateTime closingTime,
-                 LocalDateTime breakStart, LocalDateTime breakEnd, String notice, String intro,
+    public Store(String name, Double longitude, Double latitude,
+                 String phoneNumber, LocalTime openingTime, LocalTime closingTime,
+                 LocalTime breakStart, LocalTime breakEnd, String notice, String intro,
                  Integer offDay, StoreStatus status, Address address) {
         this.name = name;
         this.longitude = longitude;

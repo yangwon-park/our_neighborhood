@@ -1,77 +1,30 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8"/>
-    <title>우리 동네</title>
-    <link href="../css/style.css" rel="stylesheet">
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8"> <link th:href="@{/css/bootstrap.min.css}"
+                                 href="css/bootstrap.min.css" rel="stylesheet">
 </head>
-<style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        overflow: hidden;
-    }
-
-    #map {
-        width: 100%;
-        height: 100%;
-    }
-</style>
 <body>
-<div>
-    <form th:object="${storeSearchCond}" class="form-inline" method="get">
-        <div class="form-group mb-2">
-            <input type="text" th:field="*{keyword}" class="formcontrol" placeholder="검색어"/>
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2>홈 화면</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg" type="button"
+                    th:onclick="|location.href='@{/sign_up}'|">
+                회원 가입
+            </button>
         </div>
-        <button type="submit" class="btn btn-primary mb-2">검색</button>
-    </form>
-</div>
-<!-- 지도를 만들 div -->
-<div class="container" id="map"></div>
-<p id="result"></p>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>
-<script>
-
-
-// 지도를 담을 div를 찾음
-let container = document.getElementById('map');
-
-// 지도에 관한 옵션 부여
-let options = {
-    center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
-    level: 1		// 확대 레벨
-};
-
-// 지도 생성
-let map = new kakao.maps.Map(container, options);
-
-if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition((position) => {
-        var lat = position.coords.latitude,
-            lon = position.coords.longitude;
-
-        var currentPosition = new kakao.maps.LatLng(lat, lon);
-
-        map.setCenter(currentPosition);
-    })
-} else {
-    var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-        message = 'geolocation을 사용할 수 없음'
-
-    map.setCenter(locPosition)
-}
-
-// ============================================================================================
-
-
-
-
-
-</script>
+        <div class="col">
+            <button class="w-100 btn btn-dark btn-lg"
+                    onclick="location.href='items.html'"
+                    th:onclick="|location.href='@{/sign_in}'|" type="button">
+                로그인
+            </button>
+        </div>
+    </div>
+    <hr class="my-4">
+</div> <!-- /container -->
 </body>
 </html>

@@ -23,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,18 +73,13 @@ class ReviewServiceTest {
         em.persist(member2);
         em.persist(member3);
 
-        Store store1 = new Store(
-                "칸다 소바", 123L, 123L, "010-1234-1234",
-                LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(),
-                "안녕하세요", "칸다 소바입니다.", null, StoreStatus.OPEN,
-                new Address("부산광역시", "해운대구", "123489")
-        );
-        Store store2 = new Store(
-                "맥도 날드", 123L, 123L, "010-1234-1234",
-                LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(),
-                "안녕하세요", "맥도날드입니다.", null, StoreStatus.OPEN,
-                new Address("부산광역시", "해운대구", "123489")
-        );
+        Store store1 = new Store("칸다 소바", 35.1612928, 129.1600985, "0517311660",
+                LocalTime.of(9, 00, 00), LocalTime.of(20, 00, 00), LocalTime.of(15, 30, 00), LocalTime.of(17, 00, 00),
+                null, "안녕하세요 칸다 소바입니다.", null, StoreStatus.OPEN, new Address("부산 광역시", "해운대구 구남로 30번길 8-3 1층", "48094"));
+
+        Store store2 = new Store("맥도날드", 35.1600985, 129.1596415, "07072091629",
+                LocalTime.of(00, 00, 00), LocalTime.of(00, 00, 00), null, null,
+                null, "맥도날드로 오세요.", null, StoreStatus.OPEN, new Address("부산 광역시", "해운대구 해운대로 570번길 51", "48094"));
 
         em.persist(store1);
         em.persist(store2);

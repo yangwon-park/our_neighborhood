@@ -1,7 +1,6 @@
 package ywphsm.ourneighbor.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -39,9 +38,9 @@ class StoreServiceTest {
         queryFactory = new JPAQueryFactory(em);
 
         Store store = new Store(
-                "칸다 소바", 123L, 123L, "010-1234-1234",
-                LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(),
-                "안녕하세요", "칸다 소바입니다.", null, StoreStatus.OPEN,
+                "명진 소바", 123.0, 123.0, "010-1234-1234",
+                LocalTime.now(), LocalTime.now(), LocalTime.now(), LocalTime.now(),
+                "안녕하세요", "명진 소바입니다.", null, StoreStatus.OPEN,
                 new Address("부산광역시", "해운대구", "123489")
         );
         em.persist(store);
@@ -51,8 +50,8 @@ class StoreServiceTest {
     @DisplayName("매장 등록")
     void saveStore() {
         Store store = new Store(
-                "맥도날드", 123L, 123L, "010-1234-1234",
-                LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(),
+                "맥도날드", 123.0, 123.0, "010-1234-1234",
+                LocalTime.now(), LocalTime.now(), LocalTime.now(), LocalTime.now(),
                 "안녕하세요", "맥도날드입니다.", null, StoreStatus.OPEN,
                 new Address("부산광역시", "해운대구", "123489")
         );
@@ -86,6 +85,16 @@ class StoreServiceTest {
         assertThat(stores.size()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("검색어가 매장명에 포함되는 매장 찾기")
+    void searchStoreByName() {
+        String cond = "소바";
+        List<Store> stores = storeService.searchByKeyword(cond);
 
+        assertThat(stores.size()).isEqualTo(2);
 
+        for (Store store1 : stores) {
+            System.out.println("store1 = " + store1.getName());
+        }
+    }
 }

@@ -56,6 +56,8 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
+    // 생성 메소드
+
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
         this.userId = userId;
         this.password = password;

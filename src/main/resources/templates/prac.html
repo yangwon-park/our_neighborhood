@@ -1,10 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="layout/header :: common_header(~{::title}) ">
   <meta charset="utf-8"/>
-  <title>우리 동네</title>
-  <link href="../css/style.css" rel="stylesheet">
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <title>우리 동네 연습 모드</title>
 </head>
 <body>
 <div class="container">
@@ -33,5 +31,8 @@
     </table>
   </div>
 </div> <!-- /container -->
+<footer th:replace="layout/footer :: common_footer">
+
+</footer>
 </body>
 </html>

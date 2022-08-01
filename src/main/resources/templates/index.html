@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="layout/header :: common_header(~{::title}) ">
   <meta charset="utf-8"/>
-  <title>우리 동네</title>
-  <link href="../css/style.css" rel="stylesheet">
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <title>우리 동네 홈화면</title>
+<!--  <link href="../css/style.css" rel="stylesheet">-->
+<!--  <link href="../css/bootstrap.min.css" rel="stylesheet">-->
 </head>
 <style>
     html, body {
@@ -32,9 +32,9 @@
   </form>
 </div>
 <!-- 지도를 만들 div -->
-<div class="container" id="map"></div>
+<div id="map"></div>
 <p id="result"></p>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>
+<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>-->
 <script>
 
 
@@ -68,3 +68,5 @@ if ('geolocation' in navigator) {
 
 // ============================================================================================
 </script>
+</body>
+</html>

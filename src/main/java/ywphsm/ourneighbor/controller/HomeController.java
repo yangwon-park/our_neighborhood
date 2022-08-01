@@ -22,6 +22,7 @@ public class HomeController {
     private final MemberService memberService;
     private final StoreService storeService;
 
+    // 검색 뷰페이지 임시
     @GetMapping("/prac")
     public String prac(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         List<Store> stores = storeService.searchByKeyword(storeSearchCond);
@@ -35,12 +36,7 @@ public class HomeController {
         List<Store> stores = storeService.searchByKeyword(storeSearchCond);
         model.addAttribute("stores", stores);
 
-        return "home";
+        return "index";
     }
 
-    @PostMapping("/")
-    public String home() {
-
-        return "redirect:/home";
-    }
 }

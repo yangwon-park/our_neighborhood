@@ -3,8 +3,6 @@
 <head th:replace="layout/header :: common_header(~{::title}) ">
   <meta charset="utf-8"/>
   <title>우리 동네 홈화면</title>
-<!--  <link href="../css/style.css" rel="stylesheet">-->
-<!--  <link href="../css/bootstrap.min.css" rel="stylesheet">-->
 </head>
 <style>
     html, body {
@@ -23,7 +21,7 @@
     }
 </style>
 <body>
-<div>
+<div class="container-fluid">
   <form th:object="${storeSearchCond}" class="form-inline" method="get">
     <div class="form-group mb-2">
       <input type="text" th:field="*{keyword}" class="formcontrol" placeholder="검색어"/>
@@ -32,41 +30,63 @@
   </form>
 </div>
 <!-- 지도를 만들 div -->
-<div id="map"></div>
+<div class="container-fluid" id="map"></div>
 <p id="result"></p>
 <!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>-->
-<script>
+<script th:inline="javascript">
+  // 지도를 담을 div를 찾음
+  let mapContainer = document.getElementById('map');
 
+  // 지도에 관한 옵션 부여
+  let mapOptions = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
+      level: 1		// 확대 레벨
+  };
 
-// 지도를 담을 div를 찾음
-let container = document.getElementById('map');
+  // 지도 생성
+  let map = new kakao.maps.Map(mapContainer, mapOptions);
 
-// 지도에 관한 옵션 부여
-let options = {
-    center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
-    level: 1		// 확대 레벨
-};
+  // 현재 위치로 맵 중심 정렬
+  if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+          var lat = position.coords.latitude,
+              lon = position.coords.longitude;
 
-// 지도 생성
-let map = new kakao.maps.Map(container, options);
+          var currentPosition = new kakao.maps.LatLng(lat, lon);
 
-if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition((position) => {
-        var lat = position.coords.latitude,
-            lon = position.coords.longitude;
+          map.setCenter(currentPosition);
+      })
+  } else {
+      var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+          message = 'geolocation을 사용할 수 없음'
 
-        var currentPosition = new kakao.maps.LatLng(lat, lon);
-
-        map.setCenter(currentPosition);
-    })
-} else {
-    var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-        message = 'geolocation을 사용할 수 없음'
-
-    map.setCenter(locPosition)
-}
+      map.setCenter(locPosition)
+  }
 
 // ============================================================================================
+
+  var bounds = new kakao.maps.LatLngBounds();
+
+  [# th:each="store : ${stores}"]
+  var lat = [[${store.lat}]]
+  var lon = [[${store.lon}]]
+
+  var locPosition = new kakao.maps.LatLng(lat, lon);
+  var message = '<div style="padding: 5px;">여기에 계신가요?!</div>';
+
+  displayMarker(locPosition, message);
+  bounds.extend(new kakao.maps.LatLng(lat, lon));
+  [/]
+
+  map.setBounds(bounds);
+
+  function displayMarker(locPosition, message) {
+      let marker = new kakao.maps.Marker({
+          map: map,
+          position: locPosition
+      });
+  }
+
 </script>
 </body>
 </html>

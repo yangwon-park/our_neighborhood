@@ -25,7 +25,11 @@ dependencies {
 
 	// Spring Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
+  
+  // Lombok
+	compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+  
 	// Spring Data JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
@@ -47,6 +51,8 @@ dependencies {
 	// MySQL
 	runtimeOnly 'mysql:mysql-connector-java'
 
+	//Gson
+	implementation 'com.google.code.gson:gson:2.8.7'
 
 	// QueryDSL
 	//Querydsl 추가

@@ -29,36 +29,39 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @NotBlank
+//    @NotBlank
     private String userId;
 
-    @NotBlank
+//    @NotBlank
     private String password;    // 암호화
 
-    @NotBlank
+//    @NotBlank
     private String username;
 
-    @NotBlank
+//    @NotBlank
     private String nickname;
 
-    @Email
+//    @Email
     private String email;
 
-    @NotBlank
+//    @NotBlank
     private String phoneNumber;
 
-    @NotNull
+//    @NotNull
     private int age;
 
-    @NotNull
+//    @NotBlank
+    private String birthDate;
+
+//    @NotNull
     private int gender;         // 0 : 남자, 1 : 여자
 
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
     private boolean emailConfirm;
-    // 생성 메소드
 
+    // 생성 메소드
 
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
         this.userId = userId;
@@ -84,8 +87,10 @@ public class Member extends BaseTimeEntity {
     }
 
     //회원가입때 사용
-    public Member(String username, int age, String phoneNumber, int gender, String userId, String password, String email, String nickname) {
+
+    public Member(String username, String birthDate, int age, String phoneNumber, int gender, String userId, String password, String email, String nickname) {
         this.username = username;
+        this.birthDate = birthDate;
         this.age = age;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
@@ -95,8 +100,28 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
+
+    public Member(String email, String username, int gender) {
+        this.email = email;
+        this.username = username;
+        this.gender = gender;
+    }
+
+    //이메일 인증 성공
+
     public void emailConfirmSuccess() {
         this.emailConfirm = true;
+    }
+
+
+    //회원 수정
+    public void update(String nickname, String phoneNumber) {
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 
     /*

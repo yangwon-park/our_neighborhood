@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {
-        "id", "name", "longitude", "latitude",
+        "id", "name", "lon", "lat",
         "phoneNumber", "openingTime", "closingTime",
         "breakStart", "breakEnd", "notice", "intro",
         "offDay", "status"

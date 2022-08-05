@@ -26,16 +26,12 @@ dependencies {
 	// Spring Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
   
-  // Lombok
+  	// Lombok
 	compileOnly 'org.projectlombok:lombok'
-  annotationProcessor 'org.projectlombok:lombok'
+  	annotationProcessor 'org.projectlombok:lombok'
   
 	// Spring Data JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-	// Lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
 
 	// 타임 리프
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'

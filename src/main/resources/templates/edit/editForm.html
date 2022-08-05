@@ -1,18 +1,17 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}) ">
+    <meta charset="utf-8"/>
+    <title>회원 수정</title>
     <style>
- .container {
- max-width: 560px;
- }
- .field-error {
- border-color: #dc3545;
- color: #dc3545;
- }
- </style>
+     .container {
+     max-width: 560px;
+     }
+     .field-error {
+     border-color: #dc3545;
+     color: #dc3545;
+     }
+    </style>
 </head>
 <body>
 <div class="container">

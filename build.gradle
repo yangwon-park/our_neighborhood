@@ -26,15 +26,12 @@ dependencies {
 	// Spring Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
   
-  // Lombok
+  	// Lombok
 	compileOnly 'org.projectlombok:lombok'
-  annotationProcessor 'org.projectlombok:lombok'
+  	annotationProcessor 'org.projectlombok:lombok'
   
 	// Spring Data JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-	// Lombok
-	compileOnly 'org.projectlombok:lombok'
 
 	// 타임 리프
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -63,9 +60,6 @@ dependencies {
 
 	// p6spy
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
-
-	// lombok
-	annotationProcessor 'org.projectlombok:lombok'
 
 	// spring-boot-start-test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

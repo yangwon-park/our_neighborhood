@@ -61,6 +61,8 @@ public class Member extends BaseTimeEntity {
 
     private boolean emailConfirm;
 
+    // 생성 메소드
+
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
         this.userId = userId;
         this.password = password;
@@ -85,6 +87,7 @@ public class Member extends BaseTimeEntity {
     }
 
     //회원가입때 사용
+
     public Member(String username, String birthDate, int age, String phoneNumber, int gender, String userId, String password, String email, String nickname) {
         this.username = username;
         this.birthDate = birthDate;
@@ -97,6 +100,7 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
+
     public Member(String email, String username, int gender) {
         this.email = email;
         this.username = username;
@@ -104,9 +108,11 @@ public class Member extends BaseTimeEntity {
     }
 
     //이메일 인증 성공
+
     public void emailConfirmSuccess() {
         this.emailConfirm = true;
     }
+
 
     //회원 수정
     public void update(String nickname, String phoneNumber) {

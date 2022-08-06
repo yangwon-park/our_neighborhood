@@ -44,4 +44,9 @@ public class StoreService {
         return storeRepository.searchByName(cond);
     }
 
+    // 검색어 포함 매장명 조회
+    public List<Store> searchByKeyword(String keyword) {
+        return storeRepository.searchByKeyword(keyword);
+    }
+
 }

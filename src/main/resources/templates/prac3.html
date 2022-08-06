@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}) ">
+    <meta charset="utf-8"/>
+    <title>연습 - 지도 검색 불러오기</title>
+</head>
+<style>
+    .map_wrap, .map_wrap * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+        font-size: 12px;
+    }
+
+    .map_wrap a, .map_wrap a:hover, .map_wrap a:active {
+        color: #000;
+        text-decoration: none;
+    }
+
+    .map_wrap {
+        position: relative;
+        width: 100%;
+        height: 500px;
+    }
+
+    #menu_wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 250px;
+        margin: 10px 0 30px 10px;
+        padding: 5px;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.7);
+        z-index: 1;
+        font-size: 12px;
+        border-radius: 10px;
+    }
+
+    .bg_white {
+        background: #fff;
+    }
+
+    #menu_wrap hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 2px solid #5F5F5F;
+        margin: 3px 0;
+    }
+
+    #menu_wrap .option {
+        text-align: center;
+    }
+
+    #menu_wrap .option p {
+        margin: 10px 0;
+    }
+
+    #menu_wrap .option button {
+        margin-left: 5px;
+    }
+</style>
+<body>
+<div class="map_wrap">
+    <!--  지도 div-->
+    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+
+    <div id="menu_wrap" class="bg_white">
+        <div class="option">
+            <div>
+                <input type="text" id="keyword">
+                <button id="searchBtn" class="btn btn-primary">검색 버튼</button>
+            </div>
+        </div>
+    </div>
+</div>
+<p id="result"></p>
+<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>-->
+<script th:inline="javascript">
+
+    // 지도를 담을 div를 찾음
+    var mapContainer = document.getElementById('map');
+
+    // 지도에 관한 옵션 부여
+    var mapOptions = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
+        level: 1		// 확대 레벨
+    };
+
+    // 지도 생성
+    var map = new kakao.maps.Map(mapContainer, mapOptions);
+
+    // 현재 위치로 맵 중심 정렬
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            var lat = position.coords.latitude,
+                lon = position.coords.longitude;
+
+            var currentPosition = new kakao.maps.LatLng(lat, lon);
+
+            map.setCenter(currentPosition);
+        })
+    } else {
+        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+            message = 'geolocation을 사용할 수 없음'
+
+        map.setCenter(locPosition)
+    }
+
+    // ============================================================================================
+
+    // 마커를 담을 배열
+    var markers = [];
+    var locs = []
+
+    // 메뉴를 찾는 함수
+    function findStores() {
+        const keyword = document.getElementById('keyword').value;
+
+        if (!keyword.replace(/^\s+|\s+$/g, '')) {
+            alert('키워드를 입력해주세요!');
+            return false;
+        }
+
+        axios({
+            method: "get",
+            url: "/searchStore",
+            params: {
+                keyword: keyword
+            }
+        })
+            .then((res) => {
+                console.log(res.data)
+                for (let i = 0; i < res.data.length; i++) {
+                    var lat = res.data[i].lat;
+                    var lon = res.data[i].lon;
+
+                    var locPosition = new kakao.maps.LatLng(lat, lon);
+                    locs.push(locPosition)
+                }
+
+                displayMarker(locs);
+                const input = document.getElementById('keyword');
+                input.value = null;
+            });
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', findStores);
+
+    function displayMarker(locs) {
+
+        removeMarker();
+
+        var bounds = new kakao.maps.LatLngBounds();
+
+        for (var i = 0; i < locs.length; i++) {
+            var placePosition = locs[i],
+                marker = addMarker(placePosition, i)
+            console.log(locs[i])
+            console.log(i)
+
+            bounds.extend(placePosition);
+        }
+
+        map.setBounds(bounds);
+    }
+
+    function addMarker(position) {
+        var marker = new kakao.maps.Marker({
+            position: position
+        });
+
+        marker.setMap(map);
+        markers.push(marker);
+
+        return marker;
+    }
+
+
+    function removeMarker() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+
+        markers = [];
+        locs = [];
+    }
+
+</script>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
+</body>
+</html>

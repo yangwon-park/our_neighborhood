@@ -8,4 +8,6 @@ import java.util.List;
 public interface StoreRepositoryCustom {
 
     List<Store> searchByName(StoreSearchCond cond);
+
+    List<Store> searchByKeyword(String keyword);
 }

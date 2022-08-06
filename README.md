@@ -8,17 +8,25 @@
 
 - Language - Java11 (SpringBoot 2.6.5)
   - Library & Dependecy
-    - SpringWeb
-    - SpringDataJPA
-    - QueryDSL
-    - Hibernate Validation
-    - Thymeleaf
-    - MySQL Driver
+    - Spring Web (2.6.5)
+    - SpringDataJPA (2.6.5)
+    - Spring Security (2.6.5)
+    - Spring Validation (2.6.5)
+    - Thymeleaf (2.6.5)
+    - QueryDSL (5.0.0)
+    - MySQL Driver (8.0.28)
     - H2 Database (1.4.200)
-    - Lombok
+    - Lombok (1.18.22)
+    - gson (2.8.7)
 - DB - H2 (Local), My SQL
-- Front - HTML5, CSS (Bootstrap - 4.6.1)
+- Front
+  - HTML5, CSS (Bootstrap - 5.2.0)
+  - axios(0.27.2)
+
 - View Template - Thymeleaf
 - CVS - Git (Github, SourceTree)
+- ETC
+  - p6spy (1.5.8) - jpa 쿼리 파라미터 확인 용 라이브러리
+
 
  

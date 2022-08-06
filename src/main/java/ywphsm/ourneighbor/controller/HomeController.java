@@ -35,6 +35,26 @@ public class HomeController {
         return "prac";
     }
 
+
+    // 검색 뷰페이지 임시
+    @GetMapping("/prac2")
+    public String prac2(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
+        return "prac2";
+    }
+
+    @PostMapping("/prac2")
+    public String prac2(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
+        List<Store> stores = storeService.searchByKeyword(storeSearchCond);
+        System.out.println("storeSearchCond = " + storeSearchCond.getKeyword());
+        for (Store store : stores) {
+            System.out.println("store = " + store.getName());
+        }
+        model.addAttribute("stores", stores);
+
+        return "prac2";
+    }
+
+
     @GetMapping("/loginHome")
     public String loginhome(
             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
@@ -49,6 +69,7 @@ public class HomeController {
         return "loginHome";
     }
     
+
     @GetMapping("/")
     public String home(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         List<Store> stores = storeService.searchByKeyword(storeSearchCond);

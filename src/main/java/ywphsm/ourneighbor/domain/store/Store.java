@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {
-        "id", "name", "longitude", "latitude",
+        "id", "name", "lon", "lat",
         "phoneNumber", "openingTime", "closingTime",
         "breakStart", "breakEnd", "notice", "intro",
         "offDay", "status"
@@ -38,12 +38,11 @@ public class Store extends BaseTimeEntity {
     private String name;
 
     @NotNull
-    private Double longitude;                // 경도
+    private Double lon;                // 경도
 
     @NotNull
-    private Double latitude;                 // 위도
+    private Double lat;                 // 위도
 
-    @NotBlank
     private String phoneNumber;
 
     @Column(name = "opening_time")
@@ -100,13 +99,13 @@ public class Store extends BaseTimeEntity {
     /*
         생성자
      */
-    public Store(String name, Double longitude, Double latitude,
+    public Store(String name, Double lat, Double lon,
                  String phoneNumber, LocalTime openingTime, LocalTime closingTime,
                  LocalTime breakStart, LocalTime breakEnd, String notice, String intro,
                  Integer offDay, StoreStatus status, Address address) {
         this.name = name;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.lat = lat;
+        this.lon = lon;
         this.phoneNumber = phoneNumber;
         this.openingTime = openingTime;
         this.closingTime = closingTime;

@@ -102,23 +102,6 @@ public class MemberService {
         member.updatePassword(encodedPassword);
         em.flush();
         em.clear();
-        Optional<Member> findMembers = memberRepository.findByNickname(nickname);
-        return findMembers.orElse(null);
     }
 
-    //비밀번호 인코딩
-    public String encodedPassword(String password) {
-        return passwordEncoder.encode(password);
-    }
-
-    //이메일 토큰만료, 인증된 이메일로 변경
-    @Transactional
-    public void confirmEmail(String tokenId) {
-        EmailToken findToken = tokenService.findByIdAndExpirationDateAfterAndExpired(tokenId);
-        if (findToken != null) {
-            findToken.useToken();   // 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true로 변경
-            Member findMember = findOne(findToken.getMemberId());
-            findMember.emailConfirmSuccess(); // 유저의 이메일 인증 값 변경 로직을 구현해주면 된다.
-        }
-    }
 }

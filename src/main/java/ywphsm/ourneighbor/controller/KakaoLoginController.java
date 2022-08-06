@@ -19,8 +19,13 @@ public class KakaoLoginController {
 
     private final KakaoService kakaoService;
 
-    @GetMapping("/sign_in/kakao")
-    public String kakaoIndex(@RequestParam String code, HttpServletRequest request) {
+    @GetMapping("/login/kakaoUrl")
+    public String googleUrl() {
+        return "redirect:https://kauth.kakao.com/oauth/authorize?client_id=cd429446ad94ee1e20c77038ad37b1a2&redirect_uri=http://localhost:8080/login/kakao&response_type=code";
+    }
+
+    @GetMapping("/login/kakao")
+    public String kakaoLogin(@RequestParam String code, HttpServletRequest request) {
         log.info("code={}", code);
 
         String kakaoAccessToken = kakaoService.getKakaoAccessToken(code);

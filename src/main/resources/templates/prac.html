@@ -18,12 +18,14 @@
     <table class="table table-striped">
       <thead>
       <tr>
+        <th>이미지</th>
         <th>#</th>
         <th>가게 이름</th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="store : ${stores}">
+        <td><i class="fas fa-home"></i></td>
         <td th:text="${store.id}"></td>
         <td th:text="${store.name}"></td>
       </tr>

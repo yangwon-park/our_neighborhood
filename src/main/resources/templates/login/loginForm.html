@@ -1,18 +1,17 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}) ">
+    <meta charset="utf-8"/>
+    <title>로그인</title>
     <style>
- .container {
- max-width: 560px;
- }
- .field-error {
- border-color: #dc3545;
- color: #dc3545;
- }
- </style>
+     .container {
+     max-width: 560px;
+     }
+     .field-error {
+     border-color: #dc3545;
+     color: #dc3545;
+     }
+     </style>
 </head>
 <body><div class="container">
     <div class="py-5 text-center">
@@ -51,9 +50,15 @@
     </form>
 
 <!-- 카카오 로그인 -->
-    <a class="p-2" href="https://kauth.kakao.com/oauth/authorize?client_id=cd429446ad94ee1e20c77038ad37b1a2&redirect_uri=http://localhost:8080/sign_in/kakao&response_type=code">
+    <a class="p-2" href="/login/kakaoUrl">
         <img th:src="@{/images/kakao_login_medium_wide.png}" style="height:60px"/>
     </a>
+
+    <!-- 구글 로그인 -->
+    <a class="p-2" href="/login/googleUrl">
+        <img th:src="@{/images/btn_google_signin.png}" style="height:60px"/>
+    </a>
+
 </div> <!-- /container -->
 </body>
 </html>

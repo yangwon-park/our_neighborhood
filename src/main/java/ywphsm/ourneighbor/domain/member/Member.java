@@ -100,12 +100,21 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-
+    //카카오 로그인시 openId 회원 저장
     public Member(String email, String username, int gender) {
         this.email = email;
         this.username = username;
         this.gender = gender;
     }
+
+    //구글 로그인시 openId 회원 저장
+    public Member(String email, String username, boolean emailConfirm) {
+        this.email = email;
+        this.username = username;
+        this.emailConfirm = emailConfirm;
+    }
+
+
 
     //이메일 인증 성공
 

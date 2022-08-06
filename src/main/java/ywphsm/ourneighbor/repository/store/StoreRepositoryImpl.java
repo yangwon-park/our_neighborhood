@@ -26,6 +26,15 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Store> searchByKeyword(String keyword) {
+        return queryFactory
+                .select(store)
+                .from(store)
+                .where(nameContains(keyword))
+                .fetch();
+    }
+
     private BooleanExpression nameContains(String name) {
         if (!StringUtils.hasText(name)) {
             return null;

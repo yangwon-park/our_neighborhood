@@ -70,7 +70,7 @@
     <div id="menu_wrap" class="bg_white">
         <div class="option">
             <div>
-                <input type="text" id="keyword">
+                <input type="text" id="keyword"/>
                 <button id="searchBtn" class="btn btn-primary">검색 버튼</button>
             </div>
         </div>
@@ -115,6 +115,13 @@
     var markers = [];
     var locs = []
 
+    document.getElementById('searchBtn').addEventListener('click', findStores);
+    document.getElementById('keyword').addEventListener('keydown', (e) => {
+        if (e.isComposing === false && e.code == 'Enter') {
+            findStores()
+        }
+    })
+
     // 메뉴를 찾는 함수
     function findStores() {
         const keyword = document.getElementById('keyword').value;
@@ -146,8 +153,6 @@
                 input.value = null;
             });
     }
-
-    document.getElementById('searchBtn').addEventListener('click', findStores);
 
     function displayMarker(locs) {
 

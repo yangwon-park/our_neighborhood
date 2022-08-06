@@ -39,3 +39,7 @@ out/
 
 # QueryDSL Q 클래스
 src/main/generated
+
+# npm
+src/main/resources/static/node_modules
+src/main/resources/static/node

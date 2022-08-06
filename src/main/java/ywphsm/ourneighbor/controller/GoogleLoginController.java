@@ -35,7 +35,7 @@ public class GoogleLoginController {
         log.info("code={}", code);
 
         Model userInfo = googleService.getUserInfo(code, model);
-        Member googleUser = googleService.saveKakaoUser(userInfo);
+        Member googleUser = googleService.saveGoogleUser(userInfo);
 
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, googleUser);

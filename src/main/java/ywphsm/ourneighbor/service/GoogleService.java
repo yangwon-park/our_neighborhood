@@ -89,7 +89,8 @@ public class GoogleService {
         return model;
     }
 
-    public Member saveKakaoUser(Model model) {
+    //구글 로그인시 회원 저장
+    public Member saveGoogleUser(Model model) {
 
         String name = String.valueOf(model.getAttribute("name"));
         String email = String.valueOf(model.getAttribute("email"));

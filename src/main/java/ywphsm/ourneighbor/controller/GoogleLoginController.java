@@ -34,11 +34,10 @@ public class GoogleLoginController {
     public String googleLogin(@RequestParam String code, Model model, HttpServletRequest request) throws JsonProcessingException {
         log.info("code={}", code);
 
-        Model userInfo = googleService.getUserInfo(code, model);
-        Member googleUser = googleService.saveGoogleUser(userInfo);
+        Member userInfo = googleService.getUserInfo(code, model);
 
         HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER, googleUser);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, userInfo);
 
         return "redirect:/";
 

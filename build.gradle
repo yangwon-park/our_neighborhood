@@ -51,6 +51,8 @@ dependencies {
 	//Gson
 	implementation 'com.google.code.gson:gson:2.8.7'
 
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
 	// QueryDSL
 	//Querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa'

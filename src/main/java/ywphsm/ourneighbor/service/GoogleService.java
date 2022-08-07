@@ -37,10 +37,8 @@ public class GoogleService {
     private String GOOGLE_SNS_CLIENT_SECRET;
     @Value("${google.token.url}")
     private String GOOGLE_SNS_TOKEN_BASE_URL;
-    @Value("${google.people.url}")
-    private String GOOGLE_SNS_PEOPLE_URL;
 
-    public Model getUserInfo(String code,Model model) throws JsonProcessingException {
+    public Member getUserInfo(String code, Model model) throws JsonProcessingException {
 
         //Google OAuth Access Token 요청을 위한 파라미터 세팅
         GoogleOAuthRequest googleOAuthRequest = GoogleOAuthRequest
@@ -55,7 +53,6 @@ public class GoogleService {
 
         //HTTP Request를 위한 RestTemplate
         RestTemplate restTemplate = new RestTemplate();
-        log.info("restTemplate");
 
         //JSON 파싱을 위한 기본값 세팅
         //요청시 파라미터는 스네이크 케이스로 세팅되므로 Object mapper에 미리 설정해준다.
@@ -86,10 +83,10 @@ public class GoogleService {
 
         model.addAllAttributes(userInfo);
         model.addAttribute("token", result.getAccessToken());
-        return model;
+
+        return saveGoogleUser(model);
     }
 
-    //구글 로그인시 회원 저장
     public Member saveGoogleUser(Model model) {
 
         String name = String.valueOf(model.getAttribute("name"));

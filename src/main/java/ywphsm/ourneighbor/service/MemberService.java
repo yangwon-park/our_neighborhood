@@ -52,9 +52,9 @@ public class MemberService {
     public int ChangeBirthToAge(String birthDate) {
 
         int nowYear = LocalDateTime.now().getYear();
-        String birthYear = birthDate.substring(0, 3);
+        String birthYear = birthDate.substring(0, 4);
 
-        return nowYear - Integer.parseInt(birthYear);
+        return nowYear - Integer.parseInt(birthYear) + 1;
     }
 
     //비밀번호 인코딩

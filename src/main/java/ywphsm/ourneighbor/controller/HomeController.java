@@ -66,7 +66,7 @@ public class HomeController {
 
         model.addAttribute("member", member);
 
-        return "loginHome";
+        return "login/loginHome";
     }
     
 

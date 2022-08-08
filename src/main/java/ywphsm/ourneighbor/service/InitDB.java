@@ -20,7 +20,6 @@ public class InitDB {
     private final InitService initService;
 
     @PostConstruct
-
     public void init() {
         initService.dbInit();
     }
@@ -88,6 +87,4 @@ public class InitDB {
             em.persist(store11);
         }
     }
-
-
 }

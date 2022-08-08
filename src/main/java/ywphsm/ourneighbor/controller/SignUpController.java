@@ -56,6 +56,7 @@ public class SignUpController {
 
         memberService.join(member);
         tokenService.createEmailToken(member.getId(), member.getEmail());
+
         return "redirect:/";    //이메일인증 알림 페이지로 보내야함*********
     }
 

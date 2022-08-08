@@ -42,18 +42,11 @@ public class HomeController {
         return "prac2";
     }
 
-    @PostMapping("/prac2")
-    public String prac2(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
-        List<Store> stores = storeService.searchByKeyword(storeSearchCond);
-        System.out.println("storeSearchCond = " + storeSearchCond.getKeyword());
-        for (Store store : stores) {
-            System.out.println("store = " + store.getName());
-        }
-        model.addAttribute("stores", stores);
-
-        return "prac2";
+    // 검색 뷰페이지 임시
+    @GetMapping("/prac3")
+    public String prac3(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
+        return "prac3";
     }
-
 
     @GetMapping("/loginHome")
     public String loginhome(

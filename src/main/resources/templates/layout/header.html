@@ -9,14 +9,21 @@
 
   <!-- 별도의 css 파일 설정 -->
   <link rel="stylesheet" th:href="@{../css/style.css}">
-  <!-- fontawersome 설정 - 6.1.2 -->
+
+  <!-- fontawesome 설정 - 6.1.2 -->
   <script src="https://kit.fontawesome.com/ba4b7b559a.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" th:href="@{../fontawesome/css/all.css}">
+
   <!-- slick 설정 (슬라이드) -->
   <link rel="stylesheet" th:href="@{../plugin/slick/slick.css}">
   <link rel="stylesheet" th:href="@{../plugin/slick/slick-theme.css}">
+
   <!--  공통 카카오맵 API -->
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>
+  <!--  npm - axios 경로-->
+  <script defer th:src="@{../node_modules/axios/dist/axios.js}"></script>
+<!--  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+
 
 
 </head>

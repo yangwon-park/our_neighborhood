@@ -50,8 +50,8 @@ public class HomeController {
 
     @GetMapping("/loginHome")
     public String loginhome(
-            @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-            Model model) {
+        @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
+        Model model) {
 
         if (member == null) {
             return "login/login";

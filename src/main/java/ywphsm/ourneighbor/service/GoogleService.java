@@ -5,13 +5,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
@@ -38,7 +38,7 @@ public class GoogleService {
     @Value("${google.token.url}")
     private String GOOGLE_SNS_TOKEN_BASE_URL;
 
-    public Member getUserInfo(String code, Model model) throws JsonProcessingException {
+    public Member getUserInfo(String code, Model model) throws JsonProcessingException, ParseException {
 
         //Google OAuth Access Token 요청을 위한 파라미터 세팅
         GoogleOAuthRequest googleOAuthRequest = GoogleOAuthRequest
@@ -59,7 +59,6 @@ public class GoogleService {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        log.info("ObjectMapper");
 
         //AccessToken 발급 요청
         ResponseEntity<String> resultEntity = restTemplate.postForEntity(GOOGLE_SNS_TOKEN_BASE_URL, googleOAuthRequest, String.class);
@@ -69,39 +68,44 @@ public class GoogleService {
         GoogleOAuthResponse result = mapper.readValue(resultEntity.getBody(), new TypeReference<GoogleOAuthResponse>() {
         });
 
-        //ID Token만 추출 (사용자의 정보는 jwt로 인코딩 되어있다)
-        String jwtToken = result.getIdToken();
-        String requestUrl = UriComponentsBuilder.fromHttpUrl("https://oauth2.googleapis.com/tokeninfo")
-                .queryParam("id_token", jwtToken).encode().toUriString();
-        log.info("requestUrl:{}", requestUrl);
+        String access_token = result.getAccessToken();
+        log.info("accessToken = {}", access_token);
 
-        String resultJson = restTemplate.getForObject(requestUrl, String.class);
-        log.info("resultJson:{}", resultJson);
+        //프로필 요청 헤더 작성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + access_token);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        Map<String,String> userInfo = mapper.readValue(resultJson, new TypeReference<Map<String, String>>(){});
-        log.info("userInfo={}", userInfo);
+        //프로필정보 요청
+        ResponseEntity<String> googleUserInfo = restTemplate.exchange(
+                "https://people.googleapis.com/v1/people/me?personFields=genders,names,emailAddresses,phoneNumbers",
+                HttpMethod.GET,
+                new HttpEntity<>(headers),
+                String.class
+        );
+        log.info("naverUserInfo:{}", googleUserInfo);
 
-        model.addAllAttributes(userInfo);
-        model.addAttribute("token", result.getAccessToken());
+        JsonParser jsonParser = new JsonParser();
+        JsonElement parse = jsonParser.parse(googleUserInfo.getBody());
 
-        return saveGoogleUser(model);
-    }
+        String name = parse.getAsJsonObject().get("names").getAsJsonArray().get(0).getAsJsonObject().get("displayName").getAsString();
+        String genders = parse.getAsJsonObject().get("genders").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+        String email = parse.getAsJsonObject().get("emailAddresses").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+        String emailVerified = parse.getAsJsonObject().get("emailAddresses").getAsJsonArray().get(0).getAsJsonObject().get("metadata").getAsJsonObject().get("verified").getAsString();
 
-    public Member saveGoogleUser(Model model) {
+        log.info("name:{}", name);
+        log.info("gender:{}", genders);
+        log.info("email:{}", email);
+        log.info("emailVerified:{}", emailVerified);
+        boolean email_verified = emailVerified.equals("true");
+        int gender = genders.equals("male") ? 0 : 1;
 
-        String name = String.valueOf(model.getAttribute("name"));
-        String email = String.valueOf(model.getAttribute("email"));
-        boolean email_verified = model.getAttribute("email_verified").equals("true");
-
-        Member member = new Member(email, name, email_verified);
+        Member member = new Member(email, name, email_verified, gender);
         Member findMember = memberService.findByEmail(email);
         if (findMember == null) {
             memberService.join(member);
         }
 
         return member;
-
     }
-
-
 }

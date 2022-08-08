@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네 홈화면</title>
 </head>
 <body>
-이메일 인증 실패닷!
+이메일 인증 실패닷! 닝겐
+
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
 </body>
 </html>

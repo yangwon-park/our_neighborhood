@@ -72,7 +72,8 @@
             <label for="birthDate">생년월일</label>
             <input type="text" id="birthDate" th:field="*{birthDate}"
                    class="form-control"
-                   th:errorclass="field-error">
+                   th:errorclass="field-error"
+                    th:placeholder="20001212">
             <div class="field-error" th:errors="*{birthDate}" />
         </div>
 

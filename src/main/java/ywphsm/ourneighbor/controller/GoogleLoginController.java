@@ -3,6 +3,7 @@ package ywphsm.ourneighbor.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,7 @@ public class GoogleLoginController {
     }
 
     @GetMapping("/login/google")
-    public String googleLogin(@RequestParam String code, Model model, HttpServletRequest request) throws JsonProcessingException {
+    public String googleLogin(@RequestParam String code, Model model, HttpServletRequest request) throws JsonProcessingException, ParseException {
         log.info("code={}", code);
 
         Member userInfo = googleService.getUserInfo(code, model);

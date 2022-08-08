@@ -107,10 +107,11 @@ public class Member extends BaseTimeEntity {
     }
 
     //구글 로그인시 openId 회원 저장
-    public Member(String email, String username, boolean emailConfirm) {
+    public Member(String email, String username, boolean emailConfirm, int gender) {
         this.email = email;
         this.username = username;
         this.emailConfirm = emailConfirm;
+        this.gender = gender;
     }
 
     //네이버 로그인시 회원 저장

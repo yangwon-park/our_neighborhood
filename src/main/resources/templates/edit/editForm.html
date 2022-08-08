@@ -63,6 +63,20 @@
                 type="button">비밀번호 변경</button>
     </div>
 
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                onclick="location.href='passwordEditForm.html'"
+                th:onclick="|location.href='@{/member_edit/password_edit}'|"
+                type="button">비밀번호 변경</button>
+    </div>
+
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                onclick="location.href='passwordEditForm.html'"
+                th:onclick="|location.href='@{/member_edit/confirm_email}'|"
+                type="button">이메일 인증</button>
+    </div>
+
 </div> <!-- /container -->
 </body>
 </html>

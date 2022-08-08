@@ -43,7 +43,6 @@ public class SignUpController {
             return "signUp/signUpForm";
         }
 
-        //나이계산 ***생년월일 체크 만들어야함!!!!!!!!!**
         int age = memberService.ChangeBirthToAge(memberForm.getBirthDate());
 
         //패스워드 암호화
@@ -57,7 +56,7 @@ public class SignUpController {
         memberService.join(member);
         tokenService.createEmailToken(member.getId(), member.getEmail());
 
-        return "redirect:/";    //이메일인증 알림 페이지로 보내야함*********
+        return "signUp/confirmEmail";
     }
 
     @GetMapping("/confirm-email")
@@ -66,7 +65,7 @@ public class SignUpController {
             return "redirect:/login";
         }
 
-        return "signUp/emailFail";    //나중에 이메일 인증 실패 페이지로 바꿔야함(회원수정에서 재인증)
+        return "signUp/emailFail";
     }
 
 }

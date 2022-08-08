@@ -133,16 +133,17 @@
 
         axios({
             method: "get",
-            url: "/searchStore",
+            url: "/searchStores",
             params: {
                 keyword: keyword
             }
         })
             .then((res) => {
-                console.log(res.data)
-                for (let i = 0; i < res.data.length; i++) {
-                    var lat = res.data[i].lat;
-                    var lon = res.data[i].lon;
+                console.log(res.data.data)
+                console.log(res.data.count)
+                for (let i = 0; i < res.data.data.length; i++) {
+                    var lat = res.data.data[i].lat;
+                    var lon = res.data.data[i].lon;
 
                     var locPosition = new kakao.maps.LatLng(lat, lon);
                     locs.push(locPosition)
@@ -163,8 +164,6 @@
         for (var i = 0; i < locs.length; i++) {
             var placePosition = locs[i],
                 marker = addMarker(placePosition, i)
-            console.log(locs[i])
-            console.log(i)
 
             bounds.extend(placePosition);
         }

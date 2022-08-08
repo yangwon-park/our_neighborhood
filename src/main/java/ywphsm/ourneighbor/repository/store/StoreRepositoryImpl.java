@@ -24,7 +24,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         return queryFactory
                 .select(store)
                 .from(store)
-                .leftJoin(store.menuList, menu)
+                .innerJoin(store.menuList, menu)
                 .fetchJoin()
                 .where(nameContains(cond.getKeyword()))
                 .fetch();
@@ -35,8 +35,8 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         return queryFactory
                 .select(store)
                 .from(store)
-                .leftJoin(store.menuList, menu)
-                .fetchJoin()
+//                .innerJoin(store.menuList, menu)
+//                .fetchJoin()
                 .where(nameContains(keyword))
                 .fetch();
     }

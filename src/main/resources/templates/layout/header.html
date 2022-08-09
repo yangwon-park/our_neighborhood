@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="common_header(title)">
+<head th:fragment="common_header(title, style)">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title th:replace="${title}">우리 동네</title>
 
@@ -8,11 +8,12 @@
   <link rel="stylesheet" th:href="@{../css/bootstrap.min.css}">
 
   <!-- 별도의 css 파일 설정 -->
+  <link rel="stylesheet" th:href="@{../css/sidebars.css}" >
   <link rel="stylesheet" th:href="@{../css/style.css}">
 
   <!-- fontawesome 설정 - 6.1.2 -->
-  <script src="https://kit.fontawesome.com/ba4b7b559a.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" th:href="@{../fontawesome/css/all.css}">
+  <script defer src="https://kit.fontawesome.com/ba4b7b559a.js" crossorigin="anonymous"></script>
 
   <!-- slick 설정 (슬라이드) -->
   <link rel="stylesheet" th:href="@{../plugin/slick/slick.css}">
@@ -24,6 +25,8 @@
   <script defer th:src="@{../node_modules/axios/dist/axios.js}"></script>
 <!--  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
 
+  <style th:replace="${style}">
 
+  </style>
 
 </head>

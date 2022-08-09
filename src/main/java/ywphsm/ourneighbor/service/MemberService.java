@@ -86,8 +86,6 @@ public class MemberService {
         Member member = memberRepository.findById(id).get();
 
         member.update(nickname, phoneNumber);
-        em.flush();
-        em.clear();
     }
 
     //비밀번호 확인
@@ -95,13 +93,25 @@ public class MemberService {
         return passwordEncoder.matches(beforePassword, password);
     }
 
-    //비밀번호 수정 변경 감지
+    //비밀번호 수정 변경 감지(회원수정)
+    @Transactional
     public void updatePassword(Long id, String encodedPassword) {
         Member member = memberRepository.findById(id).get();
 
         member.updatePassword(encodedPassword);
-        em.flush();
-        em.clear();
+    }
+
+    //비밀번호 찾기 수정 변경 감지(비밀번호 찾기)
+    @Transactional
+    public void updatePassword(String userId, String encodedPassword) {
+        Member member = memberRepository.findByUserId(userId).get();
+
+        member.updatePassword(encodedPassword);
+    }
+
+    //비밀번호 찾기시 있는 아이디인지 확인
+    public Member userIdCheck(String userId) {
+        return memberRepository.findByUserId(userId).orElse(null);
     }
 
 }

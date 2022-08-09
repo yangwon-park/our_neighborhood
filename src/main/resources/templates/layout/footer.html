@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<footer th:fragment="common_footer">
-    <h5>푸터</h5>
+<footer id="footer" th:fragment="common_footer">
+    <div class="section-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 footer-1"></div>
+                <div class="col-md-4 mb-4 footer-2">
+                    <h4>임시로 만든 푸터입니다.</h4>
+                    <ul>
+                        <li>Lorem ipsum dolor sit amet, consectetur adipisicing.</li>
+                        <li>Lorem ipsum dolor sit amet, consectetur adipisicing.</li>
+                        <li>Lorem ipsum dolor sit amet, consectetur adipisicing.</li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 footer-3"></div>
+            </div>
+        </div>
+    </div>
 </footer>
 <!-- Bootstrap js 설정 - 5.2.0 -->
 <th:block th:fragment="common_js(scrpit)">

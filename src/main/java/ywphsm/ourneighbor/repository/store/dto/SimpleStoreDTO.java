@@ -16,6 +16,7 @@ public class SimpleStoreDTO {
     private String name;
     private Double lon;
     private Double lat;
+    private String phoneNumber;
     private LocalTime openingTime;
     private LocalTime closingTime;
     private LocalTime breakStart;
@@ -29,6 +30,7 @@ public class SimpleStoreDTO {
         name = store.getName();
         lon = store.getLon();
         lat = store.getLat();
+        phoneNumber = store.getPhoneNumber();
         openingTime = store.getOpeningTime();
         closingTime = store.getClosingTime();
         breakStart = store.getBreakStart();

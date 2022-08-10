@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.login.SessionConst;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.MemberService;
@@ -27,12 +26,12 @@ public class HomeController {
     private final StoreService storeService;
 
     // 검색 뷰페이지 임시
-    @GetMapping("/prac")
+    @GetMapping("/map")
     public String prac(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         List<Store> stores = storeService.searchByKeyword(storeSearchCond);
         model.addAttribute("stores", stores);
 
-        return "prac";
+        return "map";
     }
 
 
@@ -46,6 +45,12 @@ public class HomeController {
     @GetMapping("/prac3")
     public String prac3(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         return "prac3";
+    }
+
+    // 검색 뷰페이지 임시
+    @GetMapping("/prac4")
+    public String prac4(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
+        return "prac4";
     }
 
     @GetMapping("/loginHome")

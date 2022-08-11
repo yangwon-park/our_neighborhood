@@ -83,8 +83,15 @@
                    class="form-control"
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{phoneNumber}" />
+            <a th:href="@{/sign_up/certifiedPhone}">인증번호 재발급</a>
         </div>
-        <br>
+        <div>
+            <label for="certifiedNumber">인증번호</label>
+            <input type="text" id="certifiedNumber" th:field="*{certifiedNumber}"
+                   class="form-control"
+                   th:errorclass="field-error">
+            <div class="field-error" th:errors="*{certifiedNumber}" />
+        </div>
         <div>
             <label for="email">이메일</label>
             <input type="text" id="email" th:field="*{email}"

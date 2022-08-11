@@ -17,8 +17,8 @@ import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.List;
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 @Slf4j
 public class HomeController {
 
@@ -74,7 +74,6 @@ public class HomeController {
         model.addAttribute("stores", stores);
 
         return "index";
-
     }
 
 }

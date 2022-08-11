@@ -1,9 +1,6 @@
 package ywphsm.ourneighbor.domain.store;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import ywphsm.ourneighbor.domain.Address;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
 import ywphsm.ourneighbor.domain.CategoryOfStore;
@@ -99,6 +96,7 @@ public class Store extends BaseTimeEntity {
     /*
         생성자
      */
+    @Builder
     public Store(String name, Double lat, Double lon,
                  String phoneNumber, LocalTime openingTime, LocalTime closingTime,
                  LocalTime breakStart, LocalTime breakEnd, String notice, String intro,

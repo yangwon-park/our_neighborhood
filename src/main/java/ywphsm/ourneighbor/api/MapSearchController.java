@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.repository.store.dto.SimpleStoreDTO;
+import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.List;
@@ -26,8 +26,8 @@ public class MapSearchController {
     @GetMapping(value = "/searchStores", produces = "application/json;charset=utf-8")
     public Result searchStores(@RequestParam String keyword) {
         List<Store> findStores = storeService.searchByKeyword(keyword);
-        List<SimpleStoreDTO> collect = findStores.stream()
-                .map(SimpleStoreDTO::new)
+        List<SimpleSearchStoreDTO> collect = findStores.stream()
+                .map(SimpleSearchStoreDTO::new)
                 .collect(Collectors.toList());
         return new Result(collect.size(), collect);
     }

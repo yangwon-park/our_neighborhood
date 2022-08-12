@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+
+    <style>
+
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{../css/aragon.css}">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<body class="bg-default">
+
+<!-- Navbar -->
+<nav class="arg-navbar navbar navbar-expand-lg navbar-light py-3 sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="#" target="_blank">
+            우리 동네
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-collapse-main">
+            <!-- Collapse header -->
+            <div class="navbar-collapse-header d-md-none">
+                <div class="row">
+                    <div class="col-6 collapse-brand">
+                        <a href="../index.html">
+                            Argon
+                        </a>
+                    </div>
+                    <div class="col-6 collapse-close">
+                        <button type="button" class="navbar-toggler" data-toggle="collapse"
+                                data-target="#navbar-collapse-main" aria-controls="sidenav-main"
+                                aria-expanded="false" aria-label="Toggle sidenav">
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Navbar items -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="https://www.creative-tim.com/product/argon-dashboard"
+                       target="_blank">
+                        <i class="ni ni-planet"></i>
+                        <span class="nav-link-inner--text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="https://www.creative-tim.com/product/argon-dashboard"
+                       target="_blank">
+                        <i class="ni ni-circle-08"></i>
+                        <span class="nav-link-inner--text">Register</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="https://www.creative-tim.com/product/argon-dashboard"
+                       target="_blank">
+                        <i class="ni ni-key-25"></i>
+                        <span class="nav-link-inner--text">Login</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="https://www.creative-tim.com/product/argon-dashboard"
+                       target="_blank">
+                        <i class="ni ni-single-02"></i>
+                        <span class="nav-link-inner--text">Profile</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Header -->
+<section class="header">
+    <div class="header py-7 py-lg-8">
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
+    </div>
+</section>
+<!--addForm-->
+<section class="add-form">
+    <!-- Page content -->
+    <div class="container-fluid mt--8 pb-5">
+        <!-- Table -->
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="card-header bg-transparent pb-5">
+                        <div class="text-muted text-center mt-2 mb-4 fs-2">매장 정보 등록</div>
+                    </div>
+                    <div class="card-body px-lg-5 py-lg-5">
+                        <form>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <input class="form-control" placeholder="매장 이름" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group d-flex">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <input class="form-control" placeholder="우편 번호" type="text">
+                                </div>
+                                <button type="button" class="text-center btn btn-orange ms-3" style="height: 3rem">우편 번호 찾기</button>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <input class="form-control" placeholder="도로명 주소" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <input class="form-control" placeholder="지번 주소" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <input class="form-control" placeholder="매장 전화 번호" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <input class="form-control" placeholder="매장 소개" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative">
+                                    <input class="form-control" placeholder="매장 공지" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group d-flex">
+                                <div class="input-group input-group-alternative me-3">
+                                    <input class="form-control" placeholder="영업 시작 시간" type="time">
+                                </div>
+                                <div class="input-group input-group-alternative ms-3">
+                                    <input class="form-control" placeholder="영업 종료 시간" type="time">
+                                </div>
+                            </div>
+                            <div class="form-group d-flex">
+                                <div class="input-group input-group-alternative me-3">
+                                    <input class="form-control" placeholder="휴식 시작 시간" type="time">
+                                </div>
+                                <div class="input-group input-group-alternative ms-3">
+                                    <input class="form-control" placeholder="휴식 시작 시간" type="time">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative">
+                                    <input class="form-control" placeholder="매장 공지" type="text">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-orange mt-4">매장 등록</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+    <script th:replace="layout/footer :: common_js(~{::script})"></script>
+</footer>
+
+</html>

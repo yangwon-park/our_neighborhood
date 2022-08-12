@@ -28,4 +28,9 @@ public class StoreController {
         model.addAttribute("store", storeDetailDTO);
         return "store/storeDetail";
     }
+
+    @GetMapping("/addStore")
+    public String addStore(Model model) {
+        return "store/storeForm";
+    }
 }

@@ -169,10 +169,6 @@
     </div>
     <div class="container-fluid" id="map" style="height: 100%"></div>
 </main>
-<div style="padding:5px; display: none"><p id="storeName">Hello World!</p> <br><a
-        href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue"
-        target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667"
-                                     style="color:blue" target="_blank">길찾기</a></div>
 <script th:inline="javascript">
 
     // 지도를 담을 div를 찾음
@@ -214,11 +210,10 @@
     }
 
     // ============================================================================================
-
 </script>
 
 
-<script th:replace="layout/footer :: common_js(~{::script})">
+<script th:replace="layout/footer :: common_js(~{::scipt})">
 </script>
 </body>
 </html>

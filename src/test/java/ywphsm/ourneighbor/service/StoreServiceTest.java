@@ -41,7 +41,7 @@ class StoreServiceTest {
                 "명진 소바", 123.0, 123.0, "010-1234-1234",
                 LocalTime.now(), LocalTime.now(), LocalTime.now(), LocalTime.now(),
                 "안녕하세요", "명진 소바입니다.", null, StoreStatus.OPEN,
-                new Address("부산광역시", "해운대구", "123489")
+                null
         );
         em.persist(store);
     }
@@ -53,7 +53,7 @@ class StoreServiceTest {
                 "맥도날드", 123.0, 123.0, "010-1234-1234",
                 LocalTime.now(), LocalTime.now(), LocalTime.now(), LocalTime.now(),
                 "안녕하세요", "맥도날드입니다.", null, StoreStatus.OPEN,
-                new Address("부산광역시", "해운대구", "123489")
+                null
         );
 
         Long storeId = storeService.saveStore(store);

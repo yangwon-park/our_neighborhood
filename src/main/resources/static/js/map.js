@@ -112,7 +112,7 @@ function addInfoWindow(marker, data, infowindow) {
             '    </div>' +
             '    <div class="row d-flex">' +
             '        <div class="col text-nowrap">' +
-            '            <p class="card-text" style="font-size: 0.85rem">' + data.address.city + ' ' + data.address.street + '</p>' +
+            '            <p class="card-text" style="font-size: 0.85rem">' + data.address.roadAddr + ' ' + data.address.detail + '</p>' +
             '        </div>' +
             '    </div>' +
             '    <div class="row d-flex mb-2" style="font-size: 0.78rem; color: #6c757d">' +

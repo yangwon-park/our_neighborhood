@@ -31,23 +31,18 @@ public class Store extends BaseTimeEntity {
     @Column(name = "store_id")
     private Long id;
 
-    @NotBlank
     private String name;
 
-    @NotNull
     private Double lon;                // 경도
 
-    @NotNull
     private Double lat;                 // 위도
 
     private String phoneNumber;
 
     @Column(name = "opening_time")
-    @NotNull
     private LocalTime openingTime;            // 여는 시간
 
     @Column(name = "closing_time")
-    @NotNull
     private LocalTime closingTime;            // 닫는 시간
 
     @Column(name = "break_start")
@@ -85,9 +80,9 @@ public class Store extends BaseTimeEntity {
     private List<Menu> menuList = new ArrayList<>();
 
     // Many To Many인듯
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_id")
+//    private Member member;
 
     // Category와 양방향은 보류
 

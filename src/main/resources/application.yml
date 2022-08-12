@@ -26,12 +26,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
         #        QueryDSL로 사용된 JPQL 보기
         use_sql_comments: true
+        default_batch_fetch_size: 500 # 컬렉션 조회 페이징 및 최적화
 
 logging.level:
   org.hibernate.SQL: debug

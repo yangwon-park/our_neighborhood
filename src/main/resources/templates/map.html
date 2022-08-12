@@ -169,10 +169,6 @@
     </div>
     <div class="container-fluid" id="map" style="height: 100%"></div>
 </main>
-<div style="padding:5px; display: none"><p id="storeName">Hello World!</p> <br><a
-        href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue"
-        target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667"
-                                     style="color:blue" target="_blank">길찾기</a></div>
 <script th:inline="javascript">
 
     // 지도를 담을 div를 찾음
@@ -192,6 +188,8 @@
         imageOption = {offset: new kakao.maps.Point(27, 69)};
 
     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
+
+    // 현재 위치를 담기 위한 변수
     var currentPosition;
 
     // 현재 위치로 맵 중심 정렬
@@ -212,28 +210,10 @@
     }
 
     // ============================================================================================
-
-    // 마커를 담을 배열
-    // 새로운 검색이 발생하면 초기화 시켜버림
-    var markers = [];
-
-    // 인포윈도우를 담을 배열
-    // 새로운 검색이 발생하면 초기화 시켜버림
-    var infowindows = [];
-
-    // 검색 결과를 담을 배열
-    var searchResult = [];
-
-    // 엔터키 입력하면 findStores 동작
-    document.getElementById('keyword').addEventListener('keydown', (e) => {
-        if (e.isComposing === false && e.code == 'Enter') { // 한글 입력 시 이벤트 두번 발생 방지
-            findStores()
-        }
-    })
 </script>
 
 
-<script th:replace="layout/footer :: common_js(~{::script})">
+<script th:replace="layout/footer :: common_js(~{::scipt})">
 </script>
 </body>
 </html>

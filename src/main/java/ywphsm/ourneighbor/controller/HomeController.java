@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.login.SessionConst;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.MemberService;
@@ -18,8 +17,8 @@ import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.List;
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 @Slf4j
 public class HomeController {
 
@@ -27,12 +26,12 @@ public class HomeController {
     private final StoreService storeService;
 
     // 검색 뷰페이지 임시
-    @GetMapping("/prac")
+    @GetMapping("/map")
     public String prac(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         List<Store> stores = storeService.searchByKeyword(storeSearchCond);
         model.addAttribute("stores", stores);
 
-        return "prac";
+        return "map";
     }
 
 
@@ -48,10 +47,16 @@ public class HomeController {
         return "prac3";
     }
 
+    // 검색 뷰페이지 임시
+    @GetMapping("/prac4")
+    public String prac4(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
+        return "prac4";
+    }
+
     @GetMapping("/loginHome")
     public String loginhome(
-            @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-            Model model) {
+        @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
+        Model model) {
 
         if (member == null) {
             return "login/login";
@@ -69,7 +74,6 @@ public class HomeController {
         model.addAttribute("stores", stores);
 
         return "index";
-
     }
 
 }

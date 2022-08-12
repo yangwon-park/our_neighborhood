@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="common_header(title)">
+<head th:fragment="common_header(title, style)">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title th:replace="${title}">우리 동네</title>
+
+  <style th:replace="${style}">
+
+  </style>
+
 
   <!-- Bootstrap 설정 - 5.2.0 -->
   <link rel="stylesheet" th:href="@{../css/bootstrap.min.css}">
 
   <!-- 별도의 css 파일 설정 -->
+  <link rel="stylesheet" th:href="@{../css/sidebars.css}" >
   <link rel="stylesheet" th:href="@{../css/style.css}">
 
   <!-- fontawesome 설정 - 6.1.2 -->
-  <script src="https://kit.fontawesome.com/ba4b7b559a.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" th:href="@{../fontawesome/css/all.css}">
+  <script defer src="https://kit.fontawesome.com/ba4b7b559a.js" crossorigin="anonymous"></script>
 
   <!-- slick 설정 (슬라이드) -->
   <link rel="stylesheet" th:href="@{../plugin/slick/slick.css}">
@@ -20,9 +26,10 @@
 
   <!--  공통 카카오맵 API -->
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>
-  <!--  npm - axios 경로-->
-  <script defer th:src="@{../node_modules/axios/dist/axios.js}"></script>
-<!--  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+
+  <!-- 다음 우편 번호 API -->
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
 
 
 

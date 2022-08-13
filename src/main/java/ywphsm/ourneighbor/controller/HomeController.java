@@ -27,27 +27,23 @@ public class HomeController {
 
     // 검색 뷰페이지 임시
     @GetMapping("/map")
-    public String prac(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
+    public String map(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         List<Store> stores = storeService.searchByKeyword(storeSearchCond);
         model.addAttribute("stores", stores);
 
         return "map";
     }
 
-
-    // 검색 뷰페이지 임시
     @GetMapping("/prac2")
     public String prac2(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         return "prac2";
     }
 
-    // 검색 뷰페이지 임시
     @GetMapping("/prac3")
     public String prac3(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         return "prac3";
     }
 
-    // 검색 뷰페이지 임시
     @GetMapping("/prac4")
     public String prac4(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         return "prac4";
@@ -70,8 +66,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
-        List<Store> stores = storeService.searchByKeyword(storeSearchCond);
-        model.addAttribute("stores", stores);
 
         return "index";
     }

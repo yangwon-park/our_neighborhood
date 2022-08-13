@@ -14,11 +14,16 @@
 <input type="text" id="numberAddr" placeholder="지번주소">
 <span id="guide" style="color:#999;display:none"></span>
 <input type="text" id="detail" placeholder="상세주소">
+<button class="btn btn-primary" onclick="openLog()">누르면 현재 도로명 주소</button>
+<p id="lat"></p>
+<p id="lon"></p>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
 </footer>
 
 <script>
+    var addr;
+
     function openPostcode() {
         new daum.Postcode({
             oncomplete: function (data) {
@@ -32,6 +37,8 @@
                 document.getElementById('zipcode').value = data.zonecode;
                 document.getElementById('roadAddr').value = roadAddr;
                 document.getElementById('numberAddr').value = data.jibunAddress;
+
+                addr = roadAddr;
 
                 var guideTextBox = document.getElementById("guide");
                 // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
@@ -51,8 +58,27 @@
             }
         }).open();
     }
-</script>
-<script>
+
+    // 카카오맵 주소 검색 API
+    var geocoder = new kakao.maps.services.Geocoder();
+    var lat;
+    var lon;
+
+    function openLog() {
+        geocoder.addressSearch(addr, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+                lat = result[0].y
+                lon = result[0].x
+            }
+        });
+        console.log(lat)
+        console.log(lon)
+        document.getElementsByClassName('lat').innerText = lat;
+        document.getElementsByClassName('lon').innerText = lon;
+    }
+
+
+
 
 </script>
 <script th:replace="layout/footer :: common_js(~{::script})">

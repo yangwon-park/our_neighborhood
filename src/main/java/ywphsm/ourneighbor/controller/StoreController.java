@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.dto.StoreAddDTO;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.repository.store.dto.StoreDetailDTO;
+import ywphsm.ourneighbor.domain.dto.StoreDetailDTO;
 import ywphsm.ourneighbor.service.StoreService;
 
 @Controller

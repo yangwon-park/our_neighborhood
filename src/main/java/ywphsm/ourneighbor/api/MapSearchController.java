@@ -32,6 +32,9 @@ public class MapSearchController {
         return new Result(collect.size(), collect);
     }
 
+    
+    // JSON에 유연함을 주기 위해
+    // 껍데기 용도의 클래스 타입 별도 생성
     @Data
     @AllArgsConstructor
     static class Result<T> {

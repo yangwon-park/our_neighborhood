@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.repository.store.dto;
+package ywphsm.ourneighbor.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +10,7 @@ import ywphsm.ourneighbor.domain.store.StoreStatus;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor

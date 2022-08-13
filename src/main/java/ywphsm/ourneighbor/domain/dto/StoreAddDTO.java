@@ -18,13 +18,24 @@ public class StoreAddDTO {
 
     @NotBlank
     private String name;
+
     @NotBlank
     private String zipcode;
+
     @NotBlank
     private String roadAddr;
+
     @NotBlank
     private String numberAddr;
+
     private String detail;
+
+    @NotBlank
+    private Double lat;
+
+    @NotBlank
+    private Double lon;
+
     private String phoneNumber;
     @NotNull
     @DateTimeFormat(pattern = "HH:mm")
@@ -46,6 +57,8 @@ public class StoreAddDTO {
         phoneNumber = store.getPhoneNumber();
         openingTime = store.getOpeningTime();
         closingTime = store.getClosingTime();
+        lat = store.getLat();
+        lon = store.getLon();
         breakStart = store.getBreakStart();
         breakEnd = store.getBreakEnd();
         notice = store.getNotice();
@@ -63,6 +76,8 @@ public class StoreAddDTO {
                 .phoneNumber(phoneNumber)
                 .openingTime(openingTime)
                 .closingTime(closingTime)
+                .lat(lat)
+                .lon(lon)
                 .breakStart(breakStart)
                 .breakEnd(breakEnd)
                 .notice(notice)

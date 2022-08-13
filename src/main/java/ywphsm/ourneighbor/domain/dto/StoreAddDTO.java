@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -49,7 +50,7 @@ public class StoreAddDTO {
     private LocalTime breakEnd;               // 쉬는 시간 끝
     private String notice;
     private String intro;
-    private Integer offDay;
+    private List<String> offDays;
 
     @Builder
     public StoreAddDTO(Store store) {
@@ -63,7 +64,7 @@ public class StoreAddDTO {
         breakEnd = store.getBreakEnd();
         notice = store.getNotice();
         intro = store.getIntro();
-        offDay = store.getOffDay();
+        offDays = store.getOffDays();
         zipcode = store.getAddress().getZipcode();
         roadAddr = store.getAddress().getRoadAddr();
         numberAddr = store.getAddress().getNumberAddr();
@@ -82,7 +83,7 @@ public class StoreAddDTO {
                 .breakEnd(breakEnd)
                 .notice(notice)
                 .intro(intro)
-                .offDay(offDay)
+                .offDays(offDays)
                 .address(new Address(zipcode, roadAddr, numberAddr, detail))
                 .build();
     }

@@ -28,9 +28,6 @@ public class HomeController {
     // 검색 뷰페이지 임시
     @GetMapping("/map")
     public String map(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
-        List<Store> stores = storeService.searchByKeyword(storeSearchCond);
-        model.addAttribute("stores", stores);
-
         return "map";
     }
 

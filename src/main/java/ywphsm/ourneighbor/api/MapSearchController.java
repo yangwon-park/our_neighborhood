@@ -31,9 +31,8 @@ public class MapSearchController {
                 .collect(Collectors.toList());
         return new Result(collect.size(), collect);
     }
-
     
-    // JSON에 유연함을 주기 위해
+    // JSON 구조에 유연함을 주기 위해
     // 껍데기 용도의 클래스 타입 별도 생성
     @Data
     @AllArgsConstructor

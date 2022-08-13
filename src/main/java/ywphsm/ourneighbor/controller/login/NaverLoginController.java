@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.controller;
+package ywphsm.ourneighbor.controller.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;

@@ -166,6 +166,10 @@ public class Store extends BaseTimeEntity {
             return;
         }
 
+        if (breakStart == null) {
+            return;
+        }
+
         if (time.isAfter(breakStart) && time.isBefore(breakEnd)) {
             updateStatus(StoreStatus.BREAK);
         }

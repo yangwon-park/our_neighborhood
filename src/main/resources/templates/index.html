@@ -1,92 +1,427 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
-  <meta charset="utf-8"/>
-  <title>우리 동네 홈화면</title>
+    <meta charset="utf-8"/>
+    <title>우리 동네</title>
 </head>
-  <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
+<style>
 
-    body {
-        overflow: hidden;
-    }
-
-    #map {
-        width: 100%;
-        height: 100%;
-    }
-  </style>
+</style>
 <body>
-<div class="container-fluid">
-  <form th:object="${storeSearchCond}" class="form-inline" method="get">
-    <div class="form-group mb-2">
-      <input type="text" th:field="*{keyword}" class="formcontrol" placeholder="검색어"/>
+<nav class="navbar navbar-expand-lg py-3 shadow-lg sticky-top">
+    <div class="container-fluid ms-3 me-3">
+        <a href="/" class="navbar-brand align-middle">
+            <h3 class="m-0">
+                <img src="../images/ex.png" alt="Logo" height="36px">
+                우리 동네
+            </h3>
+
+        </a>
+        <!-- 화면 작아지면 햄버거 버튼으로 변경      -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <th:block th:if="${member eq null}">
+                        <a href="/login" class="nav-link">
+                            로그인
+                        </a>
+                    </th:block>
+                    <th:block th:if="${member ne null}">
+                        <a href="#" class="nav-link">
+                            내 정보
+                        </a>
+                        <a href="/logout" class="nav-link">
+                            로그아웃
+                        </a>
+                    </th:block>
+                </li>
+                <li class="nav-item">
+                    <a href="#intro" class="nav-link">
+                        Intro
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#services" class="nav-link">
+                        Services
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#slogan" class="nav-link">
+                        Slogan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#gallery" class="nav-link">
+                        Gallery
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#cta" class="nav-link">
+                        Contact
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary mb-2">검색</button>
-  </form>
-</div>
-<!-- 지도를 만들 div -->
-<div class="container-fluid" id="map"></div>
-<p id="result"></p>
-<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>-->
-<script th:inline="javascript">
-  // 지도를 담을 div를 찾음
-  let mapContainer = document.getElementById('map');
+</nav>
 
-  // 지도에 관한 옵션 부여
-  let mapOptions = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
-      level: 1		// 확대 레벨
-  };
+<!--    div class="overlay"는 상위 section id="top"의 위치, 크기와 동일 => position을 relative로 설정-->
+<section id="top" class="position-relative">
+    <div class="section-content overlay d-flex justify-content-center align-items-center">
+        <div class="container-xxl">
+            <div class="row align-items-center">
+                <div class="col-md-9 welcome">
+                    <h1 class="welcome-title fw-light">
+                        Welcome <span class="text-warning fw-bold">주변 핫한 지역 5개 회전목마</span>. Lorem ipsum dolor sit amet,
+                        consectetur adipisicing elit. Hic, officia!
+                    </h1>
+                    <div class="divider"></div>
+                    <p class="col-sm-10 col-md-12 lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque
+                        deserunt dignissimos doloremque eum odit officia possimus provident quam qui soluta!</p>
+                    <p class="col-sm-2 col-md-12">
+                        <a href="#" class="btn btn-primary">Read More</a>
+                    </p>
+                </div>
+                <!--                    d-none으로 일단 모든 기기에서 안 보기에 설정 => d-md-block로 md 이상에선 보이게 다시 설정 => 최종적으로 sm 이하에선 안 보임-->
+                <div class="col-md-3 d-none d-md-block letsgo">
+                    <div class="card card-body letsgo-card">
+                        <div class="letsgo my-3">
+                            <h4 class="lestgo-title card-title text-dark mb-3">핫 플레이스 검색</h4>
+                            <p class="card-text text-secondary">
+                                <th:block th:if="${member eq null}">
+                                    회원님이 원하시는 장소를 가까운 <br/> 순서대로 보여드려요!
+                                </th:block>
+                                <th:block th:if="${member ne null}">
+                                    <span th:type="${member.username}"></span>님이 원하시는 장소를 가까운 <br/> 순서대로 보여드려요!
+                                </th:block>
+                            </p>
+                        </div>
+                        <div class="letsgo-card-form">
+                            <form>
+                                <p class="mb-3">
+                                    <button class="btn btn-orange w-100" type="button" onclick=location.href="map">이동</button>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-  // 지도 생성
-  let map = new kakao.maps.Map(mapContainer, mapOptions);
+<section id="intro">
+    <div class="section-content">
+        <div class="container intro">
+            <div class="row align-items-center">
+                <div class="col-md-6 intro-first">
+                    <div class="row px-md-3">
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
+                                    <h3 class="fw-light">
+                                        <a href="#" class="link-light text-decoration-none">Link 1</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
+                                    <h3 class="fw-light">
+                                        <a href="#" class="link-light text-decoration-none">Link 2</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
+                                    <h3 class="fw-light">
+                                        <a href="#" class="link-light text-decoration-none">Link 3</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
+                                    <h3 class="fw-light">
+                                        <a href="#" class="link-light text-decoration-none">Link 4</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 intro-second">
+                    <h5 class="fw-light">Greetings!</h5>
+                    <h1 class="mb-4">Introduce Our Website.</h1>
+                    <div class="intro-text">
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab debitis dolor ea
+                            eveniet illum incidunt itaque magnam odio voluptates, voluptatum.</p>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cupiditate
+                            eligendi et facere illum incidunt inventore magnam quam quod vitae.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-  // 현재 위치로 맵 중심 정렬
-  if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-          var lat = position.coords.latitude,
-              lon = position.coords.longitude;
+<section id="services">
+    <div class="section-content">
+        <div class="container services">
+            <div class="services-header text-center mb-5">
+                <h1 class="display-5">Our Amazing Services</h1>
+                <div class="divider"></div>
+                <p class="lead text-secondary">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis doloremque esse in iure
+                    minima nam odit possimus repellat voluptates?
+                </p>
+            </div>
+            <div id="slick-slide" class="services-body">
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque
+                                ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque
+                                ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque
+                                ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque
+                                ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque
+                                ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque
+                                ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-          var currentPosition = new kakao.maps.LatLng(lat, lon);
+<section id="slogan">
+    <div class="section-content d-flex align-items-center h-100">
+        <div class="container slogan">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-body slogan-card">
+                        <h1 class="mb-3 mb-3">Our Slogan</h1>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus eius
+                            excepturi labore laborum minus modi qui quisquam quo sed, voluptates.</p>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias, quae!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-          map.setCenter(currentPosition);
-      })
-  } else {
-      var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-          message = 'geolocation을 사용할 수 없음'
+<section id="features">
+    <div class="section-content">
+        <div class="container features">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="card card-body shadow border-0 features-card">
+                        <h4 class="card-title mb-3">
+                            <span class="fw-bold">1</span>
+                            Feature 1
+                        </h4>
+                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus
+                            veniam.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card card-body shadow border-0 features-card">
+                        <h4 class="card-title mb-3">
+                            <span class="fw-bold">2</span>
+                            Feature 2
+                        </h4>
+                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus
+                            veniam.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card card-body shadow border-0 features-card">
+                        <h4 class="card-title mb-3">
+                            <span class="fw-bold">3</span>
+                            Feature 3
+                        </h4>
+                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus
+                            veniam.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-      map.setCenter(locPosition)
-  }
+<section id="gallery">
+    <div class="section-content">
+        <div class="container gallery">
+            <div class="gallery-header text-center mb-5">
+                <h1 class="display-4">Our Gallery</h1>
+                <div class="divider"></div>
+                <p class="lead text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem debitis
+                    labore nobis nostrum quam quidem voluptatem. Accusantium commodi mollitia voluptatum.</p>
+            </div>
+            <div class="row gallery-body">
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 1</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 2</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 3</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 4</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 5</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 6</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-// ============================================================================================
+<section id="cta" class="position-relative">
+    <div class="section-content position-absolute h-100 w-100 overlay d-flex flex-column justify-content-center align-items-center">
+        <div class="container text-center cta">
+            <h3 class="display-6 text-primary">
+                Contact Us AnyTime!
+            </h3>
+            <h2 class="display-4 text-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h2>
+            <p class="lead text-light mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque consequatur
+                deleniti excepturi impedit libero non nostrum obcaecati quis! A, inventore.</p>
+            <h1 class="m-0">
+                <a href="tel:02-111-1111" class="link-warning text-decoration-none">02-111-1111</a>
+            </h1>
+        </div>
+    </div>
+</section>
 
-  var bounds = new kakao.maps.LatLngBounds();
-
-  [# th:each="store : ${stores}"]
-  var lat = [[${store.lat}]]
-  var lon = [[${store.lon}]]
-
-  var locPosition = new kakao.maps.LatLng(lat, lon);
-  var message = '<div style="padding: 5px;">여기에 계신가요?!</div>';
-
-  displayMarker(locPosition, message);
-  bounds.extend(new kakao.maps.LatLng(lat, lon));
-  [/]
-
-  map.setBounds(bounds);
-
-  function displayMarker(locPosition, message) {
-      let marker = new kakao.maps.Marker({
-          map: map,
-          position: locPosition
-      });
-  }
-
-</script>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
 </body>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
 </html>

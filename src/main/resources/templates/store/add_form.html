@@ -13,7 +13,7 @@
 <body class="bg-default">
 
 <!-- Navbar -->
-<nav class="arg-navbar navbar navbar-expand-lg navbar-light py-3 sticky-top">
+<nav class="arg-navbar navbar navbar-expand-lg py-3 sticky-top">
     <div class="container">
         <a class="navbar-brand" href="#" target="_blank">
             우리 동네
@@ -189,8 +189,8 @@
 </body>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
-    <script th:replace="layout/footer :: common_js(~{::script})"></script>
 </footer>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script>
 
     // 우편 번호 API로 받아온 도로명 주소를 담을 변수

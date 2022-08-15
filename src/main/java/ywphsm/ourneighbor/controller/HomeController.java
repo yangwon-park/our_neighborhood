@@ -46,24 +46,11 @@ public class HomeController {
         return "prac4";
     }
 
-    @GetMapping("/loginHome")
-    public String loginhome(
-        @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-        Model model) {
-
-        if (member == null) {
-            return "login/login";
-        }
+    @GetMapping("/")
+    public String index(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
+                       Model model) {
 
         model.addAttribute("member", member);
-
-        return "login/loginHome";
-    }
-    
-
-    @GetMapping("/")
-    public String home(Model model, @ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
-
         return "index";
     }
 

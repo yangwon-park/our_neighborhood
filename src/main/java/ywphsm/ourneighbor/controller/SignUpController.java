@@ -28,12 +28,6 @@ public class SignUpController {
     private final MemberService memberService;
     private final TokenService tokenService;
 
-
-    @GetMapping("/home")
-    public String signUpHome() {
-        return "login/login";
-    }
-
     @GetMapping
     public String signUp(@ModelAttribute MemberForm memberForm, HttpServletRequest request) {
         HttpSession session = request.getSession();

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.EditForm;
 import ywphsm.ourneighbor.controller.form.EmailConfirmForm;
 import ywphsm.ourneighbor.controller.form.PasswordEditForm;
+import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.email.TokenService;
@@ -28,15 +29,16 @@ public class EditController {
 
         editForm.setId(member.getId());
         editForm.setNickname(member.getNickname());
-        editForm.setPhoneNumber(member.getPhoneNumber());
 
         return "edit/editForm";
     }
 
     @PostMapping
-    public String memberEdit(@Valid @ModelAttribute EditForm editForm, BindingResult bindingResult) {
+    public String memberEdit(@Valid @ModelAttribute EditForm editForm, BindingResult bindingResult,
+                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
-        if (memberService.doubleCheck(editForm.getNickname()) != null) {
+        if (memberService.doubleCheck(editForm.getNickname()) != null &&
+                !member.getNickname().equals(editForm.getNickname())) {
             bindingResult.reject("doubleCheck", new Object[]{editForm.getNickname()}, null);
 
             if (bindingResult.hasErrors()) {
@@ -44,7 +46,7 @@ public class EditController {
             }
         }
 
-        memberService.update(editForm.getId(), editForm.getNickname(), editForm.getPhoneNumber());
+        memberService.updateNickname(editForm.getId(), editForm.getNickname());
         return "redirect:/";
     }
 
@@ -94,11 +96,51 @@ public class EditController {
                                @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
         if (bindingResult.hasErrors()) {
-            return "/edit/EmailConfirmForm";
+            return "edit/EmailConfirmForm";
         }
 
         tokenService.createEmailToken(member.getId(), emailConfirmForm.getEmail());
 
-        return "/signUp/confirmEmail";
+        return "signUp/confirmEmail";
+    }
+
+    @GetMapping("/phoneCertified")
+    public String edit_phoneCertified(@ModelAttribute PhoneCertifiedForm phoneCertifiedForm,
+                                      @SessionAttribute(name = SessionConst.PHONE_CERTIFIED) PhoneCertifiedForm phoneSession) {
+
+        phoneSession.setPhoneNumber(phoneSession.getPhoneNumber());
+        return "edit/phoneCertifiedForm";
+    }
+
+    @PostMapping("/phoneCertified")
+    public String edit_phoneCertified(@Valid @ModelAttribute PhoneCertifiedForm phoneCertifiedForm,
+                                      BindingResult bindingResult,
+                                      @SessionAttribute(name = SessionConst.PHONE_CERTIFIED) PhoneCertifiedForm phoneSession,
+                                      @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
+
+        if (!phoneCertifiedForm.getPhoneNumber().equals(phoneSession.getPhoneNumber()) ||
+                !phoneCertifiedForm.getCertifiedNumber().equals(phoneSession.getCertifiedNumber())) {
+            bindingResult.reject("phoneCertifiedFail");
+        }
+
+        if (memberService.findByPhoneNumber(phoneCertifiedForm.getPhoneNumber()) != null) {
+            bindingResult.reject("phoneDoubleCheck");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "edit/phoneCertifiedForm";
+        }
+
+        memberService.updatePhoneNumber(member.getId(), phoneCertifiedForm.getPhoneNumber());
+
+        return "redirect:/logout";
+    }
+
+    //회원탈퇴
+    @GetMapping("/withdrawal")
+    public String withdrawal(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
+
+        memberService.withdrawal(member.getId());
+        return "redirect:/logout";
     }
 }

@@ -74,9 +74,9 @@ public class MemberService {
     //이메일 토큰만료, 인증된 이메일로 변경
     @Transactional
     public boolean confirmEmail(String tokenId) {
-        EmailToken findToken = tokenService.findByIdAndExpirationDateAfterAndExpired(tokenId);
+        EmailToken findToken = tokenService.findByIdAndExpirationDateAfterAndExpired(tokenId);  //유효한 토큰 찾기
         if (findToken != null) {
-            findToken.useToken();   // 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true로 변경
+            findToken.useToken();   // 토큰 만료 로직을 구현 ex) expired 값을 true로 변경
             Member findMember = findOne(findToken.getMemberId());
             findMember.emailConfirmSuccess(); // 유저의 이메일 인증 값 변경 로직을 구현해주면 된다.
             return true;
@@ -89,12 +89,20 @@ public class MemberService {
         return memberRepository.findByEmail(email).orElse(null);
     }
 
-    //회원수정 변경 감지
+    //회원수정시 닉네임 변경
     @Transactional
-    public void update(Long id, String nickname, String phoneNumber) {
+    public void updateNickname(Long id, String nickname) {
         Member member = memberRepository.findById(id).get();
 
-        member.update(nickname, phoneNumber);
+        member.updateNickname(nickname);
+    }
+
+    //회원수정시 전화번호 변경
+    @Transactional
+    public void updatePhoneNumber(Long id, String phoneNumber) {
+        Member member = memberRepository.findById(id).get();
+
+        member.updatePhoneNumber(phoneNumber);
     }
 
     //비밀번호 확인
@@ -132,7 +140,7 @@ public class MemberService {
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("to", phoneNumber);    // 수신전화번호
-        params.put("from", "01038352375");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("from", "010383523755");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
         params.put("type", "SMS");
         params.put("text", "Our neighborhood 휴대폰인증 메시지 : 인증번호는" + "["+cerNum+"]" + "입니다.");
 
@@ -146,11 +154,12 @@ public class MemberService {
 
     }
 
+    //휴대폰번호 중복검사
     public Member findByPhoneNumber(String phoneNumber) {
         return memberRepository.findByPhoneNumber(phoneNumber).orElse(null);
     }
 
-
+    //아이디 찾기
     public String findUserId(String receiverEmail) {
 
         String userId = memberRepository.findByEmail(receiverEmail).orElse(null).getUserId();
@@ -164,5 +173,11 @@ public class MemberService {
         }
 
         return userId;
+    }
+
+    //회원탈퇴
+    @Transactional
+    public void withdrawal(Long id) {
+        memberRepository.findById(id).ifPresent(memberRepository::delete);
     }
 }

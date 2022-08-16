@@ -37,11 +37,13 @@ public class SignUpController {
     @GetMapping
     public String signUp(@ModelAttribute MemberForm memberForm, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Object attribute = session.getAttribute(SessionConst.PHONE_CERTIFIED);
+        PhoneCertifiedForm certifiedForm = (PhoneCertifiedForm) session.getAttribute(SessionConst.PHONE_CERTIFIED);
 
-        if (attribute == null) {
+        if (certifiedForm == null) {
             return "redirect:/sign_up/certifiedPhone";
         }
+
+        memberForm.setPhoneNumber(certifiedForm.getPhoneNumber());
 
         return "signUp/signUpForm";
     }
@@ -59,13 +61,17 @@ public class SignUpController {
             bindingResult.reject("doubleCheck", new Object[]{memberForm.getNickname()}, null);
         }
 
-        if (!memberForm.getPhoneNumber().equals(certifiedForm.getPhoneNumber()) &&
+        if (!memberForm.getPhoneNumber().equals(certifiedForm.getPhoneNumber()) ||
                 !memberForm.getCertifiedNumber().equals(certifiedForm.getCertifiedNumber())) {
             bindingResult.reject("phoneCertifiedFail");
         }
 
         if (memberService.findByPhoneNumber(memberForm.getPhoneNumber()) != null) {
-            bindingResult.reject("PhoneDoubleCheck");
+            bindingResult.reject("phoneDoubleCheck");
+        }
+
+        if (memberService.findByEmail(memberForm.getEmail()) != null) {
+            bindingResult.reject("emailDoubleCheck");
         }
 
         if (bindingResult.hasErrors()) {
@@ -113,7 +119,8 @@ public class SignUpController {
     }
 
     @GetMapping("/sendSMS")
-    public String sendSMS(@RequestParam String phoneNumber, HttpServletRequest request) {
+    public String sendSMS(@RequestParam String phoneNumber, HttpServletRequest request,
+                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         Random rand = new Random();
         String certifiedNumber = "";
         for (int i = 0; i < 6; i++) {
@@ -132,6 +139,9 @@ public class SignUpController {
         HttpSession session = request.getSession();
         session.setAttribute("phoneCertified", certifiedForm);
 
+        if (member != null) {
+            return "redirect:/member_edit/phoneCertified";
+        }
         return "redirect:/sign_up";
     }
 }

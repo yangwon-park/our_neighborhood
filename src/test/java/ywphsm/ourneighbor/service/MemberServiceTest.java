@@ -71,7 +71,7 @@ class MemberServiceTest {
                 .where(member.age.goe(10).and(member.age.lt(30)))
                 .fetch();
 
-        assertThat(memberList).extracting("username").contains("kkk", "ㅁㅁㅁ");
+        assertThat(memberList).extracting("username").contains("user1", "user3");
     }
 }
 

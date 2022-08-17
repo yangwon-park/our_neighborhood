@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ywphsm.ourneighbor.domain.store.Store;
-
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.StoreService;
 
@@ -32,7 +31,9 @@ public class MapSearchController {
                 .collect(Collectors.toList());
         return new Result(collect.size(), collect);
     }
-
+    
+    // JSON 구조에 유연함을 주기 위해
+    // 껍데기 용도의 클래스 타입 별도 생성
     @Data
     @AllArgsConstructor
     static class Result<T> {

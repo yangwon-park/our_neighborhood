@@ -101,7 +101,7 @@ function addInfoWindow(marker, data, infowindow) {
             '<div class="container">' +
             '    <div class="row mt-2">' +
             '        <div class="col m-auto">' +
-            '           <a href="/store/' + data.storeId + '" class="fs-5 me-2">' + data.name + '</a>' +
+            '           <a style="text-decoration: none; color: #0b1526" href="/store/' + data.storeId + '" class="fs-5 me-2">' + data.name + '</a>' +
             '           <span class="badge mb-2 ' + data.status + '">' + data.status + '</span>' +
             '        </div>' +
             '    </div>' +

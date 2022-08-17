@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<nav th:fragment="common_navbar" class="navbar navbar-expand-lg py-3 shadow-lg sticky-top">
+  <div class="container-fluid ms-3 me-3">
+    <a href="/" class="navbar-brand align-middle">
+      <h3 class="m-0">
+        <img src="../images/ex.png" alt="Logo" height="36px">
+        우리 동네
+      </h3>
+
+    </a>
+    <!-- 화면 작아지면 햄버거 버튼으로 변경      -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <th:block th:if="${member eq null}">
+            <a href="/login" class="nav-link">
+              로그인
+            </a>
+          </th:block>
+          <th:block th:if="${member ne null}">
+            <a href="#" class="nav-link">
+              내 정보
+            </a>
+            <a href="/logout2" class="nav-link">
+              로그아웃
+            </a>
+          </th:block>
+        </li>
+        <li class="nav-item">
+          <a href="#intro" class="nav-link">
+            내 가게 정보
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#services" class="nav-link">
+            Services
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#slogan" class="nav-link">
+            Slogan
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#gallery" class="nav-link">
+            Gallery
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#cta" class="nav-link">
+            Contact
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

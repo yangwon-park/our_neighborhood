@@ -8,13 +8,14 @@
     </style>
 </head>
 <body>
+<nav th:replace="layout/navbar :: common_navbar"></nav>
 <h4>스토어 디테일</h4>
 <div>
     <table class="table">
         <thead>
         <tr>
             <th>가게명 <button class="btn btn-orange"
-                            th:onclick="|location.href='@{/menu/addMenu/'${store.id}'}'|">메뉴 등록</button> </th>
+            th:onclick="|location.href='@{/menu/addMenu/{storeId}(storeId=${store.storeId})}'|">메뉴 등록</button> </th>
             <th>전화번호</th>
             <th>오픈 시간</th>
             <th>닫는 시간</th>
@@ -53,7 +54,7 @@
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
 </footer>
-<script>
+<script th:inline="javascript">
 
 </script>
 <script th:replace="layout/footer :: common_js(~{::script})">

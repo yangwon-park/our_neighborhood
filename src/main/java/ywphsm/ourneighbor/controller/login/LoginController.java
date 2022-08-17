@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.controller;
+package ywphsm.ourneighbor.controller.login;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -47,12 +47,12 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);    //session이 없어도 생성 X
 
         if (session != null) {
-            session.invalidate();
+            session.invalidate();   //세션 삭제
         }
         return "redirect:/";
     }

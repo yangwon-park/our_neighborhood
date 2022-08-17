@@ -94,58 +94,44 @@
 
                 <div class="card-body px-lg-5 py-lg-5">
                     <div class="text-center text-muted mb-4">
-                        <small>회원 수정</small>
+                        <small>비밀번호 변경</small>
                     </div>
-                    <form role="form" action="" th:action th:object="${editForm}" method="post">
+                    <form role="form" action="" th:action th:object="${phoneCertifiedForm}" method="post">
+
                         <div th:if="${#fields.hasGlobalErrors()}">
                             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
                                th:text="${err}">전체 오류 메시지</p>
                         </div>
-                        <input type="hidden" th:field="*{id}" />
+
                         <div class="form-group">
                             <div class="input-group input-group-alternative mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                 </div>
-                                <input class="form-control" placeholder="nickname" type="text" id="nickname" th:field="*{nickname}"
+                                <input class="form-control" disabled placeholder="phoneNumber" type="text" id="phoneNumber" th:field="*{phoneNumber}"
                                        th:errorclass="field-error">
-                                <div class="field-error" th:errors="*{nickname}" />
+                                <div class="field-error" th:errors="*{phoneNumber}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="certifiedNumber" type="text" id="certifiedNumber" th:field="*{certifiedNumber}"
+                                       th:errorclass="field-error">
+                                <div class="field-error" th:errors="*{certifiedNumber}" />
                             </div>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-orange mt-4">닉네임 변경</button>
+                            <button type="submit" class="btn btn-orange mt-4">전화번호 변경</button>
                         </div>
                     </form>
-                    <br>
-                    <div class="col">
-                        <button class="w-100 btn btn-secondary btn-lg"
-                                th:onclick="|location.href='@{/sign_up/certifiedPhone}'|"
-                                type="button">휴대폰 번호 변경</button>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <button class="w-100 btn btn-secondary btn-lg"
-                                th:onclick="|location.href='@{/member_edit/password_edit}'|"
-                                type="button">비밀번호 변경</button>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <button class="w-100 btn btn-secondary btn-lg"
-                                th:onclick="|location.href='@{/member_edit/confirm_email}'|"
-                                type="button">이메일 인증</button>
-                    </div>
-                    <br>
-                    <div class="text-center">
-                        <button class="btn btn-orange mt-6"
-                                th:onclick="|location.href='@{/member_edit/withdrawal}'|"
-                                type="button">회원 탈퇴</button>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</section>
 
 </body>
 <footer th:replace="layout/footer :: common_footer">

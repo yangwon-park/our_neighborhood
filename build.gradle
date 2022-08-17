@@ -51,10 +51,10 @@ dependencies {
 	//Gson
 	implementation 'com.google.code.gson:gson:2.8.7'
 
+	//json-simple
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
 	// QueryDSL
-	//Querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -72,6 +72,12 @@ dependencies {
 
 	//이메일인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//coolSMS(휴대폰 문자 인증)
+	implementation group: 'net.nurigo', name: 'javaSDK', version: '2.2'
+
+	// devtools (개발 편의성 증대)
+	implementation 'org.springframework.boot:spring-boot-devtools'
 
 }
 

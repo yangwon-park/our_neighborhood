@@ -13,12 +13,8 @@
     <table class="table">
         <thead>
         <tr>
-<<<<<<< HEAD
-            <th>가게명</th>
-=======
             <th>가게명 <button class="btn btn-orange"
                             th:onclick="|location.href='@{/menu/addMenu/'${store.id}'}'|">메뉴 등록</button> </th>
->>>>>>> 130a377259d58076f245b658a1838abb3d42525c
             <th>전화번호</th>
             <th>오픈 시간</th>
             <th>닫는 시간</th>
@@ -33,20 +29,6 @@
         </tr>
         </thead>
         <tbody>
-<<<<<<< HEAD
-        <tr th:each="store : ${store}">
-            <td th:text="${store.name}"></td>
-            <td th:text="${store.phoneNumber}"></td>
-            <td th:text="${store.openingTime}"></td>
-            <td th:text="${store.closingTime}"></td>
-            <td th:text="${store.breakStart}"></td>
-            <td th:text="${store.breakEnd}"></td>
-            <td th:text="${store.notice}"></td>
-            <td th:text="${store.intro}"></td>
-            <td th:text="${store.offDay}"></td>
-            <td th:text="${store.status}"></td>
-            <td th:text="${store.address.city}"></td>
-=======
         <tr th:object="${store}">
             <td th:text="*{name}"></td>
             <td th:text="*{phoneNumber}"></td>
@@ -61,7 +43,6 @@
             </td>
             <td th:text="*{status}"></td>
             <td th:text="*{address.roadAddr}"></td>
->>>>>>> 130a377259d58076f245b658a1838abb3d42525c
 <!--            <td th:text="${store.menuList}"></td>-->
         </tr>
         </tbody>

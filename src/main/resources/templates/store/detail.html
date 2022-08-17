@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<h4>스토어 디테일</h4>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>가게명</th>
+            <th>전화번호</th>
+            <th>오픈 시간</th>
+            <th>닫는 시간</th>
+            <th>쉬는 시간</th>
+            <th>쉬는 시간</th>
+            <th>소개</th>
+            <th>한줄말</th>
+            <th>쉬는 날</th>
+            <th>상태</th>
+            <th>주소</th>
+<!--            <th>메뉴</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="store : ${store}">
+            <td th:text="${store.name}"></td>
+            <td th:text="${store.phoneNumber}"></td>
+            <td th:text="${store.openingTime}"></td>
+            <td th:text="${store.closingTime}"></td>
+            <td th:text="${store.breakStart}"></td>
+            <td th:text="${store.breakEnd}"></td>
+            <td th:text="${store.notice}"></td>
+            <td th:text="${store.intro}"></td>
+            <td th:text="${store.offDay}"></td>
+            <td th:text="${store.status}"></td>
+            <td th:text="${store.address.city}"></td>
+<!--            <td th:text="${store.menuList}"></td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
+<script>
+
+</script>
+<script th:replace="layout/footer :: common_js(~{::script})">
+</script>
+</body>
+</html>

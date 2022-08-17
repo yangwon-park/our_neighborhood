@@ -133,8 +133,11 @@ public class Member extends BaseTimeEntity {
 
 
     //회원 수정
-    public void update(String nickname, String phoneNumber) {
+    public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

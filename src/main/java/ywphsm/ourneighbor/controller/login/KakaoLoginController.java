@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.controller;
+package ywphsm.ourneighbor.controller.login;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

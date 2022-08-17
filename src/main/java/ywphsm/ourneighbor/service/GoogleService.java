@@ -15,7 +15,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import ywphsm.ourneighbor.controller.form.google.GoogleOAuthRequest;
 import ywphsm.ourneighbor.controller.form.google.GoogleOAuthResponse;
 import ywphsm.ourneighbor.domain.member.Member;

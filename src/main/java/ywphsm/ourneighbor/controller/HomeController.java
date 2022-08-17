@@ -48,7 +48,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-                       Model model) {
+                        Model model) {
 
         model.addAttribute("member", member);
         return "index";

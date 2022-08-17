@@ -13,5 +13,5 @@ public class PhoneCertifiedForm {
             message = "11자리의 숫자여야합니다")
     private String phoneNumber;
 
-    private String CertifiedNumber;
+    private String certifiedNumber;
 }

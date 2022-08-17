@@ -47,12 +47,16 @@ public class LoginController {
         return "redirect:/";
     }
 
+<<<<<<< HEAD
+    @GetMapping("/logout")
+=======
     @GetMapping("/logout2")
+>>>>>>> 130a377259d58076f245b658a1838abb3d42525c
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);    //session이 없어도 생성 X
 
         if (session != null) {
-            session.invalidate();
+            session.invalidate();   //세션 삭제
         }
         return "redirect:/";
     }

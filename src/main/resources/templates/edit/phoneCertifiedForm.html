@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
-<<<<<<< HEAD
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
 
@@ -92,116 +91,47 @@
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
             <div class="card bg-secondary shadow border-0">
-                <div class="card-header bg-transparent pb-5">
-                    <div class="text-muted text-center mt-2 mb-4"><small>Api 로그인</small></div>
-                    <!-- 카카오 로그인 -->
-                    <a class="p-2" href="/login/kakaoUrl">
-                        <img th:src="@{/images/kakao_login_medium_narrow.png}" style="height:60px"/>
-                    </a>
-                    <!-- 구글 로그인 -->
-                    <a class="p-2" href="/login/googleUrl">
-                        <img th:src="@{/images/btn_google_signin.png}" style="height:60px"/>
-                    </a>
-                    <!-- 네이버 로그인 -->
-                    <a class="p-2" href="/login/naverUrl">
-                        <img th:src="@{/images/naver_login.png}" style="height:60px"/>
-                    </a>
-                </div>
+
                 <div class="card-body px-lg-5 py-lg-5">
                     <div class="text-center text-muted mb-4">
-                        <small>Log in</small>
+                        <small>비밀번호 변경</small>
                     </div>
-                    <form role="form" action="" th:action th:object="${loginForm}" method="post">
+                    <form role="form" action="" th:action th:object="${phoneCertifiedForm}" method="post">
+
                         <div th:if="${#fields.hasGlobalErrors()}">
                             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
                                th:text="${err}">전체 오류 메시지</p>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                </div>
+                                <input class="form-control" disabled placeholder="phoneNumber" type="text" id="phoneNumber" th:field="*{phoneNumber}"
+                                       th:errorclass="field-error">
+                                <div class="field-error" th:errors="*{phoneNumber}" />
+                            </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-alternative mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                 </div>
-                                <input class="form-control" placeholder="Name" type="text" id="userId" th:field="*{userId}"
+                                <input class="form-control" placeholder="certifiedNumber" type="text" id="certifiedNumber" th:field="*{certifiedNumber}"
                                        th:errorclass="field-error">
-                                <div class="field-error" th:errors="*{userId}" />
+                                <div class="field-error" th:errors="*{certifiedNumber}" />
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="input-group input-group-alternative">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                                </div>
-                                <input class="form-control" placeholder="Password" type="password" id="password" th:field="*{password}"
-                                       th:errorclass="field-error">
-                                <div class="field-error" th:errors="*{password}" />
-                            </div>
-                        </div>
-
                         <div class="text-center">
-                            <button type="submit" class="btn btn-orange mt-4">로그인</button>
+                            <button type="submit" class="btn btn-orange mt-4">전화번호 변경</button>
                         </div>
                     </form>
-                    <!-- 아이디 찾기 -->
-                    <a class="p-2" href="/findUserId">아이디 찾기</a>
-
-                    <!-- 비밀번호 찾기 -->
-                    <a class="p-2" href="/findPassword">비밀번호 찾기</a>
                 </div>
-=======
-    <meta charset="utf-8"/>
-    <title>로그인</title>
-    <style>
-        .container {
-            max-width: 560px;
-        }
-
-        .field-error {
-            border-color: #dc3545;
-            color: #dc3545;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="py-5 text-center">
-        <h2>로그인</h2>
-    </div>
-    <form th:action th:object="${loginForm}" method="post">
-        <div th:if="${#fields.hasGlobalErrors()}">
-            <p class="field-error" th:each="err : ${#fields.globalErrors()}"
-               th:text="${err}">전체 오류 메시지</p>
-        </div>
-        <div>
-            <label for="userId">로그인 ID</label>
-            <input type="text" id="userId" th:field="*{userId}" class="form-control"
-                   th:errorclass="field-error">
-            <div class="field-error" th:errors="*{userId}"></div>
-        </div>
-        <div>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" th:field="*{password}"
-                   class="form-control"
-                   th:errorclass="field-error">
-            <div class="field-error" th:errors="*{password}"></div>
-        </div>
-        <hr class="my-4">
-        <div class="row">
-            <div class="col">
-                <button class="w-100 btn btn-primary btn-lg" type="submit">
-                    로그인
-                </button>
-            </div>
-            <div class="col">
-                <button class="w-100 btn btn-secondary btn-lg"
-                        onclick="location.href='items.html'" th:onclick="|location.href='@{/}'|"
-                        type="button">취소
-                </button>
->>>>>>> 130a377259d58076f245b658a1838abb3d42525c
             </div>
         </div>
     </div>
 </div>
-</section>
 
 </body>
 <footer th:replace="layout/footer :: common_footer">

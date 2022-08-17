@@ -13,7 +13,11 @@
 <body class="bg-default">
 
 <!-- Navbar -->
+<<<<<<< HEAD
+<nav class="arg-navbar navbar navbar-expand-lg navbar-light py-3 sticky-top">
+=======
 <nav class="arg-navbar navbar navbar-expand-lg py-3 sticky-top">
+>>>>>>> 130a377259d58076f245b658a1838abb3d42525c
     <div class="container">
         <a class="navbar-brand" href="#" target="_blank">
             우리 동네
@@ -76,7 +80,11 @@
     </div>
 </nav>
 <!-- Header -->
+<<<<<<< HEAD
+<section class="header">
+=======
     <section class="header">
+>>>>>>> 130a377259d58076f245b658a1838abb3d42525c
     <div class="header py-7 py-lg-8">
         <div class="separator separator-bottom separator-skew zindex-100">
             <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -127,6 +135,8 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
+<<<<<<< HEAD
+=======
                                     <input th:field="*{lat}" class="form-control" placeholder="위도" type="hidden">
                                 </div>
                             </div>
@@ -137,6 +147,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
+>>>>>>> 130a377259d58076f245b658a1838abb3d42525c
                                     <input th:field="*{phoneNumber}" class="form-control" placeholder="매장 전화 번호" type="text">
                                 </div>
                             </div>
@@ -163,6 +174,9 @@
                                     <input th:field="*{breakStart}" class="form-control" placeholder="휴식 시작 시간" type="time">
                                 </div>
                                 <div class="input-group input-group-alternative ms-3">
+<<<<<<< HEAD
+                                    <input th:field="*{breakEnd}" class="form-control" placeholder="휴식 시작 시간" type="time">
+=======
                                     <input th:field="*{breakEnd}" class="form-control" placeholder="휴식 종료 시간" type="time">
                                 </div>
                             </div>
@@ -173,6 +187,7 @@
                                             th:field="${store.offDays}" th:value="${day.value}">
                                     <label class="custom-control-label"
                                            th:for="${#ids.prev('offDays')}" th:text="${day.key}">일</label>
+>>>>>>> 130a377259d58076f245b658a1838abb3d42525c
                                 </div>
                             </div>
                             <div class="text-center">
@@ -189,6 +204,12 @@
 </body>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
+<<<<<<< HEAD
+    <script th:replace="layout/footer :: common_js(~{::script})"></script>
+</footer>
+<script>
+    var addr;
+=======
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script>
@@ -201,6 +222,7 @@
     // 카카오맵 geocoder 라이브러리 객체 생성
     var geocoder = new kakao.maps.services.Geocoder();
 
+>>>>>>> 130a377259d58076f245b658a1838abb3d42525c
     function openPostcode() {
         new daum.Postcode({
             oncomplete: function (data) {
@@ -232,6 +254,8 @@
                     guideTextBox.innerHTML = '';
                     guideTextBox.style.display = 'none';
                 }
+<<<<<<< HEAD
+=======
             },
 
             onclose: function(state) {
@@ -245,10 +269,23 @@
 
                     findLatLon();
                 }
+>>>>>>> 130a377259d58076f245b658a1838abb3d42525c
             }
         }).open();
     }
 
+<<<<<<< HEAD
+    console.log(addr)
+
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    geocoder.addressSearch(addr, (result, status) => {
+
+        if (status === kakao.maps.services.Status.OK) {
+
+        }
+    })
+=======
 
     function findLatLon() {
         geocoder.addressSearch(addr, (result, status) => {
@@ -263,5 +300,6 @@
 
 
     }
+>>>>>>> 130a377259d58076f245b658a1838abb3d42525c
 </script>
 </html>

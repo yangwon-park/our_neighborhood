@@ -24,21 +24,16 @@ public class MapSearchController {
     // 메뉴 리스트는 불러오지 않음
     // 단순 조회이므로 fetch 조인으로 최적화
     @GetMapping(value = "/searchStores", produces = "application/json;charset=utf-8")
-    public Result searchStores(@RequestParam String keyword) {
+    public ResultClass searchStores(@RequestParam String keyword) {
         List<Store> findStores = storeService.searchByKeyword(keyword);
         List<SimpleSearchStoreDTO> collect = findStores.stream()
                 .map(SimpleSearchStoreDTO::new)
                 .collect(Collectors.toList());
-        return new Result(collect.size(), collect);
+        return new ResultClass(collect.size(), collect);
     }
     
     // JSON 구조에 유연함을 주기 위해
     // 껍데기 용도의 클래스 타입 별도 생성
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private int count;
-        private T data;
-    }
+
 
 }

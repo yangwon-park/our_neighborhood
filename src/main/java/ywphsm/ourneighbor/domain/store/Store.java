@@ -1,10 +1,7 @@
 package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
-<<<<<<< HEAD
-=======
 import lombok.extern.slf4j.Slf4j;
->>>>>>> 130a377259d58076f245b658a1838abb3d42525c
 import ywphsm.ourneighbor.domain.Address;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
 import ywphsm.ourneighbor.domain.Menu;

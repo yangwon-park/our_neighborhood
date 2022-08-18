@@ -1,16 +1,16 @@
-package ywphsm.ourneighbor.repository.store.dto;
+package ywphsm.ourneighbor.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -26,23 +26,23 @@ public class StoreDetailDTO {
     private String phoneNumber;
 
     @NotNull
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss a")
     private LocalTime openingTime;            // 여는 시간
 
     @NotNull
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss a")
     private LocalTime closingTime;            // 닫는 시간
 
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss a")
     private LocalTime breakStart;             // 쉬는 시간 시작
 
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss a")
     private LocalTime breakEnd;               // 쉬는 시간 끝
 
     private String notice;                    // 가게 소식
     private String intro;                     // 가게 소개
 
-    private Integer offDay;                   // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
+    private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
 
     private StoreStatus status;               // 가게 오픈 상황
 
@@ -64,7 +64,7 @@ public class StoreDetailDTO {
         breakEnd = store.getBreakEnd();
         notice = store.getNotice();
         intro = store.getIntro();
-        offDay = store.getOffDay();
+        offDays = store.getOffDays();
         status = store.getStatus();
         address = store.getAddress();
     }
@@ -79,7 +79,7 @@ public class StoreDetailDTO {
                 .breakEnd(breakEnd)
                 .notice(notice)
                 .intro(intro)
-                .offDay(offDay)
+                .offDays(offDays)
                 .status(status)
                 .address(address)
                 .build();

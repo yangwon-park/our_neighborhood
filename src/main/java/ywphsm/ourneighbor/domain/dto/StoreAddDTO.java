@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ywphsm.ourneighbor.domain.Address;
+
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.validation.constraints.NotBlank;
@@ -12,19 +13,34 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import java.util.List;
+
+
 @Data
 @NoArgsConstructor
 public class StoreAddDTO {
 
     @NotBlank
     private String name;
+
+
     @NotBlank
     private String zipcode;
+
     @NotBlank
     private String roadAddr;
+
     @NotBlank
     private String numberAddr;
+
     private String detail;
+
+    @NotBlank
+    private Double lat;
+
+    @NotBlank
+    private Double lon;
+
     private String phoneNumber;
     @NotNull
     @DateTimeFormat(pattern = "HH:mm")
@@ -38,7 +54,9 @@ public class StoreAddDTO {
     private LocalTime breakEnd;               // 쉬는 시간 끝
     private String notice;
     private String intro;
-    private Integer offDay;
+
+    private List<String> offDays;
+
 
     @Builder
     public StoreAddDTO(Store store) {
@@ -46,11 +64,13 @@ public class StoreAddDTO {
         phoneNumber = store.getPhoneNumber();
         openingTime = store.getOpeningTime();
         closingTime = store.getClosingTime();
+        lat = store.getLat();
+        lon = store.getLon();
         breakStart = store.getBreakStart();
         breakEnd = store.getBreakEnd();
         notice = store.getNotice();
         intro = store.getIntro();
-        offDay = store.getOffDay();
+        offDays = store.getOffDays();
         zipcode = store.getAddress().getZipcode();
         roadAddr = store.getAddress().getRoadAddr();
         numberAddr = store.getAddress().getNumberAddr();
@@ -63,11 +83,13 @@ public class StoreAddDTO {
                 .phoneNumber(phoneNumber)
                 .openingTime(openingTime)
                 .closingTime(closingTime)
+                .lat(lat)
+                .lon(lon)
                 .breakStart(breakStart)
                 .breakEnd(breakEnd)
                 .notice(notice)
                 .intro(intro)
-                .offDay(offDay)
+                .offDays(offDays)
                 .address(new Address(zipcode, roadAddr, numberAddr, detail))
                 .build();
     }

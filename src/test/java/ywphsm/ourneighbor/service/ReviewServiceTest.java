@@ -36,7 +36,6 @@ import static ywphsm.ourneighbor.domain.store.QStore.*;
 
 @SpringBootTest
 @Transactional
-@Rollback(false)
 class ReviewServiceTest {
 
     @Autowired
@@ -130,21 +129,6 @@ class ReviewServiceTest {
         em.persist(review5);
     }
 
-    @Test
-    @DisplayName("리뷰 등록")
-    void saveReview() {
-        Member findMember = findMember("JJJ");
-
-        Store visitedStore = findStore("칸다 소바");
-
-        Review review = new Review("맛있어요", 5, findMember, visitedStore);
-
-        Long reviewId = reviewService.saveReview(review);
-
-        Long findReviewId = reviewService.findOne(reviewId).getId();
-
-        assertThat(reviewId).isEqualTo(findReviewId);
-    }
 
     @Test
     @DisplayName("Querydsl 사용해서 리뷰의 내용, 작성자, 가게 이름 불러오기")
@@ -153,6 +137,10 @@ class ReviewServiceTest {
                 .select(review.content, review.member.username, review.store.name)
                 .from(review)
                 .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple);
+        }
 
         assertThat(result.size()).isEqualTo(5);
     }
@@ -163,7 +151,7 @@ class ReviewServiceTest {
         List<Review> reviewList = queryFactory
                 .select(review)
                 .from(review)
-                .where(review.member.username.eq("JJJ"))
+                .where(review.member.username.eq("user2"))
                 .fetch();
 
         assertThat(reviewList).extracting("content")

@@ -1,61 +1,461 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>우리 동네</title>
-    <style>
-
-    </style>
+<head>
+    <meta charset="utf-8"/>
+    <title>우리 동네 홈화면</title>
 </head>
-<body>
-<input type="text" id="zipcode" placeholder="우편번호">
-<input type="button" onclick="openPostcode()" value="우편번호 찾기"><br>
-<input type="text" id="roadAddr" placeholder="도로명주소">
-<input type="text" id="numberAddr" placeholder="지번주소">
-<span id="guide" style="color:#999;display:none"></span>
-<input type="text" id="detail" placeholder="상세주소">
-<footer th:replace="layout/footer :: common_footer">
-    템플릿 푸터
-</footer>
+<style>
 
-<script>
-    function openPostcode() {
-        new daum.Postcode({
-            oncomplete: function (data) {
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" th:href="@{../css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{../css/app.css}">
 
-                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var roadAddr = data.roadAddress; // 도로명 주소 변수
 
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('zipcode').value = data.zonecode;
-                document.getElementById('roadAddr').value = roadAddr;
-                document.getElementById('numberAddr').value = data.jibunAddress;
+<nav class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-lg sticky-top">
+    <div class="container">
+        <a href="index.html" class="navbar-brand align-middle">
+            <h3 class="m-0">
+                <img src="../images/ex.png" alt="Logo" height="36px">
+                My BS5 WEB
+            </h3>
+        </a>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a href="#top" class="nav-link">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#intro" class="nav-link">
+                        Intro
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#services" class="nav-link">
+                        Services
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#slogan" class="nav-link">
+                        Slogan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#gallery" class="nav-link">
+                        Gallery
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#cta" class="nav-link">
+                        Contact
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#find-us" class="nav-link">
+                        Find us
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-                var guideTextBox = document.getElementById("guide");
-                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-                if (data.autoRoadAddress) {
-                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-                    guideTextBox.style.display = 'block';
+<!--    div class="overlay"는 상위 section id="top"의 위치, 크기와 동일 => position을 relative로 설정-->
+<section id="top" class="position-relative">
+    <div class="section-content overlay d-flex justify-content-center align-items-center">
+        <div class="container-xxl">
+            <div class="row align-items-center">
+                <div class="col-md-9 welcome">
+                    <h1 class="welcome-title fw-light">
+                        Welcome <span class="text-warning fw-bold">My 1st WebSite</span>. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic, officia!
+                    </h1>
+                    <div class="divider"></div>
+                    <p class="col-sm-10 col-md-12 lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque deserunt dignissimos doloremque eum odit officia possimus provident quam qui soluta!</p>
+                    <p class="col-sm-2 col-md-12">
+                        <a href="#" class="btn btn-primary">Read More</a>
+                    </p>
+                </div>
+                <!--                    d-none으로 일단 모든 기기에서 안 보기에 설정 => d-md-block로 md 이상에선 보이게 다시 설정 => 최종적으로 sm 이하에선 안 보임-->
+                <div class="col-md-3 d-none d-md-block letsgo">
+                    <div class="card card-body letsgo-card">
+                        <div class="letsgo my-3">
+                            <h4 class="lestgo-title card-title text-dark mb-3">Easy Contact!</h4>
+                            <p class="card-text text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste, nesciunt.</p>
+                        </div>
+                        <div class="letsgo-card-form">
+                            <form>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Your name"/>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="tel" class="form-control" placeholder="Your phone"/>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input type="text" class="form-check-input" id="flexCheckDefault">
+                                    <label for="flexCheckDefault" class="form-check-label text-secondary">
+                                        I agree to provide privacy.
+                                    </label>
+                                </div>
+                                <p class="mb-3">
+                                    <button class="btn btn-primary w-100" type="button">Submit</button>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                } else if (data.autoJibunAddress) {
-                    var expJibunAddr = data.autoJibunAddress;
-                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-                    guideTextBox.style.display = 'block';
-                } else {
-                    guideTextBox.innerHTML = '';
-                    guideTextBox.style.display = 'none';
-                }
-            }
-        }).open();
-    }
+<section id="intro">
+    <div class="section-content">
+        <div class="container intro">
+            <div class="row align-items-center">
+                <div class="col-md-6 intro-first">
+                    <div class="row px-md-3">
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
+                                    <h3 class="fw-light">
+                                        <a href="#" class="link-light text-decoration-none">Link 1</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
+                                    <h3 class="fw-light">
+                                        <a href="#" class="link-light text-decoration-none">Link 2</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
+                                    <h3 class="fw-light">
+                                        <a href="#" class="link-light text-decoration-none">Link 3</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
+                                    <h3 class="fw-light">
+                                        <a href="#" class="link-light text-decoration-none">Link 4</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 intro-second">
+                    <h5 class="fw-light">Greetings!</h5>
+                    <h1 class="mb-4">Introduce Our Website.</h1>
+                    <div class="intro-text">
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab debitis dolor ea eveniet illum incidunt itaque magnam odio voluptates, voluptatum.</p>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cupiditate eligendi et facere illum incidunt inventore magnam quam quod vitae.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="services">
+    <div class="section-content">
+        <div class="container services">
+            <div class="services-header text-center mb-5">
+                <h1 class="display-5">Our Amazing Services</h1>
+                <div class="divider"></div>
+                <p class="lead text-secondary">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis doloremque esse in iure minima nam odit possimus repellat voluptates?
+                </p>
+            </div>
+            <div id="slick-slide" class="services-body">
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-col mx-2 my-3">
+                    <div class="card">
+                        <a href="#">
+                            <img src="" alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Slide Title</h4>
+                            <p class="card-text fw-light mb-4">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque ducimus expedita fugiat hic quam quis recusandae, vel vero.
+                            </p>
+                            <a href="#" class="btn btn-primary">View More...</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="slogan">
+    <div class="section-content d-flex align-items-center h-100">
+        <div class="container slogan">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-body slogan-card">
+                        <h1 class="mb-3 mb-3">Our Slogan</h1>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus eius excepturi labore laborum minus modi qui quisquam quo sed, voluptates.</p>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias, quae!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="features">
+    <div class="section-content">
+        <div class="container features">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="card card-body shadow border-0 features-card">
+                        <h4 class="card-title mb-3">
+                            <span class="fw-bold">1</span>
+                            Feature 1
+                        </h4>
+                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus veniam.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card card-body shadow border-0 features-card">
+                        <h4 class="card-title mb-3">
+                            <span class="fw-bold">2</span>
+                            Feature 2
+                        </h4>
+                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus veniam.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card card-body shadow border-0 features-card">
+                        <h4 class="card-title mb-3">
+                            <span class="fw-bold">3</span>
+                            Feature 3
+                        </h4>
+                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus veniam.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="gallery">
+    <div class="section-content">
+        <div class="container gallery">
+            <div class="gallery-header text-center mb-5">
+                <h1 class="display-4">Our Gallery</h1>
+                <div class="divider"></div>
+                <p class="lead text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem debitis labore nobis nostrum quam quidem voluptatem. Accusantium commodi mollitia voluptatum.</p>
+            </div>
+            <div class="row gallery-body">
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 1</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 2</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 3</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 4</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 5</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
+                    <div class="card card-body border-0 p-0">
+                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
+                            <h2 class="gallery-title">Gallery 6</h2>
+                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="cta" class="position-relative">
+    <div class="section-content position-absolute h-100 w-100 overlay d-flex flex-column justify-content-center align-items-center">
+        <div class="container text-center cta">
+            <h3 class="display-6 text-primary">
+                Contact Us AnyTime!
+            </h3>
+            <h2 class="display-4 text-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h2>
+            <p class="lead text-light mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque consequatur deleniti excepturi impedit libero non nostrum obcaecati quis! A, inventore.</p>
+            <h1 class="m-0">
+                <a href="tel:02-111-1111" class="link-warning text-decoration-none">02-111-1111</a>
+            </h1>
+        </div>
+    </div>
+</section>
+
+<section id="find-us" class="position-relative">
+    <!--        container.fluid는 자체적으로 패딩이 설정돼있음 => px-0으로 없애주자-->
+    <div class="container-fluid px-0 mb-3">
+        <div id="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52178.88971932613!2d129.13858008095593!3d35.17705081715166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35688d9fdaeda715%3A0x21c4cd40510865a5!2z67aA7IKw6rSR7Jet7IucIO2VtOyatOuMgOq1rA!5e0!3m2!1sko!2skr!4v1659700821634!5m2!1sko!2skr" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-8 col-10 find-us">
+                <h3>Contact Us!</h3>
+                <div class="divider"></div>
+                <p class="text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto aspernatur atque incidunt nihil quae repellendus repudiandae similique tempore totam veritatis.</p>
+                <div class="d-flex text-secondary">
+                    <p class="fw-bold me-5">
+                        <span class="text-uppercase">phone</span>:
+                        <a href="tel:02-111-1111" class="text-decoration-none">02-111-1111</a>
+                    </p>
+                    <p class="fw-bold">
+                        <span class="text-uppercase">email</span>:
+                        <a href="mailto:jdoe@email.com" class="text-decoration-none">jdoe@email.com</a>
+                    </p>
+                </div>
+                <form action="">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Your name"/>
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="Your email"/>
+                    </div>
+                    <div class="mb-3">
+                        <textarea rows="3" class="form-control" placeholder="입력하세요"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="checkbox" id="checkDefault" class="form-check-input">
+                        <label for="checkDefault" class="form-check-label text-secondary">
+                            I agree to provide privacy.
+                        </label>
+                    </div>
+                    <p class="mb-3">
+                        <button class="btn btn-primary w-100">Send!</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=41d607d49af431e65df64d51940ccfc7&libraries=services,clusterer,drawing"></script>-->
+<script th:inline="javascript">
+
 </script>
-<script>
-
-</script>
-<script th:replace="layout/footer :: common_js(~{::script})">
-</script>
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script th:src="@{../js/bootstrap.bundle.js}"></script>
+<script type="module" th:src="@{../js/app.js}"></script>
 </html>

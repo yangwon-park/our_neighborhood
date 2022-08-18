@@ -6,3 +6,15 @@ body{
     display: none;
 }
 
+.OPEN {
+    background: #fd7e14;
+}
+
+.BREAK {
+    background: #0c4128;
+}
+
+.CLOSED {
+    background: #6c757d;
+    color: #0b1526;
+}

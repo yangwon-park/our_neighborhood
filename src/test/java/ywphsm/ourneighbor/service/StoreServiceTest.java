@@ -9,12 +9,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Address;
-import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.domain.store.StoreStatus;
+import ywphsm.ourneighbor.domain.store.*;
 
 import javax.persistence.EntityManager;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.*;
 import static ywphsm.ourneighbor.domain.store.QStore.*;
@@ -36,30 +40,29 @@ class StoreServiceTest {
     @BeforeEach
     void before() {
         queryFactory = new JPAQueryFactory(em);
-
-        Store store = new Store(
-                "명진 소바", 123.0, 123.0, "010-1234-1234",
-                LocalTime.now(), LocalTime.now(), LocalTime.now(), LocalTime.now(),
-                "안녕하세요", "명진 소바입니다.", null, StoreStatus.OPEN,
-                null
-        );
+        List<String> offDays = new ArrayList<>();
+        offDays.add("토요일");
+        Store store = new Store("쿠다", 35.1612928, 129.1600985, "0517311660",
+                LocalTime.of(9, 00), LocalTime.of(20, 00), LocalTime.of(15, 30), LocalTime.of(17, 00),
+                null, "안녕하세요 칸다 소바입니다.", offDays , StoreStatus.OPEN, new Address("부산광역시 해운대구 구남로 30번길 8-3 1층", "48094", "1234", null));
         em.persist(store);
     }
 
     @Test
     @DisplayName("매장 등록")
     void saveStore() {
-        Store store = new Store(
-                "맥도날드", 123.0, 123.0, "010-1234-1234",
+
+        List<String> offDays = new ArrayList<>();
+        offDays.add("일요일");
+
+        Store store = new Store("쿠다", 1.0, 1.0, "1234",
                 LocalTime.now(), LocalTime.now(), LocalTime.now(), LocalTime.now(),
-                "안녕하세요", "맥도날드입니다.", null, StoreStatus.OPEN,
-                null
-        );
+                "gd", "H2", offDays, StoreStatus.OPEN, null);
 
         Long storeId = storeService.saveStore(store);
         Store findStore = storeService.findOne(storeId);
 
-        assertThat(findStore.getId()).isEqualTo(storeId);
+        assertThat(findStore).isEqualTo(store);
     }
 
     @Test
@@ -91,10 +94,33 @@ class StoreServiceTest {
         String cond = "소바";
         List<Store> stores = storeService.searchByKeyword(cond);
 
-        assertThat(stores.size()).isEqualTo(2);
+        assertThat(stores.size()).isEqualTo(1);
 
         for (Store store1 : stores) {
             System.out.println("store1 = " + store1.getName());
         }
+    }
+
+    @Test
+    @DisplayName("현재 요일 구하기")
+    void today() {
+        LocalDate date = LocalDate.now();
+        String today = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
+
+        LocalTime time = LocalTime.now();
+
+
+        Store findStore = storeService.searchByKeyword("쿠다").get(0);
+
+        List<String> offDays = findStore.getOffDays();
+
+        LocalTime openingTime = findStore.getOpeningTime();
+        LocalTime closingTime = findStore.getClosingTime();
+
+
+        assertThat(openingTime).isBefore(time);
+        assertThat(closingTime).isAfter(time);
+
+        assertThat(today).contains(offDays);
     }
 }

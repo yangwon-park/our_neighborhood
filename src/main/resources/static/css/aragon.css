@@ -391,39 +391,6 @@ small,
     box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08), none;
 }
 
-.btn-orange {
-    color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
-    box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
-}
-
-.btn-orange:hover {
-    color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
-}
-
-.btn-orange:focus {
-    box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08), 0 0 0 0 rgba(94, 114, 228, .5);
-}
-
-.btn-orange:disabled {
-    color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
-}
-
-.btn-orange:not(:disabled):not(.disabled):active {
-    color: #fff;
-    border-color: #FD7E14;
-    background-color: #EBE40D;
-}
-
-.btn-orange:not(:disabled):not(.disabled):active:focus {
-    box-shadow: none, 0 0 0 0 rgba(94, 114, 228, .5);
-}
-
 .btn-neutral {
     color: #212529;
     border-color: #fff;
@@ -626,11 +593,12 @@ small,
 }
 
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
-    background-color: #5e72e4;
+    border: none;
+    background-color: #FD7E14;
 }
 
 .custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
-    background-color: #5e72e4;
+    background-color: #FD7E14;
     box-shadow: none;
 }
 

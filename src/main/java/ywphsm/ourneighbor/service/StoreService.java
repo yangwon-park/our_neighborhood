@@ -31,7 +31,11 @@ public class StoreService {
 
     // 매장 하나 조회
     public Store findOne(Long storeId) {
-        return storeRepository.findById(storeId).orElseThrow(NoSuchElementException::new);
+        Store store = storeRepository.findById(storeId).orElseThrow(NoSuchElementException::new);
+
+        store.autoUpdateStatus(store.getOffDays(), store.getOpeningTime(), store.getClosingTime(), store.getBreakStart(), store.getBreakEnd());
+
+        return store;
     }
 
     // 매장 이름으로 조회
@@ -39,14 +43,16 @@ public class StoreService {
         return storeRepository.findByName(name);
     }
 
-    // 검색어 포함 매장명 조회
-    public List<Store> searchByKeyword(StoreSearchCond cond) {
-        return storeRepository.searchByName(cond);
-    }
 
     // 검색어 포함 매장명 조회
     public List<Store> searchByKeyword(String keyword) {
-        return storeRepository.searchByKeyword(keyword);
+        List<Store> stores = storeRepository.searchByKeyword(keyword);
+
+        for (Store store : stores) {
+            store.autoUpdateStatus(store.getOffDays(), store.getOpeningTime(), store.getClosingTime(), store.getBreakStart(), store.getBreakEnd());
+        }
+
+        return stores;
     }
 
 }

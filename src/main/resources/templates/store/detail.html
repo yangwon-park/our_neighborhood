@@ -5,54 +5,103 @@
     <title>우리 동네</title>
     <style>
 
+        a {
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+        }
+
     </style>
 </head>
+<link rel="stylesheet" th:href="@{/css/aragon.css}">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <body>
-<h4>스토어 디테일</h4>
-<div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>가게명</th>
-            <th>전화번호</th>
-            <th>오픈 시간</th>
-            <th>닫는 시간</th>
-            <th>쉬는 시간</th>
-            <th>쉬는 시간</th>
-            <th>소개</th>
-            <th>한줄말</th>
-            <th>쉬는 날</th>
-            <th>상태</th>
-            <th>주소</th>
-<!--            <th>메뉴</th>-->
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="store : ${store}">
-            <td th:text="${store.name}"></td>
-            <td th:text="${store.phoneNumber}"></td>
-            <td th:text="${store.openingTime}"></td>
-            <td th:text="${store.closingTime}"></td>
-            <td th:text="${store.breakStart}"></td>
-            <td th:text="${store.breakEnd}"></td>
-            <td th:text="${store.notice}"></td>
-            <td th:text="${store.intro}"></td>
-            <td th:text="${store.offDay}"></td>
-            <td th:text="${store.status}"></td>
-            <td th:text="${store.address.city}"></td>
-<!--            <td th:text="${store.menuList}"></td>-->
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-
-<footer th:replace="layout/footer :: common_footer">
-    템플릿 푸터
-</footer>
-<script>
-
-</script>
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<section class="header">
+    <div class="header py-7 py-lg-8">
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
+    </div>
+</section>
+<section class="main">
+    <div class="container" th:object="${store}">
+        <div class="row head justify-content-end align-items-center">
+            <div class="col-6 d-flex">
+                <h1 class="my-auto" style="font-size: 2.0rem" th:text="*{name}">가게명</h1>
+                <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
+                      th:classappend="*{status}"></span>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"
+                        th:onclick="|location.href='@{/menu/addMenu/{storeId}(storeId=${store.storeId})}'|">메뉴 등록
+                </button>
+            </div>
+        </div>
+        <hr class="my-2">
+        <div class="row store-info" style="font-size: 1rem">
+            <div class="col-12 my-1">
+                <i class="fa-solid fa-map-location-dot orange fa-sm"></i>
+                <span>주소</span>
+                <span th:text="*{address.roadAddr}"></span>
+            </div>
+            <div class="col-12 my-1" style="font-size: 0.8rem">
+                <span class="badge bg-dark my-auto ms-3">지번</span>
+                <span th:text="*{address.numberAddr}"></span>
+            </div>
+            <div class="col-12 my-1">
+                <i class="fa-solid fa-square-phone orange fa-sm"></i>
+                <span>전화 번호</span>
+                <a th:href="@{tel:{phoneNumber}(phoneNumeber=*{phoneNumber})}"
+                   th:text="*{phoneNumber}" style="color: #000000">전화번호</a>
+            </div>
+            <div class="col-12 d-flex align-items-center my-1">
+                <i class="fa-solid fa-calendar orange me-1 fa-sm"></i>
+                <span th:each="day : *{offDays}" class="me-2">
+                    <th:block th:text="${day}"></th:block>
+                </span>
+                <span th:if="${not #lists.isEmpty(store.offDays)}">휴무</span>
+                <span th:if="${#lists.isEmpty(store.offDays)}">휴무일 없음</span>
+            </div>
+            <div class="col-12 my-1">
+                <i class="fa-solid fa-clock orange fa-sm"></i>
+                <span>영업 시간</span>
+                <span th:text="*{#temporals.format(openingTime, 'a hh:mm')}"></span>
+                ~
+                <span th:text="*{#temporals.format(closingTime, 'a hh:mm')}"></span>
+            </div>
+            <div class="col-12 my-1">
+                <i class="fa-solid fa-clock orange fa-sm"></i>
+                <span>휴식 시간</span>
+                <th:block th:if="*{breakStart ne null}">
+                    <th:block th:if="*{breakStart ne breakEnd}">
+                        <span th:text="*{#temporals.format(breakStart, 'a hh:mm')}"></span>
+                        ~
+                        <span th:text="*{#temporals.format(breakEnd, 'a hh:mm')}"></span>
+                    </th:block>
+                </th:block>
+                <th:block th:if="*{breakStart eq null}">
+                    없음
+                </th:block>
+            </div>
+            <div class="col-12 my-1">
+                <p>
+                    <span th:text="*{intro}"></span>
+                </p>
+            </div>
+            <div class="col-12 my-1">
+                <p>
+                    <span th:text="*{notice}"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<!--<footer th:replace="layout/footer :: common_footer">-->
+<!--    템플릿 푸터-->
+<!--</footer>-->
 <script th:replace="layout/footer :: common_js(~{::script})">
 </script>
 </body>

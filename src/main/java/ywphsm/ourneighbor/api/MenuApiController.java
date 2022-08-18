@@ -13,7 +13,7 @@ public class MenuApiController {
 
     private final MenuService menuService;
 
-    @PostMapping("/menu/add_menu")
+    @PostMapping(value = "/menu/add")
     public Long save(@RequestBody MenuAddDTO menuAddDTO) {
         return menuService.saveMenu(menuAddDTO);
     }

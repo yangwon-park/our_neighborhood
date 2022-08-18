@@ -26,17 +26,17 @@ public class StoreDetailDTO {
     private String phoneNumber;
 
     @NotNull
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss a")
     private LocalTime openingTime;            // 여는 시간
 
     @NotNull
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss a")
     private LocalTime closingTime;            // 닫는 시간
 
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss a")
     private LocalTime breakStart;             // 쉬는 시간 시작
 
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss a")
     private LocalTime breakEnd;               // 쉬는 시간 끝
 
     private String notice;                    // 가게 소식

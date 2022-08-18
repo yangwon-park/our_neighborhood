@@ -36,64 +36,39 @@
                         <div class="text-muted text-center mt-2 mb-4 fs-2">메뉴 등록</div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form th:object="${menu}" method="post">
-                            <div class="form-group">
-                                <div class="input-group input-group-alternative mb-3">
-                                    <input id="${name}" class="form-control" placeholder="메뉴 이름" type="text">
-                                </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-3">
+                                <input th:field="${menu.name}" class="form-control" placeholder="메뉴 이름" type="text">
                             </div>
-                            <div class="form-group d-flex">
-                                <div class="input-group input-group-alternative mb-3">
-                                    <input id="${price}" class="form-control" placeholder="가격" type="text">
-                                </div>
+                        </div>
+                        <div class="form-group d-flex">
+                            <div class="input-group input-group-alternative mb-3">
+                                <input th:field="${menu.price}" class="form-control" placeholder="가격" type="text">
                             </div>
-                            <div class="form-group">
-                                <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="*{storeId}" class="form-control" placeholder="매장 번호"
-                                           type="hidden">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-3">
+                                <input th:field="${menu.storeId}" class="form-control" placeholder="매장 번호"
+                                       type="hidden">
                             </div>
-                            <div class="text-center">
-                                <button onclick="addMenu()" type="button" class="btn btn-orange mt-4" id="menu_save">메뉴 등록</button>
-                            </div>
-                        </form>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-orange mt-4" id="menu-save">메뉴 등록</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
+<p id="result"></p>
 </body>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script>
-    var menuSaveBtn = document.getElementById('menu_save')
-
-    var menuName = document.getElementById('name').value;
-    var price = document.getElementById('price').value;
-    var storeId = document.getElementById('storeId').value;
-
-    function addMenu() {
-        console.log(this)
-        console.log(menuName)
-        console.log(price)
-
-        axios( {
-            method: "post",
-            url: "/menu/add",
-            data: {
-                name: menuName,
-                price: price,
-                storeId: storeId
-            }
-        }).then((resp) => {
-            alert('메뉴가 등록됐습니다.')
-            console.log(resp)
-        })
-    }
 
 </script>
+
 </html>

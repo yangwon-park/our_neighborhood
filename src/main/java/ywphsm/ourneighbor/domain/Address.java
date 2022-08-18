@@ -8,13 +8,13 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.Embeddable;
 
 // 임베디드 타입
-@Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Embeddable
 public class Address {
-    private String roadAddr;      // 해운대구 좌동 ~~
+    private String roadAddr;
     private String numberAddr;
-    private String zipcode;     // 우편 번호
+    private String zipcode;
     private String detail;
 
     public Address(String roadAddr, String numberAddr, String zipcode, String detail) {

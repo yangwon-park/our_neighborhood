@@ -11,7 +11,6 @@ html {
     padding: 4rem 0;
 }
 
-
 .navbar {
     background-color: #FD7E14;
 
@@ -22,6 +21,39 @@ html {
 .navbar img {
     color: #ffffff;
 }
+
+.orange {
+   color: #FD7E14;
+}
+
+
+.btn:hover,
+.btn:focus {
+    text-decoration: none;
+}
+
+.btn:focus {
+    outline: 0;
+    box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);
+}
+
+.btn:disabled {
+    opacity: .65;
+    box-shadow: none;
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
+.btn:not(:disabled):not(.disabled):active {
+    box-shadow: none;
+}
+
+.btn:not(:disabled):not(.disabled):active:focus {
+    box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08), none;
+}
+
 
 .btn-orange {
     color: #fff;

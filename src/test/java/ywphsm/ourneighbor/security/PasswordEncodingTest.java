@@ -1,10 +1,11 @@
-package ywphsm.ourneighbor.controller.security;
+package ywphsm.ourneighbor.security;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.service.MemberService;
 
 @SpringBootTest

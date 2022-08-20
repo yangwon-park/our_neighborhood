@@ -82,21 +82,21 @@ class MenuServiceTest {
         em.persist(menu5);
     }
 
-    @Test
-    @DisplayName("메뉴 등록")
-    void saveMenu() {
-        List<Store> storeList = storeService.findByName("칸다 소바");
-        Store store = storeList.get(0);
-
-        Menu menu = new Menu(
-                "마제 소바", 10000, 0,
-                null, null, store
-        );
-
-        Long menuId = menuService.saveMenu(menu);
-        System.out.println(store);
-        assertThat(menu).isEqualTo(menuService.findOne(menuId));
-    }
+//    @Test
+//    @DisplayName("메뉴 등록")
+//    void saveMenu() {
+//        List<Store> storeList = storeService.findByName("칸다 소바");
+//        Store store = storeList.get(0);
+//
+//        Menu menu = new Menu(
+//                "마제 소바", 10000, 0,
+//                null, null, store
+//        );
+//
+//        Long menuId = menuService.saveMenu(menu);
+//        System.out.println(store);
+//        assertThat(menu).isEqualTo(menuService.findOne(menuId));
+//    }
 
 
     @Test

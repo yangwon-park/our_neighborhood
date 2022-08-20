@@ -34,8 +34,9 @@ public class EditController {
     }
 
     @PostMapping
-    public String memberEdit(@Valid @ModelAttribute EditForm editForm, BindingResult bindingResult,
-                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
+    public String memberEdit(@Valid @ModelAttribute EditForm editForm, BindingResult bindingResult) {
+
+        Member member = memberService.findOne(editForm.getId());
 
         if (memberService.doubleCheck(editForm.getNickname()) != null &&
                 !member.getNickname().equals(editForm.getNickname())) {

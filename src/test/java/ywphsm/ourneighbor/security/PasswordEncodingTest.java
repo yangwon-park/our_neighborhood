@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.security;
+package ywphsm.ourneighbor.controller.security;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -33,9 +33,9 @@
 
                 <div class="card-body px-lg-5 py-lg-5">
                     <div class="text-center text-muted mb-4">
-                        <small>비밀번호 변경</small>
+                        <small>전화번호 변경</small>
                     </div>
-                    <form role="form" action="" th:action th:object="${phoneCertifiedForm}" method="post">
+                    <form role="form" action="" th:action th:object="${phoneNumberEditForm}" method="post">
 
                         <div th:if="${#fields.hasGlobalErrors()}">
                             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
@@ -47,7 +47,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                 </div>
-                                <input class="form-control" disabled placeholder="phoneNumber" type="text" id="phoneNumber" th:field="*{phoneNumber}"
+                                <input class="form-control" readonly placeholder="전화번호" type="text" id="phoneNumber" th:field="*{phoneNumber}"
                                        th:errorclass="field-error">
                                 <div class="field-error" th:errors="*{phoneNumber}" />
                             </div>
@@ -57,11 +57,12 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                 </div>
-                                <input class="form-control" placeholder="certifiedNumber" type="text" id="certifiedNumber" th:field="*{certifiedNumber}"
+                                <input class="form-control" placeholder="인증번호" type="text" id="certifiedNumber" th:field="*{certifiedNumber}"
                                        th:errorclass="field-error">
                                 <div class="field-error" th:errors="*{certifiedNumber}" />
                             </div>
                         </div>
+
                         <div class="text-center">
                             <button type="submit" class="btn btn-orange mt-4">전화번호 변경</button>
                         </div>

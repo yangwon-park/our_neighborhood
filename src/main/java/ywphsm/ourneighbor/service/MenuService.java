@@ -30,7 +30,7 @@ public class MenuService {
 
     // 메뉴 하나 조회
     public Menu findOne(Long menuId) {
-        return menuRepository.findById(menuId).orElseGet(null);
+        return menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
     }
 
     // 전체 메뉴 조회

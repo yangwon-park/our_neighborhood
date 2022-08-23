@@ -36,7 +36,6 @@ public class StoreController {
         return offDays;
     }
 
-
     @GetMapping("/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findOne(storeId);

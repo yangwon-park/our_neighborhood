@@ -105,7 +105,7 @@
                                 </div>
                             </div>
                             <div class="form-group d-flex justify-content-center">
-                                <h5>휴무일 선택</h5>
+                                <h5>휴무일</h5>
                                 <div th:each="day : ${offDays}" class="custom-control custom-checkbox mb-3 ms-3 me-3">
                                     <input class="custom-control-input" type="checkbox"
                                            th:field="${store.offDays}" th:value="${day.value}">

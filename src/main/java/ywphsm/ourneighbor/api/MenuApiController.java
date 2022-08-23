@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,13 @@ public class MenuApiController {
 
     @PostMapping(value = "/menu/add")
     public Long save(@RequestBody MenuAddDTO menuAddDTO) {
+
+        log.info("menuAddDTO={}", menuAddDTO);
+        return menuService.saveMenu(menuAddDTO);
+    }
+
+    @PostMapping(value = "/menu/add2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Long save2(MenuAddDTO menuAddDTO) {
 
         log.info("menuAddDTO={}", menuAddDTO);
         return menuService.saveMenu(menuAddDTO);

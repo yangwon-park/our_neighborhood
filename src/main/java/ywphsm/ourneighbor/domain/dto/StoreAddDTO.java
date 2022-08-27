@@ -10,7 +10,6 @@ import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import java.util.List;
@@ -22,7 +21,6 @@ public class StoreAddDTO {
 
     @NotBlank
     private String name;
-
 
     @NotBlank
     private String zipcode;
@@ -42,17 +40,23 @@ public class StoreAddDTO {
     private Double lon;
 
     private String phoneNumber;
+
     @NotNull
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime openingTime;            // 여는 시간
+
     @NotNull
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime closingTime;            // 닫는 시간
+
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime breakStart;             // 쉬는 시간 시작
+
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime breakEnd;               // 쉬는 시간 끝
+
     private String notice;
+
     private String intro;
 
     private List<String> offDays;

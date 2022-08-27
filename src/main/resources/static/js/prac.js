@@ -8,13 +8,8 @@ var main = {
     },
 
     save: function () {
-        var data = {
-            name: document.getElementById('name').value,
-            price: document.getElementById('price').value,
-            storeId: document.getElementById('storeId').value
-        };
 
-        console.log(data)
+        const menuForm = document.getElementById('menuForm')
 
         axios( {
             headers: {
@@ -23,7 +18,7 @@ var main = {
             },
             method: "post",
             url: "/menu/add2",
-            data: data
+            data: new FormData(menuForm)
         }).then((resp) => {
             alert('메뉴가 등록됐습니다.')
             window.location.reload()

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ywphsm.ourneighbor.domain.dto.MenuAddDTO;
+import ywphsm.ourneighbor.service.MenuService;
 import ywphsm.ourneighbor.service.StoreService;
 
 @Controller
@@ -16,7 +17,8 @@ import ywphsm.ourneighbor.service.StoreService;
 @RequiredArgsConstructor
 public class MenuController {
 
-    private StoreService storeService;
+    private final StoreService storeService;
+    private final MenuService menuService;
 
     @GetMapping("/addMenu/{storeId}")
     public String addMenu(@PathVariable Long storeId, Model model) {
@@ -25,4 +27,11 @@ public class MenuController {
         model.addAttribute("menu", dto);
         return "menu/add_form";
     }
+
+
+
+
+
+
+
 }

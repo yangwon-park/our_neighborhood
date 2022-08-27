@@ -3,13 +3,18 @@ package ywphsm.ourneighbor.api;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.StoreService;
 
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +23,7 @@ import java.util.stream.Collectors;
 public class MapSearchController {
 
     private final StoreService storeService;
+
 
     // 검색한 스토어 리스트 axios로 비동기 통신
     
@@ -31,6 +37,7 @@ public class MapSearchController {
                 .collect(Collectors.toList());
         return new ResultClass(collect.size(), collect);
     }
+
 
 
 }

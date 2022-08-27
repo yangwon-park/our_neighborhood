@@ -42,6 +42,9 @@ public class StoreController {
 
         StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store);
 
+        log.info("store={}", storeDetailDTO.getMenuList());
+        log.info("store={}", store.getMenuList());
+
         model.addAttribute("store", storeDetailDTO);
         return "store/detail";
     }

@@ -26,7 +26,9 @@ public class Menu {
     private Integer price;
 
     private int discountPrice;
+
     private LocalDateTime discountStart;
+
     private LocalDateTime discountEnd;
 
 

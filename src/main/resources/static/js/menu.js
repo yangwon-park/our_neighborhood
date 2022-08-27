@@ -17,7 +17,7 @@ var main = {
                 "Access-Control-Allow_Origin": "*"
             },
             method: "post",
-            url: "/menu/add2",
+            url: "/menu/add",
             data: new FormData(menuForm)
         }).then((resp) => {
             alert('메뉴가 등록됐습니다.')

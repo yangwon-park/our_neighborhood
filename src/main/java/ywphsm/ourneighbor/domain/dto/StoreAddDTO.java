@@ -94,7 +94,7 @@ public class StoreAddDTO {
                 .notice(notice)
                 .intro(intro)
                 .offDays(offDays)
-                .address(new Address(zipcode, roadAddr, numberAddr, detail))
+                .address(new Address( roadAddr, numberAddr, zipcode, detail))
                 .build();
     }
 }

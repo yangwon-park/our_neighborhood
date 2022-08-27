@@ -34,6 +34,7 @@ public class MenuService {
 
         Menu menu = menuAddDTO.toEntity(findStore);
         storedImage.addMenu(menu);
+        findStore.addMenu(menu);
 
         return menuRepository.save(menu).getId();
     }

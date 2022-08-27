@@ -35,7 +35,7 @@
                     <div class="card-header bg-transparent pb-5">
                         <div class="text-muted text-center mt-2 mb-4 fs-2">메뉴 등록</div>
                     </div>
-                    <form enctype="multipart/form-data">
+                    <form id="menuForm" enctype="multipart/form-data">
                         <div class="card-body px-lg-5 py-lg-5">
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
@@ -48,7 +48,7 @@
                                 </div>
                             </div><div class="form-group d-flex">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="${menu.price}" class="form-control" placeholder="가격" type="file"/>
+                                    <input th:field="${menu.image}" class="form-control" type="file"/>
                                 </div>
                             </div>
                             <div class="form-group">

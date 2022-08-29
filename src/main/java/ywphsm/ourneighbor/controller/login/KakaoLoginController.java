@@ -12,9 +12,9 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequiredArgsConstructor
 public class KakaoLoginController {
 
     private final KakaoService kakaoService;

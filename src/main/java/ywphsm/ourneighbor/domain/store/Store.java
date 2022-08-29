@@ -2,9 +2,7 @@ package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import ywphsm.ourneighbor.domain.Address;
-import ywphsm.ourneighbor.domain.BaseTimeEntity;
-import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 
 import javax.persistence.*;
@@ -71,25 +69,21 @@ public class Store extends BaseTimeEntity {
     /*
         JPA 연관 관계 매핑
      */
-    /*
-        Store (One) <==> Menu (Many)
-        mappedBy가 없는 쪽이 연관 관계의 주인
-            ==> Menu 엔티티의 Store가 연관 관계의 주인
-            ==> FK가 있는 엔티티가 연관 관계의 주인
-            ==> ManyToOne인 경우, Many 쪽이 항상 연관 관계의 주인
 
-        생각해보면 Menu를 보고 Store를 불러올 경우는 없다
-        아래는 양방향 관계를 맺을 때 다시 사용
-     */
+    // Menu (1:N)
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
+
+
+    // Category (N:N)
+    @OneToMany(mappedBy = "store")
+    private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
     // Many To Many인듯
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
 //    private Member member;
 
-    // Category와 양방향은 보류
 
 
 
@@ -150,9 +144,8 @@ public class Store extends BaseTimeEntity {
     */
 
     /*
-        비즈니스 로직 추가
+        === 비즈니스 로직 추가 ===
      */
-
     public void updateStatus(StoreStatus status) {
         this.status = status;
     }

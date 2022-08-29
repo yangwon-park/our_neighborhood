@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -10,9 +11,9 @@ import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Entity
 public class Category {
 
     @Id
@@ -20,20 +21,13 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
-    @NotBlank
     private String name;
 
+    private Long depth;
 
     /*
-        JPA 연관 관계 매핑
+        JPA 연관 관계
      */
-    /*
-        Store(다) : Category(다)
-            ==> Store(1) : CategoryOfStore(다) : Category (1)
-     */
-    @OneToMany(mappedBy = "category")
-    private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
-
 
     /*
         계층형 구조 => 셀프로 양방향 연관 관계를 걸어줌
@@ -47,12 +41,26 @@ public class Category {
     }
 
     @OneToMany(mappedBy = "parent")
-    private List<Category> child = new ArrayList<>();
+    private List<Category> children = new ArrayList<>();
 
-    
+    // store (N:N)
+    @OneToMany(mappedBy = "category")
+    private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
+
+
     /*
         생성자
      */
+    @Builder
+    public Category(String name, Long depth, List<CategoryOfStore> categoryOfStoreList, Category parent, List<Category> children) {
+
+        this.name = name;
+        this.depth = depth;
+        this.categoryOfStoreList = categoryOfStoreList;
+        this.parent = parent;
+        this.children = children;
+    }
+
 
 
     /*
@@ -64,7 +72,7 @@ public class Category {
     }
 
     public void addChildCategory(Category child) {
-        this.child.add(child);
+        this.children.add(child);
         child.setParent(this);
     }
 

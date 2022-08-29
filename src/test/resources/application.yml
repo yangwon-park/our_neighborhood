@@ -38,6 +38,11 @@ logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace
 
+# 파일 저장 경로
+file:
+  dir: /c:/Users/ywOnp/Desktop/Study/review/file/
+
+
 #google login 관련
 google:
   url: https://accounts.google.com/o/oauth2/v2/auth

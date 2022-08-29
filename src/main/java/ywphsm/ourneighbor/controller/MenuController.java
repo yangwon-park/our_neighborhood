@@ -11,10 +11,10 @@ import ywphsm.ourneighbor.domain.dto.MenuAddDTO;
 import ywphsm.ourneighbor.service.MenuService;
 import ywphsm.ourneighbor.service.StoreService;
 
-@Controller
-@RequestMapping("/menu")
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
+@RequestMapping("/menu")
+@Controller
 public class MenuController {
 
     private final StoreService storeService;

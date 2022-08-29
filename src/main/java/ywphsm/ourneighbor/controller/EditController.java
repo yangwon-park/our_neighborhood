@@ -15,9 +15,9 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.validation.Valid;
 
-@Controller
 @RequiredArgsConstructor
 @RequestMapping("/member_edit")
+@Controller
 public class EditController {
 
     private final MemberService memberService;

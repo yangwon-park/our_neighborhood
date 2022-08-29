@@ -2,9 +2,7 @@ package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import ywphsm.ourneighbor.domain.Address;
-import ywphsm.ourneighbor.domain.BaseTimeEntity;
-import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 
 import javax.persistence.*;
@@ -34,6 +32,7 @@ public class Store extends BaseTimeEntity {
     private String name;
 
     private Double lat;                // 위도
+
     private Double lon;                // 경도
 
     private String phoneNumber;
@@ -51,6 +50,7 @@ public class Store extends BaseTimeEntity {
     private LocalTime breakEnd;               // 쉬는 시간 끝
 
     private String notice;                    // 가게 소식
+
     private String intro;                     // 가게 소개
 
 //    @OneToMany(mappedBy = "store")
@@ -69,32 +69,27 @@ public class Store extends BaseTimeEntity {
     /*
         JPA 연관 관계 매핑
      */
-    /*
-        Store (One) <==> Menu (Many)
-        mappedBy가 없는 쪽이 연관 관계의 주인
-            ==> Menu 엔티티의 Store가 연관 관계의 주인
-            ==> FK가 있는 엔티티가 연관 관계의 주인
-            ==> ManyToOne인 경우, Many 쪽이 항상 연관 관계의 주인
 
-        생각해보면 Menu를 보고 Store를 불러올 경우는 없다
-        아래는 양방향 관계를 맺을 때 다시 사용
-     */
-    @OneToMany(mappedBy = "store")
+    // Menu (1:N)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
+
+
+    // Category (N:N)
+    @OneToMany(mappedBy = "store")
+    private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
     // Many To Many인듯
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
 //    private Member member;
 
-    // Category와 양방향은 보류
 
 
 
     /*
         생성자
      */
-    @Builder
     public Store(String name, Double lat, Double lon,
                  String phoneNumber, LocalTime openingTime, LocalTime closingTime,
                  LocalTime breakStart, LocalTime breakEnd, String notice, String intro,
@@ -114,6 +109,27 @@ public class Store extends BaseTimeEntity {
         this.address = address;
     }
 
+    @Builder
+    public Store(String name, Double lat, Double lon,
+                 String phoneNumber, LocalTime openingTime, LocalTime closingTime,
+                 LocalTime breakStart, LocalTime breakEnd, String notice, String intro,
+                 List<String> offDays, StoreStatus status, Address address, List<Menu> menuList) {
+        this.name = name;
+        this.lat = lat;
+        this.lon = lon;
+        this.phoneNumber = phoneNumber;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.breakStart = breakStart;
+        this.breakEnd = breakEnd;
+        this.notice = notice;
+        this.intro = intro;
+        this.offDays = offDays;
+        this.status = status;
+        this.address = address;
+        this.menuList = menuList;
+    }
+
     /*
         === 연관 관계 편의 메소드 ===
      */
@@ -128,9 +144,8 @@ public class Store extends BaseTimeEntity {
     */
 
     /*
-        비즈니스 로직 추가
+        === 비즈니스 로직 추가 ===
      */
-
     public void updateStatus(StoreStatus status) {
         this.status = status;
     }

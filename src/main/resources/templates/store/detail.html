@@ -4,12 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
     <style>
-
         a {
             text-decoration: none;
             color: rgb(0, 0, 0);
         }
-
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/aragon.css}">
@@ -95,6 +93,15 @@
                 <p>
                     <span th:text="*{notice}"></span>
                 </p>
+            </div>
+        </div>
+        <hr class="my-2 hr-orange">
+        <div class="row store-menu">
+            <h3><strong>메뉴</strong></h3>
+            <div class="col" th:each="menu : *{menuList}">
+                <img th:src="|/menu/${menu.getFile().getStoredFileName()}|" width="300" height="300" alt="메뉴 사진">
+                <span th:text="${menu.getName()}"></span>
+                <span th:text="${menu.getPrice()}"></span>
             </div>
         </div>
     </div>

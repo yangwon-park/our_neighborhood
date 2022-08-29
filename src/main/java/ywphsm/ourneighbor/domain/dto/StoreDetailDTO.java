@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.Menu;
 import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
@@ -46,11 +47,14 @@ public class StoreDetailDTO {
 
     private StoreStatus status;               // 가게 오픈 상황
 
+    private List<Menu> menuList;              // 메뉴
+
     // 주소는 임베디드 타입으로 받음
     private Address address;
 
     // 나중에
 //    private List<Menu> menuList;
+
 
 
     @Builder
@@ -67,6 +71,7 @@ public class StoreDetailDTO {
         offDays = store.getOffDays();
         status = store.getStatus();
         address = store.getAddress();
+        menuList = store.getMenuList();
     }
 
     public Store toEntity() {

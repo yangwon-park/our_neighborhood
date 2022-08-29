@@ -13,10 +13,10 @@ import ywphsm.ourneighbor.service.StoreService;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
+@Slf4j
 @Controller
 @RequestMapping("/store")
-@Slf4j
-@RequiredArgsConstructor
 public class StoreController {
 
     private final StoreService storeService;
@@ -41,6 +41,9 @@ public class StoreController {
         Store store = storeService.findOne(storeId);
 
         StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store);
+
+        log.info("store={}", storeDetailDTO.getMenuList());
+        log.info("store={}", store.getMenuList());
 
         model.addAttribute("store", storeDetailDTO);
         return "store/detail";

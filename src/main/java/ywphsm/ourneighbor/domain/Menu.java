@@ -26,20 +26,17 @@ public class Menu {
     private Integer price;
 
     private int discountPrice;
+
     private LocalDateTime discountStart;
+
     private LocalDateTime discountEnd;
 
 
     /*
         JPA 연관 관계 매핑
      */
-    /*
-        Store (One) <==> Menu (Many)
-        mappedBy가 없는 쪽이 연관 관계의 주인
-            ==> Menu 엔티티의 Store가 연관 관계의 주인
-            ==> FK가 있는 엔티티가 연관 관계의 주인
-            ==> ManyToOne인 경우, Many 쪽이 항상 연관 관계의 주인
-     */
+
+    // store (N:1)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;

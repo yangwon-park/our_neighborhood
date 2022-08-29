@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import ywphsm.ourneighbor.controller.form.LoginForm;
 import ywphsm.ourneighbor.domain.dto.MenuAddDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.login.SessionConst;
@@ -20,8 +21,8 @@ import ywphsm.ourneighbor.service.StoreService;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Controller
 @Slf4j
+@Controller
 public class HomeController {
 
     private final MemberService memberService;
@@ -53,10 +54,8 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-                        Model model) {
+    public String index() {
 
-        model.addAttribute("member", member);
         return "index";
     }
 

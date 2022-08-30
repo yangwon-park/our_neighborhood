@@ -36,8 +36,13 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    public void setParent(Category parent) {
+    public void addParentCategory(Category parent) {
         this.parent = parent;
+    }
+
+    public void addParentCategoryAndDepth(Category parent, Long depth) {
+        this.parent = parent;
+        this.depth = depth;
     }
 
     @OneToMany(mappedBy = "parent")
@@ -73,8 +78,10 @@ public class Category {
 
     public void addChildCategory(Category child) {
         this.children.add(child);
-        child.setParent(this);
+        child.addParentCategory(this);
     }
+
+
 
 
 }

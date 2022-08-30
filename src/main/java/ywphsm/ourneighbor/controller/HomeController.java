@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import ywphsm.ourneighbor.controller.form.LoginForm;
 import ywphsm.ourneighbor.domain.dto.MenuAddDTO;
+import ywphsm.ourneighbor.domain.dto.StoreAddDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.login.SessionConst;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,22 +36,10 @@ public class HomeController {
     }
 
     @GetMapping("/prac2")
-    public String prac2(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
+    public String addStore(Model model) {
+        model.addAttribute("store", new StoreAddDTO());
+
         return "prac2";
-    }
-
-
-    @GetMapping("/prac3/{storeId}")
-    public String addMenu(@PathVariable Long storeId, Model model) {
-        MenuAddDTO dto = new MenuAddDTO();
-        dto.setStoreId(storeId);
-        model.addAttribute("menu", dto);
-        return "prac3";
-    }
-
-    @GetMapping("/prac4")
-    public String prac4(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
-        return "prac4";
     }
 
     @GetMapping("/")

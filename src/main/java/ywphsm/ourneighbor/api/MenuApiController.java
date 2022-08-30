@@ -16,8 +16,8 @@ import ywphsm.ourneighbor.service.MenuService;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class MenuApiController {
 
@@ -27,12 +27,6 @@ public class MenuApiController {
     @PostMapping(value = "/menu/add")
     public Long save(MenuAddDTO menuAddDTO) throws IOException {
 
-        log.info("menuAddDTO={}", menuAddDTO);
-        return menuService.saveMenu(menuAddDTO);
-    }
-
-    @PostMapping(value = "/menu/add2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Long save2(MenuAddDTO menuAddDTO) throws IOException {
         log.info("menuAddDTO={}", menuAddDTO);
         return menuService.saveMenu(menuAddDTO);
     }

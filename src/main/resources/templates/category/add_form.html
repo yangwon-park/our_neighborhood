@@ -3,7 +3,6 @@
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
-
     <style>
 
     </style>
@@ -11,7 +10,6 @@
 <link rel="stylesheet" th:href="@{/css/aragon.css}">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <body class="bg-default">
-<!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
 <section class="header">
@@ -33,32 +31,31 @@
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent pb-5">
-                        <div class="text-muted text-center mt-2 mb-4 fs-2">메뉴 등록</div>
+                        <div class="text-muted text-center mt-2 mb-4 fs-2"> 카테고리 등록</div>
                     </div>
-                    <form id="menuForm" enctype="multipart/form-data">
+                    <form id="category-form">
                         <div class="card-body px-lg-5 py-lg-5">
-                            <div class="form-group">
-                                <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="${menu.name}" class="form-control" placeholder="메뉴 이름" type="text"/>
-                                </div>
-                            </div>
                             <div class="form-group d-flex">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="${menu.price}" class="form-control" placeholder="가격" type="text"/>
+                                    <input th:field="${category.name}" class="form-control" placeholder="카테고리 이름"
+                                           type="text"/>
                                 </div>
-                            </div><div class="form-group d-flex">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="${menu.image}" class="form-control" type="file"/>
+                                    <select id="category-select" class="form-select">
+                                        <option value="">상위 카테고리 선택</option>
+                                        <option th:each="cate : ${all}" th:value="${cate.getCategoryId()}"
+                                                th:text="${cate.getName()}"></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="${menu.storeId}" class="form-control" placeholder="매장 번호"
-                                           type="hidden">
-                                </div>
+                                <!--                                <div class="input-group input-group-alternative mb-3">-->
+                                <!--                                    <input th:field="${category.depth}" class="form-control" placeholder="카테고리 뎁스"-->
+                                <!--                                           type="hidden"/>-->
+                                <!--                                </div>-->
                             </div>
                             <div class="text-center">
-                                <button type="button" class="btn btn-orange mt-4" id="menu-save">메뉴 등록</button>
+                                <button type="button" class="btn btn-orange mt-4" id="category-add">카테고리 등록</button>
                             </div>
                         </div>
                     </form>
@@ -67,16 +64,11 @@
         </div>
     </div>
 </section>
-<p id="result"></p>
-</body>
 <footer th:replace="layout/footer :: common_footer">
-    템플릿 푸터
+
 </footer>
-<!--<script th:replace="layout/footer :: common_js(~{::script})"></script>-->
-<script type="module" th:src="@{/js/prac.js}"></script>
-<script defer th:src="@{/node_modules/axios/dist/axios.js}"></script>
-<script>
 
-</script>
-
+<script type="module" th:src="@{/js/category.js}"></script>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+</body>
 </html>

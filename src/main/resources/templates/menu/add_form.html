@@ -39,18 +39,20 @@
                         <div class="card-body px-lg-5 py-lg-5">
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="${menu.name}" class="form-control" placeholder="메뉴 이름" type="text"/>
+                                    <input th:field="${menu.name}" class="form-control" placeholder="메뉴 이름"
+                                           type="text"/>
                                 </div>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="input-group input-group-alternative mb-3">
                                     <input th:field="${menu.price}" class="form-control" placeholder="가격" type="text"/>
                                 </div>
-                            </div><div class="form-group d-flex">
-                            <div class="input-group input-group-alternative mb-3">
-                                <input th:field="${menu.image}" class="form-control" type="file"/>
                             </div>
-                        </div>
+                            <div class="form-group d-flex">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <input th:field="${menu.image}" class="form-control" type="file"/>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
                                     <input th:field="${menu.storeId}" class="form-control" placeholder="매장 번호"
@@ -72,9 +74,7 @@
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
 </footer>
+<script type="module" th:src="@{/js/menu.js}"></script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
-<script>
-
-</script>
 
 </html>

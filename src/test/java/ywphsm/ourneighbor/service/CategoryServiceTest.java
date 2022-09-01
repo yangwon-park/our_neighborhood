@@ -39,24 +39,7 @@ class CategoryServiceTest {
     @Test
     @DisplayName("카테고리 등록")
     void save() {
-//        CategoryDTO cate1 = CategoryAddDTO.builder()
-//                .name("전자 제품")
-//                .depth(1L)
-//                .parentName(null)
-//                .build();
-//        CategoryDTO cate2 = CategoryAddDTO.builder()
-//                .name("컴퓨터")
-//                .depth(2L)
-//                .parentName(cate1.getParentName())
-//                .build();
-//
-//        categoryService.saveCategory(cate1);
-//        categoryService.saveCategory(cate2);
-//        List<CategoryDTO> allCategories = categoryService.findAllCategories();
-//
-//        for (CategoryDTO allCategory : allCategories) {
-//            System.out.println("allCategory = " + allCategory);
-//        }
+        
     }
 
 }

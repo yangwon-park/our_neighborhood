@@ -6,13 +6,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ywphsm.ourneighbor.domain.Address;
 
+import ywphsm.ourneighbor.domain.CategoryOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -61,6 +64,8 @@ public class StoreAddDTO {
 
     private List<String> offDays;
 
+    private List<CategoryOfStoreDTO> categoryOfStores;
+
 
     @Builder
     public StoreAddDTO(Store store) {
@@ -79,6 +84,9 @@ public class StoreAddDTO {
         roadAddr = store.getAddress().getRoadAddr();
         numberAddr = store.getAddress().getNumberAddr();
         detail = store.getAddress().getDetail();
+        categoryOfStores = store.getCategoryOfStoreList().stream()
+                .map(CategoryOfStoreDTO::new)
+                .collect(Collectors.toList());
     }
 
     public Store toEntity() {
@@ -94,7 +102,8 @@ public class StoreAddDTO {
                 .notice(notice)
                 .intro(intro)
                 .offDays(offDays)
-                .address(new Address( roadAddr, numberAddr, zipcode, detail))
+                .address(new Address(roadAddr, numberAddr, zipcode, detail))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
     }
 }

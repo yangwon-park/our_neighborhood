@@ -7,8 +7,8 @@ import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class CategoryOfStore {
 
@@ -37,22 +37,26 @@ public class CategoryOfStore {
     /*
         === 연관 관계 편의 메소드 ===
     */
-    public void addCategory(Category category, Store store) {
+    public CategoryOfStore addCategory(Category category, Store store) {
         this.setCategory(category);
         this.setStore(store);
         category.getCategoryOfStoreList().add(this);
         store.getCategoryOfStoreList().add(this);
+
+        return this;
     }
 
 
     /*
         생성자
      */
-    public CategoryOfStore(Store store) {
-        this.store = store;
+
+    public CategoryOfStore(Category category) {
+        this.category = category;
     }
 
-
-
-
+    public CategoryOfStore(Category category, Store store) {
+        this.category = category;
+        this.store = store;
+    }
 }

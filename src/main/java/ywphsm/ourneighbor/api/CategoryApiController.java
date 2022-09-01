@@ -23,6 +23,12 @@ public class CategoryApiController {
         return new ResultClass<>(categories);
     }
 
+    @GetMapping("/categories2")
+    public ResultClass<?> findAllCategories2() {
+        List<CategoryDTO> categories = categoryService.findAllCategoriesHier();
+        return new ResultClass<>(categories);
+    }
+
     @PostMapping("/category/add")
     public Long save(CategoryDTO dto) {
         log.info("========================================================");

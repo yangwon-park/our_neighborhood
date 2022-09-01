@@ -49,18 +49,19 @@ public class StoreController {
         return "store/detail";
     }
 
-    @GetMapping("/addStore")
+    @GetMapping("/add")
     public String addStore(Model model) {
         model.addAttribute("store", new StoreAddDTO());
 
         return "store/add_form";
     }
 
-    @PostMapping("/addStore")
+    @PostMapping("/add")
     public String addStore(@ModelAttribute StoreAddDTO storeAddDTO) {
+
         Store store = storeAddDTO.toEntity();
 
-        storeService.saveStore(store);
+//        storeService.saveStore(store);
 
         return "redirect:/map";
     }

@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -53,7 +54,7 @@ public class StoreDetailDTO {
     private Address address;
 
     // 나중에
-//    private List<Menu> menuList;
+    private List<CategoryOfStoreDTO> categoryList;
 
 
 
@@ -72,6 +73,9 @@ public class StoreDetailDTO {
         status = store.getStatus();
         address = store.getAddress();
         menuList = store.getMenuList();
+        categoryList = store.getCategoryOfStoreList().stream()
+                .map(CategoryOfStoreDTO::new)
+                .collect(Collectors.toList());
     }
 
     public Store toEntity() {

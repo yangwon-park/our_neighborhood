@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.service;
+package ywphsm.ourneighbor.service.login;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.service.MemberService;
 
 import java.io.*;
 import java.net.HttpURLConnection;

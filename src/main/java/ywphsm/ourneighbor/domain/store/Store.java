@@ -76,7 +76,7 @@ public class Store extends BaseTimeEntity {
 
 
     // Category (N:N)
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
     // Many To Many인듯
@@ -113,7 +113,8 @@ public class Store extends BaseTimeEntity {
     public Store(String name, Double lat, Double lon,
                  String phoneNumber, LocalTime openingTime, LocalTime closingTime,
                  LocalTime breakStart, LocalTime breakEnd, String notice, String intro,
-                 List<String> offDays, StoreStatus status, Address address, List<Menu> menuList) {
+                 List<String> offDays, StoreStatus status, Address address,
+                 List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList) {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -128,6 +129,7 @@ public class Store extends BaseTimeEntity {
         this.status = status;
         this.address = address;
         this.menuList = menuList;
+        this.categoryOfStoreList = categoryOfStoreList;
     }
 
     /*

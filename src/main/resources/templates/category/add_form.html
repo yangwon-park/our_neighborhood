@@ -41,18 +41,12 @@
                                            type="text"/>
                                 </div>
                                 <div class="input-group input-group-alternative mb-3">
-                                    <select id="category-select" class="form-select">
-                                        <option value="">상위 카테고리 선택</option>
+                                    <select name="categoryId" id="category-select" class="form-select">
+                                        <option value="">카테고리 선택</option>
                                         <option th:each="cate : ${all}" th:value="${cate.getCategoryId()}"
                                                 th:text="${cate.getName()}"></option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <!--                                <div class="input-group input-group-alternative mb-3">-->
-                                <!--                                    <input th:field="${category.depth}" class="form-control" placeholder="카테고리 뎁스"-->
-                                <!--                                           type="hidden"/>-->
-                                <!--                                </div>-->
                             </div>
                             <div class="text-center">
                                 <button type="button" class="btn btn-orange mt-4" id="category-add">카테고리 등록</button>

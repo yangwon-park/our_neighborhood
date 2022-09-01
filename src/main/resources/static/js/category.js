@@ -22,13 +22,7 @@ var main = {
             data: form
         }).then((resp) => {
             alert('카테고리가 등록됐습니다.')
-            let values = form.values();
-
-            for (const v of values) {
-                console.log(v)
-            }
-
-            // window.location.reload()
+            window.location.reload()
         }).catch((error) => {
             console.log(error)
         })

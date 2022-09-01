@@ -9,6 +9,7 @@ import ywphsm.ourneighbor.domain.dto.CategoryDTO;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -18,6 +19,11 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+
+    public Category findById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NoSuchElementException("존재 하지 않는 카테고리입니다."));
+    }
 
     // 카테고리 등록
     @Transactional
@@ -47,8 +53,8 @@ public class CategoryService {
 
             category.addParentCategoryAndDepth(root, 1L);
         } else {
-            Category parent = categoryRepository.findById(dto.getParentId()).orElseThrow(
-                    () -> new IllegalArgumentException("존재하지 않는 상위 카테고리입니다."));
+            Category parent = categoryRepository.findById(dto.getParentId())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상위 카테고리입니다."));
 
             category.addParentCategoryAndDepth(parent, parent.getDepth()+1);
             parent.getChildren().add(category);

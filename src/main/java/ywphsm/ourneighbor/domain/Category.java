@@ -66,11 +66,15 @@ public class Category {
         this.children = children;
     }
 
-
+    public Category(String name, Long depth, Category parent) {
+        this.name = name;
+        this.depth = depth;
+        this.parent = parent;
+    }
 
     /*
-        === 연관 관계 편의 메소드 ===
-    */
+            === 연관 관계 편의 메소드 ===
+        */
     public void addCategory(CategoryOfStore categoryOfStore) {
         categoryOfStoreList.add(categoryOfStore);
         categoryOfStore.setCategory(this);

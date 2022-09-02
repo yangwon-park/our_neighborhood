@@ -6,11 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.CategoryOfStore;
-import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
-import ywphsm.ourneighbor.domain.dto.StoreAddDTO;
-import ywphsm.ourneighbor.domain.search.StoreSearchCond;
+import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.util.List;
@@ -26,7 +23,7 @@ public class StoreService {
 
     // 매장 등록
     @Transactional
-    public Long saveStore(StoreAddDTO dto, Category category) {
+    public Long saveStore(StoreDTO.Add dto, Category category) {
 
         Store store = dto.toEntity();
 

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Menu;
-import ywphsm.ourneighbor.domain.dto.MenuAddDTO;
+import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -27,7 +27,7 @@ public class MenuService {
 
     // 메뉴 등록
     @Transactional
-    public Long saveMenu(MenuAddDTO menuAddDTO) throws IOException {
+    public Long saveMenu(MenuDTO.Add menuAddDTO) throws IOException {
         Store findStore = storeRepository.findById(menuAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
 
         UploadFile storedImage = fileStore.storeFile(menuAddDTO.getImage());

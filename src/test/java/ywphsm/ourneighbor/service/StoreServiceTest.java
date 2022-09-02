@@ -10,12 +10,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Address;
 import ywphsm.ourneighbor.domain.Category;
-import ywphsm.ourneighbor.domain.dto.CategoryDTO;
-import ywphsm.ourneighbor.domain.dto.StoreAddDTO;
+import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.*;
 
 import javax.persistence.EntityManager;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
@@ -64,11 +62,11 @@ class StoreServiceTest {
                 new Address("부산 해운대구 구남로30번길 8-3", "부산 해운대구 우동 544-15", "48094", "1층"));
 
         // AddDTO에는 storeId, StoreStatus 없음
-        StoreAddDTO storeAddDTO = new StoreAddDTO(store);
+        StoreDTO.Add dto = new StoreDTO.Add(store);
 
         Category category = new Category("일식", 1L, null);
 
-        Long storeId = storeService.saveStore(storeAddDTO, category);
+        Long storeId = storeService.saveStore(dto, category);
         Store findStore = storeService.findOne(storeId);
 
         assertThat(findStore.getName()).isEqualTo(store.getName());

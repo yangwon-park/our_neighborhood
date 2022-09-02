@@ -6,17 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import ywphsm.ourneighbor.controller.form.LoginForm;
 import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.dto.CategoryDTO;
-import ywphsm.ourneighbor.domain.dto.MenuAddDTO;
-import ywphsm.ourneighbor.domain.dto.StoreAddDTO;
-import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
-import ywphsm.ourneighbor.service.login.SessionConst;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
-import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.List;
@@ -42,13 +36,13 @@ public class HomeController {
         log.info("all={}", all);
 
         model.addAttribute("all", all);
-        model.addAttribute("store", new StoreAddDTO());
+        model.addAttribute("store", new StoreDTO.Add());
 
         return "prac2";
     }
 
     @PostMapping("/prac2")
-    public String addStore(@ModelAttribute StoreAddDTO storeAddDTO, @RequestParam Long categoryId) {
+    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam Long categoryId) {
         log.info("storeAddDTO={}", storeAddDTO);
         log.info("categoryId={}", categoryId);
 

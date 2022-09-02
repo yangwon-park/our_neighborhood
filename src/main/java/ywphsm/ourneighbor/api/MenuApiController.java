@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ywphsm.ourneighbor.domain.dto.MenuAddDTO;
+import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.service.MenuService;
 
@@ -25,7 +25,7 @@ public class MenuApiController {
     private final FileStore fileStore;
 
     @PostMapping(value = "/menu/add")
-    public Long save(MenuAddDTO menuAddDTO) throws IOException {
+    public Long save(MenuDTO.Add menuAddDTO) throws IOException {
 
         log.info("menuAddDTO={}", menuAddDTO);
         return menuService.saveMenu(menuAddDTO);

@@ -5,12 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.dto.StoreAddDTO;
-import ywphsm.ourneighbor.domain.dto.StoreDetailDTO;
+import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.dto.CategoryDTO;
+import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ import java.util.Map;
 public class StoreController {
 
     private final StoreService storeService;
+    private final CategoryService categoryService;
 
     @ModelAttribute("offDays")
     public Map<String, String> offDays() {
@@ -40,7 +44,7 @@ public class StoreController {
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findOne(storeId);
 
-        StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store);
+        StoreDTO.Detail storeDetailDTO = new StoreDTO.Detail(store);
 
         log.info("store={}", storeDetailDTO.getMenuList());
         log.info("store={}", store.getMenuList());
@@ -51,17 +55,24 @@ public class StoreController {
 
     @GetMapping("/add")
     public String addStore(Model model) {
-        model.addAttribute("store", new StoreAddDTO());
+        List<CategoryDTO> all = categoryService.findAll();
 
+        log.info("all={}", all);
+
+        model.addAttribute("all", all);
+        model.addAttribute("store", new StoreDTO.Add());
         return "store/add_form";
     }
 
     @PostMapping("/add")
-    public String addStore(@ModelAttribute StoreAddDTO storeAddDTO) {
+    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam Long categoryId) {
 
         Store store = storeAddDTO.toEntity();
 
-//        storeService.saveStore(store);
+        Category category = categoryService.findById(categoryId);
+        log.info("category={}", category.getCategoryOfStoreList());
+
+        storeService.saveStore(storeAddDTO, category);
 
         return "redirect:/map";
     }

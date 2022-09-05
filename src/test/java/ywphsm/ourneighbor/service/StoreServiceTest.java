@@ -42,7 +42,7 @@ class StoreServiceTest {
     void before() {
         queryFactory = new JPAQueryFactory(em);
         List<String> offDays = new ArrayList<>();
-        offDays.add("목요일");
+        offDays.add("금요일");
         Store store = new Store("쿠다", 35.1612928, 129.1600985, "0517311660",
                 LocalTime.of(9, 00), LocalTime.of(20, 00), LocalTime.of(15, 30), LocalTime.of(17, 00),
                 null, "안녕하세요 칸다 소바입니다.", offDays , StoreStatus.OPEN, new Address("부산광역시 해운대구 구남로 30번길 8-3 1층", "48094", "1234", null));

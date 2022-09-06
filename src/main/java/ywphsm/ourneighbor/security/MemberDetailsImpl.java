@@ -2,8 +2,10 @@ package ywphsm.ourneighbor.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,26 +15,26 @@ public class MemberDetailsImpl implements UserDetails {
 
     private Member member;
 
+    private static final String ROLE_PREFIX = "ROLE_";
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return String.valueOf(member.getMemberRole());
-            }
-        });
-        return collection;
+        Role role = member.getRole();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(ROLE_PREFIX + role.toString());
+        Collection<GrantedAuthority> authorities = new ArrayList<>(); //List인 이유 : 여러개의 권한을 가질 수 있다
+        authorities.add(authority);
+
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return member.getUserId();
     }
 
     //계정이 만료되지 않았는지 리턴 (true: 만료안됨)

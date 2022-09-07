@@ -69,6 +69,8 @@ public class WeatherApiController {
 
         JSONArray foreJson = jsonObject.getJSONObject("foreCast").getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
 
+        System.out.println("foreJson = " + foreJson);
+
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH00", Locale.KOREAN));
 
         for (int i = 0; i < foreJson.length(); i++) {
@@ -120,8 +122,6 @@ public class WeatherApiController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("airPollution", airPollution);
         JSONArray airJson = jsonObject.getJSONObject("airPollution").getJSONObject("response").getJSONObject("body").getJSONArray("items");
-
-        System.out.println("airJson = " + airJson);
 
         for (int i = 0; i < airJson.length(); i++) {
 

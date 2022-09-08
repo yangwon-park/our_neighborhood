@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ywphsm.ourneighbor.api.dto.WeatherDTO;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -24,7 +26,12 @@ import java.util.Locale;
 public class WeatherApiController {
 
     @GetMapping("/weather")
-    public WeatherDTO getWeather() throws Exception{
+    public WeatherDTO getWeather(HttpServletRequest req) throws Exception{
+
+        Cookie[] cookies = req.getCookies();
+        for (Cookie cookie : cookies) {
+            System.out.println("cookie = " + cookie.getName());
+        }
 
         WeatherDTO dto = new WeatherDTO();
 

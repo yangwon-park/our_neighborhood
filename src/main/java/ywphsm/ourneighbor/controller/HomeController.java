@@ -57,12 +57,7 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(HttpServletRequest req) {
-
-        Cookie[] cookies = req.getCookies();
-        for (Cookie cookie : cookies) {
-            System.out.println("cookie = " + cookie.getName());
-        }
+    public String index() {
 
         return "index";
     }

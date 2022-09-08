@@ -66,9 +66,6 @@ public class StoreController {
 
     @PostMapping("/add")
     public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam Long categoryId) {
-
-        Store store = storeAddDTO.toEntity();
-
         Category category = categoryService.findById(categoryId);
         log.info("category={}", category.getCategoryOfStoreList());
 

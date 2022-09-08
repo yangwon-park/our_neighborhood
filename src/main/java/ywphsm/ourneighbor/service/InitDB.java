@@ -40,7 +40,7 @@ public class InitDB {
                     "ywonp9405@gmail.com", "01067731582", 29, 0, Role.ADMIN);
 
             Member member2 = new Member("hansung", "12341234", "문한성", "한성",
-                    "hansung@naver.com", "01038352375", 24, 0);
+                    "arnold1998@naver.com", "01038352375", 24, 0);
 
             List<String> offDays = new ArrayList<>();
             offDays.add("일요일");

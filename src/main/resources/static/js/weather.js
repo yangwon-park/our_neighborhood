@@ -3,6 +3,59 @@ var main = {
         var _this = this;
 
         _this.loadCoords();
+        _this.setWeatherInfo();
+    },
+
+    setWeatherInfo: function () {
+        axios( {
+            method: "get",
+            url: "/weather",
+        }).then((resp) => {
+
+            console.log(resp.data);
+
+            var _skyStatus = document.getElementById("sky-status");
+            var _tmp = document.getElementById("tmp");
+            var _pop = document.getElementById("pop");
+            var _pm10Value = document.getElementById("pm-10-value")
+
+            var skyStatus = resp.data.status;
+            var pm10Value = resp.data.pm10Value;
+
+            const fontAwesome = document.createElement("i")
+
+            if (skyStatus === "SUNNY") {
+                fontAwesome.innerHTML = "<i class=\"fa-solid fa-sun orange fs-1\"></i>"
+            } else if (skyStatus  === "CLOUDY") {
+                fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud-sun fs-1\"></i>"
+            }else if (skyStatus  === "VERYCLOUDY") {
+                fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud fs-1\"></i>"
+            }else if (skyStatus  === "RAINY") {
+                fontAwesome.innerHTML = "<i class=\"fa-solid fa-umbrella fs-1\"></i>"
+            }else if (skyStatus  === "SNOWY") {
+                fontAwesome.innerHTML = "<i class=\"fa-regular fa-snowflake fs-1\"></i>"
+            }
+
+            if (pm10Value <= 30) {
+                _pm10Value.innerText = "좋음 (미세먼지 농도 : " + pm10Value + ")";
+            } else if (pm10Value <= 80) {
+                _pm10Value.innerText = "보통 (미세먼지 농도 : " + pm10Value + ")";
+            } else if (pm10Value <= 150) {
+                _pm10Value.innerText = "나쁨 (미세먼지 농도 : " + pm10Value + ")";
+            } else {
+                _pm10Value.innerText = "매우 나쁨 (미세먼지 농도 : " + pm10Value + ")";
+            }
+
+
+            _skyStatus.appendChild(fontAwesome);
+            _tmp.innerText = "현재 기온 : " + resp.data.tmp + "℃";
+            _pop.innerText = "강수 확률 : " + resp.data.pop + "%";
+
+
+
+        }).catch((error) => {
+            console.log(error);
+        })
     },
 
     setCookie: function (key, value, exp) {
@@ -33,7 +86,6 @@ var main = {
         if (lat == null || lon == null) {
             this.findCoords();
         }
-
     },
 
     findCoords: function () {
@@ -75,6 +127,16 @@ var main = {
         alert('현재 위치 정보를 가져올 수 없습니다.');
     },
 
+    params: {
+        RE: 6371.00877,     // 지구 반경(km)
+        GRID: 5.0,          // 격자 간격(km)
+        SLAT1: 30.0,         // 투영 위도1(degree)
+        SLAT2: 60.0,        // 투영 위도2(degree)
+        OLON: 126.0,        // 기준점 경도(degree)
+        OLAT: 38.0,         // 기준점 위도(degree)
+        XO: 43,             // 기준점 X좌표(GRID)
+        YO: 136             // 기1준점 Y좌표(GRID)
+    },
 
     /*
         LCC DFS 좌표변환 함수
@@ -86,11 +148,11 @@ var main = {
         var DEGRAD = Math.PI / 180.0;
         var RADDEG = 180.0 / Math.PI;
 
-        var re = params.RE / params.GRID;
-        var slat1 = params.SLAT1 * DEGRAD;
-        var slat2 = params.SLAT2 * DEGRAD;
-        var olat = params.OLAT * DEGRAD;
-        var olon = params.OLON * DEGRAD;
+        var re = this.params.RE / this.params.GRID;
+        var slat1 = this.params.SLAT1 * DEGRAD;
+        var slat2 = this.params.SLAT2 * DEGRAD;
+        var olat = this.params.OLAT * DEGRAD;
+        var olon = this.params.OLON * DEGRAD;
 
         var sn = Math.tan(Math.PI * 0.25 + slat2 * 0.5) / Math.tan(Math.PI * 0.25 + slat1 * 0.5);
         sn = Math.log(Math.cos(slat1) / Math.cos(slat2)) / Math.log(sn);
@@ -117,14 +179,14 @@ var main = {
 
             theta *= sn;
 
-            rs['nx'] = Math.floor(ra * Math.sin(theta) + params.XO + 0.5);
-            rs['ny'] = Math.floor(ro - ra * Math.cos(theta) + params.YO + 0.5);
+            rs['nx'] = Math.floor(ra * Math.sin(theta) + this.params.XO + 0.5);
+            rs['ny'] = Math.floor(ro - ra * Math.cos(theta) + this.params.YO + 0.5);
         } else {
             rs['nx'] = v1;
             rs['ny'] = v2;
 
-            var xn = v1 - params.XO;
-            var yn = ro - v2 + params.YO;
+            var xn = v1 - this.params.XO;
+            var yn = ro - v2 + this.params.YO;
 
             ra = Math.sqrt(xn * xn + yn * yn);
 
@@ -154,13 +216,13 @@ var main = {
 
 main.init();
 
-const params = {
-    RE: 6371.00877,     // 지구 반경(km)
-    GRID: 5.0,          // 격자 간격(km)
-    SLAT1: 30.0,         // 투영 위도1(degree)
-    SLAT2: 60.0,        // 투영 위도2(degree)
-    OLON: 126.0,        // 기준점 경도(degree)
-    OLAT: 38.0,         // 기준점 위도(degree)
-    XO: 43,             // 기준점 X좌표(GRID)
-    YO: 136             // 기1준점 Y좌표(GRID)
-}
+// const params = {
+//     RE: 6371.00877,     // 지구 반경(km)
+//     GRID: 5.0,          // 격자 간격(km)
+//     SLAT1: 30.0,         // 투영 위도1(degree)
+//     SLAT2: 60.0,        // 투영 위도2(degree)
+//     OLON: 126.0,        // 기준점 경도(degree)
+//     OLAT: 38.0,         // 기준점 위도(degree)
+//     XO: 43,             // 기준점 X좌표(GRID)
+//     YO: 136             // 기1준점 Y좌표(GRID)
+// }

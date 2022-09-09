@@ -11,4 +11,5 @@ public class WeatherDTO {
     private String TMP;         // 1시간 기온 (섭씨)
 
     private String pm10Value;   // 미세먼지 농도
+    private SkyStatus status;
 }

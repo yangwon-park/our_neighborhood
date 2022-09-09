@@ -8,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ywphsm.ourneighbor.api.dto.SkyStatus;
 import ywphsm.ourneighbor.api.dto.WeatherDTO;
 
 import java.io.BufferedReader;
@@ -78,7 +79,6 @@ public class WeatherApiController {
         jsonObject.put("foreCast", foreCast);
 
         JSONArray foreJson = jsonObject.getJSONObject("foreCast").getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
-
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH00", Locale.KOREAN));
 
         for (int i = 0; i < foreJson.length(); i++) {
@@ -106,6 +106,27 @@ public class WeatherApiController {
             }
         }
 
+        String pty = dto.getPTY();
+        String sky = dto.getSKY();
+
+        if (!pty.equals("0")) {
+            if (pty.equals("3")) {
+                dto.setStatus(SkyStatus.SNOWY);
+            } else {
+                dto.setStatus(SkyStatus.RAINY);
+            }
+        } else {
+            if (sky.equals("1")) {
+                dto.setStatus(SkyStatus.SUNNY);
+            } else if (sky.equals("3")) {
+                dto.setStatus(SkyStatus.CLOUDY);
+            } else {
+                dto.setStatus(SkyStatus.VERYCLOUDY);
+            }
+        }
+
+
+        log.info("=== getForeCast End ===");
         return dto;
     }
 
@@ -139,15 +160,14 @@ public class WeatherApiController {
         jsonObject.put("airPollution", airPollution);
         JSONArray airJson = jsonObject.getJSONObject("airPollution").getJSONObject("response").getJSONObject("body").getJSONArray("items");
 
-        System.out.println("airJson = " + airJson);
+        // 추후에 디테일한 현재 위치에 있는 관측소 기반으로 미세먼지 농도를 체크할 수 있게 변경 예정
+        for (int i = 0; i < 1; i++) {
 
-        for (int i = 0; i < airJson.length(); i++) {
-
-            String station = airJson.getJSONObject(i).getString("stationName");
-            String pm10Value = airJson.getJSONObject(i).getString("pm10Value");
-
-            dto.setPm10Value(pm10Value);
+//            String station = airJson.getJSONObject(i).getString("stationName");
+            dto.setPm10Value(airJson.getJSONObject(i).getString("pm10Value"));
         }
+
+        log.info("=== getAirPollution End ===");
 
         return dto;
     }

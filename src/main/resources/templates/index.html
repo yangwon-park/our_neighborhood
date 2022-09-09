@@ -27,17 +27,18 @@
                         <a href="#" class="btn btn-primary">Read More</a>
                     </p>
                 </div>
+
                 <!--   d-none으로 일단 모든 기기에서 안 보기에 설정 => d-md-block로 md 이상에선 보이게 다시 설정 => 최종적으로 sm 이하에선 안 보임-->
                 <div class="col-md-3 d-none d-md-block letsgo">
                     <div class="card card-body letsgo-card">
                         <div class="letsgo my-3">
                             <h4 class="lestgo-title card-title text-dark mb-3">핫 플레이스 검색</h4>
                             <p class="card-text text-secondary">
-                                <th:block th:if="${member eq null}">
+                                <th:block th:if="${session.loginMember eq null}">
                                     회원님이 원하시는 장소를 가까운 <br/> 순서대로 보여드려요!
                                 </th:block>
-                                <th:block th:if="${member ne null}">
-                                    <span th:type="${member.username}"></span>님이 원하시는 장소를 가까운 <br/> 순서대로 보여드려요!
+                                <th:block th:if="${session.loginMember ne null}">
+                                    <span th:type="${session.loginMember.getUsername()}"></span>님이 원하시는 장소를 가까운 <br/> 순서대로 보여드려요!
                                 </th:block>
                             </p>
                         </div>
@@ -48,6 +49,56 @@
                                 </p>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="weather">
+    <div class="section-content">
+        <div class="container weather">
+            <div class="row align-items-center">
+                <div class="col-md-6 weather-first">
+                    <div class="row px-md-3">
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
+                                <div id="sky-status" class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
+                                <div id="tmp" class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
+                                <div id="pop" class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
+                                <div id="pm-10-value" class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 weather-second">
+                    <h1 class="mb-4">날씨에 어울리는 장소 추천</h1>
+                    <div class="weather-text">
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab debitis dolor ea
+                            eveniet illum incidunt itaque magnam odio voluptates, voluptatum.</p>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cupiditate
+                            eligendi et facere illum incidunt inventore magnam quam quod vitae.</p>
                     </div>
                 </div>
             </div>

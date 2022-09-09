@@ -30,6 +30,7 @@ public class MenuApiController {
         return menuService.saveMenu(menuAddDTO);
     }
 
+
     // 메뉴 이미지 출력
     @GetMapping("/menu/{fileName}")
     public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {

@@ -1,6 +1,6 @@
 package ywphsm.ourneighbor.domain.member;
 
 
-public enum MemberRole {
+public enum Role {
     USER, SELLER, ADMIN
 }

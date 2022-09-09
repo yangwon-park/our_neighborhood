@@ -29,8 +29,4 @@ public class MapSearchController {
                 .collect(Collectors.toList());
         return new ResultClass<>(collect.size(), collect);
     }
-
-
-
-
 }

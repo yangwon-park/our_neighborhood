@@ -57,7 +57,7 @@ public class Member extends BaseTimeEntity {
     private int gender;         // 0 : 남자, 1 : 여자
 
     @Enumerated(EnumType.STRING)
-    private MemberRole memberRole;
+    private Role role;
 
     private boolean emailConfirm;
 
@@ -73,7 +73,7 @@ public class Member extends BaseTimeEntity {
         this.gender = gender;
     }
 
-    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender, MemberRole memberRole) {
+    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender, Role role) {
         this.userId = userId;
         this.password = password;
         this.username = username;
@@ -82,7 +82,7 @@ public class Member extends BaseTimeEntity {
         this.phoneNumber = phoneNumber;
         this.age = age;
         this.gender = gender;
-        this.memberRole = memberRole;
+        this.role = role;
     }
 
     //회원가입때 사용

@@ -9,10 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.*;
 
 import javax.persistence.EntityManager;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
@@ -41,7 +42,7 @@ class StoreServiceTest {
     void before() {
         queryFactory = new JPAQueryFactory(em);
         List<String> offDays = new ArrayList<>();
-        offDays.add("토요일");
+        offDays.add("금요일");
         Store store = new Store("쿠다", 35.1612928, 129.1600985, "0517311660",
                 LocalTime.of(9, 00), LocalTime.of(20, 00), LocalTime.of(15, 30), LocalTime.of(17, 00),
                 null, "안녕하세요 칸다 소바입니다.", offDays , StoreStatus.OPEN, new Address("부산광역시 해운대구 구남로 30번길 8-3 1층", "48094", "1234", null));
@@ -55,14 +56,23 @@ class StoreServiceTest {
         List<String> offDays = new ArrayList<>();
         offDays.add("일요일");
 
-        Store store = new Store("쿠다", 1.0, 1.0, "1234",
-                LocalTime.now(), LocalTime.now(), LocalTime.now(), LocalTime.now(),
-                "gd", "H2", offDays, StoreStatus.OPEN, null);
+        Store store = new Store("칸다 소바", 35.1612928, 129.1600985, "0517311660",
+                LocalTime.of(9, 00), LocalTime.of(21, 00), LocalTime.of(15, 30), LocalTime.of(17, 00),
+                null, "안녕하세요 칸다 소바입니다.", offDays , StoreStatus.OPEN,
+                new Address("부산 해운대구 구남로30번길 8-3", "부산 해운대구 우동 544-15", "48094", "1층"));
 
-        Long storeId = storeService.saveStore(store);
+        // AddDTO에는 storeId, StoreStatus 없음
+        StoreDTO.Add dto = new StoreDTO.Add(store);
+
+        Category category = new Category("일식", 1L, null);
+
+        Long storeId = storeService.saveStore(dto, category);
         Store findStore = storeService.findOne(storeId);
 
-        assertThat(findStore).isEqualTo(store);
+        assertThat(findStore.getName()).isEqualTo(store.getName());
+
+        // 카테고리 일치 여부 확인
+        assertThat(findStore.getCategoryOfStoreList().get(0).getCategory().getName()).isEqualTo("일식");
     }
 
     @Test
@@ -80,12 +90,14 @@ class StoreServiceTest {
         }
     }
 
+
+
     @Test
     @DisplayName("모든 매장 찾기")
     void findAllStore() {
         List<Store> stores = storeService.findStores();
 
-        assertThat(stores.size()).isEqualTo(1);
+        assertThat(stores.size()).isEqualTo(12);
     }
 
     @Test
@@ -123,4 +135,11 @@ class StoreServiceTest {
 
         assertThat(today).contains(offDays);
     }
+
+
+
+
+
+
+
 }

@@ -10,15 +10,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.service.GoogleService;
+import ywphsm.ourneighbor.service.login.GoogleService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequiredArgsConstructor
 public class GoogleLoginController {
 
     private final GoogleService googleService;

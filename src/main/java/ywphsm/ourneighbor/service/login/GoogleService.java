@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.service;
+package ywphsm.ourneighbor.service.login;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import ywphsm.ourneighbor.controller.form.google.GoogleOAuthRequest;
 import ywphsm.ourneighbor.controller.form.google.GoogleOAuthResponse;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.service.MemberService;
 
 import java.util.Map;
 

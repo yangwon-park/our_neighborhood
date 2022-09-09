@@ -15,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static ywphsm.ourneighbor.domain.member.QMember.*;
 
 @SpringBootTest
 @Transactional
@@ -59,19 +60,18 @@ class MemberServiceTest {
         assertThat(memberId).isEqualTo(findMember.getId());
     }
 
-//    @Test
-//    @DisplayName("10대, 20대인 회원 찾기")
-//    void findMembers1020() {
-//        List<Member> memberList = queryFactory
-//                .select(member)
-//                .from(member)
-//                .where(member.age.goe(10).and(member.age.lt(30)))
-//                .fetch();
-//
-//        assertThat(memberList).extracting("username").contains("user1", "user3");
-//    }
-}
+    @Test
+    @DisplayName("10대, 20대인 회원 찾기")
+    void findMembers1020() {
+        List<Member> memberList = queryFactory
+                .select(member)
+                .from(member)
+                .where(member.age.goe(10).and(member.age.lt(30)))
+                .fetch();
 
+        assertThat(memberList).extracting("username").contains("user1", "user3");
+    }
+}
 
 
 

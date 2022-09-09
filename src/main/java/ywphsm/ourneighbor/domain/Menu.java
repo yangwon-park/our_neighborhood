@@ -1,21 +1,19 @@
 package ywphsm.ourneighbor.domain;
 
 import lombok.*;
+import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {
         "id", "name", "price", "discountPrice",
         "discountStart", "discountEnd"
 })
+@Entity
 public class Menu {
 
     @Id
@@ -28,20 +26,17 @@ public class Menu {
     private Integer price;
 
     private int discountPrice;
+
     private LocalDateTime discountStart;
+
     private LocalDateTime discountEnd;
 
 
     /*
         JPA 연관 관계 매핑
      */
-    /*
-        Store (One) <==> Menu (Many)
-        mappedBy가 없는 쪽이 연관 관계의 주인
-            ==> Menu 엔티티의 Store가 연관 관계의 주인
-            ==> FK가 있는 엔티티가 연관 관계의 주인
-            ==> ManyToOne인 경우, Many 쪽이 항상 연관 관계의 주인
-     */
+
+    // store (N:1)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
@@ -51,24 +46,18 @@ public class Menu {
         this.store = store;
     }
 
-    /*
-        생성자를 강제하고 setter를 닫음으로써 값이 변경될 가능성을 차단함
-        수정이 필요한 경우의 메소드는 별도로 작성하자
-    */
-    @Builder
-    public Menu(Long id, String name, Integer price, int discountPrice,
-                LocalDateTime discountStart, LocalDateTime discountEnd,
-                Store store) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.discountPrice = discountPrice;
-        this.discountStart = discountStart;
-        this.discountEnd = discountEnd;
-        this.store = store;
+    @OneToOne(mappedBy = "menu", cascade = CascadeType.ALL)
+    private UploadFile file;
+
+    public void setFile(UploadFile file) {
+        this.file = file;
     }
 
-
+    /*
+            생성자를 강제하고 setter를 닫음으로써 값이 변경될 가능성을 차단함
+            수정이 필요한 경우의 메소드는 별도로 작성하자
+    */
+    @Builder
     public Menu(String name, Integer price, int discountPrice,
                 LocalDateTime discountStart, LocalDateTime discountEnd,
                 Store store) {
@@ -83,6 +72,7 @@ public class Menu {
     /*
         === 연관 관계 편의 메소드 ===
      */
+
 
 
 

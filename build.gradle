@@ -53,6 +53,8 @@ dependencies {
 
 	//json-simple
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	implementation group: 'org.json', name: 'json', version: '20200518'
+
 
 	// QueryDSL
 	implementation 'com.querydsl:querydsl-jpa'
@@ -65,6 +67,9 @@ dependencies {
 
 	// spring-boot-start-test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// spring-security
+	testImplementation 'org.springframework.security:spring-security-test'
 
 	//테스트에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'

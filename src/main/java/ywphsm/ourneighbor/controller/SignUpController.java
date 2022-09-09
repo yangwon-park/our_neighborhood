@@ -15,14 +15,12 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Random;
 
-@Slf4j
-@Controller
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/sign_up")
+@Controller
 public class SignUpController {
 
     private final MemberService memberService;

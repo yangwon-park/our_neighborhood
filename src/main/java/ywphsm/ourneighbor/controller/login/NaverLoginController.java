@@ -7,15 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.service.NaverService;
+import ywphsm.ourneighbor.service.login.NaverService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequiredArgsConstructor
 public class NaverLoginController {
 
     private final NaverService naverService;

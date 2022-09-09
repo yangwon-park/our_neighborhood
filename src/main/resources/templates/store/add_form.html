@@ -17,7 +17,8 @@
 <section class="header">
     <div class="header py-7 py-lg-8">
         <div class="separator separator-bottom separator-skew zindex-100">
-            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg">
                 <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
             </svg>
         </div>
@@ -25,9 +26,7 @@
 </section>
 <!--addForm-->
 <section class="main">
-    <!-- Page content -->
     <div class="container-fluid mt--8 pb-5">
-        <!-- Table -->
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
@@ -43,18 +42,23 @@
                             </div>
                             <div class="form-group d-flex">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="*{zipcode}" class="form-control" placeholder="우편 번호" type="text" disabled>
+                                    <input th:field="*{zipcode}" class="form-control" placeholder="우편 번호" type="text"
+                                           readonly>
                                 </div>
-                                <button type="button" onclick="openPostcode()" class="text-center btn btn-orange ms-3" style="height: 3rem">우편 번호 찾기</button>
+                                <button type="button" onclick="openPostcode()" class="text-center btn btn-orange ms-3"
+                                        style="height: 3rem">우편 번호 찾기
+                                </button>
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="*{roadAddr}" class="form-control" placeholder="도로명 주소" type="text" disabled>
+                                    <input th:field="*{roadAddr}" class="form-control" placeholder="도로명 주소" type="text"
+                                           readonly>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="*{numberAddr}" class="form-control" placeholder="지번 주소" type="text">
+                                    <input th:field="*{numberAddr}" class="form-control" placeholder="지번 주소"
+                                           type="text">
                                 </div>
                             </div>
                             <span id="guide" style="color:#999;display:none"></span>
@@ -75,7 +79,8 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="*{phoneNumber}" class="form-control" placeholder="매장 전화 번호" type="text">
+                                    <input th:field="*{phoneNumber}" class="form-control" placeholder="매장 전화 번호"
+                                           type="text">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -90,22 +95,36 @@
                             </div>
                             <div class="form-group d-flex">
                                 <div class="input-group input-group-alternative me-3">
-                                    <input th:field="*{openingTime}" class="form-control" placeholder="영업 시작 시간" type="time">
+                                    <input th:field="*{openingTime}" class="form-control" placeholder="영업 시작 시간"
+                                           type="time">
                                 </div>
                                 <div class="input-group input-group-alternative ms-3">
-                                    <input th:field="*{closingTime}" class="form-control" placeholder="영업 종료 시간" type="time">
+                                    <input th:field="*{closingTime}" class="form-control" placeholder="영업 종료 시간"
+                                           type="time">
                                 </div>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="input-group input-group-alternative me-3">
-                                    <input th:field="*{breakStart}" class="form-control" placeholder="휴식 시작 시간" type="time">
+                                    <input th:field="*{breakStart}" class="form-control" placeholder="휴식 시작 시간"
+                                           type="time">
                                 </div>
                                 <div class="input-group input-group-alternative ms-3">
-                                    <input th:field="*{breakEnd}" class="form-control" placeholder="휴식 종료 시간" type="time">
+                                    <input th:field="*{breakEnd}" class="form-control" placeholder="휴식 종료 시간"
+                                           type="time">
                                 </div>
                             </div>
+                            <div class="form-group d-flex">
+                                <div class="input-group input-group-alternative me-3">
+                                    <select name="categoryId" class="form-select">
+                                        <option value="">상위 카테고리 선택</option>
+                                        <option th:each="cate : ${all}" th:value="${cate.getCategoryId()}"
+                                                th:text="${cate.getName()}"></option>
+                                    </select>
+                                </div>
+
+                            </div>
                             <div class="form-group d-flex justify-content-center">
-                                <h5>휴무일 선택</h5>
+                                <h5>휴무일</h5>
                                 <div th:each="day : ${offDays}" class="custom-control custom-checkbox mb-3 ms-3 me-3">
                                     <input class="custom-control-input" type="checkbox"
                                            th:field="${store.offDays}" th:value="${day.value}">
@@ -128,78 +147,7 @@
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
 </footer>
+<script th:src="@{/js/postcode.js}"></script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
-<script>
 
-    // 우편 번호 API로 받아온 도로명 주소를 담을 변수
-    var addr;
-    var lat; // addr의 위도
-    var lon; // addr의 경도
-
-    // 카카오맵 geocoder 라이브러리 객체 생성
-    var geocoder = new kakao.maps.services.Geocoder();
-
-    function openPostcode() {
-        new daum.Postcode({
-            oncomplete: function (data) {
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var roadAddr = data.roadAddress; // 도로명 주소 변수
-
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('zipcode').value = data.zonecode;
-                document.getElementById('roadAddr').value = roadAddr;
-                document.getElementById('numberAddr').value = data.jibunAddress;
-
-                addr = roadAddr;
-
-                var guideTextBox = document.getElementById("guide");
-                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-                if (data.autoRoadAddress) {
-                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-                    guideTextBox.style.display = 'block';
-
-                } else if (data.autoJibunAddress) {
-                    var expJibunAddr = data.autoJibunAddress;
-                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-                    guideTextBox.style.display = 'block';
-                } else {
-                    guideTextBox.innerHTML = '';
-                    guideTextBox.style.display = 'none';
-                }
-            },
-
-            onclose: function(state) {
-                //state는 우편번호 찾기 화면이 어떻게 닫혔는지에 대한 상태 변수 이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
-                if(state === 'FORCE_CLOSE'){
-                    //사용자가 브라우저 닫기 버튼을 통해 팝업창을 닫았을 경우, 실행될 코드를 작성하는 부분입니다.
-
-                } else if(state === 'COMPLETE_CLOSE'){
-                    //사용자가 검색결과를 선택하여 팝업창이 닫혔을 경우, 실행될 코드를 작성하는 부분입니다.
-                    //oncomplete 콜백 함수가 실행 완료된 후에 실행됩니다.
-
-                    findLatLon();
-                }
-            }
-        }).open();
-    }
-
-
-    function findLatLon() {
-        geocoder.addressSearch(addr, (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-                lat = result[0].y
-                lon = result[0].x
-            }
-
-            document.getElementById("lat").value = lat;
-            document.getElementById("lon").value = lon;
-        });
-
-
-    }
-</script>
 </html>

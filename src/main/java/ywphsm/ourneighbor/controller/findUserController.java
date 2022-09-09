@@ -12,9 +12,9 @@ import ywphsm.ourneighbor.service.MemberService;
 
 import javax.validation.Valid;
 
-@Controller
 @RequiredArgsConstructor
-public class findUserController {
+@Controller
+public class FindUserController {
 
     private final MemberService memberService;
 

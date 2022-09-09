@@ -34,6 +34,10 @@ spring:
         use_sql_comments: true
         default_batch_fetch_size: 500 # 컬렉션 조회 페이징 및 최적화
 
+# 파일 저장 경로
+file:
+  dir: /c:/Users/HOME/Desktop/JAVA/menu_file/
+
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace

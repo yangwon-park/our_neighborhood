@@ -14,13 +14,10 @@ import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.email.EmailService;
 import ywphsm.ourneighbor.service.email.TokenService;
 import javax.persistence.EntityManager;
-import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Email;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,6 +27,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+
+    private final EntityManager em;
+
     private final EmailService emailService;
 
     // 회원 가입

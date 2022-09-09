@@ -11,4 +11,9 @@ public class ResultClass<T> {
 
     private int count;
     private T data;
+
+
+    public ResultClass(T data) {
+        this.data = data;
+    }
 }

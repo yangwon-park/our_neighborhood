@@ -3,7 +3,6 @@ package ywphsm.ourneighbor.domain.store.days;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ywphsm.ourneighbor.domain.store.days.Days;
 
 import javax.persistence.*;
 

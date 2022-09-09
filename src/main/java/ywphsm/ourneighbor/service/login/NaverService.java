@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.service;
+package ywphsm.ourneighbor.service.login;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +21,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import ywphsm.ourneighbor.controller.form.naver.NaverTokenResponse;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.service.MemberService;
 
 @Slf4j
 @Service

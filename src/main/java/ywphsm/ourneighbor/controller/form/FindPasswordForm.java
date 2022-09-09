@@ -6,7 +6,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class FindPasswordForm {
+public class
+FindPasswordForm {
 
     @NotBlank
     private String userId;

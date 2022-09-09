@@ -2,34 +2,22 @@ package ywphsm.ourneighbor.service;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.domain.member.QMember;
-import ywphsm.ourneighbor.domain.store.QStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static ywphsm.ourneighbor.domain.QMenu.*;
 import static ywphsm.ourneighbor.domain.QReview.*;
 import static ywphsm.ourneighbor.domain.member.QMember.*;
 import static ywphsm.ourneighbor.domain.store.QStore.*;

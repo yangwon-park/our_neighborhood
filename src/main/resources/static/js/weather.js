@@ -11,9 +11,6 @@ var main = {
             method: "get",
             url: "/weather",
         }).then((resp) => {
-
-            console.log(resp.data);
-
             var _skyStatus = document.getElementById("sky-status");
             var _tmp = document.getElementById("tmp");
             var _pop = document.getElementById("pop");
@@ -50,9 +47,6 @@ var main = {
             _skyStatus.appendChild(fontAwesome);
             _tmp.innerText = "현재 기온 : " + resp.data.tmp + "℃";
             _pop.innerText = "강수 확률 : " + resp.data.pop + "%";
-
-
-
         }).catch((error) => {
             console.log(error);
         })
@@ -92,8 +86,6 @@ var main = {
         navigator.geolocation.getCurrentPosition(
             this.success, this.error
         );
-
-        alert(document.cookie);
     },
 
     success: function (position) {

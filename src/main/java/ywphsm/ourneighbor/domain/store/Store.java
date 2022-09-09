@@ -3,10 +3,8 @@ package ywphsm.ourneighbor.domain.store;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ywphsm.ourneighbor.domain.*;
-import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 
 import javax.persistence.*;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;

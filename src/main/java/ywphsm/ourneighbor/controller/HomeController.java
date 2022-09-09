@@ -13,8 +13,6 @@ import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.service.StoreService;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
@@ -57,12 +55,7 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(HttpServletRequest req) {
-
-        Cookie[] cookies = req.getCookies();
-        for (Cookie cookie : cookies) {
-            System.out.println("cookie = " + cookie.getName());
-        }
+    public String index() {
 
         return "index";
     }

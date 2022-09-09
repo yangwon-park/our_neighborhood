@@ -1,14 +1,16 @@
 package ywphsm.ourneighbor.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ywphsm.ourneighbor.api.dto.SkyStatus;
 import ywphsm.ourneighbor.api.dto.WeatherDTO;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -26,12 +28,9 @@ import java.util.Locale;
 public class WeatherApiController {
 
     @GetMapping("/weather")
-    public WeatherDTO getWeather(HttpServletRequest req) throws Exception{
-
-        Cookie[] cookies = req.getCookies();
-        for (Cookie cookie : cookies) {
-            System.out.println("cookie = " + cookie.getName());
-        }
+    public WeatherDTO getWeather(@CookieValue(value="nx", required = false, defaultValue = "") String nx,
+                                 @CookieValue(value="ny", required = false, defaultValue = "") String ny,
+                                 @CookieValue(value="sidoName", required = false, defaultValue = "") String sidoName) throws Exception{
 
         WeatherDTO dto = new WeatherDTO();
 
@@ -40,14 +39,22 @@ public class WeatherApiController {
         String numOfRows = "290";     // 오늘 하루 시간대별 모든 날씨 예보의 row 수
         String pageNo = "1";
 
-        WeatherDTO foreCast = getForeCast(serviceKey, returnType, numOfRows, pageNo, dto);
+//        System.out.println("coords = " + coords);
+//        JSONParser jsonParser = new JSONParser();
+//
+//        JSONObject jsonObject = (JSONObject) jsonParser.parse(coords);
+//        String lat = (String) jsonObject.get("lat");
+//        System.out.println("lat = " + lat);
 
-        return getAirPollution(serviceKey, returnType, numOfRows, pageNo, foreCast);
+        WeatherDTO foreCast = getForeCast(serviceKey, returnType, numOfRows, pageNo, nx, ny, dto);
+
+        return getAirPollution(serviceKey, returnType, numOfRows, pageNo, sidoName, foreCast);
     }
 
 
     // 단기 예보 조회
-    private WeatherDTO getForeCast(String serviceKey, String returnType, String numOfRows, String pageNo, WeatherDTO dto) throws Exception {
+    private WeatherDTO getForeCast(String serviceKey, String returnType, String numOfRows, String pageNo,
+                                   String nx, String ny, WeatherDTO dto) throws Exception {
 
         log.info("=== getForeCast Start ===");
 
@@ -55,9 +62,6 @@ public class WeatherApiController {
         String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
         String base_date = targetDay.format(DateTimeFormatter.ofPattern("yyyyMMdd", Locale.KOREAN));
         String base_time = "2300";
-
-        String nx = "35";
-        String ny = "129";
 
         // URL
         String result = url + "?" + URLEncoder.encode("serviceKey", StandardCharsets.UTF_8) + "=" + serviceKey +
@@ -75,9 +79,6 @@ public class WeatherApiController {
         jsonObject.put("foreCast", foreCast);
 
         JSONArray foreJson = jsonObject.getJSONObject("foreCast").getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
-
-        System.out.println("foreJson = " + foreJson);
-
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH00", Locale.KOREAN));
 
         for (int i = 0; i < foreJson.length(); i++) {
@@ -105,17 +106,46 @@ public class WeatherApiController {
             }
         }
 
+        String pty = dto.getPTY();
+        String sky = dto.getSKY();
+
+        if (!pty.equals("0")) {
+            if (pty.equals("3")) {
+                dto.setStatus(SkyStatus.SNOWY);
+            } else {
+                dto.setStatus(SkyStatus.RAINY);
+            }
+        } else {
+            if (sky.equals("1")) {
+                dto.setStatus(SkyStatus.SUNNY);
+            } else if (sky.equals("3")) {
+                dto.setStatus(SkyStatus.CLOUDY);
+            } else {
+                dto.setStatus(SkyStatus.VERYCLOUDY);
+            }
+        }
+
+
+        log.info("=== getForeCast End ===");
         return dto;
     }
 
-
     // 시도별 실시간 측정 정보 조회
-    private WeatherDTO getAirPollution(String serviceKey, String returnType, String numOfRows, String pageNo, WeatherDTO dto) throws Exception {
+    private WeatherDTO getAirPollution(String serviceKey, String returnType, String numOfRows, String pageNo,
+                                       String sidoName, WeatherDTO dto) throws Exception {
 
-        log.info("=== getAirPolution Start ===");
+        log.info("=== getAirPollution Start ===");
+
+        // API 파라미터에 맞는 시도 명으로 변환하는 로직
+        // 8도의 이름은 아래와 같이 줄여서 받고, 나머지 지역명은 앞의 2글자로 받음
+        // ex) 경상북도 => 경북
+        if (sidoName.length() == 4) {
+            sidoName = String.valueOf(sidoName.charAt(0)).concat(String.valueOf(sidoName.charAt(2)));
+        } else {
+            sidoName = sidoName.substring(0, 2);
+        }
 
         String url = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty";
-        String sidoName = "서울";
 
         // URL
         String result = url + "?" + URLEncoder.encode("serviceKey", StandardCharsets.UTF_8) + "=" + serviceKey +
@@ -130,17 +160,14 @@ public class WeatherApiController {
         jsonObject.put("airPollution", airPollution);
         JSONArray airJson = jsonObject.getJSONObject("airPollution").getJSONObject("response").getJSONObject("body").getJSONArray("items");
 
-        for (int i = 0; i < airJson.length(); i++) {
+        // 추후에 디테일한 현재 위치에 있는 관측소 기반으로 미세먼지 농도를 체크할 수 있게 변경 예정
+        for (int i = 0; i < 1; i++) {
 
-            String sido = airJson.getJSONObject(i).getString("sidoName");
-            String station = airJson.getJSONObject(i).getString("stationName");
-            String pm10Value = airJson.getJSONObject(i).getString("pm10Value");
-
-            if (sido.equals("서울") && station.equals("한강대로")) {
-                dto.setPm10Value(pm10Value);
-                break;
-            }
+//            String station = airJson.getJSONObject(i).getString("stationName");
+            dto.setPm10Value(airJson.getJSONObject(i).getString("pm10Value"));
         }
+
+        log.info("=== getAirPollution End ===");
 
         return dto;
     }
@@ -181,7 +208,7 @@ public class WeatherApiController {
             resultMap = mapper.readValue(sbf.toString(), HashMap.class);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception(url + " interface failed" + e);
+            throw new Exception(url + "은 효한 URL이 아닙니다." + e);
         } finally {
             if (conn != null) conn.disconnect();
             if (br != null) br.close();

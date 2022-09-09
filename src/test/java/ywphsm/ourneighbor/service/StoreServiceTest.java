@@ -70,7 +70,7 @@ class StoreServiceTest {
         Store findStore = storeService.findOne(storeId);
 
         assertThat(findStore.getName()).isEqualTo(store.getName());
-        
+
         // 카테고리 일치 여부 확인
         assertThat(findStore.getCategoryOfStoreList().get(0).getCategory().getName()).isEqualTo("일식");
     }

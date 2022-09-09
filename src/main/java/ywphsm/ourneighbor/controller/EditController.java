@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.controller.form.EditForm;
-import ywphsm.ourneighbor.controller.form.EmailConfirmForm;
-import ywphsm.ourneighbor.controller.form.PasswordEditForm;
-import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
+import ywphsm.ourneighbor.controller.form.*;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.email.TokenService;
@@ -34,8 +31,9 @@ public class EditController {
     }
 
     @PostMapping
-    public String memberEdit(@Valid @ModelAttribute EditForm editForm, BindingResult bindingResult,
-                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
+    public String memberEdit(@Valid @ModelAttribute EditForm editForm, BindingResult bindingResult) {
+
+        Member member = memberService.findOne(editForm.getId());
 
         if (memberService.doubleCheck(editForm.getNickname()) != null &&
                 !member.getNickname().equals(editForm.getNickname())) {
@@ -105,25 +103,26 @@ public class EditController {
     }
 
     @GetMapping("/phoneCertified")
-    public String edit_phoneCertified(@ModelAttribute PhoneCertifiedForm phoneCertifiedForm,
+    public String edit_phoneCertified(@ModelAttribute PhoneNumberEditForm phoneNumberEditForm,
                                       @SessionAttribute(name = SessionConst.PHONE_CERTIFIED) PhoneCertifiedForm phoneSession) {
 
-        phoneSession.setPhoneNumber(phoneSession.getPhoneNumber());
+        phoneNumberEditForm.setPhoneNumber(phoneSession.getPhoneNumber());
         return "edit/phoneCertifiedForm";
     }
 
     @PostMapping("/phoneCertified")
-    public String edit_phoneCertified(@Valid @ModelAttribute PhoneCertifiedForm phoneCertifiedForm,
+    public String edit_phoneCertified(@Valid @ModelAttribute PhoneNumberEditForm phoneNumberEditForm,
                                       BindingResult bindingResult,
                                       @SessionAttribute(name = SessionConst.PHONE_CERTIFIED) PhoneCertifiedForm phoneSession,
                                       @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
-        if (!phoneCertifiedForm.getPhoneNumber().equals(phoneSession.getPhoneNumber()) ||
-                !phoneCertifiedForm.getCertifiedNumber().equals(phoneSession.getCertifiedNumber())) {
+        if (!phoneNumberEditForm.getPhoneNumber().equals(phoneSession.getPhoneNumber()) ||
+                !phoneNumberEditForm.getCertifiedNumber().equals(phoneSession.getCertifiedNumber())) {
             bindingResult.reject("phoneCertifiedFail");
         }
 
-        if (memberService.findByPhoneNumber(phoneCertifiedForm.getPhoneNumber()) != null) {
+        if (memberService.findByPhoneNumber(phoneNumberEditForm.getPhoneNumber()) != null &&
+        !member.getPhoneNumber().equals(phoneNumberEditForm.getPhoneNumber())) {
             bindingResult.reject("phoneDoubleCheck");
         }
 
@@ -131,7 +130,8 @@ public class EditController {
             return "edit/phoneCertifiedForm";
         }
 
-        memberService.updatePhoneNumber(member.getId(), phoneCertifiedForm.getPhoneNumber());
+        memberService.updatePhoneNumber(member.getId(), phoneNumberEditForm.getPhoneNumber());
+
 
         return "redirect:/logout";
     }

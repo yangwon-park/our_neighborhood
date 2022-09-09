@@ -3,12 +3,9 @@ package ywphsm.ourneighbor.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ywphsm.ourneighbor.domain.Address;
-import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
-import ywphsm.ourneighbor.domain.store.days.Days;
-import ywphsm.ourneighbor.domain.store.days.DaysEntity;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;

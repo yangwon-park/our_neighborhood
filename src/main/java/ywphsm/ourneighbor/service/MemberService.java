@@ -28,8 +28,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    private final EntityManager em;
-
     private final EmailService emailService;
 
     // 회원 가입

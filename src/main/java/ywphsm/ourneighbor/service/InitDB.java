@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ywphsm.ourneighbor.domain.Address;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
@@ -32,10 +33,12 @@ public class InitDB {
 
         private final EntityManager em;
 
+        private final MemberService memberService;
+
         public void dbInit() {
 
-            Member member1 = new Member("ailey", "12341234", "박양원", "양갱",
-                    "ywonp9405@gmail.com", "01067731582", 29, 0);
+            Member member1 = new Member("ailey", memberService.encodedPassword("12341234"), "박양원", "양갱",
+                    "ywonp9405@gmail.com", "01067731582", 29, 0, Role.ADMIN);
 
             Member member2 = new Member("hansung", "12341234", "문한성", "한성",
                     "hansung@naver.com", "01038352375", 24, 0);

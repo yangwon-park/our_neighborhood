@@ -1,57 +1,4 @@
 var main = {
-    init: function () {
-        var _this = this;
-
-        _this.loadCoords();
-        _this.setWeatherInfo();
-    },
-
-    setWeatherInfo: function () {
-        axios( {
-            method: "get",
-            url: "/weather",
-        }).then((resp) => {
-            var _skyStatus = document.getElementById("sky-status");
-            var _tmp = document.getElementById("tmp");
-            var _pop = document.getElementById("pop");
-            var _pm10Value = document.getElementById("pm-10-value")
-
-            var skyStatus = resp.data.status;
-            var pm10Value = resp.data.pm10Value;
-
-            const fontAwesome = document.createElement("i")
-
-            if (skyStatus === "SUNNY") {
-                fontAwesome.innerHTML = "<i class=\"fa-solid fa-sun orange fs-1\"></i>"
-            } else if (skyStatus  === "CLOUDY") {
-                fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud-sun fs-1\"></i>"
-            }else if (skyStatus  === "VERYCLOUDY") {
-                fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud fs-1\"></i>"
-            }else if (skyStatus  === "RAINY") {
-                fontAwesome.innerHTML = "<i class=\"fa-solid fa-umbrella fs-1\"></i>"
-            }else if (skyStatus  === "SNOWY") {
-                fontAwesome.innerHTML = "<i class=\"fa-regular fa-snowflake fs-1\"></i>"
-            }
-
-            if (pm10Value <= 30) {
-                _pm10Value.innerText = "좋음 (미세먼지 농도 : " + pm10Value + ")";
-            } else if (pm10Value <= 80) {
-                _pm10Value.innerText = "보통 (미세먼지 농도 : " + pm10Value + ")";
-            } else if (pm10Value <= 150) {
-                _pm10Value.innerText = "나쁨 (미세먼지 농도 : " + pm10Value + ")";
-            } else {
-                _pm10Value.innerText = "매우 나쁨 (미세먼지 농도 : " + pm10Value + ")";
-            }
-
-
-            _skyStatus.appendChild(fontAwesome);
-            _tmp.innerText = "현재 기온 : " + resp.data.tmp + "℃";
-            _pop.innerText = "강수 확률 : " + resp.data.pop + "%";
-        }).catch((error) => {
-            console.log(error);
-        })
-    },
-
     setCookie: function (key, value, exp) {
         let date = new Date();
         date.setDate(date.getDate() + (exp * 1000 * 60 * 60)); // 1000 * 60 * 60 = 1시간
@@ -73,22 +20,119 @@ var main = {
         return cookieValue;
     },
 
-    loadCoords: function () {
-        let lat = this.getCookie("lat");
-        let lon = this.getCookie("lon");
+    init: async function () {
+        console.log("==== init Start ====")
+        var _this = this;
 
-        if (lat == null || lon == null) {
-            this.findCoords();
-        }
+        await _this.findCoords();
+
+        console.log("==== init End ====")
     },
 
-    findCoords: function () {
-        navigator.geolocation.getCurrentPosition(
-            this.success, this.error
-        );
+    findCoords: async function () {
+        console.log("findCoords Start");
+        let position = await this.getCoords();
+        await this.success(position);
+
+        this.setWeatherInfo();
+
+        let nx = main.getCookie("nx");
+        let ny = main.getCookie("ny");
+        console.log("findCoords nx : " + nx)
+        console.log("findCoords ny : " + ny)
+        console.log("findCoords End");
     },
 
-    success: function (position) {
+    setWeatherInfo: function () {
+        console.log("setWeather Start");
+
+        axios({
+            method: "get",
+            url: "/weather",
+        }).then((resp) => {
+            var _skyStatus = document.getElementById("sky-status");
+            var _tmp = document.getElementById("tmp");
+            var _pop = document.getElementById("pop");
+            var _pm10Value = document.getElementById("pm-10-value")
+
+            var skyStatus = resp.data.status;
+            var pm10Value = resp.data.pm10Value;
+
+            const fontAwesome = document.createElement("i")
+
+            if (skyStatus === "SUNNY") {
+                fontAwesome.innerHTML = "<i class=\"fa-solid fa-sun orange fs-1\"></i>"
+            } else if (skyStatus === "CLOUDY") {
+                fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud-sun fs-1\"></i>"
+            } else if (skyStatus === "VERYCLOUDY") {
+                fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud fs-1\"></i>"
+            } else if (skyStatus === "RAINY") {
+                fontAwesome.innerHTML = "<i class=\"fa-solid fa-umbrella fs-1\"></i>"
+            } else if (skyStatus === "SNOWY") {
+                fontAwesome.innerHTML = "<i class=\"fa-regular fa-snowflake fs-1\"></i>"
+            }
+
+            if (pm10Value <= 30) {
+                _pm10Value.innerText = "좋음 (미세먼지 농도 : " + pm10Value + ")";
+            } else if (pm10Value <= 80) {
+                _pm10Value.innerText = "보통 (미세먼지 농도 : " + pm10Value + ")";
+            } else if (pm10Value <= 150) {
+                _pm10Value.innerText = "나쁨 (미세먼지 농도 : " + pm10Value + ")";
+            } else {
+                _pm10Value.innerText = "매우 나쁨 (미세먼지 농도 : " + pm10Value + ")";
+            }
+
+
+            _skyStatus.appendChild(fontAwesome);
+            _tmp.innerText = "현재 기온 : " + resp.data.tmp + "℃";
+            _pop.innerText = "강수 확률 : " + resp.data.pop + "%";
+        }).catch((error) => {
+            console.log(error);
+        })
+
+        console.log("setWeather End");
+    },
+
+    getCoords: function (options) {
+        console.log("getCoords Start");
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, options);
+            console.log("getCoords End");
+        })
+    },
+
+    getSidoName: async function (position) {
+        console.log("getSidoName Start")
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        let data = await this.getRegionCode(lat, lon);
+
+        let sidoName = data.result[0].region_1depth_name;
+
+        main.setCookie("sidoName", sidoName, 6);
+        console.log("getSidoName End")
+    },
+
+    getRegionCode: function (lat, lon) {
+        // 위경도를 이용하여 행정구역정보 얻기
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        var loc = new kakao.maps.LatLng(lat, lon);
+        console.log("callback Start")
+        return new Promise((resolve, reject) => {
+            geocoder.coord2RegionCode(loc.getLng(), loc.getLat(), function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    resolve({result})
+                } else {
+                    reject(status)
+                }
+            });
+        })
+    },
+
+    success: async function (position) {
+        console.log("success Start");
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
 
@@ -100,19 +144,9 @@ var main = {
         main.setCookie("nx", nx, 6);
         main.setCookie("ny", ny, 6);
 
-        // 위경도를 이용하여 행정구역정보 얻기
-        var geocoder = new kakao.maps.services.Geocoder();
+        await this.getSidoName(position);
 
-        var loc = new kakao.maps.LatLng(lat, lon);
-
-        var callback = function (result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-                let sidoName = result[0].region_1depth_name;
-                main.setCookie("sidoName", sidoName, 6);
-            }
-        }
-
-        geocoder.coord2RegionCode(loc.getLng(), loc.getLat(), callback);
+        console.log("success End");
     },
 
     error: function () {

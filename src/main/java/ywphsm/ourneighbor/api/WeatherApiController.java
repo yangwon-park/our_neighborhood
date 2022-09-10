@@ -30,6 +30,10 @@ public class WeatherApiController {
                                  @CookieValue(value="ny", required = false, defaultValue = "") String ny,
                                  @CookieValue(value="sidoName", required = false, defaultValue = "") String sidoName) throws Exception{
 
+        System.out.println("nx = " + nx);
+        System.out.println("ny = " + ny);
+        System.out.println("sidoName = " + sidoName);
+
         WeatherDTO dto = new WeatherDTO();
 
         String serviceKey = "LBYxEXESOBgpdqLOhf1sRtyCQdCdagCnzNxOIFp45%2FwsK%2BjAY6%2FkK9YbmQLnGr7cbD%2FPEihLyT0u1txhmFyEmg%3D%3D";
@@ -37,12 +41,10 @@ public class WeatherApiController {
         String numOfRows = "290";     // 오늘 하루 시간대별 모든 날씨 예보의 row 수
         String pageNo = "1";
 
-//        System.out.println("coords = " + coords);
 //        JSONParser jsonParser = new JSONParser();
 //
 //        JSONObject jsonObject = (JSONObject) jsonParser.parse(coords);
 //        String lat = (String) jsonObject.get("lat");
-//        System.out.println("lat = " + lat);
 
         WeatherDTO foreCast = getForeCast(serviceKey, returnType, numOfRows, pageNo, nx, ny, dto);
 
@@ -55,6 +57,7 @@ public class WeatherApiController {
                                    String nx, String ny, WeatherDTO dto) throws Exception {
 
         log.info("=== getForeCast Start ===");
+
 
         LocalDateTime targetDay = LocalDateTime.now().plusDays(-1);
         String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
@@ -71,12 +74,15 @@ public class WeatherApiController {
                 "&" + URLEncoder.encode("nx", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(nx, StandardCharsets.UTF_8) +
                 "&" + URLEncoder.encode("ny", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(ny, StandardCharsets.UTF_8);
 
+        log.info("result={}", result);
+
         HashMap<String, Object> foreCast = getData(url, result);
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("foreCast", foreCast);
 
         JSONArray foreJson = jsonObject.getJSONObject("foreCast").getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
+
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH00", Locale.KOREAN));
 
         for (int i = 0; i < foreJson.length(); i++) {

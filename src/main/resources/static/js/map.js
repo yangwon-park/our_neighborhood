@@ -122,7 +122,10 @@ function addInfoWindow(marker, data, infowindow) {
             '    </div>' +
             '    <div class="row d-flex mb-2">' +
             '        <div class="col">' +
-            '           <a style="color: #146c43; font-size: 0.85rem" href="tel:' + data.phoneNumber + '">' + data.phoneNumber + '</a>' +
+            '           <a style="color: #146c43; font-size: 0.85rem; text-decoration: none" href="tel:' + data.phoneNumber + '">' + data.phoneNumber + '</a>' +
+            '        </div>' +
+            '        <div class="col">' +
+            '            <p class="card-text text-end">' + data.distance + 'km</p>' +
             '        </div>' +
             '    </div>' +
             '</div>')

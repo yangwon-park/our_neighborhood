@@ -17,6 +17,7 @@ var main = {
                 cookieValue = encodeURI(arraySub[0]);
             }
         }
+
         return cookieValue;
     },
 
@@ -133,8 +134,8 @@ var main = {
 
     success: async function (position) {
         console.log("success Start");
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
 
         var coords = main.dfs_xy_conv("toXY", lat, lon);
 
@@ -143,6 +144,8 @@ var main = {
 
         main.setCookie("nx", nx, 6);
         main.setCookie("ny", ny, 6);
+        main.setCookie("lat", lat, 6);
+        main.setCookie("lon", lon, 6);
 
         await this.getSidoName(position);
 

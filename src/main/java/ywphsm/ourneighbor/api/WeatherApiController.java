@@ -30,21 +30,12 @@ public class WeatherApiController {
                                  @CookieValue(value="ny", required = false, defaultValue = "") String ny,
                                  @CookieValue(value="sidoName", required = false, defaultValue = "") String sidoName) throws Exception{
 
-        System.out.println("nx = " + nx);
-        System.out.println("ny = " + ny);
-        System.out.println("sidoName = " + sidoName);
-
         WeatherDTO dto = new WeatherDTO();
 
         String serviceKey = "LBYxEXESOBgpdqLOhf1sRtyCQdCdagCnzNxOIFp45%2FwsK%2BjAY6%2FkK9YbmQLnGr7cbD%2FPEihLyT0u1txhmFyEmg%3D%3D";
         String returnType = "JSON";
         String numOfRows = "290";     // 오늘 하루 시간대별 모든 날씨 예보의 row 수
         String pageNo = "1";
-
-//        JSONParser jsonParser = new JSONParser();
-//
-//        JSONObject jsonObject = (JSONObject) jsonParser.parse(coords);
-//        String lat = (String) jsonObject.get("lat");
 
         WeatherDTO foreCast = getForeCast(serviceKey, returnType, numOfRows, pageNo, nx, ny, dto);
 
@@ -129,7 +120,6 @@ public class WeatherApiController {
             }
         }
 
-
         log.info("=== getForeCast End ===");
         return dto;
     }
@@ -140,7 +130,7 @@ public class WeatherApiController {
 
         log.info("=== getAirPollution Start ===");
 
-        // API 파라미터에 맞는 시도 명으로 변환하는 로직
+        // API 파라미터 sidoName 조건에 맞는 시도 명으로 변환하는 로직
         // 8도의 이름은 아래와 같이 줄여서 받고, 나머지 지역명은 앞의 2글자로 받음
         // ex) 경상북도 => 경북
         if (sidoName.length() == 4) {

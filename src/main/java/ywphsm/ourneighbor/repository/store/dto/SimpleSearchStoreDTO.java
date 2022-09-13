@@ -18,6 +18,8 @@ public class SimpleSearchStoreDTO {
     private StoreStatus status;
     private Address address;
 
+    private Double distance;
+
     public SimpleSearchStoreDTO(Store store) {
         storeId = store.getId();
         name = store.getName();

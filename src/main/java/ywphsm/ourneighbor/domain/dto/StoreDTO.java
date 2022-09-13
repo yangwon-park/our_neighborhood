@@ -143,7 +143,6 @@ public class StoreDTO {
         // 주소는 임베디드 타입으로 받음
         private Address address;
 
-        // 나중에
         private List<CategoryOfStoreDTO> categoryList;
 
 

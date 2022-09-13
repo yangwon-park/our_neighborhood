@@ -6,12 +6,13 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ywphsm.ourneighbor.domain.dist.Distance;
+import ywphsm.ourneighbor.domain.distance.Distance;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,9 +45,16 @@ public class MapSearchController {
 
             dto.setDistance(refineDist);
 
-            log.info("refineDist={}", refineDist);
         });
 
-        return new ResultClass<>(findDTO.size(), findDTO);
+        List<SimpleSearchStoreDTO> result = new ArrayList<>();
+
+        for (SimpleSearchStoreDTO dto : findDTO) {
+            if (dto.getDistance() < 3.5) {
+                result.add(dto);
+            }
+        }
+
+        return new ResultClass<>(result.size(), result);
     }
 }

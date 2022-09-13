@@ -1369,13 +1369,13 @@ a.text-light:focus {
     box-shadow: none;
 }
 
-.nav-link {
-    color: #525f7f;
-}
+/*.nav-link {*/
+/*    color: #525f7f;*/
+/*}*/
 
-.nav-link:hover {
-    color: #5e72e4;
-}
+/*.nav-link:hover {*/
+/*    color: #5e72e4;*/
+/*}*/
 
 .nav-link i.ni {
     position: relative;

@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.domain.dist;
+package ywphsm.ourneighbor.domain.distance;
 
 public class Distance {
 

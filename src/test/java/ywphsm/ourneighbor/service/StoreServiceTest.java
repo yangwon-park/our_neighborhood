@@ -64,9 +64,12 @@ class StoreServiceTest {
         // AddDTO에는 storeId, StoreStatus 없음
         StoreDTO.Add dto = new StoreDTO.Add(store);
 
+        List<Category> categoryList = new ArrayList<>();
         Category category = new Category("일식", 1L, null);
 
-        Long storeId = storeService.saveStore(dto, category);
+        categoryList.add(category);
+
+        Long storeId = storeService.saveStore(dto, categoryList);
         Store findStore = storeService.findOne(storeId);
 
         assertThat(findStore.getName()).isEqualTo(store.getName());

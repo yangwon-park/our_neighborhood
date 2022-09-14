@@ -13,6 +13,7 @@ import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.service.StoreService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -31,25 +32,33 @@ public class HomeController {
 
     @GetMapping("/prac2")
     public String addStore(Model model) {
-        List<CategoryDTO> all = categoryService.findAll();
+        List<CategoryDTO> all = categoryService.findAllCategoriesHier();
 
-        log.info("all={}", all);
+        CategoryDTO result = null;
 
-        model.addAttribute("all", all);
+        if (all.size() != 0) {
+            result = all.get(0);
+        }
+
+        log.info("all={}", result);
+
+        model.addAttribute("all", result);
         model.addAttribute("store", new StoreDTO.Add());
 
         return "prac2";
     }
 
     @PostMapping("/prac2")
-    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam Long categoryId) {
-        log.info("storeAddDTO={}", storeAddDTO);
-        log.info("categoryId={}", categoryId);
+    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam(value="categoryId") List<Long> categoryId) {
+        List<Category> categoryList = new ArrayList<>();
 
-        Category category = categoryService.findById(categoryId);
-        log.info("category={}", category.getCategoryOfStoreList());
+        for (Long id : categoryId) {
+            Category category = categoryService.findById(id);
+            log.info("category={}", category.getCategoryOfStoreList());
+            categoryList.add(category);
+        }
 
-        storeService.saveStore(storeAddDTO, category);
+        storeService.saveStore(storeAddDTO, categoryList);
 
         return "redirect:/prac2";
     }

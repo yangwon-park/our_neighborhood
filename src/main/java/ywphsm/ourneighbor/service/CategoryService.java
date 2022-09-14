@@ -69,7 +69,7 @@ public class CategoryService {
     }
 
     // 하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리
-    public List<CategoryDTO> findAllCategoriesHier() {
+    public List<CategoryDTO> findAllCategoriesHier()  {
         return categoryRepository.findCategories().stream().map(CategoryDTO::of).collect(Collectors.toList());
     }
 }

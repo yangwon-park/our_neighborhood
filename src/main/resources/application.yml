@@ -19,10 +19,14 @@ spring:
   #  profiles:
   #    active: local
   datasource:
-    url: jdbc:mysql://localhost:3306/neighbor?serverTimezone=Asia/Seoul
-    username: neighbor
-    password: hood
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/neighbor?serverTimezone=Asia/Seoul
+#    username: neighbor
+#    password: hood
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:tcp://localhost/~/neighbor
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
@@ -36,7 +40,7 @@ spring:
 
 # 파일 저장 경로
 file:
-  dir: /c:/Users/ywOnp/Desktop/Study/review/file/
+  dir: /Users/bag-yang-won/Desktop/file/
 
 logging.level:
   org.hibernate.SQL: debug

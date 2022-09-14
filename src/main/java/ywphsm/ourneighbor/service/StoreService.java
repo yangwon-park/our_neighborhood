@@ -23,19 +23,21 @@ public class StoreService {
 
     // 매장 등록
     @Transactional
-    public Long saveStore(StoreDTO.Add dto, Category category) {
+    public Long saveStore(StoreDTO.Add dto, List<Category> categoryList) {
 
         Store store = dto.toEntity();
 
-        CategoryOfStore categoryOfStore = new CategoryOfStore(category, store);
-        log.info("store={}", store);
-        log.info("categoryOfStore={}", categoryOfStore);
+        for (Category category : categoryList) {
 
-        CategoryOfStore result = categoryOfStore.addCategory(category, store);
+            CategoryOfStore categoryOfStore = new CategoryOfStore(category, store);
+            log.info("store={}", store.getName());
+            log.info("categoryOfStore={}", categoryOfStore.getCategory().getName());
 
-        log.info("result={}", result.getStore());
-        log.info("result={}", result.getCategory());
+            CategoryOfStore result = categoryOfStore.addCategory(category, store);
 
+            log.info("result={}", result.getStore().getName());
+            log.info("result={}", result.getCategory().getName());
+        }
 
         storeRepository.save(store);
         return store.getId();

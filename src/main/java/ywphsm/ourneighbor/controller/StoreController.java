@@ -12,6 +12,7 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,21 +56,36 @@ public class StoreController {
 
     @GetMapping("/add")
     public String addStore(Model model) {
-        List<CategoryDTO> all = categoryService.findAll();
+        List<CategoryDTO> allCategories = categoryService.findAllCategoriesHier();
 
-        log.info("all={}", all);
+        CategoryDTO category = null;
 
-        model.addAttribute("all", all);
+        if (allCategories.size() != 0) {
+            category = allCategories.get(0);
+        }
+
+        log.info("allCategories={}", category);
+
+        model.addAttribute("category", category);
         model.addAttribute("store", new StoreDTO.Add());
+
+
         return "store/add_form";
     }
 
     @PostMapping("/add")
-    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam Long categoryId) {
-        Category category = categoryService.findById(categoryId);
-        log.info("category={}", category.getCategoryOfStoreList());
+    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam(value="categoryId") List<Long> categoryId) {
+        log.info("storeAddDTO={}", storeAddDTO);
+        log.info("categoryId={}", categoryId);
+        List<Category> categoryList = new ArrayList<>();
 
-        storeService.saveStore(storeAddDTO, category);
+        for (Long id : categoryId) {
+            Category category = categoryService.findById(id);
+            log.info("category={}", category.getCategoryOfStoreList());
+            categoryList.add(category);
+        }
+
+        storeService.saveStore(storeAddDTO, categoryList);
 
         return "redirect:/map";
     }

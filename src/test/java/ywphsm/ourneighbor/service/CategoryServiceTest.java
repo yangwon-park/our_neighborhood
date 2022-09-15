@@ -16,7 +16,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
         .WebEnvironment.RANDOM_PORT)
 class CategoryServiceTest {
 
-
     @Autowired
     WebApplicationContext context;
 

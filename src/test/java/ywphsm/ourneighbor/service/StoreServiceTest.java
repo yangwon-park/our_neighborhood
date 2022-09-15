@@ -10,6 +10,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Address;
 import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.CategoryOfStore;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.*;
 
@@ -41,16 +42,10 @@ class StoreServiceTest {
     @BeforeEach
     void before() {
         queryFactory = new JPAQueryFactory(em);
-        List<String> offDays = new ArrayList<>();
-        offDays.add("금요일");
-        Store store = new Store("쿠다", 35.1612928, 129.1600985, "0517311660",
-                LocalTime.of(9, 00), LocalTime.of(20, 00), LocalTime.of(15, 30), LocalTime.of(17, 00),
-                null, "안녕하세요 칸다 소바입니다.", offDays , StoreStatus.OPEN, new Address("부산광역시 해운대구 구남로 30번길 8-3 1층", "48094", "1234", null));
-        em.persist(store);
     }
 
     @Test
-    @DisplayName("매장 등록")
+    @DisplayName("매장 등록, 카테고리 정상 등록 확인")
     void saveStore() {
 
         List<String> offDays = new ArrayList<>();
@@ -65,32 +60,29 @@ class StoreServiceTest {
         StoreDTO.Add dto = new StoreDTO.Add(store);
 
         List<Category> categoryList = new ArrayList<>();
-        Category category = new Category("일식", 1L, null);
+        Category category1 = new Category("음식점", 1L, null);
+        Category category2 = new Category("일식", 2L, category1);
 
-        categoryList.add(category);
+        categoryList.add(category1);
+        categoryList.add(category2);
 
         Long storeId = storeService.saveStore(dto, categoryList);
         Store findStore = storeService.findOne(storeId);
 
+        // 등록된 매장의 이름이 조회한 매장의 이름과 일치하는가 확인
         assertThat(findStore.getName()).isEqualTo(store.getName());
 
-        // 카테고리 일치 여부 확인
-        assertThat(findStore.getCategoryOfStoreList().get(0).getCategory().getName()).isEqualTo("일식");
+        // 카테고리 등록 정상 작동 확인 (2개의 카테고리가 들어갔나 확인)
+        assertThat(findStore.getCategoryOfStoreList().size()).isEqualTo(2);
     }
 
     @Test
     @DisplayName("해당하는 이름의 매장 찾기")
     void findOneStore() {
-        Store findStore = queryFactory
-                .select(store)
-                .from(store)
-                .where(store.name.eq("칸다 소바"))
-                .fetchOne();
+        List<Store> findStoreList = storeService.searchByKeyword("칸다");
 
-
-        if (findStore != null) {
-            assertThat(findStore.getName()).isEqualTo("칸다 소바");
-        }
+        // 칸다라는 매장은 한 개 뿐
+        assertThat(findStoreList).size().isEqualTo(1);
     }
 
 
@@ -100,22 +92,10 @@ class StoreServiceTest {
     void findAllStore() {
         List<Store> stores = storeService.findStores();
 
-        assertThat(stores.size()).isEqualTo(12);
+        assertThat(stores.size()).isEqualTo(11);
     }
 
-    @Test
-    @DisplayName("검색어가 매장명에 포함되는 매장 찾기")
-    void searchStoreByName() {
-        String cond = "소바";
-        List<Store> stores = storeService.searchByKeyword(cond);
-
-        assertThat(stores.size()).isEqualTo(1);
-
-        for (Store store1 : stores) {
-            System.out.println("store1 = " + store1.getName());
-        }
-    }
-
+    // 쉬는 날이 있는 가게 등록 한 후 다시 구현
     @Test
     @DisplayName("현재 요일 구하기")
     void today() {
@@ -124,8 +104,7 @@ class StoreServiceTest {
 
         LocalTime time = LocalTime.now();
 
-
-        Store findStore = storeService.searchByKeyword("쿠다").get(0);
+        Store findStore = storeService.searchByKeyword("맥도").get(0);
 
         List<String> offDays = findStore.getOffDays();
 

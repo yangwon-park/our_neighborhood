@@ -17,7 +17,6 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-
     // 카테고리 등록
     @GetMapping("/category/add")
     public String addCategory(Model model) {

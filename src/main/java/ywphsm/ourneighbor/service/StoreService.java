@@ -57,12 +57,6 @@ public class StoreService {
         return store;
     }
 
-    // 매장 이름으로 조회
-    public List<Store> findByName(String name) {
-        return storeRepository.findByName(name);
-    }
-
-
     // 검색어 포함 매장명 조회
     public List<Store> searchByKeyword(String keyword) {
         List<Store> stores = storeRepository.searchByKeyword(keyword);

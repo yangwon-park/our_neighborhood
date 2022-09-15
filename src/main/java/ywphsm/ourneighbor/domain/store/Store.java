@@ -72,7 +72,6 @@ public class Store extends BaseTimeEntity {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
 
-
     // Category (N:N)
     @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();

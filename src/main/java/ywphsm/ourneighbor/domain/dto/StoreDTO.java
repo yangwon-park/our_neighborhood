@@ -21,6 +21,7 @@ public class StoreDTO {
     @Data
     @NoArgsConstructor
     public static class Add {
+
         @NotBlank
         private String name;
 

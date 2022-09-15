@@ -37,15 +37,15 @@
                         <div class="card-body px-lg-5 py-lg-5">
                             <div class="form-group d-flex">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="${category.name}" class="form-control" placeholder="카테고리 이름"
-                                           type="text"/>
-                                </div>
-                                <div class="input-group input-group-alternative mb-3">
                                     <select name="categoryId" id="category-select" class="form-select">
-                                        <option value="">카테고리 선택</option>
+                                        <option value="">상위 카테고리 선택</option>
                                         <option th:each="cate : ${all}" th:value="${cate.getCategoryId()}"
                                                 th:text="${cate.getName()}"></option>
                                     </select>
+                                </div>
+                                <div class="input-group input-group-alternative mb-3">
+                                    <input th:field="${category.name}" class="form-control" placeholder="카테고리 이름"
+                                           type="text"/>
                                 </div>
                             </div>
                             <div class="text-center">

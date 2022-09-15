@@ -69,7 +69,6 @@ public class StoreController {
         model.addAttribute("category", category);
         model.addAttribute("store", new StoreDTO.Add());
 
-
         return "store/add_form";
     }
 

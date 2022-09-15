@@ -16,7 +16,7 @@ var main = {
 
         form.append('parentId', parentId);
 
-        axios( {
+        axios({
             method: "post",
             url: "/category/add",
             data: form

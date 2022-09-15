@@ -32,19 +32,7 @@ public class HomeController {
 
     @GetMapping("/prac2")
     public String addStore(Model model) {
-        List<CategoryDTO> all = categoryService.findAllCategoriesHier();
-
-        CategoryDTO result = null;
-
-        if (all.size() != 0) {
-            result = all.get(0);
-        }
-
-        log.info("all={}", result);
-
-        model.addAttribute("all", result);
         model.addAttribute("store", new StoreDTO.Add());
-
         return "prac2";
     }
 

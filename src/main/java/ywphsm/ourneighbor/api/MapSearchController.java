@@ -44,7 +44,6 @@ public class MapSearchController {
             double refineDist = Math.ceil(dist * 10) / 10.0;
 
             dto.setDistance(refineDist);
-
         });
 
         List<SimpleSearchStoreDTO> result = new ArrayList<>();

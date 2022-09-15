@@ -20,8 +20,8 @@ var main = {
     },
 
     setMainCategories: function (children) {
-
         let mainChildren = [];
+
         // 대분류는 미리 저장함
         for (const mc of children) {
             let mainOption = document.createElement("option");
@@ -47,6 +47,8 @@ var main = {
                 [this.categoryLayerEl.main.selectedIndex].value;
 
             for (const mid of mainChildren) {
+                console.log(mainChildren);
+                console.log(mid);
                 for (let i = 0; i < mid.length; i++) {
                     if (mainVal === String(mid[i].parentId)) {
                         let option = document.createElement("option");
@@ -54,27 +56,25 @@ var main = {
                         option.value = mid[i].categoryId;
                         main.categoryLayerEl.mid.appendChild(option)
                     }
-                }
 
-                midChildren.push(mid.children);
+                    midChildren.push(mid[i].children);
+                }
             }
         });
-
         return midChildren;
     },
 
     changeMidCategories: function (midChildren) {
         this.categoryLayerEl.mid.addEventListener("change", () => {
+
             this.resetCategories(this.categoryLayerEl.sub, "소분류 선택");
 
-            let mainVal = this.categoryLayerEl.mid.options
+            let midVal = this.categoryLayerEl.mid.options
                 [this.categoryLayerEl.mid.selectedIndex].value;
-
-            console.log(midChildren);
 
             for (const sub of midChildren) {
                 for (let i = 0; i < sub.length; i++) {
-                    if (mainVal === String(sub[i].parentId)) {
+                    if (midVal === String(sub[i].parentId)) {
                         let option = document.createElement("option");
                         option.text = sub[i].name;
                         option.value = sub[i].categoryId;

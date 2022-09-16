@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
         "discountStart", "discountEnd"
 })
 @Entity
-public class Menu {
+public class Menu extends BaseEntity{
 
     @Id
     @GeneratedValue

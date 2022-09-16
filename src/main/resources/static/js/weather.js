@@ -83,7 +83,6 @@ var main = {
                 _pm10Value.innerText = "매우 나쁨 (미세먼지 농도 : " + pm10Value + ")";
             }
 
-
             _skyStatus.appendChild(fontAwesome);
             _tmp.innerText = "현재 기온 : " + resp.data.tmp + "℃";
             _pop.innerText = "강수 확률 : " + resp.data.pop + "%";

@@ -23,10 +23,9 @@ public class CategoryApiController {
         return new ResultClass<>(categories);
     }
 
-    @GetMapping("/categories2")
-    public ResultClass<?> findAllCategories2() {
-        List<CategoryDTO> categories = categoryService.findAllCategoriesHier();
-        return new ResultClass<>(categories);
+    @GetMapping("/categoriesHier")
+    public CategoryDTO findAllCategoriesHier() {
+        return categoryService.findAllCategoriesHier().get(0);
     }
 
     @PostMapping("/category/add")

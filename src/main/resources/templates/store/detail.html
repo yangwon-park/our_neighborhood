@@ -4,10 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
     <style>
-        a {
-            text-decoration: none;
-            color: rgb(0, 0, 0);
-        }
+
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/aragon.css}">
@@ -29,8 +26,14 @@
         <div class="row head justify-content-end align-items-center">
             <div class="col-6 d-flex">
                 <h1 class="my-auto" style="font-size: 2.0rem" th:text="*{name}">가게명</h1>
-                <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
-                      th:classappend="*{status}"></span>
+                <p class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
+                      th:classappend="*{status}"></p>
+                <span class="ms-3 m-auto">
+                    <th:block th:each="cate : ${categoryList}">
+                        <a style="color: #6c757d" href="#" th:text="${cate.name}"></a>
+                        >
+                    </th:block>
+                </span>
             </div>
             <div class="col-6">
                 <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"

@@ -14,7 +14,7 @@ public class CategoryOfStoreDTO {
     }
 
     public CategoryOfStoreDTO(CategoryOfStore categoryOfStore) {
-        this.storeId = categoryOfStore.getId();
+        this.storeId = categoryOfStore.getStore().getId();
         this.categoryId = categoryOfStore.getCategory().getId();
     }
 }

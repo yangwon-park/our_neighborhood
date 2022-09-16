@@ -8,6 +8,7 @@ import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.CategoryOfStore;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.domain.store.StoreStatus;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.util.List;
@@ -38,6 +39,8 @@ public class StoreService {
             log.info("result={}", result.getStore().getName());
             log.info("result={}", result.getCategory().getName());
         }
+
+        store.updateStatus(StoreStatus.OPEN);
 
         storeRepository.save(store);
         return store.getId();

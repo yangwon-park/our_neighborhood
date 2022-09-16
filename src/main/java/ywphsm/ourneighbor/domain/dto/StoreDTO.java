@@ -146,8 +146,6 @@ public class StoreDTO {
 
         private List<CategoryOfStoreDTO> categoryList;
 
-
-
         @Builder
         public Detail(Store store) {
             storeId = store.getId();

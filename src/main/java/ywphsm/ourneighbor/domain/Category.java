@@ -55,8 +55,8 @@ public class Category {
         생성자
      */
     @Builder
-    public Category(String name, Long depth, List<CategoryOfStore> categoryOfStoreList, Category parent, List<Category> children) {
-
+    public Category(Long id, String name, Long depth, List<CategoryOfStore> categoryOfStoreList, Category parent, List<Category> children) {
+        this.id = id;
         this.name = name;
         this.depth = depth;
         this.categoryOfStoreList = categoryOfStoreList;

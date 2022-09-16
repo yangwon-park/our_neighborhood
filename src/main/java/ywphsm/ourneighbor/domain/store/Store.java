@@ -20,7 +20,7 @@ import java.util.Locale;
         "phoneNumber", "openingTime", "closingTime",
         "breakStart", "breakEnd", "notice", "intro", "status"})
 @Entity
-public class Store extends BaseTimeEntity {
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -73,7 +73,7 @@ public class Store extends BaseTimeEntity {
     private List<Menu> menuList = new ArrayList<>();
 
     // Category (N:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
     // Many To Many인듯

@@ -13,7 +13,6 @@
             text-decoration: none;
             color: rgb(0, 0, 0);
         }
-
     </style>
 </head>
 <body>
@@ -101,23 +100,20 @@
                 </button>
                 <div class="collapse show" id="home-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">Overview</a></li>
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">Updates</a></li>
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">Reports</a></li>
+                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">300m</a></li>
+                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">500m</a></li>
+                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">1km</a></li>
+                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">3km</a></li>
                     </ul>
                 </div>
             </li>
             <li class="mb-1">
                 <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
                         data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-                    Dashboard
+                    카테고리
                 </button>
                 <div class="collapse" id="dashboard-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">Overview</a></li>
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">Weekly</a></li>
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">Monthly</a></li>
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">Annually</a></li>
+                    <ul id="map-category" class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     </ul>
                 </div>
             </li>
@@ -197,9 +193,8 @@
 
     // ============================================================================================
 </script>
-
-<script type="module" th:src="@{/js/map.js}"></script>
-<script th:replace="layout/footer :: common_js(~{::scipt})">
-</script>
+<script th:replace="layout/footer :: common_js(~{::scipt})"></script>
+<script type="module" th:src="@{/js/setMap.js}"></script>
+<script type="module" th:src="@{/js/sideCategory.js}"></script>
 </body>
 </html>

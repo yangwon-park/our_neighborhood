@@ -30,21 +30,22 @@ function findStores() {
 
     axios({
         method: "get",
-        url: "/searchStores",
+        url: "/searchByKeyword",
         params: {
             keyword: keyword
         }
     })
-        .then((res) => {
-            if (res.data.count < 1) {
+        .then((resp) => {
+            if (resp.data.count < 1) {
                 alert('검색 결과가 없어요!!');
                 window.location.href = 'http://localhost:8080/map';
             }
 
-            for (let i = 0; i < res.data.data.length; i++) {
-                searchResult.push(res.data.data[i])
+            for (let i = 0; i < resp.data.data.length; i++) {
+                searchResult.push(resp.data.data[i])
             }
 
+            console.log(searchResult);
             displayMarker(searchResult);
 
             // input 태그 값 지움

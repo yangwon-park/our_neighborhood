@@ -71,4 +71,8 @@ public class StoreService {
         return stores;
     }
 
+    public List<Store> searchByCategory(Long categoryId) {
+        return storeRepository.searchByCategory(categoryId);
+    }
+
 }

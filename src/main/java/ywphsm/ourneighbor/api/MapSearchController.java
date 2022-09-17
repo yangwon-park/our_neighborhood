@@ -27,16 +27,38 @@ public class MapSearchController {
     // 메뉴 리스트는 불러오지 않음
     // 단순 조회이므로 fetch 조인으로 최적화
     // map.html에서 가게 이름을 검색하는 경우 수행됨
-    @GetMapping(value = "/searchStores", produces = "application/json;charset=utf-8")
-    public ResultClass<?> searchStores(@RequestParam String keyword,
-                                       @CookieValue(value = "lat", required = false) String myLat,
-                                       @CookieValue(value = "lon", required = false) String myLon) {
+    @GetMapping(value = "/searchByKeyword", produces = "application/json;charset=utf-8")
+    public ResultClass<?> searchByKeyword(@RequestParam String keyword,
+                                          @CookieValue(value = "lat", required = false) String myLat,
+                                          @CookieValue(value = "lon", required = false) String myLon) {
         List<Store> findStores = storeService.searchByKeyword(keyword);
 
-        List<SimpleSearchStoreDTO> findDTO = findStores.stream()
+        List<SimpleSearchStoreDTO> result = findStores.stream()
                 .map(SimpleSearchStoreDTO::new)
                 .collect(Collectors.toList());
 
+        calculateDist(myLat, myLon, result);
+
+        return new ResultClass<>(result.size(), result);
+    }
+
+    @GetMapping(value = "/searchByCategory")
+    public ResultClass<?> searchByCategory(@RequestParam String categoryId,
+                                           @CookieValue(value = "lat", required = false) String myLat,
+                                           @CookieValue(value = "lon", required = false) String myLon) {
+        List<Store> findStores = storeService.searchByCategory(Long.parseLong(categoryId));
+
+        List<SimpleSearchStoreDTO> result = findStores.stream()
+                .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
+
+        // 리팩토링 : dto에 dist 값을 set만 해주면 해결 (별도의 List 사용할 필요없음)
+        calculateDist(myLat, myLon, result);
+
+        return new ResultClass<>(result.size(), result);
+    }
+
+    private static void calculateDist(String myLat, String myLon,
+                                      List<SimpleSearchStoreDTO> findDTO) {
         findDTO.forEach(dto -> {
             double dist = Distance.byHaversine(dto.getLat(), dto.getLon(),
                     Double.parseDouble(myLat), Double.parseDouble(myLon));
@@ -45,15 +67,5 @@ public class MapSearchController {
 
             dto.setDistance(refineDist);
         });
-
-        List<SimpleSearchStoreDTO> result = new ArrayList<>();
-
-        for (SimpleSearchStoreDTO dto : findDTO) {
-            if (dto.getDistance() < 3.5) {
-                result.add(dto);
-            }
-        }
-
-        return new ResultClass<>(result.size(), result);
     }
 }

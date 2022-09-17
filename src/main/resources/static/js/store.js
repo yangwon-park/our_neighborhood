@@ -10,7 +10,7 @@ var main = {
             url: "/categoriesHier",
         }).then((resp) => {
             let rootChildren = resp.data.children;
-            let mainChildren = this.setMainCategories(rootChildren);
+            let mainChildren = this.getMainCategories(rootChildren);
 
             let midChildren = this.changeMainCategories(mainChildren);
             this.changeMidCategories(midChildren);
@@ -19,17 +19,17 @@ var main = {
         })
     },
 
-    setMainCategories: function (children) {
+    getMainCategories: function (children) {
         let mainChildren = [];
 
         // 대분류는 미리 저장함
-        for (const mc of children) {
+        for (const rc of children) {
             let mainOption = document.createElement("option");
-            mainOption.text = mc.name;
-            mainOption.value = mc.categoryId;
+            mainOption.text = rc.name;
+            mainOption.value = rc.categoryId;
             this.categoryLayerEl.main.appendChild(mainOption);
 
-            mainChildren.push(mc.children)
+            mainChildren.push(rc.children)
         }
 
         return mainChildren;

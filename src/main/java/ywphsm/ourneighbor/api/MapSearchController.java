@@ -12,7 +12,6 @@ import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,7 @@ public class MapSearchController {
     // 메뉴 리스트는 불러오지 않음
     // 단순 조회이므로 fetch 조인으로 최적화
     // map.html에서 가게 이름을 검색하는 경우 수행됨
-    @GetMapping(value = "/searchByKeyword", produces = "application/json;charset=utf-8")
+    @GetMapping(value = "/searchByKeyword")
     public ResultClass<?> searchByKeyword(@RequestParam String keyword,
                                           @CookieValue(value = "lat", required = false) String myLat,
                                           @CookieValue(value = "lon", required = false) String myLon) {

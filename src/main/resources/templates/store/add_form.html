@@ -37,13 +37,15 @@
                         <form class="form-floating" th:object="${store}" method="post">
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{name}" th:errorclass="input-error" class="form-control" placeholder="매장 이름을 입력해주세요." type="text">
+                                    <input th:field="*{name}" th:errorclass="input-error" class="form-control"
+                                           placeholder="매장 이름을 입력해주세요." type="text">
                                     <div class="input-error" th:errors="*{name}"></div>
                                 </div>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="mb-3">
-                                    <input th:field="*{zipcode}" th:errorclass="input-error" class="form-control" placeholder="우편 번호" type="text"
+                                    <input th:field="*{zipcode}" th:errorclass="input-error" class="form-control"
+                                           placeholder="우편 번호" type="text"
                                            readonly>
                                     <div class="input-error" th:errors="*{zipcode}"></div>
                                 </div>
@@ -53,14 +55,16 @@
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{roadAddr}" th:errorclass="input-error" class="form-control" placeholder="도로명 주소" type="text"
+                                    <input th:field="*{roadAddr}" th:errorclass="input-error" class="form-control"
+                                           placeholder="도로명 주소" type="text"
                                            readonly>
                                     <div class="input-error" th:errors="*{roadAddr}"></div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{numberAddr}" th:errorclass="input-error" class="form-control" placeholder="지번 주소"
+                                    <input th:field="*{numberAddr}" th:errorclass="input-error" class="form-control"
+                                           placeholder="지번 주소"
                                            type="text">
                                     <div class="input-error" th:errors="*{numberAddr}"></div>
                                 </div>
@@ -73,12 +77,14 @@
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{lat}" th:errorclass="input-error" class="form-control" placeholder="위도" type="hidden">
+                                    <input th:field="*{lat}" th:errorclass="input-error" class="form-control"
+                                           placeholder="위도" type="hidden">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{lon}" th:errorclass="input-error" class="form-control" placeholder="경도" type="hidden">
+                                    <input th:field="*{lon}" th:errorclass="input-error" class="form-control"
+                                           placeholder="경도" type="hidden">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -99,13 +105,17 @@
                             </div>
                             <div class="form-group d-flex">
                                 <div class="me-3">
-                                    <label for="openingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업 시작</label>
-                                    <input th:field="*{openingTime}" th:errorclass="input-error" class="form-control" type="time">
+                                    <label for="openingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업
+                                        시작</label>
+                                    <input th:field="*{openingTime}" th:errorclass="input-error" class="form-control"
+                                           type="time">
                                     <div class="input-error" th:errors="*{openingTime}"></div>
                                 </div>
                                 <div class="ms-3">
-                                    <label for="closingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업 종료</label>
-                                    <input th:field="*{closingTime}" th:errorclass="input-error" class="form-control" type="time">
+                                    <label for="closingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업
+                                        종료</label>
+                                    <input th:field="*{closingTime}" th:errorclass="input-error" class="form-control"
+                                           type="time">
                                     <div class="input-error" th:errors="*{closingTime}"></div>
                                 </div>
                             </div>
@@ -113,12 +123,14 @@
                                 <div class="me-3" style="width: 100%">
                                     <label for="breakStart" class="m-auto fw-light px-2" style="font-size: 1rem">
                                         휴식 시작 (없으면 비워두세요)</label>
-                                    <input th:field="*{breakStart}" th:errorclass="input-error" class="form-control input-time" type="time">
+                                    <input th:field="*{breakStart}" th:errorclass="input-error"
+                                           class="form-control input-time" type="time">
                                 </div>
                                 <div class="ms-3" style="width: 100%">
                                     <label for="breakEnd" class="m-auto fw-light px-2" style="font-size: 1rem">
                                         휴식 종료 (없으면 비워두세요)</label>
-                                    <input th:field="*{breakEnd}" th:errorclass="input-error" class="form-control input-time" type="time">
+                                    <input th:field="*{breakEnd}" th:errorclass="input-error"
+                                           class="form-control input-time" type="time">
                                 </div>
                             </div>
                             <div class="form-group d-flex">
@@ -134,13 +146,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-center">
-                                <h5>휴무일</h5>
-                                <div th:each="day : ${offDays}" class="custom-control custom-checkbox mb-3 ms-3 me-3">
-                                    <input class="custom-control-input" type="checkbox"
-                                           th:field="${store.offDays}" th:value="${day.value}">
-                                    <label class="custom-control-label"
-                                           th:for="${#ids.prev('offDays')}" th:text="${day.key}">일</label>
+                            <div class="form-group">
+                                <div class="flex-wrap mb-2">
+                                    <h5 style="display: inline">휴무일 선택</h5>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div th:each="day : ${offDays}"
+                                         class="custom-control custom-checkbox mb-3 me-3">
+                                        <input class="custom-control-input" type="checkbox"
+                                               th:field="${store.offDays}" th:value="${day.value}">
+                                        <label class="custom-control-label"
+                                               th:for="${#ids.prev('offDays')}" th:text="${day.key}">일</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="text-center">

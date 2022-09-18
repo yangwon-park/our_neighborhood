@@ -30,27 +30,29 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
-                    <div class="card-header bg-transparent pb-5">
-                        <div class="text-muted text-center mt-2 mb-4 fs-2"> 카테고리 등록</div>
+                    <div class="card-header bg-transparent">
+                        <div class="text-muted text-center mt-2 mb-4 fs-2">카테고리 등록</div>
                     </div>
-                    <form id="category-form" class="needs-validation">
+                    <div>
+                        <button type="button" class="btn btn-dark mt-4 float-end me-3"
+                                id="category-delete">카테고리 삭제</button>
+                    </div>
+                    <form id="category-form">
                         <div class="card-body px-lg-5 py-lg-5">
                             <div class="form-group">
-                                <div class="input-group input-group-alternative mb-3">
+                                <div class="mb-3">
                                     <select name="categoryId" id="category-select" class="form-select" required>
                                         <option value="">상위 카테고리 선택</option>
                                         <option th:each="cate : ${all}" th:value="${cate.getCategoryId()}"
                                                 th:text="${cate.getName()}"></option>
                                     </select>
-                                    <div class="invalid-feedback">
-                                        상위 카테고리는 필수 항목입니다.
+                                    <div id="category-select-valid" class="my-1" style="display: none">
                                     </div>
                                 </div>
-                                <div class="input-group input-group-alternative mb-3">
+                                <div class="mb-3">
                                     <input th:field="${category.name}" class="form-control"
                                            placeholder="카테고리 이름" type="text" required/>
-                                    <div class="invalid-feedback">
-                                        카테고리 이름은 필수 항목입니다.
+                                    <div id="category-name-valid" class="my-1" style="display: none">
                                     </div>
                                 </div>
                             </div>

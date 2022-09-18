@@ -57,6 +57,9 @@ body{
     border-color: #ff253a;
     color: #ff253a;
 }
+.input-error-border {
+    border-color: #ff253a;
+}
 
 .section-content {
     padding: 4rem 0;

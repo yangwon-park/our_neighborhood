@@ -55,7 +55,6 @@ public class NaverService {
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-        log.info("mapper:{}", mapper);
 
         //AccessToken 발급 요청
         ResponseEntity<String> resultEntity = restTemplate.postForEntity(NAVER_TOKEN_URL, params, String.class);

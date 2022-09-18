@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ywphsm.ourneighbor.domain.Address;
 import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.Review;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
@@ -140,6 +141,8 @@ public class StoreDTO {
 
         private List<Menu> menuList;              // 메뉴
 
+        private List<Review> reviewList;          // 리뷰
+
         // 주소는 임베디드 타입으로 받음
         private Address address;
 
@@ -163,6 +166,7 @@ public class StoreDTO {
             status = store.getStatus();
             address = store.getAddress();
             menuList = store.getMenuList();
+            reviewList = store.getReviewList();
             categoryList = store.getCategoryOfStoreList().stream()
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());

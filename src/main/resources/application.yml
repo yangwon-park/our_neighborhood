@@ -19,10 +19,10 @@ spring:
   #  profiles:
   #    active: local
   datasource:
-    url: jdbc:h2:tcp://localhost/~/neighbor
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/neighbor?serverTimezone=Asia/Seoul
+    username: neighbor
+    password: hood
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -61,3 +61,4 @@ naver:
   client:
     id: z_c0ETHIqnzInQwcpjLX
     secret: A2wobfeDuq
+

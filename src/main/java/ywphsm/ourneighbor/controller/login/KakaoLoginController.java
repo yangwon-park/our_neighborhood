@@ -1,5 +1,6 @@
 package ywphsm.ourneighbor.controller.login;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -25,11 +26,10 @@ public class KakaoLoginController {
     }
 
     @GetMapping("/login/kakao")
-    public String kakaoLogin(@RequestParam String code, HttpServletRequest request) {
+    public String kakaoLogin(@RequestParam String code, HttpServletRequest request) throws JsonProcessingException {
         log.info("code={}", code);
 
-        String kakaoAccessToken = kakaoService.getKakaoAccessToken(code);
-        Member kakaoUser = kakaoService.createKakaoUser(kakaoAccessToken);
+        Member kakaoUser = kakaoService.getKakaoAccessToken(code);
 
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, kakaoUser);

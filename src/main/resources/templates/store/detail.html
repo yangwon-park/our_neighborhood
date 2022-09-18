@@ -10,7 +10,7 @@
         }
     </style>
 </head>
-<link rel="stylesheet" th:href="@{/css/aragon.css}">
+<link rel="stylesheet" th:href="@{/css/argon.css}">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <body class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
@@ -102,6 +102,18 @@
                 <img th:src="|/menu/${menu.getFile().getStoredFileName()}|" width="300" height="300" alt="메뉴 사진">
                 <span th:text="${menu.getName()}"></span>
                 <span th:text="${menu.getPrice()}"></span>
+            </div>
+        </div>
+        <hr class="my-2 hr-orange">
+        <div class="row store-menu">
+            <h3><strong>리뷰</strong></h3>
+            <div class="col-6">
+                <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"
+                        th:onclick="|location.href='@{/store/{storeId}/createReview(storeId=${store.storeId})}'|">리뷰 등록
+                </button>
+            </div>
+            <div class="col" th:each="review : *{reviewList}">
+                <span th:text="${review.content}"></span>
             </div>
         </div>
     </div>

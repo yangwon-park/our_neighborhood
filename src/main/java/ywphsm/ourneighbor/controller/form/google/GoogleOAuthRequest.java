@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class GoogleOAuthRequest {
+
     private String redirectUri;
     private String clientId;
     private String clientSecret;

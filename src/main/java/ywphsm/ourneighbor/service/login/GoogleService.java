@@ -49,8 +49,6 @@ public class GoogleService {
                 .redirectUri(GOOGLE_SNS_REDIRECT_URL)
                 .grantType("authorization_code").build();
 
-        log.info("googleOAuthRequest:{}", googleOAuthRequest);
-
         //HTTP Request를 위한 RestTemplate
         RestTemplate restTemplate = new RestTemplate();
 

@@ -6,13 +6,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
+import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +45,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(memberDetailService).passwordEncoder(passwordEncoder());
     }
 
+    // 날씨 API 값 쿠키 저장 시, 방화벽 설정에서 잡혀서 defaultHttpFireWall로 변경
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.httpFirewall(defaultHttpFireWall());
+    }
+
+    @Bean
+    public HttpFirewall defaultHttpFireWall() {
+        return new DefaultHttpFirewall();
+    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -45,8 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/user/**").authenticated()
-                .antMatchers("/seller/**").access("hasRole('SELLER') or hasRole('ADMIN')")
-                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/seller/**").hasAnyRole("SELLER", "ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
 
         http.formLogin()
@@ -54,6 +73,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .loginPage("/login")
                 .loginProcessingUrl("/loginSecurity")
+                .successHandler(new AuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        //사용자 정보 가져오기
+                        authentication = SecurityContextHolder.getContext().getAuthentication();
+                        MemberDetailsImpl principal = (MemberDetailsImpl) authentication.getPrincipal();
+                        Member loginMember = principal.getMember();
+
+                        HttpSession session = request.getSession();
+                        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+
+                        response.sendRedirect("/");
+                    }
+                })
 
                 //logout
                 .and()

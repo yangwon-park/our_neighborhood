@@ -72,6 +72,10 @@ public class Store extends BaseTimeEntity {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
 
+    // Review (1:N)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    private List<Review> reviewList = new ArrayList<>();
+
 
     // Category (N:N)
     @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
@@ -81,7 +85,6 @@ public class Store extends BaseTimeEntity {
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
 //    private Member member;
-
 
 
 

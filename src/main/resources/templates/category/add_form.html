@@ -7,7 +7,7 @@
 
     </style>
 </head>
-<link rel="stylesheet" th:href="@{/css/aragon.css}">
+<link rel="stylesheet" th:href="@{/css/argon.css}">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <body class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
@@ -33,19 +33,25 @@
                     <div class="card-header bg-transparent pb-5">
                         <div class="text-muted text-center mt-2 mb-4 fs-2"> 카테고리 등록</div>
                     </div>
-                    <form id="category-form">
+                    <form id="category-form" class="needs-validation">
                         <div class="card-body px-lg-5 py-lg-5">
-                            <div class="form-group d-flex">
+                            <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
-                                    <select name="categoryId" id="category-select" class="form-select">
+                                    <select name="categoryId" id="category-select" class="form-select" required>
                                         <option value="">상위 카테고리 선택</option>
                                         <option th:each="cate : ${all}" th:value="${cate.getCategoryId()}"
                                                 th:text="${cate.getName()}"></option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        상위 카테고리는 필수 항목입니다.
+                                    </div>
                                 </div>
                                 <div class="input-group input-group-alternative mb-3">
-                                    <input th:field="${category.name}" class="form-control" placeholder="카테고리 이름"
-                                           type="text"/>
+                                    <input th:field="${category.name}" class="form-control"
+                                           placeholder="카테고리 이름" type="text" required/>
+                                    <div class="invalid-feedback">
+                                        카테고리 이름은 필수 항목입니다.
+                                    </div>
                                 </div>
                             </div>
                             <div class="text-center">
@@ -61,7 +67,27 @@
 <footer th:replace="layout/footer :: common_footer">
 
 </footer>
+<script>
+    (function () {
+        'use strict'
 
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                document.getElementById('category-add').addEventListener('click', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
 <script type="module" th:src="@{/js/category.js}"></script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 </body>

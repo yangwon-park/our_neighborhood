@@ -53,6 +53,11 @@ body{
     display: none;
 }
 
+.input-error {
+    border-color: #ff253a;
+    color: #ff253a;
+}
+
 .section-content {
     padding: 4rem 0;
 }
@@ -76,7 +81,6 @@ body{
     background: #FD7E14;
     border: 0;
 }
-
 
 .btn:hover,
 .btn:focus {

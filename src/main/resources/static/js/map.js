@@ -184,7 +184,7 @@ var main = {
         return () => {
             this.closeInfowindow();
             infowindow.setContent(
-                '<div class="container">' +
+                '<div class="container text-nowrap">' +
                 '    <div class="row mt-2">' +
                 '        <div class="col m-auto">' +
                 '           <a style="text-decoration: none; color: #0b1526" href="/store/' + data.storeId + '" class="fs-5 me-2">' + data.name + '</a>' +
@@ -197,7 +197,7 @@ var main = {
                 '        </div>' +
                 '    </div>' +
                 '    <div class="row d-flex">' +
-                '        <div class="col text-nowrap">' +
+                '        <div class="col">' +
                 '            <p class="card-text" style="font-size: 0.85rem">' + data.address.roadAddr + ' ' + data.address.detail + '</p>' +
                 '        </div>' +
                 '    </div>' +

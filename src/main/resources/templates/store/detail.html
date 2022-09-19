@@ -102,7 +102,7 @@
         <div class="row store-menu">
             <h3><strong>메뉴</strong></h3>
             <div class="col" th:each="menu : *{menuList}">
-                <img th:src="|/menu/${menu.getFile().getStoredFileName()}|" width="300" height="300" alt="메뉴 사진">
+                <img th:src="|/menu/${menu.getStoredFileName()}|" width="300" height="300" alt="메뉴 사진">
                 <span th:text="${menu.getName()}"></span>
                 <span th:text="${menu.getPrice()}"></span>
             </div>

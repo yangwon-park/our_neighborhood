@@ -49,6 +49,10 @@ public class StoreController {
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findOne(storeId);
         StoreDTO.Detail dto = new StoreDTO.Detail(store);
+
+        log.info("dto={}", dto);
+        log.info("dto={}", dto.getMenuList());
+
         List<CategoryOfStoreDTO> categoryList = dto.getCategoryList();
 
 //        List<CategorySimpleDTO> dtoList = new ArrayList<>();

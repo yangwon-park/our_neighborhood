@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ywphsm.ourneighbor.domain.Category;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 public class CategoryDTO {
 
     private Long categoryId;
+
+    @NotBlank
     private String name;
     private Long depth;
 

@@ -22,7 +22,7 @@ public class StoreDTO {
     @NoArgsConstructor
     public static class Add {
 
-        @NotBlank
+        @NotBlank(message = "필수값입니다.")
         private String name;
 
         @NotBlank
@@ -36,10 +36,10 @@ public class StoreDTO {
 
         private String detail;
 
-        @NotBlank
+        @NotNull
         private Double lat;
 
-        @NotBlank
+        @NotNull
         private Double lon;
 
         private String phoneNumber;
@@ -63,6 +63,7 @@ public class StoreDTO {
         private String intro;
 
         private List<String> offDays;
+
 
         private List<CategoryOfStoreDTO> categoryOfStores;
 

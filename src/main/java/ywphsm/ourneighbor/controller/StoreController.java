@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.Category;
-import ywphsm.ourneighbor.domain.dto.CategoryDTO;
 import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -75,8 +75,14 @@ public class StoreController {
     }
 
     @PostMapping("/add")
-    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO,
-                           @RequestParam(value="categoryId") List<Long> categoryId) {
+    public String addStore(@Validated @ModelAttribute("store") StoreDTO.Add dto, BindingResult bindingResult,
+                           @RequestParam(value = "categoryId") List<Long> categoryId) {
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "store/add_form";
+        }
+
         List<Category> categoryList = new ArrayList<>();
 
         for (Long id : categoryId) {
@@ -85,7 +91,7 @@ public class StoreController {
             categoryList.add(category);
         }
 
-        storeService.saveStore(storeAddDTO, categoryList);
+        storeService.saveStore(dto, categoryList);
 
         return "redirect:/";
     }

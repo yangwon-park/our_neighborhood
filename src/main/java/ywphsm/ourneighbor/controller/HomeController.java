@@ -24,6 +24,12 @@ public class HomeController {
     private final StoreService storeService;
     private final CategoryService categoryService;
 
+    @GetMapping("/")
+    public String index() {
+
+        return "index";
+    }
+
     // 검색 뷰페이지 임시
     @GetMapping("/map")
     public String map(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
@@ -51,10 +57,5 @@ public class HomeController {
         return "redirect:/prac2";
     }
 
-    @GetMapping("/")
-    public String index() {
-
-        return "index";
-    }
 
 }

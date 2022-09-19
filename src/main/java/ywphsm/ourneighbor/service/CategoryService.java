@@ -72,4 +72,17 @@ public class CategoryService {
     public List<CategoryDTO> findAllCategoriesHier()  {
         return categoryRepository.findCategories().stream().map(CategoryDTO::of).collect(Collectors.toList());
     }
+
+    public boolean checkCategoryDuplicate(String categoryName, Category parent) {
+        return categoryRepository.existsByNameAndParent(categoryName, parent);
+    }
+
+    @Transactional
+    public void deleteCategory(Long categoryId) {
+        
+        // findById + delete 조합 => 에러 발생 시 개발자가 직접 커스텀 가능
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new IllegalArgumentException("해당 카테고리가 없습니다. categoryId = " + categoryId));
+        categoryRepository.delete(category);
+    }
 }

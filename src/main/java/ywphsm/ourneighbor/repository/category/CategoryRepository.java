@@ -19,4 +19,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
 
     // 카테고리 존재 여부를 확인
     Boolean existsByNameAndDepth(String name, Long depth);
+
+    Boolean existsByNameAndParent(String name, Category parent);
 }

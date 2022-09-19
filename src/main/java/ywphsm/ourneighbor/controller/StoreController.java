@@ -76,7 +76,7 @@ public class StoreController {
 
     @PostMapping("/add")
     public String addStore(@Validated @ModelAttribute("store") StoreDTO.Add dto, BindingResult bindingResult,
-                           @RequestParam(value = "categoryId") List<Long>categoryId) {
+                           @RequestParam(value = "categoryId") List<Long> categoryId) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);

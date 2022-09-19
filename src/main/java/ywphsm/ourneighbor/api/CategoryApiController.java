@@ -36,13 +36,12 @@ public class CategoryApiController {
         return ResponseEntity.ok(categoryService.checkCategoryDuplicate(name, parent));
     }
 
-
     @PostMapping("/category/add")
     public Long save(@Validated CategoryDTO dto) {
         return categoryService.saveCategory(dto);
     }
 
-    @DeleteMapping("/category/delete/{categoryId}")
+    @DeleteMapping("/category/{categoryId}")
     public Long delete(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
 

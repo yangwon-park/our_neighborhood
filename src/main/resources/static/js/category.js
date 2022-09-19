@@ -83,7 +83,7 @@ var main = {
 
         axios({
             method: "delete",
-            url: "/category/delete/" + categoryId,
+            url: "/category/" + categoryId,
         }).then((resp) => {
             alert('카테고리 삭제가 완료됐습니다.');
             window.location.reload();

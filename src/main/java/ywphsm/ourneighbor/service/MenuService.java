@@ -28,13 +28,13 @@ public class MenuService {
     // 메뉴 등록
     @Transactional
     public Long saveMenu(MenuDTO.Add menuAddDTO) throws IOException {
-        Store findStore = storeRepository.findById(menuAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
+        Store linkedStore = storeRepository.findById(menuAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
 
         UploadFile storedImage = fileStore.storeFile(menuAddDTO.getImage());
 
-        Menu menu = menuAddDTO.toEntity(findStore);
+        Menu menu = menuAddDTO.toEntity(linkedStore);
         storedImage.addMenu(menu);
-        findStore.addMenu(menu);
+        linkedStore.addMenu(menu);
 
         return menuRepository.save(menu).getId();
     }

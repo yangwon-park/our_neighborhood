@@ -2,6 +2,37 @@ var main = {
     init: function () {
         var _this = this;
         _this.getCategories();
+        const storeUpdateBtn = document.getElementById('store-update');
+
+        storeUpdateBtn.addEventListener('click', () => {
+            _this.updateStore();
+        })
+    },
+
+    updateStore: function () {
+        const storeForm = document.getElementById('store-edit-form');
+        const id = document.getElementById('storeId').value;
+
+        const formData = new FormData(storeForm);
+
+        for (let key of formData.keys()) {
+            console.log(key);
+        }
+
+        for (let v of formData.values()) {
+            console.log(v);
+        }
+
+
+        axios({
+            method: "put",
+            url: "/store/edit/" + id,
+            data: formData
+        }).then((resp) => {
+            alert('매장 정보 수정이 완료됐습니다.');
+        }).catch((error) => {
+            console.log(error);
+        })
     },
 
     getCategories: function () {

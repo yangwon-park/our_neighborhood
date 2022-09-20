@@ -23,16 +23,23 @@
 </section>
 <section class="main">
     <div class="container" th:object="${store}">
-        <div class="row head justify-content-end align-items-center">
+        <div class="row head">
             <div class="col-6 d-flex">
                 <h1 class="my-auto" style="font-size: 2.0rem" th:text="*{name}">가게명</h1>
                 <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
                       th:classappend="*{status}"></span>
             </div>
             <div class="col-6">
-                <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"
-                        th:onclick="|location.href='@{/menu/addMenu/{storeId}(storeId=${store.storeId})}'|">메뉴 등록
-                </button>
+                <div class="float-end">
+                    <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                            th:onclick="|location.href='@{/store/edit/{storeId}(storeId=${store.storeId})}'|">
+                        정보 수정
+                    </button>
+                    <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                            th:onclick="|location.href='@{/menu/addMenu/{storeId}(storeId=${store.storeId})}'|">
+                        메뉴 등록
+                    </button>
+                </div>
             </div>
         </div>
         <hr class="my-2">
@@ -46,11 +53,11 @@
             <div class="col-12 my-1">
                 <i class="fa-solid fa-map-location-dot orange fa-sm"></i>
                 <span>주소</span>
-                <span th:text="*{address.roadAddr}"></span>
+                <span th:text="*{roadAddr}"></span>
             </div>
             <div class="col-12 my-1" style="font-size: 0.8rem">
                 <span class="badge bg-dark my-auto ms-3">지번</span>
-                <span th:text="*{address.numberAddr}"></span>
+                <span th:text="*{numberAddr}"></span>
             </div>
             <div class="col-12 my-1">
                 <i class="fa-solid fa-square-phone orange fa-sm"></i>

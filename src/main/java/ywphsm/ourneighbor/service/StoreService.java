@@ -12,7 +12,6 @@ import ywphsm.ourneighbor.domain.store.StoreStatus;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,21 +28,36 @@ public class StoreService {
         Store store = dto.toEntity();
 
         for (Category category : categoryList) {
-
-            CategoryOfStore categoryOfStore = new CategoryOfStore(category, store);
-            log.info("store={}", store.getName());
+            CategoryOfStore categoryOfStore = CategoryOfStore.linkCategoryAndStore(category, store);
             log.info("categoryOfStore={}", categoryOfStore.getCategory().getName());
-
-            CategoryOfStore result = categoryOfStore.addCategory(category, store);
-
-            log.info("result={}", result.getStore().getName());
-            log.info("result={}", result.getCategory().getName());
+            log.info("categoryOfStore={}", categoryOfStore.getStore().getName());
         }
 
+        // default: OPEN
         store.updateStatus(StoreStatus.OPEN);
 
         storeRepository.save(store);
         return store.getId();
+    }
+
+
+    @Transactional
+    public Long update(Long storeId, StoreDTO.Update dto, List<Category> categoryList) {
+
+        Store findStore = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
+
+        // 기존의 게시물에 category를 먼저 등록해줌
+        for (Category category : categoryList) {
+            findStore.getCategoryOfStoreList().clear();
+            log.info("category={}", category.getName());
+            CategoryOfStore categoryOfStore = CategoryOfStore.linkCategoryAndStore(category, findStore);
+        }
+
+        // 그 후, dto로 전달받은 수정된 정보를 별도로 업데이트 시킴
+        findStore.update(dto.toEntity());
+
+        return storeId;
     }
 
     // 전체 매장 조회
@@ -53,9 +67,10 @@ public class StoreService {
 
     // 매장 하나 조회
     public Store findOne(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(NoSuchElementException::new);
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
 
-        store.autoUpdateStatus(store.getOffDays(), store.getOpeningTime(), store.getClosingTime(), store.getBreakStart(), store.getBreakEnd());
+        store.autoUpdateStatus(store.getOffDays(), store.getBusinessTime());
 
         return store;
     }
@@ -65,7 +80,7 @@ public class StoreService {
         List<Store> stores = storeRepository.searchByKeyword(keyword);
 
         for (Store store : stores) {
-            store.autoUpdateStatus(store.getOffDays(), store.getOpeningTime(), store.getClosingTime(), store.getBreakStart(), store.getBreakEnd());
+            store.autoUpdateStatus(store.getOffDays(), store.getBusinessTime());
         }
 
         return stores;

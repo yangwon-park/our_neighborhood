@@ -48,24 +48,28 @@ public class StoreController {
     @GetMapping("/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findOne(storeId);
+
         StoreDTO.Detail dto = new StoreDTO.Detail(store);
 
         log.info("dto={}", dto);
         log.info("dto={}", dto.getMenuList());
+        log.info("dto={}", dto.getCategoryList());
 
         List<CategoryOfStoreDTO> categoryList = dto.getCategoryList();
 
 //        List<CategorySimpleDTO> dtoList = new ArrayList<>();
 //        for (CategoryOfStoreDTO categoryOfStoreDTO : categoryList) {
-//            Category id = categoryService.findById(categoryOfStoreDTO.getCategoryId());
-//            CategorySimpleDTO of = CategorySimpleDTO.of(id);
-//            dtoList.add(of);
+//            Category category = categoryService.findById(categoryOfStoreDTO.getCategoryId());
+//            CategorySimpleDTO dto = CategorySimpleDTO.of(category);
+//            dtoList.add(dto);
 //        }
 
         List<CategorySimpleDTO> dtoList = categoryList.stream()
                 .map(categoryOfStoreDTO ->
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
+
+        log.info("dtoList={}", dtoList);
 
         model.addAttribute("store", dto);
         model.addAttribute("categoryList", dtoList);
@@ -89,15 +93,23 @@ public class StoreController {
 
         List<Category> categoryList = new ArrayList<>();
 
-        for (Long id : categoryId) {
-            Category category = categoryService.findById(id);
+        categoryId.stream().map(categoryService::findById).forEach(category -> {
             log.info("category={}", category.getCategoryOfStoreList());
             categoryList.add(category);
-        }
+        });
 
         storeService.saveStore(dto, categoryList);
 
         return "redirect:/";
     }
 
+    @GetMapping("/edit/{storeId}")
+    public String editStore(@PathVariable Long storeId, Model model) {
+        Store findStore = storeService.findOne(storeId);
+        StoreDTO.Update store = new StoreDTO.Update(findStore);
+
+        model.addAttribute("store", store);
+
+        return "store/edit_form";
+    }
 }

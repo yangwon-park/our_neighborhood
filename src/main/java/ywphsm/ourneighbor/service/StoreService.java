@@ -6,11 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.CategoryOfStore;
+import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
+import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +23,7 @@ import java.util.List;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final CategoryRepository categoryRepository;
 
     // 매장 등록
     @Transactional
@@ -42,16 +46,20 @@ public class StoreService {
 
 
     @Transactional
-    public Long update(Long storeId, StoreDTO.Update dto, List<Category> categoryList) {
+    public Long update(Long storeId, StoreDTO.Update dto, List<Long> categoryIdList) {
 
         Store findStore = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
 
-        // 기존의 게시물에 category를 먼저 등록해줌
-        for (Category category : categoryList) {
-            findStore.getCategoryOfStoreList().clear();
-            log.info("category={}", category.getName());
-            CategoryOfStore categoryOfStore = CategoryOfStore.linkCategoryAndStore(category, findStore);
+        // 먼저 카테고리를 업데이트
+        List<CategoryOfStore> categoryOfStoreList = findStore.getCategoryOfStoreList();
+
+        for (int i = 0; i < categoryOfStoreList.size(); i++) {
+            Long categoryId = categoryIdList.get(i);
+
+            Category category = categoryRepository.findById(categoryId).orElseThrow(
+                    () -> new IllegalArgumentException("해당 카테고리가 없습니다. id = " + categoryId));
+            categoryOfStoreList.get(i).updateCategory(category);
         }
 
         // 그 후, dto로 전달받은 수정된 정보를 별도로 업데이트 시킴
@@ -60,9 +68,15 @@ public class StoreService {
         return storeId;
     }
 
-    // 전체 매장 조회
-    public List<Store> findStores() {
-        return storeRepository.findAll();
+    @Transactional
+    public Long delete(Long storeId) {
+
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("해당 매장이 없습니다. storeId = " + storeId));
+
+        storeRepository.delete(store);
+
+        return storeId;
     }
 
     // 매장 하나 조회
@@ -73,6 +87,11 @@ public class StoreService {
         store.autoUpdateStatus(store.getOffDays(), store.getBusinessTime());
 
         return store;
+    }
+
+    // 전체 매장 조회
+    public List<Store> findStores() {
+        return storeRepository.findAll();
     }
 
     // 검색어 포함 매장명 조회

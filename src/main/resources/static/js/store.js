@@ -1,35 +1,48 @@
 var main = {
     init: function () {
         var _this = this;
+
         _this.getCategories();
+
         const storeUpdateBtn = document.getElementById('store-update');
+        const storeDeleteBtn = document.getElementById('store-delete');
 
         storeUpdateBtn.addEventListener('click', () => {
             _this.updateStore();
+        })
+
+        storeDeleteBtn.addEventListener('click', () => {
+            _this.deleteStore();
         })
     },
 
     updateStore: function () {
         const storeForm = document.getElementById('store-edit-form');
-        const id = document.getElementById('storeId').value;
+        const storeId = document.getElementById('storeId').value;
 
         const formData = new FormData(storeForm);
 
-        for (let key of formData.keys()) {
-            console.log(key);
-        }
-
-        for (let v of formData.values()) {
-            console.log(v);
-        }
-
-
         axios({
             method: "put",
-            url: "/store/edit/" + id,
+            url: "/store/edit/" + storeId,
             data: formData
         }).then((resp) => {
             alert('매장 정보 수정이 완료됐습니다.');
+            window.location.href = "/store/" + storeId;
+        }).catch((error) => {
+            console.log(error);
+        })
+    },
+
+    deleteStore: function () {
+        const storeId = document.getElementById('storeId').value;
+
+        axios({
+            method: "delete",
+            url: "/store/delete/" + storeId,
+        }).then((resp) => {
+            alert('매장 삭제가 완료됐습니다.');
+            window.location.href = "/";
         }).catch((error) => {
             console.log(error);
         })
@@ -92,6 +105,7 @@ var main = {
                 }
             }
         });
+
         return midChildren;
     },
 

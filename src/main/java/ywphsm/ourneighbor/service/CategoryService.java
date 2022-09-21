@@ -27,7 +27,7 @@ public class CategoryService {
 
     // 카테고리 등록
     @Transactional
-    public Long saveCategory(CategoryDTO dto) {
+    public Long save(CategoryDTO dto) {
         
         // parent, child는 빠져있음
         Category category = dto.toEntity();
@@ -63,6 +63,17 @@ public class CategoryService {
         return categoryRepository.save(category).getId();
     }
 
+    @Transactional
+    public Long delete(Long categoryId) {
+
+        // findById + delete 조합 => 에러 발생 시 개발자가 직접 커스텀 가능
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new IllegalArgumentException("해당 카테고리가 없습니다. categoryId = " + categoryId));
+        categoryRepository.delete(category);
+
+        return categoryId;
+    }
+
     // 단순히 모든 카테고리들을 보여주는 쿼리
     public List<CategoryDTO> findAll() {
         return categoryRepository.findAllByOrderByDepthAscParentIdAscNameAsc().stream().map(CategoryDTO::new).collect(Collectors.toList());
@@ -70,19 +81,11 @@ public class CategoryService {
 
     // 하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리
     public List<CategoryDTO> findAllCategoriesHier()  {
-        return categoryRepository.findCategories().stream().map(CategoryDTO::of).collect(Collectors.toList());
+        return categoryRepository.findByCategories().stream().map(CategoryDTO::of).collect(Collectors.toList());
     }
 
     public boolean checkCategoryDuplicate(String categoryName, Category parent) {
         return categoryRepository.existsByNameAndParent(categoryName, parent);
     }
 
-    @Transactional
-    public void deleteCategory(Long categoryId) {
-        
-        // findById + delete 조합 => 에러 발생 시 개발자가 직접 커스텀 가능
-        Category category = categoryRepository.findById(categoryId).orElseThrow(
-                () -> new IllegalArgumentException("해당 카테고리가 없습니다. categoryId = " + categoryId));
-        categoryRepository.delete(category);
-    }
 }

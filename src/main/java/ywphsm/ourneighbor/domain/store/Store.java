@@ -145,6 +145,9 @@ public class Store extends BaseEntity {
         this.address = store.getAddress();
     }
 
+    public void updateCategoryOfStore(List<CategoryOfStore> categoryOfStoreList) {
+        this.categoryOfStoreList = categoryOfStoreList;
+    }
 
     public void updateStatus(StoreStatus status) {
         this.status = status;

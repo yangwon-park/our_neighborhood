@@ -8,9 +8,7 @@ import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,15 +17,16 @@ import java.util.stream.Collectors;
 public class StoreApiController {
 
     private final StoreService storeService;
-    private final CategoryService categoryService;
 
     @PutMapping("/edit/{storeId}")
     public Long update(@PathVariable Long storeId, StoreDTO.Update dto,
                        @RequestParam List<Long> categoryId) {
 
-        List<Category> categoryList = categoryId.stream()
-                .map(categoryService::findById).collect(Collectors.toList());
+        return storeService.update(storeId, dto, categoryId);
+    }
 
-        return storeService.update(storeId, dto, categoryList);
+    @DeleteMapping("/delete/{storeId}")
+    public Long delete(@PathVariable Long storeId) {
+        return storeService.delete(storeId);
     }
 }

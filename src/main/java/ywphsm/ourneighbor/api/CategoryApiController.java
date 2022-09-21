@@ -38,13 +38,11 @@ public class CategoryApiController {
 
     @PostMapping("/category/add")
     public Long save(@Validated CategoryDTO dto) {
-        return categoryService.saveCategory(dto);
+        return categoryService.save(dto);
     }
 
     @DeleteMapping("/category/{categoryId}")
     public Long delete(@PathVariable Long categoryId) {
-        categoryService.deleteCategory(categoryId);
-
-        return categoryId;
+        return categoryService.delete(categoryId);
     }
 }

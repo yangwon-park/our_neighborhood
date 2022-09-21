@@ -51,10 +51,6 @@ public class StoreController {
 
         StoreDTO.Detail dto = new StoreDTO.Detail(store);
 
-        log.info("dto={}", dto);
-        log.info("dto={}", dto.getMenuList());
-        log.info("dto={}", dto.getCategoryList());
-
         List<CategoryOfStoreDTO> categoryList = dto.getCategoryList();
 
 //        List<CategorySimpleDTO> dtoList = new ArrayList<>();
@@ -68,8 +64,6 @@ public class StoreController {
                 .map(categoryOfStoreDTO ->
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
-
-        log.info("dtoList={}", dtoList);
 
         model.addAttribute("store", dto);
         model.addAttribute("categoryList", dtoList);
@@ -104,8 +98,6 @@ public class StoreController {
     public String editStore(@PathVariable Long storeId, Model model) {
         Store findStore = storeService.findOne(storeId);
         StoreDTO.Update store = new StoreDTO.Update(findStore);
-
-        log.info("store={}", store);
 
         model.addAttribute("store", store);
 

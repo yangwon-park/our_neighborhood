@@ -33,13 +33,14 @@ public class InitDB {
         public void dbInit() {
 
             Store store1 = new Store("칸다소바", 35.1612928, 129.1600985, "0517311660",
-                    new BusinessTime(LocalTime.of(9, 00), LocalTime.of(21, 00), LocalTime.of(15, 30), LocalTime.of(17, 00)),
+                    new BusinessTime(LocalTime.of(11, 30), LocalTime.of(21, 30), LocalTime.of(15, 30), LocalTime.of(17, 00)),
                     null, "안녕하세요 칸다 소바입니다.", null , StoreStatus.OPEN,
                     new Address("부산 해운대구 구남로30번길 8-3", "부산 해운대구 우동 544-15", "48094", "1층"));
 
             Store store3 = new Store("쿠지라멘", 35.1638127, 129.1681053, null,
                     new BusinessTime(LocalTime.of(11, 00), LocalTime.of(19, 00), null, null),
                     "영업 날짜 및 시간을 인스타그램으로 확인해주세요.", "https://www.instagram.com/kuziramen/", null, StoreStatus.OPEN,
+//                    월요일 휴무
                     new Address("부산 해운대구 해운대해변로 351-1", "부산 해운대구 중동 1205-13", "48096", ""));
 
             Store store4 = new Store("버거인뉴욕", 35.1609342, 129.1646901, "0517430144",

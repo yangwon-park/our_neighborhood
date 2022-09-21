@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
@@ -19,7 +20,7 @@ public class StoreApiController {
     private final StoreService storeService;
 
     @PutMapping("/edit/{storeId}")
-    public Long update(@PathVariable Long storeId, StoreDTO.Update dto,
+    public Long update(@PathVariable Long storeId, @Validated StoreDTO.Update dto,
                        @RequestParam List<Long> categoryId) {
 
         return storeService.update(storeId, dto, categoryId);

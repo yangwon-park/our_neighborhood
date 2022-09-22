@@ -1,7 +1,7 @@
 package ywphsm.ourneighbor.repository.store.dto;
 
 import lombok.Data;
-import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 

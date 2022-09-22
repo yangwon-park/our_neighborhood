@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{/css/argon.css}">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<body class="bg-default">
+<!-- Navbar -->
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
+<section class="header">
+    <div class="header py-7 py-lg-8">
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
+    </div>
+</section>
+<section class="add-form">
+    <!-- Page content -->
+    <div class="container-fluid mt--8 pb-5">
+        <!-- Table -->
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-8">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="card-header bg-transparent pb-5">
+                        <div class="text-muted text-center mt-2 mb-4 fs-2">메뉴 수정</div>
+                    </div>
+                    <th:block th:each="menu, i: ${menuList}">
+                        <form class="form-floating" th:id="|menu-edit-form${i.index+1}|" enctype="multipart/form-data">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="col-6">
+                                        <img th:src="|/menu/${menu.getStoredFileName()}|" width="150" height="150"
+                                             alt="메뉴 사진">
+                                    </div>
+                                    <div class="col-6 align-middle">
+                                        <div class="form-group">
+                                            <div class="">
+                                                <label th:for="|menu-edit-name${i.index+1}|">
+                                                    메뉴 이름
+                                                </label>
+                                                <input th:id="|menu-edit-name${i.index+1}|" name="name"
+                                                       th:value="${menu.name}"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="">
+                                                <label th:for="|menu-edit-price${i.index+1}|">
+                                                    상품 가격
+                                                </label>
+                                                <input th:id="|menu-edit-price${i.index+1}|" name="price"
+                                                       th:value="${menu.price}"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="">
+                                                <label th:for="|menu-edit-dcPrice${i.index+1}|">
+                                                    할인 가격
+                                                </label>
+                                                <input th:id="|menu-edit-dcPrice${i.index+1}|" name="discountPrice"
+                                                       th:value="${menu.discountPrice}"/>
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="">
+                                                <label th:for="|menu-edit-dcStart${i.index+1}|">
+                                                    할인 시작
+                                                </label>
+                                                <input th:id="|menu-edit-dcStart${i.index+1}|" name="discountStart"
+                                                       type="time"
+                                                       th:value="${menu.discountStart}"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="">
+                                                <label th:for="|menu-edit-dcEnd${i.index+1}|">
+                                                    할인 종료
+                                                </label>
+                                                <input th:id="|menu-edit-dcEnd${i.index+1}|" name="discountEnd"
+                                                       type="time"
+                                                       th:value="${menu.discountEnd}"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="">
+                                                <label th:for="|menu-edit-image${i.index+1}|">
+                                                    이미지
+                                                </label>
+                                                <input th:id="|menu-edit-image${i.index+1}|" name="file"
+                                                       type="file"/>
+                                                <input id="storeId" th:value="${menu.storeId}" type="hidden"/>
+                                                <input th:id="|menuId${i.index+1}|" name="id" th:value="${menu.id}" type="hidden"/>
+                                            </div>
+                                        </div>
+                                        <div class="float-end">
+                                            <button th:id="|menu-delete-btn${i.index+1}|"
+                                                    type="button" class="btn btn-dark mt-4 menu-delete">
+                                                삭제</button>
+                                            <button th:id="|menu-edit-btn${i.index+1}|"
+                                                    type="button" class="btn btn-orange mt-4 menu-edit">
+                                                수정</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
+<script type="module" th:src="@{/js/menu.js}"></script>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+</body>
+</html>

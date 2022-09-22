@@ -32,13 +32,13 @@
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent">
                         <div class="text-muted text-center mt-2 mb-4 fs-2">카테고리 등록</div>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-dark mt-4 float-end me-3"
-                                id="category-delete">카테고리 삭제</button>
+                        <div class="text-muted text-right" style="font-size: 0.5rem">
+                            삭제를 원하시면 상위 카테고리만 선택하세요.
+                        </div>
                     </div>
                     <form id="category-form">
                         <div class="card-body px-lg-5 py-lg-5">
+
                             <div class="form-group">
                                 <div class="mb-3">
                                     <select name="categoryId" id="category-select" class="form-select" required>
@@ -56,8 +56,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center">
-                                <button type="button" class="btn btn-orange mt-4" id="category-add">카테고리 등록</button>
+                            <div class="float-end">
+                                <button type="button" class="btn btn-dark mt-4"
+                                        id="category-delete">삭제</button>
+                                <button type="button" class="btn btn-orange mt-4"
+                                        id="category-add">등록</button>
                             </div>
                         </div>
                     </form>

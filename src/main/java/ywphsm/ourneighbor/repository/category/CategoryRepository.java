@@ -13,7 +13,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     List<Category> findAllByOrderByDepthAscParentIdAscNameAsc();
 
     @Query("select c from Category c where c.parent is NULL")
-    List<Category> findCategories();
+    List<Category> findByCategories();
 
     Optional<Category> findByNameAndDepth(String name, Long depth);
 

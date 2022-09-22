@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.Category;
-import ywphsm.ourneighbor.domain.CategoryOfStore;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.*;
 
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.*;
-import static ywphsm.ourneighbor.domain.store.QStore.*;
 
 @SpringBootTest
 @Transactional
@@ -66,7 +64,7 @@ class StoreServiceTest {
         categoryList.add(category1);
         categoryList.add(category2);
 
-        Long storeId = storeService.saveStore(dto, categoryList);
+        Long storeId = storeService.save(dto, categoryList);
         Store findStore = storeService.findOne(storeId);
 
         // 등록된 매장의 이름이 조회한 매장의 이름과 일치하는가 확인

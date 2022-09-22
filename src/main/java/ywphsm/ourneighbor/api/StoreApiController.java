@@ -23,6 +23,8 @@ public class StoreApiController {
     public Long update(@PathVariable Long storeId, @Validated StoreDTO.Update dto,
                        @RequestParam List<Long> categoryId) {
 
+        log.info("dto={}", dto);
+
         return storeService.update(storeId, dto, categoryId);
     }
 

@@ -29,7 +29,6 @@ public class CategoryOfStore {
     // 연관 관계 편의 메소드를 위해 setter 열어둠
     public void updateCategory(Category category) {
         this.category = category;
-
     }
 
     public void setStore(Store store) {

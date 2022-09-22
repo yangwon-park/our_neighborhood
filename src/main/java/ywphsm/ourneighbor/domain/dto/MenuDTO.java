@@ -1,6 +1,5 @@
 package ywphsm.ourneighbor.domain.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,6 +39,56 @@ public class MenuDTO {
                     .name(name)
                     .price(price)
                     .store(store)
+                    .build();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class Update {
+
+        @NotNull
+        private Long id;
+
+        @NotBlank
+        private String name;
+
+        @NotNull
+        private Integer price;
+
+        @NotNull
+        private Long storeId;
+
+        private String storedFileName;
+
+        private MultipartFile file;
+
+        private int discountPrice;
+
+        private LocalDateTime discountStart;
+
+        private LocalDateTime discountEnd;
+
+        @Builder
+        public Update(Menu menu) {
+            this.id = menu.getId();
+            this.name = menu.getName();
+            this.price = menu.getPrice();
+            this.storeId = menu.getStore().getId();
+            this.storedFileName = menu.getFile().getStoredFileName();
+            this.discountPrice = menu.getDiscountPrice();
+            this.discountStart = menu.getDiscountStart();
+            this.discountEnd = menu.getDiscountEnd();
+        }
+
+        public Menu toEntity() {
+            return Menu.builder()
+                    .id(id)
+                    .name(name)
+                    .price(price)
+                    .discountPrice(discountPrice)
+                    .discountStart(discountStart)
+                    .discountEnd(discountEnd)
                     .build();
         }
     }

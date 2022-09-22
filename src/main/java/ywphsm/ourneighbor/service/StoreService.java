@@ -6,14 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.CategoryOfStore;
-import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +25,7 @@ public class StoreService {
 
     // 매장 등록
     @Transactional
-    public Long saveStore(StoreDTO.Add dto, List<Category> categoryList) {
+    public Long save(StoreDTO.Add dto, List<Category> categoryList) {
 
         Store store = dto.toEntity();
 
@@ -49,7 +47,7 @@ public class StoreService {
     public Long update(Long storeId, StoreDTO.Update dto, List<Long> categoryIdList) {
 
         Store findStore = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
+                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
 
         // 먼저 카테고리를 업데이트
         List<CategoryOfStore> categoryOfStoreList = findStore.getCategoryOfStoreList();
@@ -58,7 +56,7 @@ public class StoreService {
             Long categoryId = categoryIdList.get(i);
 
             Category category = categoryRepository.findById(categoryId).orElseThrow(
-                    () -> new IllegalArgumentException("해당 카테고리가 없습니다. id = " + categoryId));
+                    () -> new IllegalArgumentException("존재하지 않는 카테고리입니다. id = " + categoryId));
             categoryOfStoreList.get(i).updateCategory(category);
         }
 

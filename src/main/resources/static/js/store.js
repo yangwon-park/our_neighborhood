@@ -8,15 +8,15 @@ var main = {
         const storeDeleteBtn = document.getElementById('store-delete');
 
         storeUpdateBtn.addEventListener('click', () => {
-            _this.updateStore();
+            _this.update();
         })
 
         storeDeleteBtn.addEventListener('click', () => {
-            _this.deleteStore();
+            _this.delete();
         })
     },
 
-    updateStore: function () {
+    update: function () {
         const storeForm = document.getElementById('store-edit-form');
         const storeId = document.getElementById('storeId').value;
 
@@ -34,12 +34,12 @@ var main = {
         })
     },
 
-    deleteStore: function () {
+    delete: function () {
         const storeId = document.getElementById('storeId').value;
 
         axios({
             method: "delete",
-            url: "/store/delete/" + storeId,
+            url: "/store/delete/" + storeId
         }).then((resp) => {
             alert('매장 삭제가 완료됐습니다.');
             window.location.href = "/";

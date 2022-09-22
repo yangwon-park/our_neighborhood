@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.service.MenuService;
@@ -18,22 +15,37 @@ import java.net.MalformedURLException;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/menu")
 public class MenuApiController {
 
     private final MenuService menuService;
+
     private final FileStore fileStore;
 
-    @PostMapping(value = "/menu/add")
-    public Long save(MenuDTO.Add menuAddDTO) throws IOException {
+    @PostMapping(value = "/add")
+    public Long save(MenuDTO.Add dto) throws IOException {
 
-        log.info("menuAddDTO={}", menuAddDTO);
-        return menuService.saveMenu(menuAddDTO);
+        log.info("dto={}", dto);
+        return menuService.save(dto);
+    }
+
+    @PutMapping("/edit/{storeId}")
+    public Long update(@PathVariable Long storeId, MenuDTO.Update dto) throws IOException {
+
+        return menuService.update(storeId, dto);
+    }
+
+    @DeleteMapping("/edit/{storeId}")
+    public Long delete(@PathVariable Long storeId, @RequestParam Long menuId) {
+        log.info("menuId={}", menuId);
+        return menuService.delete(menuId);
     }
 
 
     // 메뉴 이미지 출력
-    @GetMapping("/menu/{fileName}")
+    @GetMapping("/{fileName}")
     public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
+
         return new UrlResource("file:" + fileStore.getFullPath(fileName));
     }
 }

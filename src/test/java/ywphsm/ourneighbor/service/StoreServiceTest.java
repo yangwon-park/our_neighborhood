@@ -64,7 +64,7 @@ class StoreServiceTest {
         categoryList.add(category1);
         categoryList.add(category2);
 
-        Long storeId = storeService.saveStore(dto, categoryList);
+        Long storeId = storeService.save(dto, categoryList);
         Store findStore = storeService.findOne(storeId);
 
         // 등록된 매장의 이름이 조회한 매장의 이름과 일치하는가 확인

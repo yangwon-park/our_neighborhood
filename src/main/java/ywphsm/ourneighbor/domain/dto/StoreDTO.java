@@ -132,6 +132,7 @@ public class StoreDTO {
         private LocalTime breakEnd;               // 쉬는 시간 끝
 
         private String notice;                    // 가게 소식
+
         private String intro;                     // 가게 소개
 
         private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)

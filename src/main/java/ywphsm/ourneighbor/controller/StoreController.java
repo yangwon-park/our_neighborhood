@@ -15,7 +15,6 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +88,7 @@ public class StoreController {
                                                 .map(categoryService::findById)
                                                 .collect(Collectors.toList());
 
-        storeService.saveStore(dto, categoryList);
+        storeService.save(dto, categoryList);
 
         return "redirect:/";
     }

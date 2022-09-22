@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import ywphsm.ourneighbor.domain.Category;
-import ywphsm.ourneighbor.domain.dto.CategoryDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
@@ -52,7 +51,7 @@ public class HomeController {
             categoryList.add(category);
         }
 
-        storeService.saveStore(storeAddDTO, categoryList);
+        storeService.save(storeAddDTO, categoryList);
 
         return "redirect:/prac2";
     }

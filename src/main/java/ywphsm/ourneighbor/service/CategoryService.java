@@ -28,11 +28,11 @@ public class CategoryService {
     // 카테고리 등록
     @Transactional
     public Long save(CategoryDTO dto) {
-        
+
+        log.info("dto.getParentId={}", dto.getParentId());
+
         // parent, child는 빠져있음
         Category category = dto.toEntity();
-
-        log.info("dto.getParent_id={}", dto.getParentId());
 
         // 가장 상위 (depth : 1L) 카테고리 생성
         if (dto.getParentId() == null) {
@@ -72,6 +72,12 @@ public class CategoryService {
         categoryRepository.delete(category);
 
         return categoryId;
+    }
+
+    public CategoryDTO findByName(String name) {
+        Category category = categoryRepository.findByName(name);
+        CategoryDTO dto = new CategoryDTO(category);
+        return dto;
     }
 
     // 단순히 모든 카테고리들을 보여주는 쿼리

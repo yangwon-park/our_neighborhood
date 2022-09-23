@@ -58,17 +58,23 @@ var main = {
     },
 
     save: function () {
-        const categoryForm = document.getElementById('category-form');
-        const formData = new FormData(categoryForm);
+        const parentId = document.getElementById("category-select").options
+                      [document.getElementById("category-select").selectedIndex].value;
 
-        let parentId = $('#category-select option:selected').val();
+        const name = document.getElementById("name").value;
 
-        formData.append('parentId', parentId);
+        let data= {
+            parentId: parentId,
+            name: name
+        }
 
         axios({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "post",
             url: "/category/add",
-            data: formData
+            data: JSON.stringify(data),
         }).then((resp) => {
             alert('카테고리가 등록됐습니다.');
             window.location.reload();
@@ -78,7 +84,8 @@ var main = {
     },
 
     deleteCategory: function () {
-        let categoryId = $('#category-select option:selected').val();
+        const categoryId = document.getElementById("category-select").options
+                         [document.getElementById("category-select").selectedIndex].value;
 
         console.log(categoryId);
 

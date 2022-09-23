@@ -39,9 +39,6 @@ var main = {
 
         let nx = main.getCookie("nx");
         let ny = main.getCookie("ny");
-        console.log("findCoords nx : " + nx)
-        console.log("findCoords ny : " + ny)
-        console.log("findCoords End");
     },
 
     setWeatherInfo: function () {

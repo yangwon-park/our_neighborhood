@@ -28,12 +28,19 @@ public class MenuDTO {
 
         private MultipartFile image;
 
+        @Builder
+        public Add(String name, Integer price, Long storeId, MultipartFile image) {
+            this.name = name;
+            this.price = price;
+            this.storeId = storeId;
+            this.image = image;
+        }
+
         public Add(Menu menu) {
             this.name = menu.getName();
             this.price = menu.getPrice();
         }
 
-        @Builder
         public Menu toEntity(Store store) {
             return Menu.builder()
                     .name(name)

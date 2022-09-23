@@ -1,5 +1,6 @@
 package ywphsm.ourneighbor.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class CategoryDTO {
 
     private Long categoryId;
 
-    @NotBlank
+//    @NotBlank
     private String name;
     private Long depth;
 

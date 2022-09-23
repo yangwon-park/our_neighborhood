@@ -1,27 +1,52 @@
 package ywphsm.ourneighbor.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
 import javax.persistence.EntityManager;
 
+import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.QMenu.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest
+        .WebEnvironment.RANDOM_PORT)
 @Transactional
 class MenuServiceTest {
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private MockMvc mvc;
 
     @Autowired
     MenuService menuService;
@@ -36,61 +61,54 @@ class MenuServiceTest {
 
     @BeforeEach
     void before() {
-        queryFactory = new JPAQueryFactory(em);
-
-        Store store1 = new Store("칸다 소바", 35.1612928, 129.1600985, "0517311660",
-                LocalTime.of(9, 00, 00), LocalTime.of(20, 00, 00), LocalTime.of(15, 30, 00), LocalTime.of(17, 00, 00),
-                null, "안녕하세요 칸다 소바입니다.", null, StoreStatus.OPEN, null);
-
-        Store store2 = new Store("맥도날드", 35.1600985, 129.1596415, "07072091629",
-                LocalTime.of(00, 00, 00), LocalTime.of(00, 00, 00), null, null,
-                null, "맥도날드로 오세요.", null, StoreStatus.OPEN, null);
-
-        em.persist(store1);
-        em.persist(store2);
-
-        Menu menu1 = new Menu(
-                "마제 소바", 10000, 0,
-                null, null, store1
-        );
-        Menu menu2 = new Menu(
-                "아우라 소바", 12000, 0,
-                null, null, store1
-        );
-        Menu menu3 = new Menu(
-                "메밀 소바", 8000, 0,
-                null, null, store1
-        );
-        Menu menu4 = new Menu(
-                "햄버거", 7000, 0,
-                null, null, store2
-        );
-        Menu menu5 = new Menu(
-                "감자 튀김", 2000, 0,
-                null, null, store2
-        );
-        em.persist(menu1);
-        em.persist(menu2);
-        em.persist(menu3);
-        em.persist(menu4);
-        em.persist(menu5);
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
     }
 
-//    @Test
-//    @DisplayName("메뉴 등록")
-//    void saveMenu() {
-//        List<Store> storeList = storeService.findByName("칸다 소바");
-//        Store store = storeList.get(0);
-//
-//        Menu menu = new Menu(
-//                "마제 소바", 10000, 0,
-//                null, null, store
-//        );
-//
-//        Long menuId = menuService.saveMenu(menu);
-//        System.out.println(store);
-//        assertThat(menu).isEqualTo(menuService.findOne(menuId));
-//    }
+    @LocalServerPort
+    private int port;
+
+    @Autowired
+    TestRestTemplate restTemplate;
+
+    @Test
+    @DisplayName("메뉴 등록")
+    void saveMenu() throws Exception {
+        String name = "test";
+        Integer price = 10000;
+        Long storeId = 24L;
+
+        MenuDTO.Add dto = MenuDTO.Add.builder()
+                .name(name)
+                .price(price)
+                .storeId(storeId)
+                .build();
+
+        String url = "http://localhost:" + port + "/menu/add";
+
+        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/06d24685-63b7-49c9-99ae-db5e30957eed.jpg"));
+
+        mvc.perform(multipart("/menu/add")
+                        .file(file).part(new MockPart("id", "foo".getBytes(StandardCharsets.UTF_8)))
+                        .param("storeId", String.valueOf(storeId))
+                        .param("name", name)
+                        .param("price", String.valueOf(price)))
+                .andExpect(status().isOk());
+
+        Store one = storeService.findOne(storeId);
+        List<Menu> menuList = one.getMenuList();
+
+
+        for (Menu menu : menuList) {
+            if (menu.getName().equals(name)) {
+                assertThat(menu.getPrice()).isEqualTo(10000);
+                assertThat(menu.getFile().getUploadedFileName()).isEqualTo("test.png");
+            }
+        }
+    }
 
 
     @Test

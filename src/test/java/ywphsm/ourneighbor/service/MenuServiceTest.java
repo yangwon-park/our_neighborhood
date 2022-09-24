@@ -35,6 +35,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.QMenu.*;
 
@@ -76,30 +77,22 @@ class MenuServiceTest {
     @Test
     @DisplayName("메뉴 등록")
     void saveMenu() throws Exception {
+        Long storeId = 24L;
         String name = "test";
         Integer price = 10000;
-        Long storeId = 24L;
-
-        MenuDTO.Add dto = MenuDTO.Add.builder()
-                .name(name)
-                .price(price)
-                .storeId(storeId)
-                .build();
-
-        String url = "http://localhost:" + port + "/menu/add";
 
         MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-                new FileInputStream("/Users/bag-yang-won/Desktop/file/06d24685-63b7-49c9-99ae-db5e30957eed.jpg"));
+                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
         mvc.perform(multipart("/menu/add")
                         .file(file).part(new MockPart("id", "foo".getBytes(StandardCharsets.UTF_8)))
                         .param("storeId", String.valueOf(storeId))
                         .param("name", name)
                         .param("price", String.valueOf(price)))
+                .andDo(print())
                 .andExpect(status().isOk());
 
-        Store one = storeService.findOne(storeId);
-        List<Menu> menuList = one.getMenuList();
+        List<Menu> menuList = storeService.findOne(storeId).getMenuList();
 
 
         for (Menu menu : menuList) {

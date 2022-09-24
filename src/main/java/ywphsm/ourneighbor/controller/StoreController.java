@@ -75,24 +75,6 @@ public class StoreController {
         return "store/add_form";
     }
 
-    @PostMapping("/add")
-    public String addStore(@Validated @ModelAttribute("store") StoreDTO.Add dto, BindingResult bindingResult,
-                           @RequestParam(value = "categoryId") List<Long> categoryId) {
-
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "store/add_form";
-        }
-
-        List<Category> categoryList = categoryId.stream()
-                                                .map(categoryService::findById)
-                                                .collect(Collectors.toList());
-
-        storeService.save(dto, categoryList);
-
-        return "redirect:/";
-    }
-
     @GetMapping("/edit/{storeId}")
     public String editStore(@PathVariable Long storeId, Model model) {
         Store findStore = storeService.findOne(storeId);

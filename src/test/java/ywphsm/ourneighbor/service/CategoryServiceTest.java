@@ -11,6 +11,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -18,6 +19,7 @@ import ywphsm.ourneighbor.domain.dto.CategoryDTO;
 
 import java.awt.*;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -51,14 +53,9 @@ class CategoryServiceTest {
     CategoryService categoryService;
 
     @Test
-    void 몰라() {
-        List<CategoryDTO> all = categoryService.findAll();
-        assertThat(all.size()).isEqualTo(24);
-    }
-
-    @Test
     @DisplayName("카테고리 등록")
     void save() throws Exception {
+
         String name = "test";
         Long parentId = 5L;
 
@@ -66,10 +63,6 @@ class CategoryServiceTest {
                 .name(name)
                 .parent_id(parentId)
                 .build();
-
-        System.out.println("dto = " + dto);
-        String s = new ObjectMapper().writeValueAsString(dto);
-        System.out.println("s = " + s);
 
         String url = "http://localhost:" + port + "/category/add";
 
@@ -83,7 +76,23 @@ class CategoryServiceTest {
 
         assertThat(findCategory.getDepth()).isEqualTo(3L);
         assertThat(findCategory.getParentId()).isEqualTo(5L);
-
     }
 
+    @Test
+    @DisplayName("카테고리 삭제")
+    void delete() throws Exception {
+
+        Long categoryId = categoryService.save(CategoryDTO.builder()
+                .name("category")
+                .depth(1L)
+                .build());
+
+        String url = "http://localhost" + port + "/category/" + categoryId;
+
+        mvc.perform(MockMvcRequestBuilders.delete(url))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        assertThatThrownBy(() -> categoryService.findById(categoryId)).isInstanceOf(NoSuchElementException.class);
+    }
 }

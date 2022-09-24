@@ -4,15 +4,43 @@ var main = {
 
         _this.getCategories();
 
+        const storeSaveBtn = document.getElementById('store-save');
         const storeUpdateBtn = document.getElementById('store-update');
         const storeDeleteBtn = document.getElementById('store-delete');
 
-        storeUpdateBtn.addEventListener('click', () => {
-            _this.update();
-        })
+        if (storeSaveBtn !== null) {
+            storeSaveBtn.addEventListener('click', () => {
+                _this.save();
+            });
+        }
 
-        storeDeleteBtn.addEventListener('click', () => {
-            _this.delete();
+        if (storeUpdateBtn !== null) {
+            storeUpdateBtn.addEventListener('click', () => {
+                _this.update();
+            });
+        }
+
+        if (storeDeleteBtn !== null) {
+            storeDeleteBtn.addEventListener('click', () => {
+                _this.delete();
+            });
+        }
+    },
+
+    save: function () {
+        const storeForm = document.getElementById('store-add-form');
+
+        const formData = new FormData(storeForm);
+
+        axios({
+            method: "post",
+            url: "/store/add",
+            data: formData
+        }).then((resp) => {
+            alert('매장 등록이 완료됐습니다.');
+            window.location.href = "/";
+        }).catch((error) => {
+            console.error(error);
         })
     },
 
@@ -28,9 +56,9 @@ var main = {
             data: formData
         }).then((resp) => {
             alert('매장 정보 수정이 완료됐습니다.');
-            window.location.href = "/store/" + storeId;
+            // window.location.href = "/store/" + storeId;
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         })
     },
 
@@ -44,7 +72,7 @@ var main = {
             alert('매장 삭제가 완료됐습니다.');
             window.location.href = "/";
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         })
     },
 

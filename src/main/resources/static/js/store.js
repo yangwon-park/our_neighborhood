@@ -51,12 +51,12 @@ var main = {
         const formData = new FormData(storeForm);
 
         axios({
-            method: "put",
+            method: "patch",
             url: "/store/edit/" + storeId,
             data: formData
         }).then((resp) => {
             alert('매장 정보 수정이 완료됐습니다.');
-            // window.location.href = "/store/" + storeId;
+            window.location.href = "/store/" + storeId;
         }).catch((error) => {
             console.error(error);
         })

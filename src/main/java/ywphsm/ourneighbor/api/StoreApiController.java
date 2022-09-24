@@ -23,8 +23,7 @@ public class StoreApiController {
     private final CategoryService categoryService;
 
     @PostMapping("/add")
-    public Long addStore(StoreDTO.Add dto,
-                           @RequestParam(value = "categoryId") List<Long> categoryId) {
+    public Long save(StoreDTO.Add dto, @RequestParam(value = "categoryId") List<Long> categoryId) {
 
         log.info("dto={}", dto);
         for (Long id : categoryId) {
@@ -38,7 +37,7 @@ public class StoreApiController {
         return storeService.save(dto, categoryList);
     }
 
-    @PutMapping("/edit/{storeId}")
+    @PatchMapping("/edit/{storeId}")
     public Long update(@PathVariable Long storeId, @Validated StoreDTO.Update dto,
                        @RequestParam List<Long> categoryId) {
 

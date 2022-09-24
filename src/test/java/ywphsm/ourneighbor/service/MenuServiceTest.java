@@ -1,7 +1,5 @@
 package ywphsm.ourneighbor.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,25 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.Menu;
-import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.domain.store.StoreStatus;
 
 import javax.persistence.EntityManager;
 
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -92,7 +84,7 @@ class MenuServiceTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        List<Menu> menuList = storeService.findOne(storeId).getMenuList();
+        List<Menu> menuList = storeService.findById(storeId).getMenuList();
 
 
         for (Menu menu : menuList) {

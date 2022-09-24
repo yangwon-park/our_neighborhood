@@ -35,7 +35,7 @@ public class MenuController {
 
     @GetMapping("/edit/{storeId}")
     public String editMenu(@PathVariable Long storeId, Model model) {
-        Store findStore = storeService.findOne(storeId);
+        Store findStore = storeService.findById(storeId);
 
         List<Menu> list = findStore.getMenuList();
         List<MenuDTO.Update> menuList = list.stream()

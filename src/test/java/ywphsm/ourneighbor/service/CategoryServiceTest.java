@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,7 +81,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 삭제")
-    void delete() throws Exception {
+    void deleteStore() throws Exception {
 
         Long categoryId = categoryService.save(CategoryDTO.builder()
                 .name("category")
@@ -89,10 +90,11 @@ class CategoryServiceTest {
 
         String url = "http://localhost" + port + "/category/" + categoryId;
 
-        mvc.perform(MockMvcRequestBuilders.delete(url))
+        mvc.perform(delete(url))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        assertThatThrownBy(() -> categoryService.findById(categoryId)).isInstanceOf(NoSuchElementException.class);
+        assertThatThrownBy(() -> categoryService.findById(categoryId))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

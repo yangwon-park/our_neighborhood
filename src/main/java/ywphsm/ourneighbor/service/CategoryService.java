@@ -22,7 +22,7 @@ public class CategoryService {
 
     public Category findById(Long categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("존재 하지 않는 카테고리입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. id = " + categoryId));
     }
 
     // 카테고리 등록

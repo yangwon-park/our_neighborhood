@@ -42,11 +42,8 @@ public class MenuController {
                 .map(MenuDTO.Update::new)
                 .collect(Collectors.toList());
 
-
         model.addAttribute("menuList", menuList);
 
         return "/menu/edit_form";
     }
-
-
 }

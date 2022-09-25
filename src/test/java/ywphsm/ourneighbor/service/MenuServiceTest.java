@@ -95,30 +95,4 @@ class MenuServiceTest {
         }
     }
 
-
-    @Test
-    @DisplayName("한 매장의 모든 메뉴 불러오기")
-    void findAllMenuInAStore() {
-        List<Store> stores = storeService.findStores();
-
-        for (Store store : stores) {
-            List<Menu> menuList = findMenuList(store);
-
-            for (Menu menu : menuList) {
-                if (menu.getStore().getId().equals(store.getId())) {
-                    assertThat(store.getName()).isEqualTo(menu.getStore().getName());
-                    System.out.println("메뉴 이름 : " + menu.getName());
-                }
-            }
-        }
-    }
-
-    // 한 매장 내의 메뉴 불러오는 메소드
-    private List<Menu> findMenuList(Store store) {
-        return queryFactory
-                .select(menu)
-                .from(menu)
-                .where(menu.store.id.eq(store.getId()))
-                .fetch();
-    }
 }

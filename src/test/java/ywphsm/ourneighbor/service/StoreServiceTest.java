@@ -75,12 +75,10 @@ class StoreServiceTest {
 //      https://stackoverflow.com/questions/45044021/spring-mockmvc-request-parameter-list => 참고
 
         List<String> off = new ArrayList<>();
-
         off.add("일");
         off.add("토");
 
         List<String> categoryId = new ArrayList<>();
-
         categoryId.add("4");
         categoryId.add("6");
         categoryId.add("13");
@@ -122,6 +120,8 @@ class StoreServiceTest {
 
         assertThat(findStore.getName()).isEqualTo(dto.getName());
 
+        assertThat(findStore.getOffDays().get(0)).isEqualTo("일");
+
         // 설정된 카테고리의 개수 확인
         assertThat(findStore.getCategoryOfStoreList().size()).isEqualTo(3);
 
@@ -136,8 +136,12 @@ class StoreServiceTest {
     @Test
     @DisplayName("매장 수정")
     void updateStore() throws Exception {
-        List<Long> categoryId = new ArrayList<>();
 
+        List<String> off = new ArrayList<>();
+        off.add("일");
+        off.add("토");
+
+        List<Long> categoryId = new ArrayList<>();
         categoryId.add(4L);
         categoryId.add(6L);
         categoryId.add(13L);
@@ -168,6 +172,7 @@ class StoreServiceTest {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.addAll("categoryId", updateCategoryId);
+        params.addAll("offDays", off);
 
         StoreDTO.Update dto = StoreDTO.Update.builder()
                 .name("할인마트")
@@ -213,7 +218,7 @@ class StoreServiceTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        Store findStore = storeService.findById(storeId);
+        Store findStore = storeService.searchByKeyword(dto.getName()).get(0);
 
         assertThat(findStore.getName()).isEqualTo(dto.getName());
 

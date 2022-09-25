@@ -45,7 +45,7 @@ public class Store extends BaseEntity {
 //    private List<DaysOfStore> daysOfStore;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<String> offDays;
+    private List<String> offDays = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private StoreStatus status;               // 가게 오픈 상황
@@ -162,13 +162,16 @@ public class Store extends BaseEntity {
         // 현재 시간
         LocalTime time = LocalTime.now();
 
-        for (String offDay : offDays) {
-            if (today.equals(offDay)) {
+        if (!offDays.isEmpty()) {
+            for (String offDay : offDays) {
+                if (today.equals(offDay)) {
 
-                updateStatus(StoreStatus.CLOSED);
-                return;
+                    updateStatus(StoreStatus.CLOSED);
+                    return;
+                }
             }
         }
+
 
         // null인 경우를 처리하지 않으면 에러 발생 (검색 결과가 2개 이상인 경우 그냥 터져버림)
         if (businessTime.getOpeningTime() == null || businessTime.getClosingTime() == null) {

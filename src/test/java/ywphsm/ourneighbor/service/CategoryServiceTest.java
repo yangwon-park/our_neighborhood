@@ -9,17 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.dto.CategoryDTO;
 
-import java.awt.*;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -31,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
 @Transactional
-@Rollback(value = true)
 class CategoryServiceTest {
 
     @Autowired

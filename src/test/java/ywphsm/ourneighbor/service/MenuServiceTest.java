@@ -15,18 +15,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.EntityManager;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.QMenu.*;
@@ -46,11 +48,6 @@ class MenuServiceTest {
 
     @Autowired
     StoreService storeService;
-
-    @Autowired
-    EntityManager em;
-
-    JPAQueryFactory queryFactory;
 
     @BeforeEach
     void before() {
@@ -73,11 +70,12 @@ class MenuServiceTest {
         String name = "test";
         Integer price = 10000;
 
-        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
+//        new MockMultipartFile("필드명", storedFileName, contentType, 서버에 있는 파일 경로)
+        MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
-        mvc.perform(multipart("/menu/add")
-                        .file(file).part(new MockPart("id", "foo".getBytes(StandardCharsets.UTF_8)))
+        mvc.perform(multipart("/menu")
+                        .file(file)
                         .param("storeId", String.valueOf(storeId))
                         .param("name", name)
                         .param("price", String.valueOf(price)))
@@ -85,7 +83,6 @@ class MenuServiceTest {
                 .andExpect(status().isOk());
 
         List<Menu> menuList = storeService.findById(storeId).getMenuList();
-
 
         for (Menu menu : menuList) {
             if (menu.getName().equals(name)) {
@@ -95,4 +92,74 @@ class MenuServiceTest {
         }
     }
 
+    @Test
+    @DisplayName("메뉴 수정")
+    void updateMenu() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
+
+        Long storeId = 24L;
+
+        MenuDTO.Add dto = MenuDTO.Add.builder()
+                .storeId(storeId)
+                .name("menu")
+                .price(10000)
+                .file(file)
+                .build();
+
+        Long menuId = menuService.save(dto);
+
+        System.out.println("menuId = " + menuId);
+
+        MockMultipartFile newFile = new MockMultipartFile("file", "new.png", "image/png",
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
+
+
+        mvc.perform(multipart("/menu/" + storeId)
+                        .file(newFile)
+                        .param("id", String.valueOf(menuId))
+                        .param("storeId", String.valueOf(storeId))
+                        .param("name", "new")
+                        .param("price", String.valueOf(12000))
+                        .with(req -> {
+                            req.setMethod("PUT");
+                            return req;
+                        }))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Menu menu = menuService.findById(menuId);
+        assertThat(menu.getFile().getUploadedFileName()).isEqualTo("new.png");
+        assertThat(menu.getName()).isEqualTo("new");
+        assertThat(menu.getPrice()).isEqualTo(12000);
+        assertThat(menu.getStore().getId()).isEqualTo(24L);
+    }
+
+    @Test
+    @DisplayName("메뉴 삭제")
+    void deleteMenu() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
+
+        Long storeId = 24L;
+
+        MenuDTO.Add dto = MenuDTO.Add.builder()
+                .storeId(storeId)
+                .name("menu")
+                .price(10000)
+                .file(file)
+                .build();
+
+        Long menuId = menuService.save(dto);
+
+        String url = "http://localhost" + port + "/menu/" + storeId;
+
+        mvc.perform(delete(url)
+                        .param("menuId", String.valueOf(menuId)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        assertThatThrownBy(() -> menuService.findById(menuId))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }

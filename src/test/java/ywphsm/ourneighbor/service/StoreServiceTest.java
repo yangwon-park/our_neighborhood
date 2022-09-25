@@ -37,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
 @Transactional
-@Rollback(value = true)
 class StoreServiceTest {
 
     @Autowired
@@ -46,20 +45,13 @@ class StoreServiceTest {
     private MockMvc mvc;
 
     @Autowired
-    EntityManager em;
-
-    @Autowired
     StoreService storeService;
 
     @Autowired
     CategoryService categoryService;
 
-    // Querydsl 사용
-    JPAQueryFactory queryFactory;
-
     @BeforeEach
     void before() {
-        queryFactory = new JPAQueryFactory(em);
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())

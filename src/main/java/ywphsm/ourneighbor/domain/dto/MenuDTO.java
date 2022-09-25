@@ -26,14 +26,14 @@ public class MenuDTO {
         @NotNull
         private Long storeId;
 
-        private MultipartFile image;
+        private MultipartFile file;
 
         @Builder
-        public Add(String name, Integer price, Long storeId, MultipartFile image) {
+        public Add(String name, Integer price, Long storeId, MultipartFile file) {
             this.name = name;
             this.price = price;
             this.storeId = storeId;
-            this.image = image;
+            this.file = file;
         }
 
         public Add(Menu menu) {
@@ -75,6 +75,21 @@ public class MenuDTO {
         private LocalDateTime discountStart;
 
         private LocalDateTime discountEnd;
+
+        @Builder
+        public Update(Long id, String name, Integer price, Long storeId,
+                      String storedFileName, MultipartFile file,
+                      int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd) {
+            this.id = id;
+            this.name = name;
+            this.price = price;
+            this.storeId = storeId;
+            this.storedFileName = storedFileName;
+            this.file = file;
+            this.discountPrice = discountPrice;
+            this.discountStart = discountStart;
+            this.discountEnd = discountEnd;
+        }
 
         @Builder
         public Update(Menu menu) {

@@ -92,7 +92,7 @@ class StoreServiceTest {
                 .closingTime(LocalTime.now())
                 .build();
 
-        mvc.perform(multipart("/store/add")
+        mvc.perform(multipart("/store")
                         .param("name", dto.getName())
                         .param("zipcode", dto.getZipcode())
                         .param("roadAddr", dto.getRoadAddr())
@@ -191,7 +191,7 @@ class StoreServiceTest {
 //            return request;
 //        });
 
-        mvc.perform(multipart("/store/edit/" + storeId)
+        mvc.perform(multipart("/store/" + storeId)
                         .param("name", dto.getName())
                         .param("zipcode", dto.getZipcode())
                         .param("roadAddr", dto.getRoadAddr())
@@ -204,7 +204,7 @@ class StoreServiceTest {
                         .param("closingTime", dto.getClosingTime().format(DateTimeFormatter.ofPattern("HH:mm")))
                         .params(params)
                         .with(req -> {
-                            req.setMethod("PATCH");
+                            req.setMethod("PUT");
                             return req;
                         }))
                 .andDo(print())
@@ -254,7 +254,7 @@ class StoreServiceTest {
                 .closingTime(LocalTime.now())
                 .build(), categoryList);
 
-        String url = "http://localhost:" + port + "/store/delete/" + storeId;
+        String url = "http://localhost:" + port + "/store/" + storeId;
 
         mvc.perform(delete(url))
                 .andDo(print())

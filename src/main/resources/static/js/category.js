@@ -73,7 +73,7 @@ var main = {
                 "Content-Type": "application/json"
             },
             method: "post",
-            url: "/category/add",
+            url: "/category",
             data: JSON.stringify(data),
         }).then((resp) => {
             alert('카테고리가 등록됐습니다.');

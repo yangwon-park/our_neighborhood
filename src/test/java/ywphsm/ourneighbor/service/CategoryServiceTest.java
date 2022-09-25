@@ -59,7 +59,7 @@ class CategoryServiceTest {
                 .parent_id(parentId)
                 .build();
 
-        String url = "http://localhost:" + port + "/category/add";
+        String url = "http://localhost:" + port + "/category";
 
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -22,7 +23,8 @@ import static ywphsm.ourneighbor.domain.QReview.*;
 import static ywphsm.ourneighbor.domain.member.QMember.*;
 import static ywphsm.ourneighbor.domain.store.QStore.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest
+        .WebEnvironment.RANDOM_PORT)
 @Transactional
 class ReviewServiceTest {
 

@@ -38,7 +38,7 @@ var main = {
                 "Access-Control-Allow_Origin": "*"
             },
             method: "post",
-            url: "/menu/add",
+            url: "/menu",
             data: new FormData(menuForm)
         }).then((resp) => {
             alert('메뉴가 등록됐습니다.')
@@ -58,24 +58,15 @@ var main = {
 
         const formData = new FormData(menuForm);
 
-        for (let key of formData.keys()) {
-            console.log(key);
-        }
-
-        for (let value of formData.values()) {
-            console.log(value);
-        }
-
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",
                 "Access-Control-Allow_Origin": "*"
             },
             method: "put",
-            url: "/menu/edit/" + storeId,
+            url: "/menu/" + storeId,
             data: formData
         }).then((resp) => {
-
             alert('메뉴 정보 수정이 완료됐습니다.');
             window.location.reload();
         }).catch((error) => {
@@ -85,9 +76,6 @@ var main = {
 
     delete: function (btnId) {
         const id = btnId.substring(15);
-
-        console.log(id);
-
         const storeId = document.getElementById('storeId').value;
         const menuId = document.getElementById('menuId' + id).value;
 
@@ -95,7 +83,7 @@ var main = {
 
         axios({
             method: "delete",
-            url: "/menu/edit/" + storeId,
+            url: "/menu/" + storeId,
             params: {
                 menuId: menuId
             }

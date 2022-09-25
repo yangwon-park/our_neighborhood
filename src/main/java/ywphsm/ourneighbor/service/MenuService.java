@@ -13,7 +13,6 @@ import ywphsm.ourneighbor.repository.menu.MenuRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -30,7 +29,7 @@ public class MenuService {
     public Long save(MenuDTO.Add menuAddDTO) throws IOException {
         Store linkedStore = storeRepository.findById(menuAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
 
-        UploadFile storedImage = fileStore.storeFile(menuAddDTO.getImage());
+        UploadFile storedImage = fileStore.storeFile(menuAddDTO.getFile());
 
         Menu menu = menuAddDTO.toEntity(linkedStore);
         storedImage.addMenu(menu);
@@ -78,7 +77,7 @@ public class MenuService {
     }
     // 메뉴 하나 조회
 
-    public Menu findOne(Long menuId) {
+    public Menu findById(Long menuId) {
         return menuRepository.findById(menuId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + menuId));
     }

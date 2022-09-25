@@ -22,20 +22,20 @@ public class MenuApiController {
 
     private final FileStore fileStore;
 
-    @PostMapping(value = "/add")
+    @PostMapping
     public Long save(MenuDTO.Add dto) throws IOException {
 
         log.info("dto={}", dto);
         return menuService.save(dto);
     }
 
-    @PutMapping("/edit/{storeId}")
+    @PutMapping("/{storeId}")
     public Long update(@PathVariable Long storeId, MenuDTO.Update dto) throws IOException {
 
         return menuService.update(storeId, dto);
     }
 
-    @DeleteMapping("/edit/{storeId}")
+    @DeleteMapping("/{storeId}")
     public Long delete(@PathVariable Long storeId, @RequestParam Long menuId) {
         log.info("menuId={}", menuId);
         return menuService.delete(menuId);

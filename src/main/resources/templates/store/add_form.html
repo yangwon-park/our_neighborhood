@@ -33,7 +33,7 @@
                         <div class="text-muted text-center mt-2 mb-4 fs-2">매장 정보 등록</div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form class="form-floating" th:object="${store}" method="post">
+                        <form id="store-add-form"  class="form-floating" th:object="${store}">
                             <div class="form-group">
                                 <div class="mb-3">
                                     <input th:field="*{name}" th:errorclass="input-error" class="form-control"
@@ -158,7 +158,7 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-orange mt-4 float-end">매장 등록</button>
+                                <button id="store-save" type="button" class="btn btn-orange mt-4 float-end">매장 등록</button>
                             </div>
                         </form>
                     </div>

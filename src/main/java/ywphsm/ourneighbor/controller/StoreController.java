@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
-import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -46,7 +43,7 @@ public class StoreController {
 
     @GetMapping("/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
-        Store store = storeService.findOne(storeId);
+        Store store = storeService.findById(storeId);
 
         StoreDTO.Detail dto = new StoreDTO.Detail(store);
 
@@ -75,27 +72,9 @@ public class StoreController {
         return "store/add_form";
     }
 
-    @PostMapping("/add")
-    public String addStore(@Validated @ModelAttribute("store") StoreDTO.Add dto, BindingResult bindingResult,
-                           @RequestParam(value = "categoryId") List<Long> categoryId) {
-
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "store/add_form";
-        }
-
-        List<Category> categoryList = categoryId.stream()
-                                                .map(categoryService::findById)
-                                                .collect(Collectors.toList());
-
-        storeService.save(dto, categoryList);
-
-        return "redirect:/";
-    }
-
     @GetMapping("/edit/{storeId}")
     public String editStore(@PathVariable Long storeId, Model model) {
-        Store findStore = storeService.findOne(storeId);
+        Store findStore = storeService.findById(storeId);
         StoreDTO.Update store = new StoreDTO.Update(findStore);
 
         model.addAttribute("store", store);

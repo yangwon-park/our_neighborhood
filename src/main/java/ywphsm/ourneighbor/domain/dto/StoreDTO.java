@@ -23,7 +23,7 @@ public class StoreDTO {
     @NoArgsConstructor
     public static class Add {
 
-        @NotBlank(message = "필수값입니다.")
+        @NotBlank()
         private String name;
 
         @NotBlank
@@ -68,6 +68,28 @@ public class StoreDTO {
 
         private List<CategoryOfStoreDTO> categoryOfStores;
 
+        @Builder
+        public Add(String name, String zipcode, String roadAddr, String numberAddr, String detail,
+                   Double lat, Double lon, String phoneNumber,
+                   LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
+                   String notice, String intro, List<String> offDays, List<CategoryOfStoreDTO> categoryOfStores) {
+            this.name = name;
+            this.zipcode = zipcode;
+            this.roadAddr = roadAddr;
+            this.numberAddr = numberAddr;
+            this.detail = detail;
+            this.lat = lat;
+            this.lon = lon;
+            this.phoneNumber = phoneNumber;
+            this.openingTime = openingTime;
+            this.closingTime = closingTime;
+            this.breakStart = breakStart;
+            this.breakEnd = breakEnd;
+            this.notice = notice;
+            this.intro = intro;
+            this.offDays = offDays;
+            this.categoryOfStores = categoryOfStores;
+        }
 
         @Builder
         public Add(Store store) {
@@ -245,6 +267,30 @@ public class StoreDTO {
         private List<CategoryOfStoreDTO> categoryList;
 
         @Builder
+        public Update(String name, String phoneNumber, Double lat, Double lon,
+                      LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
+                      String notice, String intro, List<String> offDays,
+                      String zipcode, String roadAddr, String numberAddr, String detail,
+                      List<CategoryOfStoreDTO> categoryList) {
+            this.name = name;
+            this.phoneNumber = phoneNumber;
+            this.lat = lat;
+            this.lon = lon;
+            this.openingTime = openingTime;
+            this.closingTime = closingTime;
+            this.breakStart = breakStart;
+            this.breakEnd = breakEnd;
+            this.notice = notice;
+            this.intro = intro;
+            this.offDays = offDays;
+            this.zipcode = zipcode;
+            this.roadAddr = roadAddr;
+            this.numberAddr = numberAddr;
+            this.detail = detail;
+            this.categoryList = categoryList;
+        }
+
+        @Builder
         public Update(Store store) {
             storeId = store.getId();
             name = store.getName();
@@ -262,9 +308,6 @@ public class StoreDTO {
             roadAddr = store.getAddress().getRoadAddr();
             numberAddr = store.getAddress().getNumberAddr();
             detail = store.getAddress().getDetail();
-//            menuList = store.getMenuList().stream()
-//                    .map(MenuDTO.Detail::new)
-//                    .collect(Collectors.toList());
             categoryList = store.getCategoryOfStoreList().stream()
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());

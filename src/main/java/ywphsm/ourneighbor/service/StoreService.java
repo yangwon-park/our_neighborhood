@@ -70,7 +70,7 @@ public class StoreService {
     public Long delete(Long storeId) {
 
         Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 매장이 없습니다. storeId = " + storeId));
+                () -> new IllegalArgumentException("해당 매장이 없습니다. id = " + storeId));
 
         storeRepository.delete(store);
 
@@ -78,7 +78,7 @@ public class StoreService {
     }
 
     // 매장 하나 조회
-    public Store findOne(Long storeId) {
+    public Store findById(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
 

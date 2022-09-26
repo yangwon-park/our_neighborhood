@@ -47,7 +47,7 @@
                                                 <label th:for="|menu-edit-name${i.index+1}|">
                                                     메뉴 이름
                                                 </label>
-                                                <input th:id="|menu-edit-name${i.index+1}|" name="name"
+                                                <input class="form-control" th:id="|menu-edit-name${i.index+1}|" name="name"
                                                        th:value="${menu.name}"/>
                                             </div>
                                         </div>
@@ -56,7 +56,7 @@
                                                 <label th:for="|menu-edit-price${i.index+1}|">
                                                     상품 가격
                                                 </label>
-                                                <input th:id="|menu-edit-price${i.index+1}|" name="price"
+                                                <input class="form-control" th:id="|menu-edit-price${i.index+1}|" name="price"
                                                        th:value="${menu.price}"/>
                                             </div>
                                         </div>
@@ -65,7 +65,7 @@
                                                 <label th:for="|menu-edit-dcPrice${i.index+1}|">
                                                     할인 가격
                                                 </label>
-                                                <input th:id="|menu-edit-dcPrice${i.index+1}|" name="discountPrice"
+                                                <input class="form-control" th:id="|menu-edit-dcPrice${i.index+1}|" name="discountPrice"
                                                        th:value="${menu.discountPrice}"/>
                                                 <span></span>
                                             </div>
@@ -75,9 +75,8 @@
                                                 <label th:for="|menu-edit-dcStart${i.index+1}|">
                                                     할인 시작
                                                 </label>
-                                                <input th:id="|menu-edit-dcStart${i.index+1}|" name="discountStart"
-                                                       type="time"
-                                                       th:value="${menu.discountStart}"/>
+                                                <input class="form-control" th:id="|menu-edit-dcStart${i.index+1}|"
+                                                       name="discountStart" type="time" th:value="${menu.discountStart}"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -85,15 +84,14 @@
                                                 <label th:for="|menu-edit-dcEnd${i.index+1}|">
                                                     할인 종료
                                                 </label>
-                                                <input th:id="|menu-edit-dcEnd${i.index+1}|" name="discountEnd"
-                                                       type="time"
-                                                       th:value="${menu.discountEnd}"/>
+                                                <input class="form-control" th:id="|menu-edit-dcEnd${i.index+1}|"
+                                                       name="discountEnd" type="time" th:value="${menu.discountEnd}"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="">
                                                 <label th:for="|menu-edit-image${i.index+1}|">
-                                                    이미지
+                                                    이미지 (수정 시 재업로드 필요합니다.)
                                                 </label>
                                                 <input th:id="|menu-edit-image${i.index+1}|" name="file"
                                                        type="file"/>

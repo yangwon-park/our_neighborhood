@@ -37,6 +37,8 @@ var main = {
         const price = document.getElementById("price");
         const file = document.getElementById("file");
 
+        console.log(file.value)
+
         const storeId = document.getElementById("storeId").value;
 
         const nameValid = document.getElementById('menu-name-valid');
@@ -45,6 +47,7 @@ var main = {
 
         name.classList.remove("valid-custom");
         price.classList.remove("valid-custom");
+        file.classList.remove("valid-custom");
         validation.removeValidation(nameValid);
         validation.removeValidation(priceValid);
         validation.removeValidation(fileValid);
@@ -81,6 +84,11 @@ var main = {
             validation.addValidation(priceValid, "가격을 등록해주세요.");
         }
 
+        if (file.value === '') {
+            file.classList.add("valid-custom");
+            validation.addValidation(fileValid, "메뉴 이미지를 등록해주세요.");
+        }
+
     },
 
     save: function () {
@@ -104,7 +112,6 @@ var main = {
     },
 
     update: function (btnId) {
-        console.log("===menuUpdate===");
         const id = btnId.substring(13);
 
         const menuForm = document.getElementById('menu-edit-form' + id);

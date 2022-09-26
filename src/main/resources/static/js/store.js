@@ -98,7 +98,7 @@ var main = {
         for (const el in els) {
             if (els[el].value === '') {
                 els[el].classList.add("valid-custom");
-                validation.addValidation(valids[el + "Valid"], "값을 입력해주세요.");
+                validation.addValidation(valids[el + "Valid"], "위의 값들은 필수입니다.");
             }
         }
 

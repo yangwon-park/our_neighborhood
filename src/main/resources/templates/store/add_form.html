@@ -33,13 +33,13 @@
                         <div class="text-muted text-center mt-2 mb-4 fs-2">매장 정보 등록</div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form id="store-add-form"  class="form-floating" th:object="${store}">
+                        <form id="store-add-form" class="form-floating" th:object="${store}">
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{name}" th:errorclass="input-error" class="form-control"
+                                    <input th:field="*{name}" class="form-control"
                                            placeholder="매장 이름을 입력해주세요." type="text">
-                                    <div class="input-error" th:errors="*{name}"></div>
-                                </div>
+                                    <div id="store-name-valid" class="my-1 valid-custom">
+                                    </div>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="mb-3">

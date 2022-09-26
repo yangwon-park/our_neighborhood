@@ -23,7 +23,7 @@ public class StoreDTO {
     @NoArgsConstructor
     public static class Add {
 
-        @NotBlank()
+        @NotBlank
         private String name;
 
         @NotBlank

@@ -46,13 +46,13 @@
                                         <option th:each="cate : ${all}" th:value="${cate.getCategoryId()}"
                                                 th:text="${cate.getName()}"></option>
                                     </select>
-                                    <div id="category-select-valid" class="my-1" style="display: none">
+                                    <div id="category-select-valid" class="my-1 valid-custom">
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <input th:field="${category.name}" class="form-control"
                                            placeholder="카테고리 이름" type="text" required/>
-                                    <div id="category-name-valid" class="my-1" style="display: none">
+                                    <div id="category-name-valid" class="my-1 valid-custom">
                                     </div>
                                 </div>
                             </div>
@@ -72,27 +72,6 @@
 <footer th:replace="layout/footer :: common_footer">
 
 </footer>
-<script>
-    (function () {
-        'use strict'
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll('.needs-validation')
-
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-                document.getElementById('category-add').addEventListener('click', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-
-                    form.classList.add('was-validated')
-                }, false)
-            })
-    })()
-</script>
 <script type="module" th:src="@{/js/category.js}"></script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 </body>

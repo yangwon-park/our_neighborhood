@@ -85,6 +85,7 @@ var main = {
             _skyStatus.appendChild(fontAwesome);
             _tmp.innerText = "현재 기온 : " + resp.data.tmp + "℃";
             _pop.innerText = "강수 확률 : " + resp.data.pop + "%";
+            console.log("setWeather Success");
 
             mask.closeMask();
         }).catch((error) => {

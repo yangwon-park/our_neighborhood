@@ -72,7 +72,7 @@ class MenuServiceTest {
 
 //        new MockMultipartFile("필드명", storedFileName, contentType, 서버에 있는 파일 경로)
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
-                new FileInputStream("/C/Users/ywOnp/Desktop/Study/review/file/fb675083-66b1-42b7-891a-d58e6b2eac0d.jpg"));
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
         mvc.perform(multipart("/menu")
                         .file(file)

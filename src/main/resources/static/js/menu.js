@@ -1,3 +1,5 @@
+import validation from "./validation.js";
+
 var main = {
     init: async function () {
         var _this = this;
@@ -8,7 +10,8 @@ var main = {
 
         if (menuSaveBtn !== null) {
             menuSaveBtn.addEventListener('click', () => {
-                _this.save()
+                _this.check()
+                // _this.save()
             });
         }
 
@@ -29,8 +32,59 @@ var main = {
         }
     },
 
+    check: function () {
+        const name = document.getElementById("name");
+        const price = document.getElementById("price");
+        const file = document.getElementById("file");
+
+        const storeId = document.getElementById("storeId").value;
+
+        const nameValid = document.getElementById('menu-name-valid');
+        const priceValid = document.getElementById('menu-price-valid');
+        const fileValid = document.getElementById('menu-file-valid');
+
+        name.classList.remove("valid-custom");
+        price.classList.remove("valid-custom");
+        validation.removeValidation(nameValid);
+        validation.removeValidation(priceValid);
+        validation.removeValidation(fileValid);
+
+        if (name.value !== '' && storeId !== '' && price.value !== '') {
+            axios({
+                method: "get",
+                url: "/menu/check",
+                params: {
+                    name: name.value,
+                    storeId: storeId
+                }
+            }).then((resp) => {
+                let check = resp.data;
+
+                if (check === false) {
+                    this.save();
+                } else {
+                    alert("이미 등록된 메뉴입니다.");
+                    window.location.reload();
+                }
+            }).catch((e) => {
+                console.error(e);
+            });
+        }
+
+        if (name.value === '') {
+            name.classList.add("valid-custom");
+            validation.addValidation(nameValid, "메뉴 이름을 등록해주세요.");
+        }
+
+        if (price.value === '') {
+            price.classList.add("valid-custom");
+            validation.addValidation(priceValid, "가격을 등록해주세요.");
+        }
+
+    },
+
     save: function () {
-        const menuForm = document.getElementById('menuForm')
+        const menuForm = document.getElementById('menu-add-form')
 
         axios({
             headers: {

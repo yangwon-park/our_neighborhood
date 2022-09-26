@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ywphsm.ourneighbor.domain.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
+import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.MenuService;
+import ywphsm.ourneighbor.service.StoreService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,8 +23,16 @@ import java.net.MalformedURLException;
 public class MenuApiController {
 
     private final MenuService menuService;
+    private final StoreService storeService;
 
     private final FileStore fileStore;
+
+    @GetMapping("/check")
+    public ResponseEntity<Boolean> checkMenuDuplicate(String name, Long storeId) {
+        Store store = storeService.findById(storeId);
+
+        return ResponseEntity.ok(menuService.checkMenuDuplicate(name, store));
+    }
 
     @PostMapping
     public Long save(MenuDTO.Add dto) throws IOException {

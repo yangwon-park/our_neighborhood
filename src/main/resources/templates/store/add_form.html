@@ -35,43 +35,46 @@
                     <div class="card-body px-lg-5 py-lg-5">
                         <form id="store-add-form" class="form-floating" th:object="${store}">
                             <div class="form-group">
-                                <div class="mb-3">
+                                <div class="">
                                     <input th:field="*{name}" class="form-control"
                                            placeholder="매장 이름을 입력해주세요." type="text">
-                                    <div id="store-name-valid" class="my-1 valid-custom">
+                                </div>
+                                <div id="store-name-valid" class="my-1 valid-custom">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="d-flex">
+                                    <input th:field="*{zipcode}" class="form-control zipcode"
+                                           placeholder="우편 번호" type="text" readonly>
+                                    <button type="button" onclick="openPostcode()"
+                                            class="text-center btn btn-orange ms-3"
+                                            style="height: 3rem">우편 번호 찾기
+                                    </button>
+                                </div>
+                                <div id="store-zipcode-valid" class="my-1 valid-custom">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="">
+                                    <input th:field="*{roadAddr}" class="form-control roadAddr"
+                                           placeholder="도로명 주소" type="text" readonly>
+                                    <div id="store-roadAddr-valid" class="my-1 valid-custom">
                                     </div>
-                            </div>
-                            <div class="form-group d-flex">
-                                <div class="mb-3">
-                                    <input th:field="*{zipcode}" th:errorclass="input-error" class="form-control zipcode"
-                                           placeholder="우편 번호" type="text"
-                                           readonly>
-                                    <div class="input-error" th:errors="*{zipcode}"></div>
-                                </div>
-                                <button type="button" onclick="openPostcode()" class="text-center btn btn-orange ms-3"
-                                        style="height: 3rem">우편 번호 찾기
-                                </button>
-                            </div>
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <input th:field="*{roadAddr}" th:errorclass="input-error" class="form-control roadAddr"
-                                           placeholder="도로명 주소" type="text"
-                                           readonly>
-                                    <div class="input-error" th:errors="*{roadAddr}"></div>
                                 </div>
                             </div>
                             <div class="form-group">
+                                <div class="">
+                                    <input th:field="*{numberAddr}" class="form-control numberAddr"
+                                           placeholder="지번 주소" type="text">
+                                    <div id="store-numberAddr-valid" class="my-1 valid-custom">
+                                    </div>
+                                </div>
+                                <span id="guide" style="color:#999;display:none"></span>
+                            </div>
+                            <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{numberAddr}" th:errorclass="input-error" class="form-control numberAddr"
-                                           placeholder="지번 주소"
+                                    <input th:field="*{detail}" class="form-control" placeholder="상세 주소"
                                            type="text">
-                                    <div class="input-error" th:errors="*{numberAddr}"></div>
-                                </div>
-                            </div>
-                            <span id="guide" style="color:#999;display:none"></span>
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <input th:field="*{detail}" class="form-control" placeholder="상세 주소" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -86,61 +89,73 @@
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{phoneNumber}" class="form-control" placeholder="매장 전화 번호"
-                                           type="text">
+                                    <input th:field="*{phoneNumber}" class="form-control"
+                                           placeholder="매장 전화 번호" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{intro}" class="form-control" placeholder="매장 소개" type="text">
+                                    <input th:field="*{intro}" class="form-control"
+                                           placeholder="매장 소개" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{notice}" class="form-control" placeholder="매장 공지" type="text">
+                                    <input th:field="*{notice}" class="form-control"
+                                           placeholder="매장 공지" type="text">
                                 </div>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="me-3">
-                                    <label for="openingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업
+                                    <label for="openingTime" class="m-auto fw-light px-2"
+                                           style="font-size: 1rem">영업
                                         시작</label>
-                                    <input th:field="*{openingTime}" th:errorclass="input-error" class="form-control"
-                                           type="time">
-                                    <div class="input-error" th:errors="*{openingTime}"></div>
+                                    <input th:field="*{openingTime}" class="form-control" type="time">
+                                    <div id="store-openingTime-valid" class="my-1 valid-custom">
+                                    </div>
                                 </div>
                                 <div class="ms-3">
-                                    <label for="closingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업
+                                    <label for="closingTime" class="m-auto fw-light px-2"
+                                           style="font-size: 1rem">영업
                                         종료</label>
-                                    <input th:field="*{closingTime}" th:errorclass="input-error" class="form-control"
+                                    <input th:field="*{closingTime}" class="form-control"
                                            type="time">
-                                    <div class="input-error" th:errors="*{closingTime}"></div>
+                                    <div id="store-closingTime-valid" class="my-1 valid-custom">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="me-3" style="width: 100%">
-                                    <label for="breakStart" class="m-auto fw-light px-2" style="font-size: 1rem">
+                                    <label for="breakStart" class="m-auto fw-light px-2"
+                                           style="font-size: 1rem">
                                         휴식 시작 (없으면 비워두세요)</label>
-                                    <input th:field="*{breakStart}" th:errorclass="input-error"
+                                    <input th:field="*{breakStart}"
                                            class="form-control input-time" type="time">
                                 </div>
                                 <div class="ms-3" style="width: 100%">
-                                    <label for="breakEnd" class="m-auto fw-light px-2" style="font-size: 1rem">
+                                    <label for="breakEnd" class="m-auto fw-light px-2"
+                                           style="font-size: 1rem">
                                         휴식 종료 (없으면 비워두세요)</label>
-                                    <input th:field="*{breakEnd}" th:errorclass="input-error"
+                                    <input th:field="*{breakEnd}"
                                            class="form-control input-time" type="time">
                                 </div>
                             </div>
-                            <div class="form-group d-flex">
-                                <div class="input-group input-group-alternative">
-                                    <select id="main-cate" name="categoryId" class="form-select">
+                            <div class="form-group">
+                                <div class="mb-3 d-flex">
+                                    <select id="main-cate" name="categoryId"
+                                            class="form-select me-1">
                                         <option value="">대분류 선택</option>
                                     </select>
-                                    <select id="mid-cate" name="categoryId" class="form-select">
+                                    <select id="mid-cate" name="categoryId"
+                                            class="form-select me-1">
                                         <option value="">중분류 선택</option>
                                     </select>
-                                    <select id="sub-cate" name="categoryId" class="form-select">
+                                    <select id="sub-cate" name="categoryId"
+                                            class="form-select">
                                         <option value="">소분류 선택</option>
                                     </select>
+                                </div>
+                                <div id="store-category-valid" class="my-1 valid-custom">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -151,14 +166,18 @@
                                     <div th:each="day : ${offDays}"
                                          class="custom-control custom-checkbox mb-3 me-3">
                                         <input class="custom-control-input" type="checkbox"
-                                               th:field="${store.offDays}" th:value="${day.value}">
+                                               th:field="${store.offDays}"
+                                               th:value="${day.value}">
                                         <label class="custom-control-label"
-                                               th:for="${#ids.prev('offDays')}" th:text="${day.key}">일</label>
+                                               th:for="${#ids.prev('offDays')}"
+                                               th:text="${day.key}">일</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button id="store-save" type="button" class="btn btn-orange mt-4 float-end">매장 등록</button>
+                                <button id="store-save" type="button"
+                                        class="btn btn-orange mt-4 float-end">매장 등록
+                                </button>
                             </div>
                         </form>
                     </div>

@@ -76,11 +76,17 @@ body {
     display: none;
 }
 
-.input-error {
-    border-color: #ff253a;
-    color: #ff253a;
+.hidden {
+    display: none;
 }
 
+.valid-custom {
+    border-color: #ff253a;
+    color: #ff253a;
+    display: block;
+}
+
+/* color까지 지정하면 select 박스의 모든 폰트가 붉어짐*/
 .input-error-border {
     border-color: #ff253a;
 }

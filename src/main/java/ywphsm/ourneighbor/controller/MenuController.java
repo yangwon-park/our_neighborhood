@@ -42,6 +42,8 @@ public class MenuController {
                 .map(MenuDTO.Update::new)
                 .collect(Collectors.toList());
 
+        log.info("menuList={}", menuList.get(0).getStoredFileName());
+
         model.addAttribute("menuList", menuList);
 
         return "/menu/edit_form";

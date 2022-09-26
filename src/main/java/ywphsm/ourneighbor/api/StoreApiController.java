@@ -23,7 +23,7 @@ public class StoreApiController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public Long save(StoreDTO.Add dto, @RequestParam(value = "categoryId") List<Long> categoryId) {
+    public Long save(@Validated StoreDTO.Add dto, @RequestParam(value = "categoryId") List<Long> categoryId) {
 
         log.info("dto={}", dto);
         for (Long id : categoryId) {

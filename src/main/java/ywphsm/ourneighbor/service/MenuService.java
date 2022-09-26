@@ -81,4 +81,8 @@ public class MenuService {
         return menuRepository.findById(menuId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + menuId));
     }
+
+    public boolean checkMenuDuplicate(String name, Store store) {
+        return menuRepository.existsByNameAndStore(name, store);
+    }
 }

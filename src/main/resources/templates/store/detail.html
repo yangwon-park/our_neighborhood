@@ -97,16 +97,12 @@
             </div>
             <div class="col-12 my-1">
                 <p>
-                    <span th:text="*{notice}"></span>
+                    <span class="fw-bold" style="color: red" th:text="*{notice}"></span>
                 </p>
             </div>
         </div>
-        <hr class="my-2">
-        <div class="row store-menu">
-            <div class="col-6 d-flex">
-                <h1 class="my-auto" style="font-size: 1.5rem">메뉴</h1>
-            </div>
-            <div class="col-6">
+        <div class="row">
+            <div class="col-12">
                 <div class="float-end">
                     <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
                             th:onclick="|location.href='@{/menu/edit/{storeId}(storeId=${store.storeId})}'|">
@@ -118,17 +114,37 @@
                     </button>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12" th:each="menu : *{menuList}">
-                <img th:src="|/menu/${menu.getStoredFileName()}|" width="150" height="150" alt="메뉴 사진">
-                <span th:text="${menu.getName()}"></span>
-                <span th:text="${menu.getPrice()}"></span>
+        </div>
+        <hr class="my-2">
+        <div class="menu-list">
+            <div class="row menu-sub" th:each="t: ${menuTypes}">
+                <th:block th:each="menu, stat : *{menuList}">
+                    <th:block th:if="${#strings.equals(t.name(), menu.type)}"
+                              th:with="isDuplicated=${stat.index > 0 &&
+                                store.menuList[stat.index - 1].type== store.menuList[stat.index].type}">
+                        <div class="col-12" th:if="${isDuplicated == false}">
+                            <div class="menu-title my-3">
+                                <div class="col-12">
+                                    <p class="my-auto h1" style="font-size: 1.5rem" th:text="${t.description}">메뉴</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="menu-detail">
+                                <img th:src="|/menu/${menu.storedFileName}|" width="150" height="150" alt="메뉴 사진">
+                                <span th:text="${menu.name}"></span>
+                                <span th:text="${menu.price}"></span>
+                            </div>
+                        </div>
+                    </th:block>
+                </th:block>
             </div>
         </div>
     </div>
 </section>
-<!--<footer th:replace="layout/footer :: common_footer">-->
-<!--    템플릿 푸터-->
-<!--</footer>-->
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
 <script th:replace="layout/footer :: common_js(~{::script})">
 </script>
 </body>

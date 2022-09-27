@@ -34,6 +34,13 @@
     --breakpoint-xl: 1200px;
     --font-family-sans-serif: Open Sans, sans-serif;
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    accent-color: #fb6340;
+}
+
+input[type=radio] {
+    accent-color: #fb6340;
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 html {

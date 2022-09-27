@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
+import ywphsm.ourneighbor.domain.menu.Menu;
 
 import javax.persistence.*;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.domain;
+package ywphsm.ourneighbor.domain.category;
 
 import lombok.AccessLevel;
 import lombok.Getter;

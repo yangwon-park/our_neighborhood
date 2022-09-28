@@ -65,11 +65,11 @@ public class Store extends BaseEntity {
      */
 
     // Menu (1:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Menu> menuList = new ArrayList<>();
 
     // Category (N:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
     // Many To Many인듯

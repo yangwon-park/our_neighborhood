@@ -79,7 +79,7 @@ public class StoreService {
 
     // 매장 하나 조회
     public Store findById(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(
+        Store store = storeRepository.findByIdWithFetch(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
 
         store.autoUpdateStatus(store.getOffDays(), store.getBusinessTime());

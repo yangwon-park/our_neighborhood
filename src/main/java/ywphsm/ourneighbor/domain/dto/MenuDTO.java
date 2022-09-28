@@ -4,7 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.validation.constraints.NotBlank;
@@ -23,15 +24,19 @@ public class MenuDTO {
         @NotNull
         private Integer price;
 
+        @NotBlank
+        private MenuType type;
+
         @NotNull
         private Long storeId;
 
         private MultipartFile file;
 
         @Builder
-        public Add(String name, Integer price, Long storeId, MultipartFile file) {
+        public Add(String name, Integer price, MenuType type, Long storeId, MultipartFile file) {
             this.name = name;
             this.price = price;
+            this.type = type;
             this.storeId = storeId;
             this.file = file;
         }
@@ -45,6 +50,7 @@ public class MenuDTO {
             return Menu.builder()
                     .name(name)
                     .price(price)
+                    .type(type)
                     .store(store)
                     .build();
         }
@@ -128,6 +134,9 @@ public class MenuDTO {
         @NotNull
         private int discountPrice;
 
+        @NotBlank
+        private MenuType type;
+
         private String storedFileName;
 
         private LocalDateTime discountStart;
@@ -138,6 +147,7 @@ public class MenuDTO {
             this.name = menu.getName();
             this.price = menu.getPrice();
             this.discountPrice = menu.getDiscountPrice();
+            this.type = menu.getType();
             this.storedFileName = menu.getFile().getStoredFileName();
             this.discountStart = menu.getDiscountStart();
             this.discountEnd = menu.getDiscountEnd();

@@ -2,11 +2,7 @@ package ywphsm.ourneighbor.repository.category;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import ywphsm.ourneighbor.domain.CategoryOfStore;
-import ywphsm.ourneighbor.domain.QCategoryOfStore;
-
-import java.util.List;
-import java.util.Optional;
+import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 
 import static ywphsm.ourneighbor.domain.QCategoryOfStore.*;
 

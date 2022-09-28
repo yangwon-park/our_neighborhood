@@ -2,7 +2,7 @@ package ywphsm.ourneighbor.controller.form;
 
 import lombok.Builder;
 import lombok.Data;
-import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.category.Category;
 
 @Data
 public class CategorySimpleDTO {

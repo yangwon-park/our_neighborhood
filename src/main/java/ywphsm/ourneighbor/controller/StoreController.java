@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
@@ -25,6 +26,11 @@ public class StoreController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
+
+    @ModelAttribute("menuTypes")
+    public MenuType[] menuTypes() {
+        return MenuType.values();
+    }
 
     @ModelAttribute("offDays")
     public Map<String, String> offDays() {

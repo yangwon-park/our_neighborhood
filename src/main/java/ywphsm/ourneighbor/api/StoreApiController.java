@@ -2,10 +2,9 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;

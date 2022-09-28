@@ -1,6 +1,7 @@
-package ywphsm.ourneighbor.domain;
+package ywphsm.ourneighbor.domain.menu;
 
 import lombok.*;
+import ywphsm.ourneighbor.domain.BaseEntity;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.store.Store;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
         "discountStart", "discountEnd"
 })
 @Entity
-public class Menu extends BaseEntity{
+public class Menu extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -30,6 +31,9 @@ public class Menu extends BaseEntity{
     private LocalDateTime discountStart;
 
     private LocalDateTime discountEnd;
+
+    @Enumerated(EnumType.STRING)
+    private MenuType type;
 
 
     /*
@@ -57,27 +61,17 @@ public class Menu extends BaseEntity{
             생성자를 강제하고 setter를 닫음으로써 값이 변경될 가능성을 차단함
             수정이 필요한 경우의 메소드는 별도로 작성하자
     */
-    public Menu(String name, Integer price, int discountPrice,
-                LocalDateTime discountStart, LocalDateTime discountEnd,
-                Store store) {
-        this.name = name;
-        this.price = price;
-        this.discountPrice = discountPrice;
-        this.discountStart = discountStart;
-        this.discountEnd = discountEnd;
-        this.store = store;
-    }
-
     @Builder
     public Menu(Long id, String name, Integer price, int discountPrice,
                 LocalDateTime discountStart, LocalDateTime discountEnd,
-                Store store, UploadFile file) {
+                MenuType type, Store store, UploadFile file) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.discountPrice = discountPrice;
         this.discountStart = discountStart;
         this.discountEnd = discountEnd;
+        this.type = type;
         this.store = store;
         this.file = file;
     }
@@ -96,9 +90,6 @@ public class Menu extends BaseEntity{
         this.discountPrice = menu.getDiscountPrice();
         this.discountStart = menu.getDiscountStart();
         this.discountEnd = menu.getDiscountEnd();
-    }
-
-    public void updateFileName(String a, String b) {
-        this.file.updateUploadedFileName(a, b);
+        this.type = menu.getType();
     }
 }

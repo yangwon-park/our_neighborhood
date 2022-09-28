@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.Category;
-import ywphsm.ourneighbor.domain.CategoryOfStore;
+import ywphsm.ourneighbor.domain.category.Category;
+import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
@@ -79,7 +79,7 @@ public class StoreService {
 
     // 매장 하나 조회
     public Store findById(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(
+        Store store = storeRepository.findByIdWithFetch(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
 
         store.autoUpdateStatus(store.getOffDays(), store.getBusinessTime());

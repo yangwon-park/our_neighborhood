@@ -2,8 +2,7 @@ package ywphsm.ourneighbor.repository.category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ywphsm.ourneighbor.domain.Category;
-import ywphsm.ourneighbor.domain.dto.CategoryDTO;
+import ywphsm.ourneighbor.domain.category.Category;
 
 import java.util.List;
 import java.util.Optional;

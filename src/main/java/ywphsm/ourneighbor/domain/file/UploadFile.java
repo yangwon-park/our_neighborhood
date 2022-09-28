@@ -3,7 +3,7 @@ package ywphsm.ourneighbor.domain.file;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.menu.Menu;
 
 import javax.persistence.*;
 

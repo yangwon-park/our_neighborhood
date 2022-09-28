@@ -3,10 +3,8 @@ package ywphsm.ourneighbor.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.CategoryDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 

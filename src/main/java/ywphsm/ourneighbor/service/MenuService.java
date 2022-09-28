@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;

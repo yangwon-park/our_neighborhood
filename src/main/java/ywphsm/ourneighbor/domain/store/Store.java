@@ -3,8 +3,11 @@ package ywphsm.ourneighbor.domain.store;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ywphsm.ourneighbor.domain.*;
+import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
+import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
+import ywphsm.ourneighbor.domain.menu.Menu;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -64,12 +67,17 @@ public class Store extends BaseEntity {
      */
 
     // Menu (1:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Menu> menuList = new ArrayList<>();
 
     // Category (N:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
+
+    // Hashtag (N:N)
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    private List<HashtagOfStore> hashtagOfStoreList = new ArrayList<>();
+
 
     // Many To Many인듯
 //    @ManyToOne(fetch = FetchType.LAZY)
@@ -85,6 +93,7 @@ public class Store extends BaseEntity {
     public Store(String name, Double lat, Double lon,
                  String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address) {
+
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -101,7 +110,8 @@ public class Store extends BaseEntity {
     public Store(Long id, String name, Double lat, Double lon,
                  String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address,
-                 List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList) {
+                 List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,
+                 List<HashtagOfStore> hashtagOfStoreList) {
         this.id = id;
         this.name = name;
         this.lat = lat;
@@ -115,6 +125,7 @@ public class Store extends BaseEntity {
         this.address = address;
         this.menuList = menuList;
         this.categoryOfStoreList = categoryOfStoreList;
+        this.hashtagOfStoreList = hashtagOfStoreList;
     }
 
     /*
@@ -143,10 +154,6 @@ public class Store extends BaseEntity {
         this.intro = store.getIntro();
         this.offDays = store.getOffDays();
         this.address = store.getAddress();
-    }
-
-    public void updateCategoryOfStore(List<CategoryOfStore> categoryOfStoreList) {
-        this.categoryOfStoreList = categoryOfStoreList;
     }
 
     public void updateStatus(StoreStatus status) {

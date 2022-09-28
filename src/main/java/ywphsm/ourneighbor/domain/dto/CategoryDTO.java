@@ -1,12 +1,10 @@
 package ywphsm.ourneighbor.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.category.Category;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.stream.Collectors;
 

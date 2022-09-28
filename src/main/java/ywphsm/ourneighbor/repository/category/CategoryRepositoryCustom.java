@@ -1,9 +1,6 @@
 package ywphsm.ourneighbor.repository.category;
 
-import ywphsm.ourneighbor.domain.CategoryOfStore;
-
-import java.util.List;
-import java.util.Optional;
+import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 
 public interface CategoryRepositoryCustom {
 

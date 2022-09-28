@@ -3,8 +3,9 @@ package ywphsm.ourneighbor.repository.category;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
+import ywphsm.ourneighbor.domain.category.QCategoryOfStore;
 
-import static ywphsm.ourneighbor.domain.QCategoryOfStore.*;
+import static ywphsm.ourneighbor.domain.category.QCategoryOfStore.*;
 
 @RequiredArgsConstructor
 public class CategoryRepositoryImpl implements CategoryRepositoryCustom{

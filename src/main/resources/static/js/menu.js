@@ -101,7 +101,7 @@ var main = {
         }
 
         if (typeCheck === false) {
-            validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");
+            validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");gi
         }
 
     },

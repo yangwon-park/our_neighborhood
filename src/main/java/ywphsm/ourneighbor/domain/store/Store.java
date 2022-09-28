@@ -110,7 +110,8 @@ public class Store extends BaseEntity {
     public Store(Long id, String name, Double lat, Double lon,
                  String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address,
-                 List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList) {
+                 List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,
+                 List<HashtagOfStore> hashtagOfStoreList) {
         this.id = id;
         this.name = name;
         this.lat = lat;
@@ -124,6 +125,7 @@ public class Store extends BaseEntity {
         this.address = address;
         this.menuList = menuList;
         this.categoryOfStoreList = categoryOfStoreList;
+        this.hashtagOfStoreList = hashtagOfStoreList;
     }
 
     /*
@@ -152,10 +154,6 @@ public class Store extends BaseEntity {
         this.intro = store.getIntro();
         this.offDays = store.getOffDays();
         this.address = store.getAddress();
-    }
-
-    public void updateCategoryOfStore(List<CategoryOfStore> categoryOfStoreList) {
-        this.categoryOfStoreList = categoryOfStoreList;
     }
 
     public void updateStatus(StoreStatus status) {

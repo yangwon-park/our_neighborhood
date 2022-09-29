@@ -63,8 +63,8 @@ class MenuServiceTest {
 
 //        new MockMultipartFile("필드명", storedFileName, contentType, 서버에 있는 파일 경로)
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
-                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
-//                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
+//                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
         mvc.perform(multipart("/menu")
                         .file(file)
@@ -88,8 +88,8 @@ class MenuServiceTest {
     @DisplayName("메뉴 수정")
     void updateMenu() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
-                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
-//                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
+//                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
         Long storeId = 24L;
 
@@ -105,8 +105,8 @@ class MenuServiceTest {
         System.out.println("menuId = " + menuId);
 
         MockMultipartFile newFile = new MockMultipartFile("file", "new.png", "image/png",
-                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
-//                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
+//                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
 
         mvc.perform(multipart("/menu/" + storeId)
@@ -133,8 +133,8 @@ class MenuServiceTest {
     @DisplayName("메뉴 삭제")
     void deleteMenu() throws Exception {
         MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
-//                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
+//                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
+                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
         Long storeId = 24L;
 

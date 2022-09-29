@@ -22,7 +22,4 @@ public class Hashtag {
 
     @OneToMany(mappedBy = "hashtag")
     private List<HashtagOfStore> hashtagOfStoreList = new ArrayList<>();
-
-
-
 }

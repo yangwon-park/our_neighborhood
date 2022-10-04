@@ -26,7 +26,9 @@ public class TokenService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(receiverEmail);   //보낼 이메일주소 추가
         mailMessage.setSubject("회원가입 이메일 인증");  //제목
-        mailMessage.setText("http://localhost:8080/sign_up/confirm-email?token=" + emailToken.getId());//URL+ 토큰ID
+        mailMessage.setText("우리동네 회원가입해주셔서 감사합니다.\n" +
+                "아래 링크를 클릭해서 회원가입을 마무리 해주세요!\n" +
+                "http://localhost:8080/sign_up/confirm-email?token=" + emailToken.getId());//URL+ 토큰ID
         emailService.sendEmail(mailMessage);
 
         return emailToken.getId();

@@ -39,7 +39,8 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oauth2User.getAttributes());
 
         Member member = saveOrUpdate(attributes);
-        session.setAttribute(SessionConst.LOGIN_API, new SessionUser(member));
+        session.setAttribute(SessionConst.LOGIN_MEMBER, member);
+//        session.setAttribute(SessionConst.LOGIN_API, new SessionUser(member));
         //sesssion에 dto로 담을지 member로 담을지 정해야함 dto로 담으면 엔티티끼리 연관관계충돌 방지!
         //LOGIN_MEMBER로 바꿔야함 지금 로그인 인식안됨
 

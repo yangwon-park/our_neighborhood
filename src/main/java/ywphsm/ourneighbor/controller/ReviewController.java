@@ -44,7 +44,7 @@ public class ReviewController {
             return "review/createReview";
         }
 
-        Store store = storeService.findOne(storeId);
+        Store store = storeService.findById(storeId);
         Review review = new Review(reviewForm.getContent(), reviewForm.getRating(), member, store);
         reviewService.saveReview(review);
 

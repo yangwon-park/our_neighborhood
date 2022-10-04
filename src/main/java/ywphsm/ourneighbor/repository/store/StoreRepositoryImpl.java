@@ -67,10 +67,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         return Optional.ofNullable(queryFactory
                 .select(store)
                 .from(store)
-                .innerJoin(store.menuList, menu)
-                .fetchJoin()
-                .innerJoin(menu.file, uploadFile)
-                .fetchJoin()
                 .where(store.id.eq(storeId))
                 .fetchOne());
     }

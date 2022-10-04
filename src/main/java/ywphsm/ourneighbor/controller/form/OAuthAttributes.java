@@ -75,7 +75,8 @@ public class OAuthAttributes {
         Map<String, Object> profile = (Map<String, Object>) response.get("profile");
 
         int gender = 1;
-        if ((response.get("gender")).equals("male")) {
+
+        if ((response.get("gender") == null) || (response.get("gender")).equals("male")) {
             gender = 0;
         }
 

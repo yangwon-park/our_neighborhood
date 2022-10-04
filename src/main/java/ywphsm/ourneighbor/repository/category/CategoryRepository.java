@@ -2,7 +2,7 @@ package ywphsm.ourneighbor.repository.category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.category.Category;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     List<Category> findAllByOrderByDepthAscParentIdAscNameAsc();
 
     @Query("select c from Category c where c.parent is NULL")
-    List<Category> findCategories();
+    List<Category> findByCategories();
 
     Optional<Category> findByNameAndDepth(String name, Long depth);
 
@@ -21,4 +21,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     Boolean existsByNameAndDepth(String name, Long depth);
 
     Boolean existsByNameAndParent(String name, Category parent);
+
+    Category findByName(String name);
 }

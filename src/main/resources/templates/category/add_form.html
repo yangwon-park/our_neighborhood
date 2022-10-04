@@ -32,10 +32,9 @@
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent">
                         <div class="text-muted text-center mt-2 mb-4 fs-2">카테고리 등록</div>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-dark mt-4 float-end me-3"
-                                id="category-delete">카테고리 삭제</button>
+                        <div class="text-muted text-right" style="font-size: 0.5rem">
+                            삭제를 원하시면 상위 카테고리만 선택하세요.
+                        </div>
                     </div>
                     <form id="category-form">
                         <div class="card-body px-lg-5 py-lg-5">
@@ -46,18 +45,21 @@
                                         <option th:each="cate : ${all}" th:value="${cate.getCategoryId()}"
                                                 th:text="${cate.getName()}"></option>
                                     </select>
-                                    <div id="category-select-valid" class="my-1" style="display: none">
+                                    <div id="category-select-valid" class="my-1 valid-custom">
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <input th:field="${category.name}" class="form-control"
                                            placeholder="카테고리 이름" type="text" required/>
-                                    <div id="category-name-valid" class="my-1" style="display: none">
+                                    <div id="category-name-valid" class="my-1 valid-custom">
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center">
-                                <button type="button" class="btn btn-orange mt-4" id="category-add">카테고리 등록</button>
+                            <div class="float-end">
+                                <button type="button" class="btn btn-dark mt-4"
+                                        id="category-delete">삭제</button>
+                                <button type="button" class="btn btn-orange mt-4"
+                                        id="category-add">등록</button>
                             </div>
                         </div>
                     </form>
@@ -69,27 +71,6 @@
 <footer th:replace="layout/footer :: common_footer">
 
 </footer>
-<script>
-    (function () {
-        'use strict'
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll('.needs-validation')
-
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-                document.getElementById('category-add').addEventListener('click', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-
-                    form.classList.add('was-validated')
-                }, false)
-            })
-    })()
-</script>
 <script type="module" th:src="@{/js/category.js}"></script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 </body>

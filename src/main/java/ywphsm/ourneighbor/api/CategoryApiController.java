@@ -3,10 +3,8 @@ package ywphsm.ourneighbor.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.CategoryDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 
@@ -36,15 +34,14 @@ public class CategoryApiController {
         return ResponseEntity.ok(categoryService.checkCategoryDuplicate(name, parent));
     }
 
-    @PostMapping("/category/add")
-    public Long save(@Validated CategoryDTO dto) {
-        return categoryService.saveCategory(dto);
+    // @RequestBody 생략 시, Test에서 받아오질 못함
+    @PostMapping(value = "/category", produces = "application/json;")
+    public Long save(@RequestBody CategoryDTO dto) {
+        return categoryService.save(dto);
     }
 
     @DeleteMapping("/category/{categoryId}")
     public Long delete(@PathVariable Long categoryId) {
-        categoryService.deleteCategory(categoryId);
-
-        return categoryId;
+        return categoryService.delete(categoryId);
     }
 }

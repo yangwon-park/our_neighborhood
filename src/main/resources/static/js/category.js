@@ -1,3 +1,5 @@
+import validation from "./validation.js";
+
 var main = {
     init: function () {
         let _this = this;
@@ -5,7 +7,8 @@ var main = {
         let categoryDeleteBtn = document.getElementById('category-delete');
 
         categorySaveBtn.addEventListener('click', () => {
-            _this.checkDuplicate();
+            _this.check();
+            // _this.save();
         });
 
         categoryDeleteBtn.addEventListener('click', () => {
@@ -13,11 +16,19 @@ var main = {
         })
     },
 
-    checkDuplicate: function () {
-        let parentId = $('#category-select option:selected').val();
+    check: function () {
+        const parentId = document.getElementById("category-select").options
+            [document.getElementById("category-select").selectedIndex].value;
+
         let name = document.getElementById('name').value;
         let selectValid = document.getElementById('category-select-valid');
         let nameValid = document.getElementById('category-name-valid');
+        const selectedCategory = document.getElementById('category-select')
+
+        selectedCategory.classList.remove('input-error-border');
+
+        validation.removeValidation(selectValid);
+        validation.removeValidation(nameValid);
 
         if (parentId !== '' && name !== '') {
             axios({
@@ -33,7 +44,7 @@ var main = {
                 if (check === false) {
                     this.save();
                 } else {
-                    alert('중복된 카테고리입니다.');
+                    alert("이미 등록된 카테고리입니다.");
                 }
             }).catch((e) => {
                 console.error(e);
@@ -41,33 +52,37 @@ var main = {
         }
 
         if (parentId === '') {
-            document.getElementById('category-select').classList.add('input-error-border');
-            selectValid.innerText = '상위 카테고리를 선택해주세요.'
-            selectValid.classList.add('input-error');
-            selectValid.style.display = 'block';
+            selectedCategory.classList.add('input-error-border');
+
+            validation.addValidation(selectValid, "상위 카테고리를 선택해주세요");
         }
 
         if (name === '') {
-            document.getElementById('name').classList.add('input-error');
-            nameValid.innerText = '카테고리명을 입력해주세요.'
-            nameValid.classList.add('input-error');
-            nameValid.style.display = 'block';
+            document.getElementById("name").classList.add("valid-custom");
+
+            validation.addValidation(nameValid, "카테고리명을 입력해주세요.");
         }
 
     },
 
     save: function () {
-        const categoryForm = document.getElementById('category-form');
-        const form = new FormData(categoryForm);
+        const parentId = document.getElementById("category-select").options
+            [document.getElementById("category-select").selectedIndex].value;
 
-        let parentId = $('#category-select option:selected').val();
+        const name = document.getElementById("name").value;
 
-        form.append('parentId', parentId);
+        let data= {
+            parentId: parentId,
+            name: name
+        }
 
         axios({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "post",
-            url: "/category/add",
-            data: form
+            url: "/category",
+            data: JSON.stringify(data),
         }).then((resp) => {
             alert('카테고리가 등록됐습니다.');
             window.location.reload();
@@ -77,19 +92,29 @@ var main = {
     },
 
     deleteCategory: function () {
-        let categoryId = $('#category-select option:selected').val();
+        const categoryId = document.getElementById("category-select").options
+            [document.getElementById("category-select").selectedIndex].value;
 
         console.log(categoryId);
 
-        axios({
-            method: "delete",
-            url: "/category/" + categoryId,
-        }).then((resp) => {
-            alert('카테고리 삭제가 완료됐습니다.');
-            window.location.reload();
-        }).catch((error) => {
-            console.log(error);
-        })
+        let selectValid = document.getElementById('category-select-valid');
+
+        if (categoryId === '') {
+            document.getElementById('category-select').classList.add('input-error-border');
+            validation.addValidation(selectValid, "삭제할 카테고리를 선택해주세요.");
+        } else {
+            validation.removeValidation(selectValid);
+
+            axios({
+                method: "delete",
+                url: "/category/" + categoryId,
+            }).then((resp) => {
+                alert('카테고리 삭제가 완료됐습니다.');
+                window.location.reload();
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
     },
 }
 

@@ -1,3 +1,5 @@
+import mask from './mask.js';
+
 var main = {
     setCookie: function (key, value, exp) {
         let date = new Date();
@@ -37,11 +39,8 @@ var main = {
 
         this.setWeatherInfo();
 
-        let nx = main.getCookie("nx");
-        let ny = main.getCookie("ny");
-        console.log("findCoords nx : " + nx)
-        console.log("findCoords ny : " + ny)
-        console.log("findCoords End");
+        main.getCookie("nx");
+        main.getCookie("ny");
     },
 
     setWeatherInfo: function () {
@@ -86,6 +85,9 @@ var main = {
             _skyStatus.appendChild(fontAwesome);
             _tmp.innerText = "현재 기온 : " + resp.data.tmp + "℃";
             _pop.innerText = "강수 확률 : " + resp.data.pop + "%";
+            console.log("setWeather Success");
+
+            mask.closeMask();
         }).catch((error) => {
             console.log(error);
         })

@@ -202,7 +202,7 @@ public class WeatherApiController {
             resultMap = mapper.readValue(sbf.toString(), HashMap.class);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception(url + "은 효한 URL이 아닙니다." + e);
+            throw new Exception(url + "은 유효한 URL이 아닙니다." + e);
         } finally {
             if (conn != null) conn.disconnect();
             if (br != null) br.close();

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>우리 동네</title>
+
+  <style>
+
+  </style>
+</head>
+<link rel="stylesheet" href="/css/argon.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<link href="/css/star.css" rel="stylesheet"/>
+<body class="bg-default">
+
+<!-- Navbar -->
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
+<section class="header">
+  <div class="header py-7 py-lg-8">
+    <div class="separator separator-bottom separator-skew zindex-100">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+           xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </div>
+</section>
+<!-- loginForm -->
+<section class="main">
+  <div class="container mt--8 pb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card bg-secondary shadow border-0">
+          <div class="card-header bg-transparent pb-5">
+            <div class="text-muted text-center mt-2 mb-4">
+              <small>리뷰 등록</small>
+            </div>
+            <div class="card-body px-lg-5 py-lg-5">
+              <form role="form" th:action th:object="${reviewForm}" method="post" id="myform">
+                <div class="form-group">
+                  <div th:if="${#fields.hasGlobalErrors()}">
+                    <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+                       th:text="${err}">전체 오류 메시지</p>
+                  </div>
+                </div>
+                <fieldset>
+                  <span class="text-bold">별점을 선택해주세요</span>
+                  <input type="radio" th:field="*{rating}" value="5" id="rating1"><label
+                        for="rating1">★</label>
+                  <input type="radio" th:field="*{rating}" value="4" id="rating2"><label
+                        for="rating2">★</label>
+                  <input type="radio" th:field="*{rating}" value="3" id="rating3"><label
+                        for="rating3">★</label>
+                  <input type="radio" th:field="*{rating}" value="2" id="rating4"><label
+                        for="rating4">★</label>
+                  <input type="radio" th:field="*{rating}" value="1" id="rating5"><label
+                        for="rating5">★</label>
+                </fieldset>
+                <div class="form-group">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                    </div>
+                    <textarea class="form-control" placeholder="200자 이하여야 합니다"
+                              id="content"
+                              th:field="*{content}"
+                              th:errorclass="field-error"></textarea>
+                    <div class="field-error" th:errors="*{content}"></div>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-orange mt-4">등록</button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+</body>
+<footer th:replace="layout/footer :: common_footer">
+  템플릿 푸터
+  <script th:replace="layout/footer :: common_js(~{::script})"></script>
+</footer>
+
+</html>
+
+</body>
+<footer th:replace="layout/footer :: common_footer">
+  템플릿 푸터
+  <script th:replace="layout/footer :: common_js(~{::script})"></script>
+</footer>
+
+</html>

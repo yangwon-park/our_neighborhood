@@ -1,6 +1,7 @@
-package ywphsm.ourneighbor.domain;
+package ywphsm.ourneighbor.domain.menu;
 
 import lombok.*;
+import ywphsm.ourneighbor.domain.BaseEntity;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.store.Store;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
         "discountStart", "discountEnd"
 })
 @Entity
-public class Menu extends BaseEntity{
+public class Menu extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -30,6 +31,9 @@ public class Menu extends BaseEntity{
     private LocalDateTime discountStart;
 
     private LocalDateTime discountEnd;
+
+    @Enumerated(EnumType.STRING)
+    private MenuType type;
 
 
     /*
@@ -58,22 +62,34 @@ public class Menu extends BaseEntity{
             수정이 필요한 경우의 메소드는 별도로 작성하자
     */
     @Builder
-    public Menu(String name, Integer price, int discountPrice,
+    public Menu(Long id, String name, Integer price, int discountPrice,
                 LocalDateTime discountStart, LocalDateTime discountEnd,
-                Store store) {
+                MenuType type, Store store, UploadFile file) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.discountPrice = discountPrice;
         this.discountStart = discountStart;
         this.discountEnd = discountEnd;
+        this.type = type;
         this.store = store;
+        this.file = file;
     }
 
     /*
         === 연관 관계 편의 메소드 ===
      */
 
-
-
-
+    /*
+        === 비즈니스 로직 추가 ===
+     */
+    public void updateWithoutImage(Menu menu) {
+        this.id = menu.getId();
+        this.name = menu.getName();
+        this.price = menu.getPrice();
+        this.discountPrice = menu.getDiscountPrice();
+        this.discountStart = menu.getDiscountStart();
+        this.discountEnd = menu.getDiscountEnd();
+        this.type = menu.getType();
+    }
 }

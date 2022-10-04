@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import ywphsm.ourneighbor.domain.Address;
-import ywphsm.ourneighbor.domain.Menu;
+import ywphsm.ourneighbor.domain.embedded.Address;
+import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
@@ -22,7 +22,7 @@ public class StoreDTO {
     @NoArgsConstructor
     public static class Add {
 
-        @NotBlank(message = "필수값입니다.")
+        @NotBlank
         private String name;
 
         @NotBlank
@@ -67,17 +67,39 @@ public class StoreDTO {
 
         private List<CategoryOfStoreDTO> categoryOfStores;
 
+        @Builder
+        public Add(String name, String zipcode, String roadAddr, String numberAddr, String detail,
+                   Double lat, Double lon, String phoneNumber,
+                   LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
+                   String notice, String intro, List<String> offDays, List<CategoryOfStoreDTO> categoryOfStores) {
+            this.name = name;
+            this.zipcode = zipcode;
+            this.roadAddr = roadAddr;
+            this.numberAddr = numberAddr;
+            this.detail = detail;
+            this.lat = lat;
+            this.lon = lon;
+            this.phoneNumber = phoneNumber;
+            this.openingTime = openingTime;
+            this.closingTime = closingTime;
+            this.breakStart = breakStart;
+            this.breakEnd = breakEnd;
+            this.notice = notice;
+            this.intro = intro;
+            this.offDays = offDays;
+            this.categoryOfStores = categoryOfStores;
+        }
 
         @Builder
         public Add(Store store) {
             name = store.getName();
             phoneNumber = store.getPhoneNumber();
-            openingTime = store.getOpeningTime();
-            closingTime = store.getClosingTime();
             lat = store.getLat();
             lon = store.getLon();
-            breakStart = store.getBreakStart();
-            breakEnd = store.getBreakEnd();
+            openingTime = store.getBusinessTime().getOpeningTime();
+            closingTime = store.getBusinessTime().getClosingTime();
+            breakStart = store.getBusinessTime().getBreakStart();
+            breakEnd = store.getBusinessTime().getBreakEnd();
             notice = store.getNotice();
             intro = store.getIntro();
             offDays = store.getOffDays();
@@ -94,12 +116,9 @@ public class StoreDTO {
             return Store.builder()
                     .name(name)
                     .phoneNumber(phoneNumber)
-                    .openingTime(openingTime)
-                    .closingTime(closingTime)
+                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd))
                     .lat(lat)
                     .lon(lon)
-                    .breakStart(breakStart)
-                    .breakEnd(breakEnd)
                     .notice(notice)
                     .intro(intro)
                     .offDays(offDays)
@@ -134,16 +153,27 @@ public class StoreDTO {
         private LocalTime breakEnd;               // 쉬는 시간 끝
 
         private String notice;                    // 가게 소식
+
         private String intro;                     // 가게 소개
 
         private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
 
         private StoreStatus status;               // 가게 오픈 상황
 
-        private List<Menu> menuList;              // 메뉴
+        private List<MenuDTO.Detail> menuList;    // 메뉴
 
         // 주소는 임베디드 타입으로 받음
-        private Address address;
+
+        @NotBlank
+        private String zipcode;
+
+        @NotBlank
+        private String roadAddr;
+
+        @NotBlank
+        private String numberAddr;
+
+        private String detail;
 
         private List<CategoryOfStoreDTO> categoryList;
 
@@ -152,16 +182,21 @@ public class StoreDTO {
             storeId = store.getId();
             name = store.getName();
             phoneNumber = store.getPhoneNumber();
-            openingTime = store.getOpeningTime();
-            closingTime = store.getClosingTime();
-            breakStart = store.getBreakStart();
-            breakEnd = store.getBreakEnd();
+            openingTime = store.getBusinessTime().getOpeningTime();
+            closingTime = store.getBusinessTime().getClosingTime();
+            breakStart = store.getBusinessTime().getBreakStart();
+            breakEnd = store.getBusinessTime().getBreakEnd();
             notice = store.getNotice();
             intro = store.getIntro();
             offDays = store.getOffDays();
             status = store.getStatus();
-            address = store.getAddress();
-            menuList = store.getMenuList();
+            zipcode = store.getAddress().getZipcode();
+            roadAddr = store.getAddress().getRoadAddr();
+            numberAddr = store.getAddress().getNumberAddr();
+            detail = store.getAddress().getDetail();
+            menuList = store.getMenuList().stream()
+                    .map(MenuDTO.Detail::new)
+                    .collect(Collectors.toList());
             categoryList = store.getCategoryOfStoreList().stream()
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());
@@ -171,17 +206,127 @@ public class StoreDTO {
             return Store.builder()
                     .name(name)
                     .phoneNumber(phoneNumber)
-                    .openingTime(openingTime)
-                    .closingTime(closingTime)
-                    .breakStart(breakStart)
-                    .breakEnd(breakEnd)
+                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd))
                     .notice(notice)
                     .intro(intro)
                     .offDays(offDays)
                     .status(status)
-                    .address(address)
+                    .address(new Address(roadAddr, numberAddr, zipcode, detail))
                     .build();
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class Update {
+
+        private Long storeId;
+
+        @NotBlank
+        private String name;
+
+        private String phoneNumber;
+
+        @NotNull
+        private Double lat;
+
+        @NotNull
+        private Double lon;
+
+        @NotNull
+        @DateTimeFormat(pattern = "HH:mm")
+        private LocalTime openingTime;            // 여는 시간
+
+        @NotNull
+        @DateTimeFormat(pattern = "HH:mm")
+        private LocalTime closingTime;            // 닫는 시간
+
+        @DateTimeFormat(pattern = "HH:mm")
+        private LocalTime breakStart;             // 쉬는 시간 시작
+
+        @DateTimeFormat(pattern = "HH:mm")
+        private LocalTime breakEnd;               // 쉬는 시간 끝
+
+        private String notice;                    // 가게 소식
+        private String intro;                     // 가게 소개
+
+        private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
+
+        @NotBlank
+        private String zipcode;
+
+        @NotBlank
+        private String roadAddr;
+
+        @NotBlank
+        private String numberAddr;
+
+        private String detail;
+
+        private List<CategoryOfStoreDTO> categoryList;
+
+        @Builder
+        public Update(String name, String phoneNumber, Double lat, Double lon,
+                      LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
+                      String notice, String intro, List<String> offDays,
+                      String zipcode, String roadAddr, String numberAddr, String detail,
+                      List<CategoryOfStoreDTO> categoryList) {
+            this.name = name;
+            this.phoneNumber = phoneNumber;
+            this.lat = lat;
+            this.lon = lon;
+            this.openingTime = openingTime;
+            this.closingTime = closingTime;
+            this.breakStart = breakStart;
+            this.breakEnd = breakEnd;
+            this.notice = notice;
+            this.intro = intro;
+            this.offDays = offDays;
+            this.zipcode = zipcode;
+            this.roadAddr = roadAddr;
+            this.numberAddr = numberAddr;
+            this.detail = detail;
+            this.categoryList = categoryList;
+        }
+
+        @Builder
+        public Update(Store store) {
+            storeId = store.getId();
+            name = store.getName();
+            phoneNumber = store.getPhoneNumber();
+            lat = store.getLat();
+            lon = store.getLon();
+            openingTime = store.getBusinessTime().getOpeningTime();
+            closingTime = store.getBusinessTime().getClosingTime();
+            breakStart = store.getBusinessTime().getBreakStart();
+            breakEnd = store.getBusinessTime().getBreakEnd();
+            notice = store.getNotice();
+            intro = store.getIntro();
+            offDays = store.getOffDays();
+            zipcode = store.getAddress().getZipcode();
+            roadAddr = store.getAddress().getRoadAddr();
+            numberAddr = store.getAddress().getNumberAddr();
+            detail = store.getAddress().getDetail();
+            categoryList = store.getCategoryOfStoreList().stream()
+                    .map(CategoryOfStoreDTO::new)
+                    .collect(Collectors.toList());
+        }
+
+        public Store toEntity() {
+            return Store.builder()
+                    .id(storeId)
+                    .name(name)
+                    .phoneNumber(phoneNumber)
+                    .lat(lat)
+                    .lon(lon)
+                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd))
+                    .notice(notice)
+                    .intro(intro)
+                    .offDays(offDays)
+                    .address(new Address(roadAddr, numberAddr, zipcode, detail))
+                    .build();
+        }
+
     }
 
 

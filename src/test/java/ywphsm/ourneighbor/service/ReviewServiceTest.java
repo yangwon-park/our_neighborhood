@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 

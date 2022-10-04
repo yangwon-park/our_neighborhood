@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.security;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @AllArgsConstructor
+@Getter
 public class MemberDetailsImpl implements UserDetails {
 
     private Member member;

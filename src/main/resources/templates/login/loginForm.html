@@ -37,15 +37,15 @@
                         </div>
                         <div class="text-muted text-center mx-1">
                             <!-- 카카오 로그인 -->
-                            <a href="/login/kakaoUrl">
+                            <a href="/oauth2/authorization/kakao">
                                 <img th:src="@{/images/login/kakao_login.png}" style="width: 10rem; height:3rem"/>
                             </a>
                             <!-- 네이버 로그인 -->
-                            <a href="/login/naverUrl">
+                            <a href="/oauth2/authorization/naver">
                                 <img th:src="@{/images/login/naver_login.png}" style="width: 10rem; height:3rem"/>
                             </a>
                             <!-- 구글 로그인 -->
-                            <a href="/login/googleUrl">
+                            <a href="/oauth2/authorization/google">
                                 <img th:src="@{/images/login/google_login.png}" style="width: 10rem; height:3.5rem"/>
                             </a>
                         </div>
@@ -54,7 +54,7 @@
                         <div class="text-center text-muted mb-4">
                             <small>Log in</small>
                         </div>
-                        <form role="form" th:object="${loginForm}" method="post">
+                        <form role="form" th:action="@{/loginSecurity}" th:object="${loginForm}" method="post">
                             <div class="form-group">
                                 <div th:if="${#fields.hasGlobalErrors()}">
                                     <p class="field-error" th:each="err : ${#fields.globalErrors()}"
@@ -90,13 +90,12 @@
                                 <button type="submit" class="btn btn-orange mt-4">로그인</button>
                             </div>
                         </form>
-                        <br>
-                        <div class="float-end">
+                        <div class="">
                             <!-- 아이디 찾기 -->
-                            <a class="p-2 text-muted" href="/findUserId">아이디 찾기</a>
+                            <a class="p-2" href="/findUserId">아이디 찾기</a>
 
                             <!-- 비밀번호 찾기 -->
-                            <a class="p-2 text-muted" href="/findPassword">비밀번호 찾기</a>
+                            <a class="p-2" href="/findPassword">비밀번호 찾기</a>
                         </div>
                     </div>
                 </div>

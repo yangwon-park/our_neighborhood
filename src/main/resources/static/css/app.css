@@ -34,6 +34,13 @@
     --breakpoint-xl: 1200px;
     --font-family-sans-serif: Open Sans, sans-serif;
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    accent-color: #fb6340;
+}
+
+input[type=radio] {
+    accent-color: #fb6340;
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 html {
@@ -45,18 +52,48 @@ html {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-body{
+body {
     -ms-overflow-style: none;
+}
+
+#mask {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: block;
+    opacity: 0.5;
+    background: #4f5050;
+    z-index: 99;
+    text-align: center;
+}
+
+#mask > img {
+    width: 2.0rem;
+    height: 2.0rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    transition: opacity 1s ;
 }
 
 ::-webkit-scrollbar {
     display: none;
 }
 
-.input-error {
+.hidden {
+    display: none;
+}
+
+.valid-custom {
     border-color: #ff253a;
     color: #ff253a;
+    display: block;
 }
+
+/* color까지 지정하면 select 박스의 모든 폰트가 붉어짐*/
 .input-error-border {
     border-color: #ff253a;
 }
@@ -160,7 +197,7 @@ body{
     자식인 overlay에 아래와 같이 스타일 부여
         => 부모인 section과 위치와 크기가 같아짐
 */
-#top .overlay{
+#top .overlay {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -176,7 +213,7 @@ body{
     border-top: 1px solid #fff;
 }
 
-#top .welcome{
+#top .welcome {
     padding-right: 8rem;
     color: #fff;
 }
@@ -442,5 +479,4 @@ body{
     background: #6c757d;
     color: #0b1526;
 }
-
 

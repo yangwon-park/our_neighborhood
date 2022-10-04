@@ -136,11 +136,11 @@ var main = {
     },
 
     delete: function () {
-        const storeId = document.getElementById('storeId').value;
+        const storeIdVal = document.getElementById('storeId').value;
 
         axios({
             method: "delete",
-            url: "/store/" + storeId
+            url: "/store/" + storeIdVal
         }).then((resp) => {
             alert('매장 삭제가 완료됐습니다.');
             window.location.href = "/";

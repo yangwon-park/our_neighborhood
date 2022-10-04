@@ -67,7 +67,7 @@ var main = {
 
     save: function () {
         const parentId = document.getElementById("category-select").options
-                      [document.getElementById("category-select").selectedIndex].value;
+            [document.getElementById("category-select").selectedIndex].value;
 
         const name = document.getElementById("name").value;
 
@@ -93,7 +93,7 @@ var main = {
 
     deleteCategory: function () {
         const categoryId = document.getElementById("category-select").options
-                         [document.getElementById("category-select").selectedIndex].value;
+            [document.getElementById("category-select").selectedIndex].value;
 
         console.log(categoryId);
 

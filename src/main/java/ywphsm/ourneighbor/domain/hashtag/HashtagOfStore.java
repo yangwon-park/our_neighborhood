@@ -31,4 +31,6 @@ public class HashtagOfStore {
         this.hashtag = hashtag;
         this.store = store;
     }
+
 }
+

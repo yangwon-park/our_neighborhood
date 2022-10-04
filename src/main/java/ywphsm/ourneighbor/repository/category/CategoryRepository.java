@@ -23,4 +23,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     Boolean existsByNameAndParent(String name, Category parent);
 
     Category findByName(String name);
+
 }

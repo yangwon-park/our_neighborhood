@@ -21,3 +21,4 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
                 .fetchOne();
     }
 }
+

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.MemberForm;
 import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.email.TokenService;
 import ywphsm.ourneighbor.service.login.SessionConst;
@@ -78,7 +79,7 @@ public class SignUpController {
         Member member = new Member(memberForm.getUsername(), memberForm.getBirthDate(),
                 age, memberForm.getPhoneNumber(),
                 memberForm.getGender(), memberForm.getUserId(), encodedPassword,
-                memberForm.getEmail(), memberForm.getNickname());
+                memberForm.getEmail(), memberForm.getNickname(), Role.USER);
 
         memberService.join(member);
         tokenService.createEmailToken(member.getId(), member.getEmail());

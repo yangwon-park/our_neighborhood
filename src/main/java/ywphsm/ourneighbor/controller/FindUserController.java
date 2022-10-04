@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Controller
-public class findUserController {
+public class FindUserController {
 
     private final MemberService memberService;
 

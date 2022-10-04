@@ -14,7 +14,7 @@ public class CategoryDTO {
 
     private Long categoryId;
 
-//    @NotBlank
+    //    @NotBlank
     private String name;
     private Long depth;
 

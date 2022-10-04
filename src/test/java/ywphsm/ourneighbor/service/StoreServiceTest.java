@@ -176,7 +176,6 @@ class StoreServiceTest {
 
 
 //        https://stackoverflow.com/questions/62862635/mockmvc-calling-a-put-endpoint-that-accepts-a-multipart-file
-        
 //        MulitipartFormData의 경우 기본적으로 request method가 POST로 지정돼있음
 //        아래의 코드로 method를 바꿔줄 수 있음
 //        더 최신 스프링 (5.3.17) 에서부터는 perform 내의 with 메소드를 사용하여 간단하게 바꿔줄 수 있음

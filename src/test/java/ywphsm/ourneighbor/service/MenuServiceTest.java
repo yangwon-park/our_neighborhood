@@ -11,8 +11,10 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.domain.store.StoreStatus;
+import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 
 import java.io.FileInputStream;

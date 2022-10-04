@@ -57,6 +57,13 @@ class StoreServiceTest {
     private int port;
 
     @Test
+    @DisplayName("매장 한개 찾기")
+    void findOne() {
+        Store store = storeService.findById(440L);
+        assertThat(store.getId()).isEqualTo(440L);
+    }
+
+    @Test
     @DisplayName("매장 등록")
     void saveStore() throws Exception {
 //      https://stackoverflow.com/questions/45044021/spring-mockmvc-request-parameter-list => 참고

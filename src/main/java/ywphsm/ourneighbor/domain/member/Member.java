@@ -48,8 +48,8 @@ public class Member extends BaseTimeEntity {
     private boolean emailConfirm;
 
     //(1:N) Store
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Store> storeList = new ArrayList<>();
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private List<Store> storeList = new ArrayList<>();
 
     // 생성 메소드
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {

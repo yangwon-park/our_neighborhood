@@ -36,4 +36,16 @@ public class UploadFile {
         this.menu = menu;
         menu.setFile(this);
     }
+
+    /*
+        비즈니스 로직 메소드
+     */
+    public void updateMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    public void updateUploadedFileName(String storedFileName, String uploadedFileName) {
+        this.storedFileName = storedFileName;
+        this.uploadedFileName = uploadedFileName;
+    }
 }

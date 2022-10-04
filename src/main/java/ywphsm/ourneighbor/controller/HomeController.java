@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,14 @@ import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
+=======
+import org.springframework.web.bind.annotation.*;
+
+import ywphsm.ourneighbor.domain.category.Category;
+import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.service.CategoryService;
+import ywphsm.ourneighbor.domain.search.StoreSearchCond;
+>>>>>>> main
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.List;
@@ -53,4 +62,24 @@ public class MenuController {
 
         return "/menu/edit_form";
     }
+<<<<<<< HEAD
+=======
+
+    @PostMapping("/prac2")
+    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam(value="categoryId") List<Long> categoryId) {
+        List<Category> categoryList = new ArrayList<>();
+
+        for (Long id : categoryId) {
+            Category category = categoryService.findById(id);
+            log.info("category={}", category.getCategoryOfStoreList());
+            categoryList.add(category);
+        }
+
+        storeService.save(storeAddDTO, categoryList);
+
+        return "redirect:/prac2";
+    }
+
+
+>>>>>>> main
 }

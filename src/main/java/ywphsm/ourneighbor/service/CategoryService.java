@@ -93,4 +93,8 @@ public class CategoryService {
         return categoryRepository.existsByNameAndParent(categoryName, parent);
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

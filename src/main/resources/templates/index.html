@@ -7,7 +7,7 @@
 <style>
 
 </style>
-<body class="bg-default">
+<body id="main-body" class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 
 <!--    div class="overlay"는 상위 section id="top"의 위치, 크기와 동일 => position을 relative로 설정-->
@@ -411,6 +411,7 @@
 </section>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/weather.js}"></script>
+<!--<script th:src="@{/js/mask.js}"></script>-->
 </body>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터

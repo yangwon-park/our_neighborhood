@@ -20,4 +20,8 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
                 .where((categoryOfStore.store.id.eq(storeId)).and((categoryOfStore.category.id.eq(categoryId))))
                 .fetchOne();
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

@@ -67,7 +67,11 @@ var main = {
 
     save: function () {
         const parentId = document.getElementById("category-select").options
+<<<<<<< HEAD
             [document.getElementById("category-select").selectedIndex].value;
+=======
+                      [document.getElementById("category-select").selectedIndex].value;
+>>>>>>> main
 
         const name = document.getElementById("name").value;
 
@@ -93,7 +97,11 @@ var main = {
 
     deleteCategory: function () {
         const categoryId = document.getElementById("category-select").options
+<<<<<<< HEAD
             [document.getElementById("category-select").selectedIndex].value;
+=======
+                         [document.getElementById("category-select").selectedIndex].value;
+>>>>>>> main
 
         console.log(categoryId);
 

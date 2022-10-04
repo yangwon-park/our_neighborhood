@@ -224,6 +224,7 @@ var main = {
 
     removeMarker: function () {
         this.closeInfowindow();
+
         for (var i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
         }

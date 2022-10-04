@@ -2,13 +2,17 @@ package ywphsm.ourneighbor.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.Category;
 import ywphsm.ourneighbor.domain.dto.CategoryDTO;
+import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.repository.review.ReviewRepository;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
@@ -19,13 +23,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequestMapping("/store")
+//@RequestMapping("/store")
 public class StoreController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
+    private final ReviewRepository reviewRepository;
 
-    @ModelAttribute("offDays")
+    @ModelAttribute("/storeoffDays")
     public Map<String, String> offDays() {
         Map<String, String> offDays = new LinkedHashMap<>();
 
@@ -40,20 +45,27 @@ public class StoreController {
         return offDays;
     }
 
-    @GetMapping("/{storeId}")
+    @GetMapping("/store/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findOne(storeId);
 
         StoreDTO.Detail storeDetailDTO = new StoreDTO.Detail(store);
 
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.ReviewPage(pageRequest);
+        List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
+        log.info("reviewMemberDTO={}", reviewMemberDTOS);
+        log.info("content={}", content);
+
         log.info("store={}", storeDetailDTO.getMenuList());
         log.info("store={}", store.getMenuList());
+        log.info("store.review={}", store.getReviewList());
 
         model.addAttribute("store", storeDetailDTO);
         return "store/detail";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/admin/store/add")
     public String addStore(Model model) {
         List<CategoryDTO> all = categoryService.findAll();
 
@@ -64,7 +76,7 @@ public class StoreController {
         return "store/add_form";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/store/add")
     public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam Long categoryId) {
         Category category = categoryService.findById(categoryId);
         log.info("category={}", category.getCategoryOfStoreList());

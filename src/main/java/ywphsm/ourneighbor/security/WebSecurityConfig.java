@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.service.login.CustomOAuthUserService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.ServletException;
@@ -34,6 +35,7 @@ import java.io.IOException;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MemberDetailService memberDetailService;
+    private final CustomOAuthUserService customOAuthUserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -63,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable();
 
         http.authorizeRequests()
-                .antMatchers("/user/**").authenticated()
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/seller/**").hasAnyRole("SELLER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
@@ -106,7 +108,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/login");
                     }
                 })
-                .deleteCookies("remember-me");
+                .deleteCookies("remember-me")
+
+                //OAuth 로그인
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(customOAuthUserService);
 
         //중복 로그인
         http.sessionManagement()

@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: oauth
   messages:
     basename: messages,errors
   mail:
@@ -34,7 +36,6 @@ spring:
         use_sql_comments: true
         default_batch_fetch_size: 500 # 컬렉션 조회 페이징 및 최적화
 
-# 파일 저장 경로
 file:
   dir: /c:/Users/HOME/Desktop/JAVA/menu_file/
 
@@ -42,23 +43,11 @@ logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace
 
-#google login 관련
-google:
-  url: https://accounts.google.com/o/oauth2/v2/auth
-  redirect:
-    uri: http://localhost:8080/login/google
-  client:
-    id: 1008060436788-dmq8hj575pafbfnajpmdkouao0lm2ucg.apps.googleusercontent.com #클라이언트 ID
-    secret: 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 #클라이언트 보안 비밀
-  token:
-    url: https://oauth2.googleapis.com/token
-  scope: https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/user.birthday.read%20https://www.googleapis.com/auth/user.phonenumbers.read%20https://www.googleapis.com/auth/user.gender.read
-
 #naver login 관련
 naver:
   token:
     url: https://nid.naver.com/oauth2.0/token?grant_type=authorization_code
   client:
     id: z_c0ETHIqnzInQwcpjLX
-    secret: A2wobfeDuq
+
 

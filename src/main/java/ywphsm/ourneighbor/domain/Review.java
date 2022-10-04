@@ -3,6 +3,7 @@ package ywphsm.ourneighbor.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Review extends BaseEntity{
 
     @Id
@@ -20,10 +22,8 @@ public class Review extends BaseEntity{
     @Column(name = "review_id")
     private Long id;
 
-    @NotEmpty
     private String content;
 
-    @NotNull
     private Integer rating;
 
     /*

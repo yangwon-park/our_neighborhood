@@ -3,6 +3,7 @@ package ywphsm.ourneighbor.domain.store;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import ywphsm.ourneighbor.domain.*;
+import ywphsm.ourneighbor.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -76,10 +77,14 @@ public class Store extends BaseTimeEntity {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Review> reviewList = new ArrayList<>();
 
-
     // Category (N:N)
     @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
+
+    // Member (N:1)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     // Many To Many인듯
 //    @ManyToOne(fetch = FetchType.LAZY)

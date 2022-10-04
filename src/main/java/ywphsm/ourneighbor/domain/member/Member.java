@@ -1,12 +1,13 @@
 package ywphsm.ourneighbor.domain.member;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
+import ywphsm.ourneighbor.domain.Review;
+import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,37 +24,32 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-//    @NotBlank
     private String userId;
 
-//    @NotBlank
     private String password;    // 암호화
 
-//    @NotBlank
     private String username;
 
-//    @NotBlank
     private String nickname;
 
-//    @Email
     private String email;
 
-//    @NotBlank
     private String phoneNumber;
 
-//    @NotNull
     private int age;
 
-//    @NotBlank
     private String birthDate;
 
-//    @NotNull
     private int gender;         // 0 : 남자, 1 : 여자
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     private boolean emailConfirm;
+
+    //(1:N) Store
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Store> storeList = new ArrayList<>();
 
     // 생성 메소드
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
@@ -81,7 +77,7 @@ public class Member extends BaseTimeEntity {
 
     //회원가입때 사용
 
-    public Member(String username, String birthDate, int age, String phoneNumber, int gender, String userId, String password, String email, String nickname) {
+    public Member(String username, String birthDate, int age, String phoneNumber, int gender, String userId, String password, String email, String nickname, Role role) {
         this.username = username;
         this.birthDate = birthDate;
         this.age = age;
@@ -91,6 +87,7 @@ public class Member extends BaseTimeEntity {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
+        this.role = role;
     }
 
     //카카오 로그인시 openId 회원 저장
@@ -101,11 +98,19 @@ public class Member extends BaseTimeEntity {
     }
 
     //구글 로그인시 openId 회원 저장
-    public Member(String email, String username, boolean emailConfirm, int gender) {
+    @Builder
+    public Member(String email, String username, Role role, int gender) {
         this.email = email;
         this.username = username;
-        this.emailConfirm = emailConfirm;
+        this.role = role;
         this.gender = gender;
+    }
+
+    public Member updateOAuth(String name, String picture) {
+        this.username = name;
+//        this.picture = picture;
+
+        return this;
     }
 
     //네이버 로그인시 회원 저장
@@ -118,9 +123,12 @@ public class Member extends BaseTimeEntity {
         this.age = age;
     }
 
+    //시큐리티 때매 추가
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 
     //이메일 인증 성공
-
     public void emailConfirmSuccess() {
         this.emailConfirm = true;
     }

@@ -107,13 +107,27 @@
         <hr class="my-2 hr-orange">
         <div class="row store-menu">
             <h3><strong>리뷰</strong></h3>
-            <div class="col-6">
+            <div class="col">
                 <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"
-                        th:onclick="|location.href='@{/store/{storeId}/createReview(storeId=${store.storeId})}'|">리뷰 등록
+                        th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">리뷰 등록
                 </button>
             </div>
-            <div class="col" th:each="review : *{reviewList}">
-                <span th:text="${review.content}"></span>
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>별점</th>
+                        <th>리뷰</th>
+                    </tr>
+                    </thead>
+                    <tbody> <tr th:each="review : *{reviewList}">
+                        <td th:text="${review.getId()}"></td>
+                        <td th:text="${review.getRating()}"></td>
+                        <td th:text="${review.getContent()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

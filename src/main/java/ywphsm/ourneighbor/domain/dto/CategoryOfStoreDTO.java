@@ -29,17 +29,6 @@ public class CategoryOfStoreDTO {
         this.storeId = categoryOfStore.getStore().getId();
         this.categoryId = categoryOfStore.getCategory().getId();
         this.categoryName = categoryOfStore.getCategory().getName();
-<<<<<<< HEAD
-=======
-    }
-
-    public static CategoryOfStoreDTO of(CategoryOfStore entity) {
-        return CategoryOfStoreDTO.builder()
-                .storeId(entity.getStore().getId())
-                .categoryId(entity.getCategory().getId())
-                .categoryName(entity.getCategory().getName())
-                .build();
->>>>>>> main
     }
 
     public static CategoryOfStoreDTO of(CategoryOfStore entity) {

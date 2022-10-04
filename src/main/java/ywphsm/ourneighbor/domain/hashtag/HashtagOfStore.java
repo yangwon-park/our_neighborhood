@@ -31,8 +31,6 @@ public class HashtagOfStore {
         this.hashtag = hashtag;
         this.store = store;
     }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> main
+

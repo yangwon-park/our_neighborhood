@@ -154,8 +154,4 @@ public class MenuDTO {
         }
     }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main

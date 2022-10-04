@@ -55,7 +55,7 @@ public class CategoryService {
             Category parent = categoryRepository.findById(dto.getParentId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상위 카테고리입니다."));
 
-            category.addParentCategoryAndDepth(parent, parent.getDepth()+1);
+            category.addParentCategoryAndDepth(parent, parent.getDepth() + 1);
             parent.getChildren().add(category);
         }
 
@@ -85,16 +85,11 @@ public class CategoryService {
     }
 
     // 하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리
-    public List<CategoryDTO> findAllCategoriesHier()  {
+    public List<CategoryDTO> findAllCategoriesHier() {
         return categoryRepository.findByCategories().stream().map(CategoryDTO::of).collect(Collectors.toList());
     }
 
     public boolean checkCategoryDuplicate(String categoryName, Category parent) {
         return categoryRepository.existsByNameAndParent(categoryName, parent);
     }
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main

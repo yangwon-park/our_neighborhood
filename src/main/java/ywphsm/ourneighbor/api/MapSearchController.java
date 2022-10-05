@@ -12,6 +12,7 @@ import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,15 +44,19 @@ public class MapSearchController {
 
     @GetMapping(value = "/searchByCategory")
     public ResultClass<?> searchByCategory(@RequestParam String categoryId,
+                                           @RequestParam double dist,
                                            @CookieValue(value = "lat", required = false) String myLat,
                                            @CookieValue(value = "lon", required = false) String myLon) {
         List<Store> findStores = storeService.searchByCategory(Long.parseLong(categoryId));
 
-        List<SimpleSearchStoreDTO> result = findStores.stream()
+        List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
-        // 리팩토링 : dto에 dist 값을 set만 해주면 해결 (별도의 List 사용할 필요없음)
-        calculateDist(myLat, myLon, result);
+        // 리팩토링 : dto에 거리값 set 해주면 해결 (별도의 List 사용할 필요없음)
+        calculateDist(myLat, myLon, dto);
+
+        List<SimpleSearchStoreDTO> result =
+                dto.stream().filter(simpleSearchStoreDTO -> simpleSearchStoreDTO.getDistance() <= dist / 1000).collect(Collectors.toList());
 
         return new ResultClass<>(result.size(), result);
     }

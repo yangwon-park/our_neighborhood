@@ -62,13 +62,23 @@ var main = {
     searchByCategories: function (findCate) {
         for (const el of findCate) {
             el.addEventListener('click', () => {
+
+                // input radio에서 selected된 값 가져옴
+                let radio = document.querySelector('input[name="dist"]:checked');
+
+                if (radio === null) {
+                    alert("원하는 거리를 설정해주세요!!!");
+                }
+
+                let dist = radio.value;
                 let categoryId = el.getAttribute('data-value');
 
                 axios({
                     method: "get",
                     url: "/searchByCategory",
                     params: {
-                        categoryId: categoryId
+                        categoryId: categoryId,
+                        dist: dist
                     }
                 })
                     .then((res) => {

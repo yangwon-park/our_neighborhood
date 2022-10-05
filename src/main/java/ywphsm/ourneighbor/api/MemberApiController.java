@@ -13,7 +13,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @PutMapping("/update_role/{memberId}")
+    @PutMapping("/admin/update_role/{memberId}")
     public Long updateRole(@PathVariable Long memberId, @RequestBody String role) {
 
         return memberService.updateRole(memberId, role);

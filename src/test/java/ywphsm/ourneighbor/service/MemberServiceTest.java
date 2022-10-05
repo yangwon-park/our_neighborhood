@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.With;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,6 +111,7 @@ class MemberServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("계정의 권한 업데이트")
     void updateRole() throws Exception {
         String userId = "kkk";
@@ -118,7 +121,7 @@ class MemberServiceTest {
 
         assertThat(findMember.getRole()).isEqualTo(Role.USER);
 
-        String url = "http://localhost:" + port + "/update_role/" + findMember.getId();
+        String url = "http://localhost:" + port + "/admin/update_role/" + findMember.getId();
 
         mvc.perform(put(url)
                 .contentType(MediaType.APPLICATION_JSON)

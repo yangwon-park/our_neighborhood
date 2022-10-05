@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/menu")
 @Controller
 public class MenuController {
 
@@ -30,7 +29,7 @@ public class MenuController {
         return MenuType.values();
     }
 
-    @GetMapping("/add/{storeId}")
+    @GetMapping("/seller/menu/add/{storeId}")
     public String addMenu(@PathVariable Long storeId, Model model) {
         MenuDTO.Add dto = new MenuDTO.Add();
         dto.setStoreId(storeId);
@@ -38,7 +37,7 @@ public class MenuController {
         return "menu/add_form";
     }
 
-    @GetMapping("/edit/{storeId}")
+    @GetMapping("/seller/menu/edit/{storeId}")
     public String editMenu(@PathVariable Long storeId, Model model) {
         Store findStore = storeService.findById(storeId);
 
@@ -46,6 +45,8 @@ public class MenuController {
         List<MenuDTO.Update> menuList = list.stream()
                 .map(MenuDTO.Update::new)
                 .collect(Collectors.toList());
+
+        log.info("menuList={}", menuList);
 
         model.addAttribute("menuList", menuList);
 

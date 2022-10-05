@@ -30,12 +30,17 @@
                       th:classappend="*{status}"></span>
             </div>
             <div class="col-6">
-                <div class="float-end">
-                    <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                            th:onclick="|location.href='@{/store/edit/{storeId}(storeId=${store.storeId})}'|">
-                        정보 수정
-                    </button>
-                </div>
+                <th:block th:if="${session.loginMember ne null}">
+                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
+                            ${#strings.equals(session.loginMember.role, 'ADMIN')}">
+                        <div class="float-end">
+                            <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                                    th:onclick="|location.href='@{/seller/store/edit/{storeId}(storeId=${store.storeId})}'|">
+                                정보 수정
+                            </button>
+                        </div>
+                    </th:block>
+                </th:block>
             </div>
         </div>
         <hr class="my-2">
@@ -103,16 +108,21 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="float-end">
-                    <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                            th:onclick="|location.href='@{/menu/edit/{storeId}(storeId=${store.storeId})}'|">
-                        메뉴 수정
-                    </button>
-                    <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                            th:onclick="|location.href='@{/menu/add/{storeId}(storeId=${store.storeId})}'|">
-                        메뉴 등록
-                    </button>
-                </div>
+                <th:block th:if="${session.loginMember ne null}">
+                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
+                            ${#strings.equals(session.loginMember.role, 'ADMIN')}">
+                        <div class="float-end">
+                            <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                                    th:onclick="|location.href='@{/seller/menu/edit/{storeId}(storeId=${store.storeId})}'|">
+                                메뉴 수정
+                            </button>
+                            <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                                    th:onclick="|location.href='@{/seller/menu/add/{storeId}(storeId=${store.storeId})}'|">
+                                메뉴 등록
+                            </button>
+                        </div>
+                    </th:block>
+                </th:block>
             </div>
         </div>
         <hr class="my-2">

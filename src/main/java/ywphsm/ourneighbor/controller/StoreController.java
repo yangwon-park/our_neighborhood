@@ -71,13 +71,13 @@ public class StoreController {
         return "store/detail";
     }
 
-    @GetMapping("/store/add")
+    @GetMapping("/seller/store/add")
     public String addStore(Model model) {
         model.addAttribute("store", new StoreDTO.Add());
         return "store/add_form";
     }
 
-    @GetMapping("/store/edit/{storeId}")
+    @GetMapping("/seller/store/edit/{storeId}")
     public String editStore(@PathVariable Long storeId, Model model) {
         Store findStore = storeService.findById(storeId);
         StoreDTO.Update store = new StoreDTO.Update(findStore);

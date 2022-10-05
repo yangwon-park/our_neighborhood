@@ -82,10 +82,13 @@ public class MenuDTO {
 
         private LocalDateTime discountEnd;
 
+        @NotBlank
+        private MenuType type;
+
         @Builder
         public Update(Long id, String name, Integer price, Long storeId,
                       String storedFileName, MultipartFile file,
-                      int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd) {
+                      int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd, MenuType type) {
             this.id = id;
             this.name = name;
             this.price = price;
@@ -95,6 +98,7 @@ public class MenuDTO {
             this.discountPrice = discountPrice;
             this.discountStart = discountStart;
             this.discountEnd = discountEnd;
+            this.type = type;
         }
 
         @Builder
@@ -107,6 +111,7 @@ public class MenuDTO {
             this.discountPrice = menu.getDiscountPrice();
             this.discountStart = menu.getDiscountStart();
             this.discountEnd = menu.getDiscountEnd();
+            this.type = menu.getType();
         }
 
         public Menu toEntity() {
@@ -117,6 +122,7 @@ public class MenuDTO {
                     .discountPrice(discountPrice)
                     .discountStart(discountStart)
                     .discountEnd(discountEnd)
+                    .type(type)
                     .build();
         }
     }

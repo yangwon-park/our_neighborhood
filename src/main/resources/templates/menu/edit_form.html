@@ -90,8 +90,19 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="">
+                                                <div class="form-group d-flex text-nowrap">
+                                                    <div th:each="t : ${menuTypes}">
+                                                        <input type="radio" id="type" name="type" th:value="${t.name()}"/>
+                                                        <label th:text="${t.description}"
+                                                               class="form-check-label fw-bold"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="">
                                                 <label th:for="|menu-edit-image${i.index+1}|">
-                                                    이미지 (수정 시 재업로드 필요합니다.)
+                                                    이미지 (수정 시 재업로드가 필요합니다.)
                                                 </label>
                                                 <input th:id="|menu-edit-image${i.index+1}|" name="file"
                                                        type="file"/>

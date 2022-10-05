@@ -66,7 +66,7 @@ var main = {
                 && price.value !== '' && typeCheck === true) {
             axios({
                 method: "get",
-                url: "/menu/check",
+                url: "/seller/menu/check",
                 params: {
                     name: name.value,
                     storeId: storeId
@@ -101,7 +101,7 @@ var main = {
         }
 
         if (typeCheck === false) {
-            validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");gi
+            validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");
         }
 
     },

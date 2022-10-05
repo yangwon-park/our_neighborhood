@@ -57,8 +57,7 @@
                             <div class="">
                                 <div class="form-group d-flex">
                                     <div th:each="t : ${menuTypes}">
-                                        <input type="radio" th:field="*{type}" th:value="${t.name()}"
-                                               />
+                                        <input type="radio" th:field="*{type}" th:value="${t.name()}"/>
                                         <label th:for="${#ids.prev('type')}" th:text="${t.description}"
                                                class="form-check-label fw-bold"></label>
                                     </div>

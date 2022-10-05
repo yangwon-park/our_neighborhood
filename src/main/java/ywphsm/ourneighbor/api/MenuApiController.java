@@ -25,7 +25,7 @@ public class MenuApiController {
 
     private final FileStore fileStore;
 
-    @GetMapping("/check")
+    @GetMapping("/seller/menu/check")
     public ResponseEntity<Boolean> checkMenuDuplicate(String name, Long storeId) {
         Store store = storeService.findById(storeId);
 
@@ -53,7 +53,7 @@ public class MenuApiController {
 
 
     // 메뉴 이미지 출력
-    @GetMapping("/{fileName}")
+    @GetMapping("/menu/{fileName}")
     public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
 
         return new UrlResource("file:" + fileStore.getFullPath(fileName));

@@ -18,7 +18,6 @@ import java.net.MalformedURLException;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/menu")
 public class MenuApiController {
 
     private final MenuService menuService;
@@ -33,20 +32,20 @@ public class MenuApiController {
         return ResponseEntity.ok(menuService.checkMenuDuplicate(name, store));
     }
 
-    @PostMapping
+    @PostMapping("/seller/menu")
     public Long save(MenuDTO.Add dto) throws IOException {
 
         log.info("dto={}", dto);
         return menuService.save(dto);
     }
 
-    @PutMapping("/{storeId}")
+    @PutMapping("/seller/menu/{storeId}")
     public Long update(@PathVariable Long storeId, MenuDTO.Update dto) throws IOException {
 
         return menuService.update(storeId, dto);
     }
 
-    @DeleteMapping("/{storeId}")
+    @DeleteMapping("/seller/menu/{storeId}")
     public Long delete(@PathVariable Long storeId, @RequestParam Long menuId) {
         log.info("menuId={}", menuId);
         return menuService.delete(menuId);

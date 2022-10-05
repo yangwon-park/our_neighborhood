@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,15 +57,8 @@ class StoreServiceTest {
                 .build();
     }
 
-
     @Test
-    @DisplayName("매장 한개 찾기")
-    void findOne() {
-        Store store = storeService.findById(440L);
-        assertThat(store.getId()).isEqualTo(440L);
-    }
-
-    @Test
+    @WithMockUser(username = "seller", roles = "SELLER")
     @DisplayName("매장 등록")
     void saveStore() throws Exception {
 //      https://stackoverflow.com/questions/45044021/spring-mockmvc-request-parameter-list => 참고
@@ -95,7 +89,7 @@ class StoreServiceTest {
                 .closingTime(LocalTime.now())
                 .build();
 
-        mvc.perform(multipart("/store")
+        mvc.perform(multipart("/seller/store")
                         .param("name", dto.getName())
                         .param("zipcode", dto.getZipcode())
                         .param("roadAddr", dto.getRoadAddr())
@@ -129,6 +123,7 @@ class StoreServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "seller", roles = "SELLER")
     @DisplayName("매장 수정")
     void updateStore() throws Exception {
 
@@ -193,7 +188,7 @@ class StoreServiceTest {
 //            return request;
 //        });
 
-        mvc.perform(multipart("/store/" + storeId)
+        mvc.perform(multipart("/seller/store/" + storeId)
                         .param("name", dto.getName())
                         .param("zipcode", dto.getZipcode())
                         .param("roadAddr", dto.getRoadAddr())
@@ -229,6 +224,7 @@ class StoreServiceTest {
 
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("매장 삭제")
     void deleteStore() throws Exception {
         List<Long> categoryId = new ArrayList<>();
@@ -256,7 +252,7 @@ class StoreServiceTest {
                 .closingTime(LocalTime.now())
                 .build(), categoryList);
 
-        String url = "http://localhost:" + port + "/store/" + storeId;
+        String url = "http://localhost:" + port + "/admin/store/" + storeId;
 
         mvc.perform(delete(url))
                 .andDo(print())

@@ -8,11 +8,5 @@ import javax.validation.constraints.NotBlank;
 
 public class MemberDTO {
 
-    @Data
-    @NoArgsConstructor
-    public static class SimpleRole {
 
-        @NotBlank
-        private Role role;
-    }
 }

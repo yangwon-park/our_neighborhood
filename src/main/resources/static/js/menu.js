@@ -115,7 +115,7 @@ var main = {
                 "Access-Control-Allow_Origin": "*"
             },
             method: "post",
-            url: "/menu",
+            url: "/seller/menu",
             data: new FormData(menuForm)
         }).then((resp) => {
             alert('메뉴가 등록됐습니다.')
@@ -140,7 +140,7 @@ var main = {
                 "Access-Control-Allow_Origin": "*"
             },
             method: "put",
-            url: "/menu/" + storeId,
+            url: "/seller/menu/" + storeId,
             data: formData
         }).then((resp) => {
             alert('메뉴 정보 수정이 완료됐습니다.');
@@ -159,7 +159,7 @@ var main = {
 
         axios({
             method: "delete",
-            url: "/menu/" + storeId,
+            url: "/seller/menu/" + storeId,
             params: {
                 menuId: menuId
             }

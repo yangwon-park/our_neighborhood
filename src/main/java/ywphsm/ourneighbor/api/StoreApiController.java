@@ -15,13 +15,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/store")
 public class StoreApiController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
 
-    @PostMapping
+    @PostMapping("/seller/store")
     public Long save(@Validated StoreDTO.Add dto, @RequestParam(value = "categoryId") List<Long> categoryId) {
 
         log.info("dto={}", dto);
@@ -36,7 +35,7 @@ public class StoreApiController {
         return storeService.save(dto, categoryList);
     }
 
-    @PutMapping("/{storeId}")
+    @PutMapping("/seller/store/{storeId}")
     public Long update(@PathVariable Long storeId, @Validated StoreDTO.Update dto,
                        @RequestParam List<Long> categoryId) {
 
@@ -45,7 +44,7 @@ public class StoreApiController {
         return storeService.update(storeId, dto, categoryId);
     }
 
-    @DeleteMapping("/{storeId}")
+    @DeleteMapping("/admin/store/{storeId}")
     public Long delete(@PathVariable Long storeId) {
         return storeService.delete(storeId);
     }

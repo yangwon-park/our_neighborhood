@@ -81,7 +81,7 @@ var main = {
                 "Content-Type": "application/json"
             },
             method: "post",
-            url: "/category",
+            url: "/admin/category",
             data: JSON.stringify(data),
         }).then((resp) => {
             alert('카테고리가 등록됐습니다.');
@@ -107,7 +107,7 @@ var main = {
 
             axios({
                 method: "delete",
-                url: "/category/" + categoryId,
+                url: "/admin/category/" + categoryId,
             }).then((resp) => {
                 alert('카테고리 삭제가 완료됐습니다.');
                 window.location.reload();

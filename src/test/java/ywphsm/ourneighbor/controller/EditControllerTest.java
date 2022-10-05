@@ -86,7 +86,7 @@ public class EditControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 
 
-        Member findMember = memberService.findOne(loginMember.getId());
+        Member findMember = memberService.findById(loginMember.getId());
         assertThat(memberService.passwordCheck(findMember.getPassword(), "Arnold!(97")).isTrue();
     }
 
@@ -156,7 +156,7 @@ public class EditControllerTest {
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/logout"));
 
         //then
-        assertThat(memberService.findOne(loginMember.getId()).getPhoneNumber()).isEqualTo("01038352376");
+        assertThat(memberService.findById(loginMember.getId()).getPhoneNumber()).isEqualTo("01038352376");
     }
 
     @Test
@@ -173,7 +173,7 @@ public class EditControllerTest {
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/logout"));
 
         Assertions.assertThrows(NoSuchElementException.class, () -> {
-            memberService.findOne(loginMember.getId());
+            memberService.findById(loginMember.getId());
         });
     }
 }

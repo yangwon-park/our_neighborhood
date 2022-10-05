@@ -45,6 +45,9 @@ class StoreServiceTest {
     @Autowired
     CategoryService categoryService;
 
+    @LocalServerPort
+    private int port;
+
     @BeforeEach
     void before() {
         mvc = MockMvcBuilders
@@ -53,8 +56,6 @@ class StoreServiceTest {
                 .build();
     }
 
-    @LocalServerPort
-    private int port;
 
     @Test
     @DisplayName("매장 한개 찾기")

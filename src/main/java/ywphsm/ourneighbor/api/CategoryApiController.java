@@ -35,12 +35,12 @@ public class CategoryApiController {
     }
 
     // @RequestBody 생략 시, Test에서 받아오질 못함
-    @PostMapping(value = "/category", produces = "application/json;")
+    @PostMapping(value = "/admin/category", produces = "application/json;")
     public Long save(@RequestBody CategoryDTO dto) {
         return categoryService.save(dto);
     }
 
-    @DeleteMapping("/category/{categoryId}")
+    @DeleteMapping("/admin/category/{categoryId}")
     public Long delete(@PathVariable Long categoryId) {
         return categoryService.delete(categoryId);
     }

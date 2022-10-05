@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +49,7 @@ class CategoryServiceTest {
     CategoryService categoryService;
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("카테고리 등록")
     void save() throws Exception {
 
@@ -59,7 +61,7 @@ class CategoryServiceTest {
                 .parent_id(parentId)
                 .build();
 
-        String url = "http://localhost:" + port + "/category";
+        String url = "http://localhost:" + port + "/admin/category";
 
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -74,6 +76,7 @@ class CategoryServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("카테고리 삭제")
     void deleteStore() throws Exception {
 
@@ -82,7 +85,7 @@ class CategoryServiceTest {
                 .depth(1L)
                 .build());
 
-        String url = "http://localhost" + port + "/category/" + categoryId;
+        String url = "http://localhost" + port + "/admin/category/" + categoryId;
 
         mvc.perform(delete(url))
                 .andDo(print())

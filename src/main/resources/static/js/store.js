@@ -85,7 +85,7 @@ var main = {
 
             axios({
                 method: "post",
-                url: "/store",
+                url: "/seller/store",
                 data: formData
             }).then((resp) => {
                 alert("매장 등록이 완료됐습니다.");
@@ -125,7 +125,7 @@ var main = {
 
         axios({
             method: "put",
-            url: "/store/" + storeIdVal,
+            url: "/seller/store/" + storeIdVal,
             data: formData
         }).then((resp) => {
             alert('매장 정보 수정이 완료됐습니다.');
@@ -140,7 +140,7 @@ var main = {
 
         axios({
             method: "delete",
-            url: "/store/" + storeIdVal
+            url: "/admin/store/" + storeIdVal
         }).then((resp) => {
             alert('매장 삭제가 완료됐습니다.');
             window.location.href = "/";

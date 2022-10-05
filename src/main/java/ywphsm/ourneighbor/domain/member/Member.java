@@ -76,7 +76,6 @@ public class Member extends BaseTimeEntity {
     }
 
     //회원가입때 사용
-
     public Member(String username, String birthDate, int age, String phoneNumber, int gender, String userId, String password, String email, String nickname, Role role) {
         this.username = username;
         this.birthDate = birthDate;
@@ -145,6 +144,10 @@ public class Member extends BaseTimeEntity {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
     }
 
     /*

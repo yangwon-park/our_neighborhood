@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequestMapping("/store")
 public class StoreController {
 
     private final StoreService storeService;
@@ -47,7 +46,7 @@ public class StoreController {
         return offDays;
     }
 
-    @GetMapping("/{storeId}")
+    @GetMapping("/store/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findById(storeId);
 
@@ -72,13 +71,13 @@ public class StoreController {
         return "store/detail";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/store/add")
     public String addStore(Model model) {
         model.addAttribute("store", new StoreDTO.Add());
         return "store/add_form";
     }
 
-    @GetMapping("/edit/{storeId}")
+    @GetMapping("/store/edit/{storeId}")
     public String editStore(@PathVariable Long storeId, Model model) {
         Store findStore = storeService.findById(storeId);
         StoreDTO.Update store = new StoreDTO.Update(findStore);
@@ -86,5 +85,11 @@ public class StoreController {
         model.addAttribute("store", store);
 
         return "store/edit_form";
+    }
+
+    @GetMapping("/admin/store/list")
+    public String getStoreList(Model model) {
+        model.addAttribute("store", new StoreDTO.Detail());
+        return "store/list_by_admin";
     }
 }

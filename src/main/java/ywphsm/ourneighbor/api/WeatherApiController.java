@@ -37,13 +37,6 @@ public class WeatherApiController {
         String numOfRows = "290";     // 오늘 하루 시간대별 모든 날씨 예보의 row 수
         String pageNo = "1";
 
-//        System.out.println("coords = " + coords);
-//        JSONParser jsonParser = new JSONParser();
-//
-//        JSONObject jsonObject = (JSONObject) jsonParser.parse(coords);
-//        String lat = (String) jsonObject.get("lat");
-//        System.out.println("lat = " + lat);
-
         WeatherDTO foreCast = getForeCast(serviceKey, returnType, numOfRows, pageNo, nx, ny, dto);
 
         return getAirPollution(serviceKey, returnType, numOfRows, pageNo, sidoName, foreCast);
@@ -55,6 +48,7 @@ public class WeatherApiController {
                                    String nx, String ny, WeatherDTO dto) throws Exception {
 
         log.info("=== getForeCast Start ===");
+
 
         LocalDateTime targetDay = LocalDateTime.now().plusDays(-1);
         String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
@@ -71,12 +65,15 @@ public class WeatherApiController {
                 "&" + URLEncoder.encode("nx", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(nx, StandardCharsets.UTF_8) +
                 "&" + URLEncoder.encode("ny", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(ny, StandardCharsets.UTF_8);
 
+        log.info("result={}", result);
+
         HashMap<String, Object> foreCast = getData(url, result);
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("foreCast", foreCast);
 
         JSONArray foreJson = jsonObject.getJSONObject("foreCast").getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
+
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH00", Locale.KOREAN));
 
         for (int i = 0; i < foreJson.length(); i++) {
@@ -123,7 +120,6 @@ public class WeatherApiController {
             }
         }
 
-
         log.info("=== getForeCast End ===");
         return dto;
     }
@@ -134,7 +130,7 @@ public class WeatherApiController {
 
         log.info("=== getAirPollution Start ===");
 
-        // API 파라미터에 맞는 시도 명으로 변환하는 로직
+        // API 파라미터 sidoName 조건에 맞는 시도 명으로 변환하는 로직
         // 8도의 이름은 아래와 같이 줄여서 받고, 나머지 지역명은 앞의 2글자로 받음
         // ex) 경상북도 => 경북
         if (sidoName.length() == 4) {
@@ -206,7 +202,7 @@ public class WeatherApiController {
             resultMap = mapper.readValue(sbf.toString(), HashMap.class);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception(url + "은 효한 URL이 아닙니다." + e);
+            throw new Exception(url + "은 유효한 URL이 아닙니다." + e);
         } finally {
             if (conn != null) conn.disconnect();
             if (br != null) br.close();

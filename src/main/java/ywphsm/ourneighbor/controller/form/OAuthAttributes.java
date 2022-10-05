@@ -41,7 +41,6 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes){
 
-
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
@@ -75,6 +74,7 @@ public class OAuthAttributes {
         Map<String, Object> profile = (Map<String, Object>) response.get("profile");
 
         int gender = 1;
+
         if ((response.get("gender")).equals("male")) {
             gender = 0;
         }

@@ -1,9 +1,6 @@
-package ywphsm.ourneighbor.domain;
+package ywphsm.ourneighbor.domain.category;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +9,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@ToString(of = {"id", "name", "depth"})
 public class Category {
 
     @Id
@@ -55,8 +53,8 @@ public class Category {
         생성자
      */
     @Builder
-    public Category(String name, Long depth, List<CategoryOfStore> categoryOfStoreList, Category parent, List<Category> children) {
-
+    public Category(Long id, String name, Long depth, List<CategoryOfStore> categoryOfStoreList, Category parent, List<Category> children) {
+        this.id = id;
         this.name = name;
         this.depth = depth;
         this.categoryOfStoreList = categoryOfStoreList;
@@ -71,19 +69,7 @@ public class Category {
     }
 
     /*
-            === 연관 관계 편의 메소드 ===
-        */
-    public void addCategory(CategoryOfStore categoryOfStore) {
-        categoryOfStoreList.add(categoryOfStore);
-        categoryOfStore.setCategory(this);
-    }
-
-    public void addChildCategory(Category child) {
-        this.children.add(child);
-        child.addParentCategory(this);
-    }
-
-
-
+        === 연관 관계 편의 메소드 ===
+    */
 
 }

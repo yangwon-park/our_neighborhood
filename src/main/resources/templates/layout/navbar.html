@@ -3,7 +3,7 @@
 <nav th:fragment="common_navbar" class="navbar navbar-expand-lg py-3 shadow-lg sticky-top">
     <div class="container-fluid ms-3 me-3">
         <a href="/" class="navbar-brand align-middle">
-            <img src="/images/main/logo_white.jpg" alt="Logo" width="100px" height="36px">
+            <img src="/images/main/logo_white.jpg" alt="Logo" width="50px" height="24px">
         </a>
         <!-- 화면 작아지면 햄버거 버튼으로 변경      -->
         <button class="navbar-toggler" type="button"
@@ -16,48 +16,47 @@
                 <li id="weather" class="nav-item">
 
                 </li>
-                <li class="nav-item">
-                    <th:block th:if="${session.loginMember eq null}">
-                        <!--                        <a class="nav-link" data-bs-toggle="modal" href="#modal">-->
+                <th:block th:if="${session.loginMember eq null}">
+                    <li class="nav-item">
+                        <!--       <a class="nav-link" data-bs-toggle="modal" href="#modal">-->
                         <a href="/login" class="nav-link">
                             로그인
                         </a>
-                    </th:block>
-                    <th:block th:if="${session.loginMember ne null}">
-                        <a href="#" class="nav-link">
-                            내 정보
-                        </a>
+                    </li>
+                </th:block>
+                <th:block th:if="${session.loginMember ne null}">
+                    <li class="nav-item">
                         <a href="/logout" class="nav-link">
                             로그아웃
                         </a>
+                    </li>
+                    <th:block th:if="${#strings.equals(session.loginMember.getRole(), 'ADMIN')}">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/mypage/{memberId}(memberId=${session.loginMember.getId()})}" class="nav-link">
+                                운영자 페이지
+                            </a>
+                        </li>
                     </th:block>
-                </li>
-                <li class="nav-item">
-                    <a href="/store/add" class="nav-link">
-                        가게 등록
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/category/add" class="nav-link">
-                        카테고리 등록
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#slogan" class="nav-link">
-                        Slogan
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#gallery" class="nav-link">
-                        Gallery
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#cta" class="nav-link">
-                        Contact
-                    </a>
-                </li>
-
+                    <th:block th:if="${#strings.equals(session.loginMember.getRole(), 'SELLER')}">
+                        <li class="nav-item">
+                            <a href="/store/add" class="nav-link">
+                                매장 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                마이 페이지
+                            </a>
+                        </li>
+                    </th:block>
+                    <th:block th:if="${#strings.equals(session.loginMember.getRole(), 'USER')}">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                마이 페이지
+                            </a>
+                        </li>
+                    </th:block>
+                </th:block>
             </ul>
         </div>
     </div>

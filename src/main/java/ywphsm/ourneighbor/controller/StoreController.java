@@ -2,35 +2,37 @@ package ywphsm.ourneighbor.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.Category;
-import ywphsm.ourneighbor.domain.dto.CategoryDTO;
-import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
+import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
+import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.repository.review.ReviewRepository;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-//@RequestMapping("/store")
+@RequestMapping("/store")
 public class StoreController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
-    private final ReviewRepository reviewRepository;
 
-    @ModelAttribute("/storeoffDays")
+    @ModelAttribute("menuTypes")
+    public MenuType[] menuTypes() {
+        return MenuType.values();
+    }
+
+    @ModelAttribute("offDays")
     public Map<String, String> offDays() {
         Map<String, String> offDays = new LinkedHashMap<>();
 
@@ -45,45 +47,44 @@ public class StoreController {
         return offDays;
     }
 
-    @GetMapping("/store/{storeId}")
+    @GetMapping("/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
-        Store store = storeService.findOne(storeId);
+        Store store = storeService.findById(storeId);
 
-        StoreDTO.Detail storeDetailDTO = new StoreDTO.Detail(store);
+        StoreDTO.Detail dto = new StoreDTO.Detail(store);
 
-        PageRequest pageRequest = PageRequest.of(0, 5);
-        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.ReviewPage(pageRequest);
-        List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
-        log.info("reviewMemberDTO={}", reviewMemberDTOS);
-        log.info("content={}", content);
+        List<CategoryOfStoreDTO> categoryList = dto.getCategoryList();
 
-        log.info("store={}", storeDetailDTO.getMenuList());
-        log.info("store={}", store.getMenuList());
-        log.info("store.review={}", store.getReviewList());
+//        List<CategorySimpleDTO> dtoList = new ArrayList<>();
+//        for (CategoryOfStoreDTO categoryOfStoreDTO : categoryList) {
+//            Category category = categoryService.findById(categoryOfStoreDTO.getCategoryId());
+//            CategorySimpleDTO dto = CategorySimpleDTO.of(category);
+//            dtoList.add(dto);
+//        }
 
-        model.addAttribute("store", storeDetailDTO);
+        List<CategorySimpleDTO> dtoList = categoryList.stream()
+                .map(categoryOfStoreDTO ->
+                        categoryService.findById(categoryOfStoreDTO.getCategoryId()))
+                .map(CategorySimpleDTO::of).collect(Collectors.toList());
+
+        model.addAttribute("store", dto);
+        model.addAttribute("categoryList", dtoList);
         return "store/detail";
     }
 
-    @GetMapping("/admin/store/add")
+    @GetMapping("/add")
     public String addStore(Model model) {
-        List<CategoryDTO> all = categoryService.findAll();
-
-        log.info("all={}", all);
-
-        model.addAttribute("all", all);
         model.addAttribute("store", new StoreDTO.Add());
         return "store/add_form";
     }
 
-    @PostMapping("/store/add")
-    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam Long categoryId) {
-        Category category = categoryService.findById(categoryId);
-        log.info("category={}", category.getCategoryOfStoreList());
+    @GetMapping("/edit/{storeId}")
+    public String editStore(@PathVariable Long storeId, Model model) {
+        Store findStore = storeService.findById(storeId);
+        StoreDTO.Update store = new StoreDTO.Update(findStore);
 
-        storeService.saveStore(storeAddDTO, category);
+        model.addAttribute("store", store);
 
-        return "redirect:/map";
+        return "store/edit_form";
     }
-
 }

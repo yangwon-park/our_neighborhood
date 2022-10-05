@@ -1,7 +1,7 @@
 package ywphsm.ourneighbor.repository.store.dto;
 
 import lombok.Data;
-import ywphsm.ourneighbor.domain.Address;
+import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
@@ -17,6 +17,8 @@ public class SimpleSearchStoreDTO {
     private String phoneNumber;
     private StoreStatus status;
     private Address address;
+
+    private Double distance;
 
     public SimpleSearchStoreDTO(Store store) {
         storeId = store.getId();

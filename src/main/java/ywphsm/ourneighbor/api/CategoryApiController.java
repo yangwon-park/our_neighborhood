@@ -2,9 +2,9 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.CategoryDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 
@@ -23,17 +23,25 @@ public class CategoryApiController {
         return new ResultClass<>(categories);
     }
 
-    @GetMapping("/categories2")
-    public ResultClass<?> findAllCategories2() {
-        List<CategoryDTO> categories = categoryService.findAllCategoriesHier();
-        return new ResultClass<>(categories);
+    @GetMapping("/categoriesHier")
+    public CategoryDTO findAllCategoriesHier() {
+        return categoryService.findAllCategoriesHier().get(0);
     }
 
-    @PostMapping("/category/add")
-    public Long save(CategoryDTO dto) {
-        log.info("========================================================");
-        log.info("dto={},", dto);
-        log.info("========================================================");
-        return categoryService.saveCategory(dto);
+    @GetMapping("/categoryCheck")
+    public ResponseEntity<Boolean> checkCategoryDuplicate(String name, Long parentId) {
+        Category parent = categoryService.findById(parentId);
+        return ResponseEntity.ok(categoryService.checkCategoryDuplicate(name, parent));
+    }
+
+    // @RequestBody 생략 시, Test에서 받아오질 못함
+    @PostMapping(value = "/category", produces = "application/json;")
+    public Long save(@RequestBody CategoryDTO dto) {
+        return categoryService.save(dto);
+    }
+
+    @DeleteMapping("/category/{categoryId}")
+    public Long delete(@PathVariable Long categoryId) {
+        return categoryService.delete(categoryId);
     }
 }

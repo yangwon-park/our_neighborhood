@@ -11,10 +11,8 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import ywphsm.ourneighbor.controller.form.OAuthAttributes;
-import ywphsm.ourneighbor.controller.form.SessionUser;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
-import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;

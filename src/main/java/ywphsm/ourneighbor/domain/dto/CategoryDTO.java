@@ -3,7 +3,7 @@ package ywphsm.ourneighbor.domain.dto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ywphsm.ourneighbor.domain.Category;
+import ywphsm.ourneighbor.domain.category.Category;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 public class CategoryDTO {
 
     private Long categoryId;
+
+    //    @NotBlank
     private String name;
     private Long depth;
 
@@ -51,24 +53,24 @@ public class CategoryDTO {
     }
 
     // Entity를 DTO로 변환하는 메소드
-    public static CategoryDTO of(Category category) {
+    public static CategoryDTO of(Category entity) {
 
-        if (category.getParent() == null) {
+        if (entity.getParent() == null) {
             return CategoryDTO.builder()
-                    .categoryId(category.getId())
-                    .name(category.getName())
-                    .depth(category.getDepth())
+                    .categoryId(entity.getId())
+                    .name(entity.getName())
+                    .depth(entity.getDepth())
                     .parent_id(0L)
-                    .children(category.getChildren().stream().map(CategoryDTO::of).collect(Collectors.toList()))
+                    .children(entity.getChildren().stream().map(CategoryDTO::of).collect(Collectors.toList()))
                     .build();
         }
 
         return CategoryDTO.builder()
-                .categoryId(category.getId())
-                .name(category.getName())
-                .depth(category.getDepth())
-                .parent_id(category.getParent().getId())
-                .children(category.getChildren().stream().map(CategoryDTO::of).collect(Collectors.toList()))
+                .categoryId(entity.getId())
+                .name(entity.getName())
+                .depth(entity.getDepth())
+                .parent_id(entity.getParent().getId())
+                .children(entity.getChildren().stream().map(CategoryDTO::of).collect(Collectors.toList()))
                 .build();
     }
 }

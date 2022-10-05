@@ -33,7 +33,7 @@ public class EditController {
     @PostMapping
     public String memberEdit(@Valid @ModelAttribute EditForm editForm, BindingResult bindingResult) {
 
-        Member member = memberService.findOne(editForm.getId());
+        Member member = memberService.findById(editForm.getId());
 
         if (memberService.doubleCheck(editForm.getNickname()) != null &&
                 !member.getNickname().equals(editForm.getNickname())) {
@@ -82,7 +82,7 @@ public class EditController {
                                @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
         if (member.isEmailConfirm()) {
-            return "edit/alreadyEmailConfirm"; // 이미 인증된 이메일입니다 메세지 띄워야함
+            return "edit/alreadyEmailConfirm";
         }
 
         return "edit/EmailConfirmForm";
@@ -92,6 +92,10 @@ public class EditController {
     public String confirmEmail(@Valid @ModelAttribute EmailConfirmForm emailConfirmForm,
                                BindingResult bindingResult,
                                @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
+
+        if (memberService.findByEmail(emailConfirmForm.getEmail()) != null) {
+            bindingResult.reject("emailDoubleCheck");
+        }
 
         if (bindingResult.hasErrors()) {
             return "edit/EmailConfirmForm";

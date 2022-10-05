@@ -279,8 +279,8 @@ small,
     height: calc(2.75rem + 2px);
     padding: .625rem .75rem;
     transition: all .2s cubic-bezier(.68, -.55, .265, 1.55);
-    color: #8898aa;
-    border: 1px solid #cad1d7;
+    /*color: #8898aa;*/
+    /*border: 1px solid #cad1d7;*/
     border-radius: .375rem;
     background-color: #fff;
     background-clip: padding-box;
@@ -299,7 +299,7 @@ small,
 }
 
 .form-control:focus {
-    color: #8898aa;
+    /*color: #8898aa;*/
     border-color: rgba(50, 151, 211, .25);
     outline: 0;
     background-color: #fff;
@@ -329,6 +329,10 @@ small,
 
 .form-group {
     margin-bottom: 1.5rem;
+}
+
+.form-group > div {
+    width: 100%;
 }
 
 .btn {
@@ -1369,13 +1373,13 @@ a.text-light:focus {
     box-shadow: none;
 }
 
-.nav-link {
-    color: #525f7f;
-}
+/*.nav-link {*/
+/*    color: #525f7f;*/
+/*}*/
 
-.nav-link:hover {
-    color: #5e72e4;
-}
+/*.nav-link:hover {*/
+/*    color: #5e72e4;*/
+/*}*/
 
 .nav-link i.ni {
     position: relative;

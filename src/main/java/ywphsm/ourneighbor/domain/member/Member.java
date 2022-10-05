@@ -47,9 +47,13 @@ public class Member extends BaseTimeEntity {
 
     private boolean emailConfirm;
 
-    //(1:N) Store
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Store> storeList = new ArrayList<>();
+    //(N:N) Store
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
+
+    //(1:N) Member
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Review> reviewList = new ArrayList<>();
 
     // 생성 메소드
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
@@ -90,37 +94,11 @@ public class Member extends BaseTimeEntity {
         this.role = role;
     }
 
-    //카카오 로그인시 openId 회원 저장
-    public Member(String email, String username, int gender) {
-        this.email = email;
-        this.username = username;
-        this.gender = gender;
-    }
-
-    //구글 로그인시 openId 회원 저장
-    @Builder
-    public Member(String email, String username, Role role, int gender) {
-        this.email = email;
-        this.username = username;
-        this.role = role;
-        this.gender = gender;
-    }
-
     public Member updateOAuth(String name, String picture) {
         this.username = name;
 //        this.picture = picture;
 
         return this;
-    }
-
-    //네이버 로그인시 회원 저장
-    public Member(String username, int gender, String email, String phoneNumber, String birthDate, int age) {
-        this.username = username;
-        this.gender = gender;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.birthDate = birthDate;
-        this.age = age;
     }
 
     //시큐리티 때매 추가

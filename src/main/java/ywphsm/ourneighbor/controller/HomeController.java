@@ -6,13 +6,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import ywphsm.ourneighbor.domain.Category;
-import ywphsm.ourneighbor.domain.dto.CategoryDTO;
+import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.service.StoreService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -23,6 +23,12 @@ public class HomeController {
     private final StoreService storeService;
     private final CategoryService categoryService;
 
+    @GetMapping("/")
+    public String index() {
+
+        return "index";
+    }
+
     // 검색 뷰페이지 임시
     @GetMapping("/map")
     public String map(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
@@ -31,33 +37,24 @@ public class HomeController {
 
     @GetMapping("/prac2")
     public String addStore(Model model) {
-        List<CategoryDTO> all = categoryService.findAll();
-
-        log.info("all={}", all);
-
-        model.addAttribute("all", all);
         model.addAttribute("store", new StoreDTO.Add());
-
         return "prac2";
     }
 
     @PostMapping("/prac2")
-    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam Long categoryId) {
-        log.info("storeAddDTO={}", storeAddDTO);
-        log.info("categoryId={}", categoryId);
+    public String addStore(@ModelAttribute StoreDTO.Add storeAddDTO, @RequestParam(value="categoryId") List<Long> categoryId) {
+        List<Category> categoryList = new ArrayList<>();
 
-        Category category = categoryService.findById(categoryId);
-        log.info("category={}", category.getCategoryOfStoreList());
+        for (Long id : categoryId) {
+            Category category = categoryService.findById(id);
+            log.info("category={}", category.getCategoryOfStoreList());
+            categoryList.add(category);
+        }
 
-        storeService.saveStore(storeAddDTO, category);
+        storeService.save(storeAddDTO, categoryList);
 
         return "redirect:/prac2";
     }
 
-    @GetMapping("/")
-    public String index() {
-
-        return "index";
-    }
 
 }

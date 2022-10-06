@@ -74,19 +74,21 @@
                 </div>
             </li>
             <li class="border-top my-3"></li>
-            <li class="mb-1">
-                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                        data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-                    내 정보
-                </button>
-                <div class="collapse" id="account-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">찜 목록</a></li>
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">프로필 수정</a></li>
-                        <li><a href="#" class="d-inline-flex text-decoration-none rounded">로그아웃</a></li>
-                    </ul>
-                </div>
-            </li>
+            <th:block th:if="${session.loginMember != null}">
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                        내 정보
+                    </button>
+                    <div class="collapse" id="account-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="d-inline-flex text-decoration-none rounded">찜 목록</a></li>
+                            <li><a href="#" class="d-inline-flex text-decoration-none rounded">마이 페이지</a></li>
+                            <li><a href="/logout" class="d-inline-flex text-decoration-none rounded">로그아웃</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </th:block>
         </ul>
     </div>
     <div class="container-fluid" id="map" style="height: 100%"></div>

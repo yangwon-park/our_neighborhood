@@ -47,6 +47,7 @@ public class MapSearchController {
                                            @RequestParam double dist,
                                            @CookieValue(value = "lat", required = false) String myLat,
                                            @CookieValue(value = "lon", required = false) String myLon) {
+
         List<Store> findStores = storeService.searchByCategory(Long.parseLong(categoryId));
 
         List<SimpleSearchStoreDTO> dto = findStores.stream()

@@ -103,11 +103,28 @@ var main = {
         if (typeCheck === false) {
             validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");
         }
+    },
 
+    createDefaultImg: function (formData) {
+        let file = formData.get("file");
+
+        if (file.name === "") {
+            formData.delete("file");
+        }
+
+        let defaultFile = new File(["foo"], "default.png", {
+            type: "image/png"
+        })
+
+        formData.append("file", defaultFile);
     },
 
     save: function () {
-        const menuForm = document.getElementById('menu-add-form')
+        const menuForm = document.getElementById("menu-add-form");
+
+        let formData = new FormData(menuForm);
+
+        this.createDefaultImg(formData);
 
         axios({
             headers: {
@@ -116,38 +133,46 @@ var main = {
             },
             method: "post",
             url: "/seller/menu",
-            data: new FormData(menuForm)
+            data: formData
         }).then((resp) => {
             alert('메뉴가 등록됐습니다.')
-            window.location.reload()
+            // window.location.reload()
             console.log(resp)
         }).catch((error) => {
             console.log(error)
-        })
+        });
     },
 
     update: function (btnId) {
         const id = btnId.substring(13);
 
         const menuForm = document.getElementById('menu-edit-form' + id);
-        const storeId = document.getElementById('storeId').value;
+        const storeIdVal = document.getElementById('storeId').value;
 
-        const formData = new FormData(menuForm);
+        let formData = new FormData(menuForm);
+        this.createDefaultImg(formData);
 
-        axios({
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Access-Control-Allow_Origin": "*"
-            },
-            method: "put",
-            url: "/seller/menu/" + storeId,
-            data: formData
-        }).then((resp) => {
-            alert('메뉴 정보 수정이 완료됐습니다.');
-            window.location.reload();
-        }).catch((error) => {
-            console.log(error);
-        })
+        const menuEditImageVal = document.getElementById('menu-edit-image' + id).value;
+
+        // if (!menuEditImageVal) {
+        //     alert("수정 시, 이미지를 재업로드해주세요!!");
+        // } else {
+            axios({
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Access-Control-Allow_Origin": "*"
+                },
+                method: "put",
+                url: "/seller/menu/" + storeIdVal,
+                data: formData
+            }).then((resp) => {
+                alert('메뉴 정보 수정이 완료됐습니다.');
+                window.location.reload();
+            }).catch((error) => {
+                console.log(error);
+            })
+        // }
+
     },
 
     delete: function (btnId) {

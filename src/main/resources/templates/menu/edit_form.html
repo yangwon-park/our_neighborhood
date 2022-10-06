@@ -31,10 +31,10 @@
             <div class="col-lg-4 col-md-8">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent pb-5">
-                        <div class="text-muted text-center mt-2 mb-4 fs-2">메뉴 수정</div>
+                        <div class="text-center mt-2 mb-4 fs-2 fw-bold">메뉴 수정</div>
                     </div>
                     <th:block th:each="menu, i: ${menuList}">
-                        <form class="form-floating" th:id="|menu-edit-form${i.index+1}|" enctype="multipart/form-data">
+                        <form class="form-floating mb-3" th:id="|menu-edit-form${i.index+1}|" enctype="multipart/form-data">
                             <div class="card-body">
                                 <div class="d-flex">
                                     <div class="col-6">
@@ -44,84 +44,91 @@
                                     <div class="col-6 align-middle">
                                         <div class="form-group">
                                             <div class="">
-                                                <label th:for="|menu-edit-name${i.index+1}|">
+                                                <label class="fw-bold" th:for="|menu-edit-name${i.index+1}|">
                                                     메뉴 이름
                                                 </label>
-                                                <input class="form-control" th:id="|menu-edit-name${i.index+1}|" name="name"
+                                                <input class="form-control" th:id="|menu-edit-name${i.index+1}|"
+                                                       name="name"
                                                        th:value="${menu.name}"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="">
-                                                <label th:for="|menu-edit-price${i.index+1}|">
+                                                <label class="fw-bold" th:for="|menu-edit-price${i.index+1}|">
                                                     상품 가격
                                                 </label>
-                                                <input class="form-control" th:id="|menu-edit-price${i.index+1}|" name="price"
+                                                <input class="form-control" th:id="|menu-edit-price${i.index+1}|"
+                                                       name="price"
                                                        th:value="${menu.price}"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="">
-                                                <label th:for="|menu-edit-dcPrice${i.index+1}|">
+                                                <label class="fw-bold" th:for="|menu-edit-dcPrice${i.index+1}|">
                                                     할인 가격
                                                 </label>
-                                                <input class="form-control" th:id="|menu-edit-dcPrice${i.index+1}|" name="discountPrice"
+                                                <input class="form-control" th:id="|menu-edit-dcPrice${i.index+1}|"
+                                                       name="discountPrice"
                                                        th:value="${menu.discountPrice}"/>
                                                 <span></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="">
-                                                <label th:for="|menu-edit-dcStart${i.index+1}|">
+                                                <label class="fw-bold" th:for="|menu-edit-dcStart${i.index+1}|">
                                                     할인 시작
                                                 </label>
                                                 <input class="form-control" th:id="|menu-edit-dcStart${i.index+1}|"
-                                                       name="discountStart" type="time" th:value="${menu.discountStart}"/>
+                                                       name="discountStart" type="time"
+                                                       th:value="${menu.discountStart}"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="">
-                                                <label th:for="|menu-edit-dcEnd${i.index+1}|">
+                                                <label class="fw-bold" th:for="|menu-edit-dcEnd${i.index+1}|">
                                                     할인 종료
                                                 </label>
                                                 <input class="form-control" th:id="|menu-edit-dcEnd${i.index+1}|"
                                                        name="discountEnd" type="time" th:value="${menu.discountEnd}"/>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="">
-                                                <div class="form-group d-flex text-nowrap">
-                                                    <div th:each="t : ${menuTypes}">
-                                                        <input type="radio" id="type" name="type" th:value="${t.name()}"/>
-                                                        <label th:text="${t.description}"
-                                                               class="form-check-label fw-bold"></label>
-                                                    </div>
-                                                </div>
+                                        <div class="form-group d-flex text-nowrap">
+                                            <div th:each="t, i : ${menuTypes}"
+                                                 th:with="check = ${menu.type.name()}">
+                                                <input type="radio" th:id="|type${i.index+1}|" name="type"
+                                                       th:checked="${#strings.equals(t.name(), check)}"
+                                                       th:value="${t.name()}"/>
+                                                <label th:text="${t.description}"
+                                                       class="form-check-label fw-bold"></label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="">
-                                                <label th:for="|menu-edit-image${i.index+1}|">
+                                                <label class="fw-bold" th:for="|menu-edit-image${i.index+1}|">
                                                     이미지 (수정 시 재업로드가 필요합니다.)
                                                 </label>
                                                 <input th:id="|menu-edit-image${i.index+1}|" name="file"
                                                        type="file"/>
                                                 <input id="storeId" th:value="${menu.storeId}" type="hidden"/>
-                                                <input th:id="|menuId${i.index+1}|" name="id" th:value="${menu.id}" type="hidden"/>
+                                                <input th:id="|menuId${i.index+1}|" name="id" th:value="${menu.id}"
+                                                       type="hidden"/>
                                             </div>
                                         </div>
                                         <div class="float-end">
                                             <button th:id="|menu-delete-btn${i.index+1}|"
                                                     type="button" class="btn btn-dark mt-4 menu-delete">
-                                                삭제</button>
+                                                삭제
+                                            </button>
                                             <button th:id="|menu-edit-btn${i.index+1}|"
                                                     type="button" class="btn btn-orange mt-4 menu-edit">
-                                                수정</button>
+                                                수정
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </form>
+                        <hr class="my-2">
                     </th:block>
                 </div>
             </div>

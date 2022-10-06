@@ -39,6 +39,10 @@ spring:
 file:
   dir: /C:/Users/ywOnp/Desktop/Study/review/file/
 
+default:
+  image:
+    dir: /C:/Users/ywOnp/Desktop/Study/review/default/defaultImg.png
+
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace

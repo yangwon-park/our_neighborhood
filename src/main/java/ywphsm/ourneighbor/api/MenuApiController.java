@@ -36,18 +36,25 @@ public class MenuApiController {
     public Long save(MenuDTO.Add dto) throws IOException {
 
         log.info("dto={}", dto);
+        log.info("dto={}", dto.getFile());
+
         return menuService.save(dto);
     }
 
     @PutMapping("/seller/menu/{storeId}")
     public Long update(@PathVariable Long storeId, MenuDTO.Update dto) throws IOException {
 
+        log.info("dto={}", dto);
+        log.info("dto={}", dto.getFile());
+
         return menuService.update(storeId, dto);
     }
 
     @DeleteMapping("/seller/menu/{storeId}")
     public Long delete(@PathVariable Long storeId, @RequestParam Long menuId) {
+
         log.info("menuId={}", menuId);
+
         return menuService.delete(menuId);
     }
 
@@ -55,7 +62,6 @@ public class MenuApiController {
     // 메뉴 이미지 출력
     @GetMapping("/menu/{fileName}")
     public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
-
         return new UrlResource("file:" + fileStore.getFullPath(fileName));
     }
 }

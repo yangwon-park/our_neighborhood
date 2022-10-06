@@ -29,10 +29,15 @@ public class MenuService {
     public Long save(MenuDTO.Add menuAddDTO) throws IOException {
         Store linkedStore = storeRepository.findById(menuAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
 
-        UploadFile storedImage = fileStore.storeFile(menuAddDTO.getFile());
+        UploadFile newUploadFile = fileStore.storeFile(menuAddDTO.getFile());
+
+        log.info("fileName={}", newUploadFile.getStoredFileName());
+        log.info("fileName={}", newUploadFile.getUploadedFileName());
 
         Menu menu = menuAddDTO.toEntity(linkedStore);
-        storedImage.addMenu(menu);
+
+        newUploadFile.addMenu(menu);
+
         linkedStore.addMenu(menu);
 
         return menuRepository.save(menu).getId();

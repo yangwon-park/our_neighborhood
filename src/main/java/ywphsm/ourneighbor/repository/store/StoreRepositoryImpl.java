@@ -55,9 +55,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .select(store)
                 .from(store)
                 .innerJoin(store.categoryOfStoreList, categoryOfStore)
-                .fetchJoin()
                 .innerJoin(categoryOfStore.category, category)
-                .fetchJoin()
                 .where(categoryOfStore.category.id.eq(categoryId), categoryOfStore.store.id.eq(store.id))
                 .fetch();
     }

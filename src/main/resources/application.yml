@@ -18,6 +18,10 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   #  profiles:
   #    active: local
   datasource:
@@ -38,10 +42,6 @@ spring:
 
 file:
   dir: /C:/Users/ywOnp/Desktop/Study/review/file/
-
-default:
-  image:
-    dir: /C:/Users/ywOnp/Desktop/Study/review/default/defaultImg.png
 
 logging.level:
   org.hibernate.SQL: debug

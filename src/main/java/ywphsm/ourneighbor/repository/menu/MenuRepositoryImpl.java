@@ -11,6 +11,7 @@ import ywphsm.ourneighbor.domain.menu.MenuType;
 
 import java.util.List;
 
+import static ywphsm.ourneighbor.domain.file.QUploadFile.*;
 import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
 
 @Slf4j
@@ -24,16 +25,16 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         NumberExpression<Integer> typeRank = new CaseBuilder()
                 .when(menu.type.eq(MenuType.MAIN)).then(1)
                 .when(menu.type.eq(MenuType.DESSERT)).then(2)
-                .when(menu.type.eq(MenuType.DRINK)).then(3)
-                .when(menu.type.eq(MenuType.BEVERAGE)).then(4)
-                .otherwise(4);
+                .when(menu.type.eq(MenuType.BEVERAGE)).then(3)
+                .when(menu.type.eq(MenuType.DRINK)).then(4)
+                .otherwise(5);
 
         return queryFactory
                 .selectFrom(menu)
                 .where(menu.store.id.eq(storeId))
-                .innerJoin(menu.file, QUploadFile.uploadFile)
+                .innerJoin(menu.file, uploadFile)
                 .fetchJoin()
-                .orderBy(typeRank.desc())
+                .orderBy(typeRank.asc())
                 .fetch();
     }
 }

@@ -80,14 +80,14 @@ class StoreServiceTest {
         NumberExpression<Integer> typeRank = new CaseBuilder()
                 .when(menu.type.eq(MenuType.MAIN)).then(1)
                 .when(menu.type.eq(MenuType.DESSERT)).then(2)
-                .when(menu.type.eq(MenuType.DRINK)).then(3)
-                .when(menu.type.eq(MenuType.BEVERAGE)).then(4)
-                .otherwise(4);
+                .when(menu.type.eq(MenuType.BEVERAGE)).then(3)
+                .when(menu.type.eq(MenuType.DRINK)).then(4)
+                .otherwise(5);
 
         List<Menu> list = queryFactory
                 .selectFrom(menu)
                 .where(menu.store.id.eq(24L))
-                .orderBy(typeRank.desc())
+                .orderBy(typeRank.asc())
                 .fetch();
 
         for (Menu menu : list) {

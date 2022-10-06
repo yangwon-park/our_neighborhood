@@ -32,7 +32,7 @@
             <div class="col-6">
                 <div class="float-end">
                     <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                            th:onclick="|location.href='@{/store/edit/{storeId}(storeId=${store.storeId})}'|">
+                            th:onclick="|location.href='@{/seller/store/edit/{storeId}(storeId=${store.storeId})}'|">
                         정보 수정
                     </button>
                 </div>
@@ -105,11 +105,11 @@
             <div class="col-12">
                 <div class="float-end">
                     <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                            th:onclick="|location.href='@{/menu/edit/{storeId}(storeId=${store.storeId})}'|">
+                            th:onclick="|location.href='@{/seller/menu/edit/{storeId}(storeId=${store.storeId})}'|">
                         메뉴 수정
                     </button>
                     <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                            th:onclick="|location.href='@{/menu/add/{storeId}(storeId=${store.storeId})}'|">
+                            th:onclick="|location.href='@{/seller/menu/add/{storeId}(storeId=${store.storeId})}'|">
                         메뉴 등록
                     </button>
                 </div>

@@ -7,12 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -107,4 +110,22 @@ public class StoreService {
         return storeRepository.searchByCategory(categoryId);
     }
 
+
+    //매장주인이 맞는지 체크
+    public boolean OwnerCheck(Member member, Long storeId) {
+
+        Store store = storeRepository.findById(storeId).orElse(null);
+        if (store != null) {
+            List<MemberOfStore> memberOfStoreList = store.getMemberOfStoreList();
+
+            for (MemberOfStore memberOfStore : memberOfStoreList) {
+                Long id = memberOfStore.getMember().getId();
+                if (member.getId().equals(id)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

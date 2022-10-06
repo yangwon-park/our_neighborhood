@@ -17,7 +17,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/category/add")
+    @GetMapping("/admin/category/add")
     public String addCategory(Model model) {
         List<CategoryDTO> all = categoryService.findAll();
         log.info("all={}", all);

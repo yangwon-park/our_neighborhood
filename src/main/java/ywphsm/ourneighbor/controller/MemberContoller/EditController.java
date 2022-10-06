@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.controller;
+package ywphsm.ourneighbor.controller.MemberContoller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,7 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@RequestMapping("/member_edit")
+@RequestMapping("/user/member_edit")
 @Controller
 public class EditController {
 
@@ -45,7 +45,7 @@ public class EditController {
         }
 
         memberService.updateNickname(editForm.getId(), editForm.getNickname());
-        return "redirect:/";
+        return "redirect:/user/myPage";
     }
 
     @GetMapping("/password_edit")

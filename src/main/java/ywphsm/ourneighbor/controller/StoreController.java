@@ -8,11 +8,17 @@ import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
+import ywphsm.ourneighbor.service.login.SessionConst;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +27,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequestMapping("/store")
 public class StoreController {
 
     private final StoreService storeService;
@@ -47,7 +52,7 @@ public class StoreController {
         return offDays;
     }
 
-    @GetMapping("/{storeId}")
+    @GetMapping("/store/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findById(storeId);
 
@@ -72,14 +77,26 @@ public class StoreController {
         return "store/detail";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/seller/store/add")
     public String addStore(Model model) {
         model.addAttribute("store", new StoreDTO.Add());
         return "store/add_form";
     }
 
-    @GetMapping("/edit/{storeId}")
-    public String editStore(@PathVariable Long storeId, Model model) {
+    @GetMapping("/seller/store/edit/{storeId}")
+    public String editStore(@PathVariable Long storeId, Model model,
+                            @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+                            HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        if (member.getRole().equals(Role.SELLER)) {
+            boolean storeOwner = storeService.OwnerCheck(member, storeId);
+
+            if (!storeOwner) {
+                String referer = request.getHeader("Referer");
+                response.sendRedirect(referer);
+            }
+        }
+
         Store findStore = storeService.findById(storeId);
         StoreDTO.Update store = new StoreDTO.Update(findStore);
 

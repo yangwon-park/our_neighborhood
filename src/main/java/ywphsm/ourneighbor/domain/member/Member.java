@@ -51,7 +51,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
 
-    //(1:N) Member
+    //(1:N) Review
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Review> reviewList = new ArrayList<>();
 
@@ -76,6 +76,13 @@ public class Member extends BaseTimeEntity {
         this.phoneNumber = phoneNumber;
         this.age = age;
         this.gender = gender;
+        this.role = role;
+    }
+
+    @Builder
+    public Member(String username, String email, Role role) {
+        this.username = username;
+        this.email = email;
         this.role = role;
     }
 

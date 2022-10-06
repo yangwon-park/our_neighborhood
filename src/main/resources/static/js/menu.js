@@ -35,23 +35,19 @@ var main = {
     check: function () {
         const name = document.getElementById("name");
         const price = document.getElementById("price");
-        const file = document.getElementById("file");
         const type = document.getElementsByName("type");
 
         const storeId = document.getElementById("storeId").value;
 
         const nameValid = document.getElementById('menu-name-valid');
         const priceValid = document.getElementById('menu-price-valid');
-        const fileValid = document.getElementById('menu-file-valid');
         const typeValid = document.getElementById('menu-type-valid');
 
         name.classList.remove("valid-custom");
         price.classList.remove("valid-custom");
-        file.classList.remove("valid-custom");
 
         validation.removeValidation(nameValid);
         validation.removeValidation(priceValid);
-        validation.removeValidation(fileValid);
         validation.removeValidation(typeValid);
 
         let typeCheck = false;
@@ -95,11 +91,6 @@ var main = {
             validation.addValidation(priceValid, "가격을 등록해주세요.");
         }
 
-        if (file.value === '') {
-            file.classList.add("valid-custom");
-            validation.addValidation(fileValid, "메뉴 이미지를 등록해주세요.");
-        }
-
         if (typeCheck === false) {
             validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");
         }
@@ -136,7 +127,7 @@ var main = {
             data: formData
         }).then((resp) => {
             alert('메뉴가 등록됐습니다.')
-            // window.location.reload()
+            window.location.reload()
             console.log(resp)
         }).catch((error) => {
             console.log(error)
@@ -152,27 +143,20 @@ var main = {
         let formData = new FormData(menuForm);
         this.createDefaultImg(formData);
 
-        const menuEditImageVal = document.getElementById('menu-edit-image' + id).value;
-
-        // if (!menuEditImageVal) {
-        //     alert("수정 시, 이미지를 재업로드해주세요!!");
-        // } else {
-            axios({
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    "Access-Control-Allow_Origin": "*"
-                },
-                method: "put",
-                url: "/seller/menu/" + storeIdVal,
-                data: formData
-            }).then((resp) => {
-                alert('메뉴 정보 수정이 완료됐습니다.');
-                window.location.reload();
-            }).catch((error) => {
-                console.log(error);
-            })
-        // }
-
+        axios({
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Access-Control-Allow_Origin": "*"
+            },
+            method: "put",
+            url: "/seller/menu/" + storeIdVal,
+            data: formData
+        }).then((resp) => {
+            alert('메뉴 정보 수정이 완료됐습니다.');
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error);
+        })
     },
 
     delete: function (btnId) {

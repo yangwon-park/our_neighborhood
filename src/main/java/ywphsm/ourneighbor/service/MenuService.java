@@ -13,6 +13,7 @@ import ywphsm.ourneighbor.repository.menu.MenuRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -89,5 +90,9 @@ public class MenuService {
 
     public boolean checkMenuDuplicate(String name, Store store) {
         return menuRepository.existsByNameAndStore(name, store);
+    }
+
+    public List<Menu> findByStoreIdCaseByOrderByType(Long storeId) {
+        return menuRepository.findByStoreIdCaseByOrderByType(storeId);
     }
 }

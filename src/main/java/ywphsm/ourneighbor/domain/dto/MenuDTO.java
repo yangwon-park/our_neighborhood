@@ -129,6 +129,43 @@ public class MenuDTO {
 
     @Data
     @NoArgsConstructor
+    public static class Simple {
+        @NotBlank
+        private String name;
+
+        @NotNull
+        private Integer price;
+
+        @NotNull
+        private int discountPrice;
+
+        @NotBlank
+        private MenuType type;
+
+        private String storedFileName;
+
+        @Builder
+        public Simple(String name, Integer price, int discountPrice, MenuType type, String storedFileName) {
+            this.name = name;
+            this.price = price;
+            this.discountPrice = discountPrice;
+            this.type = type;
+            this.storedFileName = storedFileName;
+        }
+
+        public static MenuDTO.Simple of(Menu entity) {
+            return Simple.builder()
+                    .name(entity.getName())
+                    .price(entity.getPrice())
+                    .discountPrice(entity.getDiscountPrice())
+                    .type(entity.getType())
+                    .storedFileName(entity.getFile().getStoredFileName())
+                    .build();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
     public static class Detail {
 
         @NotBlank

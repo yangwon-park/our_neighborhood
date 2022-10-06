@@ -9,11 +9,14 @@ import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
+import ywphsm.ourneighbor.service.MenuService;
 import ywphsm.ourneighbor.service.StoreService;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +29,8 @@ public class StoreController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
+
+    private final MenuService menuService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -50,16 +55,11 @@ public class StoreController {
     @GetMapping("/store/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findById(storeId);
-
         StoreDTO.Detail dto = new StoreDTO.Detail(store);
 
-        List<MenuDTO.Detail> menuList = dto.getMenuList();
-
-        for (MenuDTO.Detail detail : menuList) {
-            log.info("detail={}", detail.getStoredFileName());
-        }
-
-        List<CategoryOfStoreDTO> categoryList = dto.getCategoryList();
+        List<Menu> menuList = menuService.findByStoreIdCaseByOrderByType(storeId);
+        List<MenuDTO.Simple> menuDTOList = menuList.stream()
+                .map(MenuDTO.Simple::of).collect(Collectors.toList());
 
 //        List<CategorySimpleDTO> dtoList = new ArrayList<>();
 //        for (CategoryOfStoreDTO categoryOfStoreDTO : categoryList) {
@@ -68,13 +68,15 @@ public class StoreController {
 //            dtoList.add(dto);
 //        }
 
-        List<CategorySimpleDTO> dtoList = categoryList.stream()
+        List<CategorySimpleDTO> dtoList = dto.getCategoryList().stream()
                 .map(categoryOfStoreDTO ->
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
         model.addAttribute("store", dto);
+        model.addAttribute("menus", menuDTOList);
         model.addAttribute("categoryList", dtoList);
+
         return "store/detail";
     }
 

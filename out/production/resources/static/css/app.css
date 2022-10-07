@@ -1,0 +1,494 @@
+/* Global */
+:root {
+    --blue: #5e72e4;
+    --indigo: #5603ad;
+    --purple: #8965e0;
+    --pink: #f3a4b5;
+    --red: #f5365c;
+    --orange: #fb6340;
+    --yellow: #ffd600;
+    --green: #2dce89;
+    --teal: #11cdef;
+    --cyan: #2bffc6;
+    --white: #fff;
+    --gray: #8898aa;
+    --gray-dark: #32325d;
+    --light: #ced4da;
+    --lighter: #e9ecef;
+    --primary: #5e72e4;
+    --secondary: #f7fafc;
+    --success: #2dce89;
+    --info: #11cdef;
+    --warning: #fb6340;
+    --danger: #f5365c;
+    --light: #adb5bd;
+    --dark: #212529;
+    --default: #172b4d;
+    --white: #fff;
+    --neutral: #fff;
+    --darker: black;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: Open Sans, sans-serif;
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    accent-color: #fb6340;
+}
+
+input[type=radio] {
+    accent-color: #fb6340;
+    width: 1.25rem;
+    height: 1.25rem;
+<<<<<<< HEAD
+    vertical-align: middle;
+=======
+>>>>>>> 1f49c78cc7b2d37dbcc13bf91da3a3616e26a4e9
+}
+
+html {
+    font-family: sans-serif;
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -ms-overflow-style: scrollbar;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+    -ms-overflow-style: none;
+}
+
+#mask {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: block;
+    opacity: 0.5;
+    background: #4f5050;
+    z-index: 99;
+    text-align: center;
+}
+
+#mask > img {
+    width: 2.0rem;
+    height: 2.0rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    transition: opacity 1s ;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+<<<<<<< HEAD
+.radio-span {
+    vertical-align: middle;
+}
+
+=======
+>>>>>>> 1f49c78cc7b2d37dbcc13bf91da3a3616e26a4e9
+.hidden {
+    display: none;
+}
+
+.valid-custom {
+    border-color: #ff253a;
+    color: #ff253a;
+    display: block;
+}
+
+/* color까지 지정하면 select 박스의 모든 폰트가 붉어짐*/
+.input-error-border {
+    border-color: #ff253a;
+}
+
+.section-content {
+    padding: 4rem 0;
+
+}
+
+.navbar {
+    background-color: #FD7E14;
+}
+
+.navbar li,
+.navbar a,
+.navbar img {
+    color: #ffffff;
+}
+
+.orange {
+    color: #FD7E14;
+}
+
+.hr-orange {
+    height: 1rem;
+    background: #FD7E14;
+    border: 0;
+}
+
+.btn:hover,
+.btn:focus {
+    text-decoration: none;
+}
+
+.btn:focus {
+    outline: 0;
+    box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);
+}
+
+.btn:disabled {
+    opacity: .65;
+    box-shadow: none;
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
+.btn:not(:disabled):not(.disabled):active {
+    box-shadow: none;
+}
+
+.btn:not(:disabled):not(.disabled):active:focus {
+    box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08), none;
+}
+
+
+.btn-orange {
+    color: #fff;
+    border-color: #FD7E14;
+    background-color: #FD7E14;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+}
+
+.btn-orange:hover {
+    color: #fff;
+    border-color: #FD7E14;
+    background-color: #FD7E14;
+}
+
+.btn-orange:focus {
+    box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08), 0 0 0 0 rgba(94, 114, 228, .5);
+}
+
+.btn-orange:disabled {
+    color: #fff;
+    border-color: #FD7E14;
+    background-color: #FD7E14;
+}
+
+.btn-orange:not(:disabled):not(.disabled):active {
+    color: #fff;
+    border-color: #FD7E14;
+    background-color: #EBE40D;
+}
+
+.btn-orange:not(:disabled):not(.disabled):active:focus {
+    box-shadow: none, 0 0 0 0 rgba(94, 114, 228, .5);
+}
+
+/* Top Section */
+#top {
+    background-image: url('../images/bg-top.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 60vh;
+}
+
+/*
+    부모인 top section을 relative로 줌
+    자식인 overlay에 아래와 같이 스타일 부여
+        => 부모인 section과 위치와 크기가 같아짐
+*/
+#top .overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+}
+
+#top .divider {
+    width: 10%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-top: 1px solid #fff;
+}
+
+#top .welcome {
+    padding-right: 8rem;
+    color: #fff;
+}
+
+/* 767 아래인 경우로만 동작 (스몰 디바이스 이하)*/
+@media screen and (max-width: 767px) {
+    #top .welcome {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+#weather .weather-first-card {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 12rem;
+}
+
+#weather .col-6:nth-of-type(1) .weather-first-card {
+
+}
+
+#weather .col-6:nth-of-type(2) .weather-first-card {
+
+}
+
+#weather .col-6:nth-of-type(3) .weather-first-card {
+
+}
+
+#weather .col-6:nth-of-type(4) .weather-first-card {
+
+}
+
+#weather .weather-first-card .overlay {
+    left: 0;
+    top: 0;
+    background-color: transparent;
+}
+
+#weather .weather-first-card .overlay i {
+    transition: hover 0.4s ease;
+}
+
+#weather .weather-first-card .overlay a:hover {
+    color: #fafa6f;
+}
+
+#intro .intro-first-card {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 12rem;
+}
+
+#intro .col-6:nth-of-type(1) .intro-first-card {
+
+}
+
+#intro .col-6:nth-of-type(2) .intro-first-card {
+
+}
+
+#intro .col-6:nth-of-type(3) .intro-first-card {
+
+}
+
+#intro .col-6:nth-of-type(4) .intro-first-card {
+
+}
+
+#intro .intro-first-card .overlay {
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+#intro .intro-first-card .overlay a {
+    transition: hover 0.4s ease;
+}
+
+#intro .intro-first-card .overlay a:hover {
+    color: #fafa6f;
+}
+
+#services {
+    background-color: rgba(96, 125, 139, 0.1);
+}
+
+#services .divider {
+    width: 10%;
+    margin: 2rem auto;
+    border-top: 0.5rem solid rgb(255, 112 3);
+}
+
+#services .services-col .card {
+    transition: 0.4s ease;
+}
+
+#services .services-col .card:hover {
+    transform: translateY(-0.8rem);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+#services .services-col img {
+    height: 13rem;
+    object-fit: cover;
+    object-position: center;
+}
+
+#slogan {
+    background-image: url('../images/bg-cta.jpa');
+    background-position: center;
+    background-size: cover;
+    height: 70vh;
+}
+
+#slogan .slogan-card {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #000000;
+    transition: all 0.4s ease;
+}
+
+#slogan .slogan-card:hover {
+    background-color: #ffffff;
+}
+
+#gallery {
+    background-color: rgba(96, 125, 139, 0.35);
+}
+
+#gallery .divider {
+    width: 10%;
+    margin: 2rem auto;
+    border-top: 2px solid #000000;
+}
+
+#gallery .gallery-item .card {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 12rem;
+    transition: 0.3s ease-in-out;
+}
+
+#gallery .gallery-item .card:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+#gallery .card .overlay {
+    background-color: rgba(96, 125, 139, 0.3);
+    opacity: 0;
+    padding: 1.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.4s ease-in-out;
+}
+
+#gallery .card .overlay:hover {
+    opacity: 1;
+    color: #fff;
+}
+
+#gallery .gallery-item:nth-of-type(1) .card {
+    background-image: url('../images/port1.jpg');
+}
+
+#gallery .gallery-item:nth-of-type(2) .card {
+    background-image: url('../images/port2.jpg');
+}
+
+#gallery .gallery-item:nth-of-type(3) .card {
+    background-image: url('../images/port3.jpg');
+}
+
+#gallery .gallery-item:nth-of-type(4) .card {
+    background-image: url('../images/port4.jpg');
+}
+
+#gallery .gallery-item:nth-of-type(5) .card {
+    background-image: url('../images/port5.jpg');
+}
+
+#gallery .gallery-item:nth-of-type(6) .card {
+    background-image: url('../images/port6.jpg');
+}
+
+#cta {
+    background-image: url('../images/bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 65vh;
+}
+
+#cta .section-content {
+    background-color: rgba(96, 125, 139, 0.3);
+    /*height: 100%;*/
+    /*width: 100%;*/
+    top: 0;
+    left: 0;
+}
+
+#find-us .find-us {
+    position: absolute;
+
+    /* 아래 두개를 활용하면 위아래 딱 맞게 중간에 배치시킬 수 있음 */
+    top: 50%;
+    transform: translateY(-50%);
+
+    right: 2rem;
+    padding: 1.5rem;
+    height: auto;
+    background-color: rgba(255, 255, 255, 0.85);
+    transition: all 0.4s ease-in;
+}
+
+#find-us .find-us:hover {
+    background-color: #fff3cd;
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+#footer .sns img {
+    border-radius: 0.75rem;
+    transition: 0.4s ease;
+}
+
+#footer .sns img:hover {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+#footer .footer-1 .footer-logo {
+    width: 80%;
+}
+
+#footer h4 {
+    color: #29407b;
+}
+
+#footer li {
+    font-size: 1.1rem;
+}
+
+#footer .footer-4 i,
+#footer .footer-4 p {
+    font-size: 1.1rem;
+}
+
+#footer .footer-4 .info-body {
+    text-indent: -0.75rem;
+    margin-left: 0.75rem;
+}
+
+
+.OPEN {
+    background: #fd7e14;
+}
+
+.BREAK {
+    background: #0c4128;
+}
+
+.CLOSED {
+    background: #6c757d;
+    color: #0b1526;
+}
+

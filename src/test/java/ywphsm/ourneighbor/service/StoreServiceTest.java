@@ -94,7 +94,7 @@ class StoreServiceTest {
             System.out.println("menu = " + menu);
         }
     }
-    
+
     @Test
     @WithMockUser(username = "seller", roles = "SELLER")
     @DisplayName("매장 등록")

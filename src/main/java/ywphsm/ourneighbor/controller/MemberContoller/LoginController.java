@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.controller.login;
+package ywphsm.ourneighbor.controller.MemberContoller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

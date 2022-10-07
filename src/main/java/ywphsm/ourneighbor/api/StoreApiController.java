@@ -9,6 +9,13 @@ import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
+import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
+import ywphsm.ourneighbor.service.login.SessionConst;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +28,18 @@ public class StoreApiController {
     private final CategoryService categoryService;
 
     @PostMapping("/seller/store")
-    public Long save(@Validated StoreDTO.Add dto, @RequestParam(value = "categoryId") List<Long> categoryId) {
+    public Long save(@Validated StoreDTO.Add dto,
+                     @RequestParam(value = "categoryId") List<Long> categoryId,
+                     @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+                     HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        if (member.getRole().equals(Role.SELLER)) {
+            boolean storeOwner = storeService.OwnerCheck(member, dto.toEntity().getId());
+            if (!storeOwner) {
+                String referer = request.getHeader("Referer");
+                response.sendRedirect(referer);
+            }
+        }
 
         log.info("dto={}", dto);
         for (Long id : categoryId) {
@@ -37,15 +55,36 @@ public class StoreApiController {
 
     @PutMapping("/seller/store/{storeId}")
     public Long update(@PathVariable Long storeId, @Validated StoreDTO.Update dto,
-                       @RequestParam List<Long> categoryId) {
+                       @RequestParam List<Long> categoryId,
+                       @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+                       HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        if (member.getRole().equals(Role.SELLER)) {
+            boolean storeOwner = storeService.OwnerCheck(member, storeId);
+            if (!storeOwner) {
+                String referer = request.getHeader("Referer");
+                response.sendRedirect(referer);
+            }
+        }
 
         log.info("dto={}", dto);
 
         return storeService.update(storeId, dto, categoryId);
     }
 
-    @DeleteMapping("/admin/store/{storeId}")
-    public Long delete(@PathVariable Long storeId) {
+    @DeleteMapping("/seller/store/{storeId}")
+    public Long delete(@PathVariable Long storeId,
+                       @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+                       HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        if (member.getRole().equals(Role.SELLER)) {
+            boolean storeOwner = storeService.OwnerCheck(member, storeId);
+            if (!storeOwner) {
+                String referer = request.getHeader("Referer");
+                response.sendRedirect(referer);
+            }
+        }
+
         return storeService.delete(storeId);
     }
 }

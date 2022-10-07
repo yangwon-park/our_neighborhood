@@ -7,6 +7,7 @@ import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
+import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.menu.Menu;
 
 import javax.persistence.*;
@@ -77,6 +78,10 @@ public class Store extends BaseEntity {
     // Hashtag (N:N)
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
     private List<HashtagOfStore> hashtagOfStoreList = new ArrayList<>();
+
+    // member (N:N)
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
 
 
     // Many To Many인듯

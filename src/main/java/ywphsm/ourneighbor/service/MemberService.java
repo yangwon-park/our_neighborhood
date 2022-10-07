@@ -16,7 +16,7 @@ import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.email.EmailService;
 import ywphsm.ourneighbor.service.email.TokenService;
-import javax.persistence.EntityManager;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -97,17 +97,21 @@ public class MemberService {
     //회원수정시 닉네임 변경
     @Transactional
     public void updateNickname(Long id, String nickname) {
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findById(id).orElse(null);
 
-        member.updateNickname(nickname);
+        if (member != null) {
+            member.updateNickname(nickname);
+        }
     }
 
     //회원수정시 전화번호 변경
     @Transactional
     public void updatePhoneNumber(Long id, String phoneNumber) {
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findById(id).orElse(null);
 
+        if (member != null) {
         member.updatePhoneNumber(phoneNumber);
+        }
     }
 
     //비밀번호 확인
@@ -118,17 +122,21 @@ public class MemberService {
     //비밀번호 수정 변경 감지(회원수정)
     @Transactional
     public void updatePassword(Long id, String encodedPassword) {
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findById(id).orElse(null);
 
+        if (member != null) {
         member.updatePassword(encodedPassword);
+        }
     }
 
     //비밀번호 찾기 수정 변경 감지(비밀번호 찾기)
     @Transactional
     public void updatePassword(String userId, String encodedPassword) {
-        Member member = memberRepository.findByUserId(userId).get();
+        Member member = memberRepository.findByUserId(userId).orElse(null);
 
-        member.updatePassword(encodedPassword);
+        if (member != null) {
+            member.updatePassword(encodedPassword);
+        }
     }
 
     //비밀번호 찾기시 있는 아이디인지 확인

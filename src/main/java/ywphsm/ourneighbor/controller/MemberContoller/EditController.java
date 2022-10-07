@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.controller;
+package ywphsm.ourneighbor.controller.MemberContoller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,7 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@RequestMapping("/member_edit")
+@RequestMapping("/user/member_edit")
 @Controller
 public class EditController {
 
@@ -45,7 +45,7 @@ public class EditController {
         }
 
         memberService.updateNickname(editForm.getId(), editForm.getNickname());
-        return "redirect:/";
+        return "redirect:/user/myPage";
     }
 
     @GetMapping("/password_edit")
@@ -82,7 +82,7 @@ public class EditController {
                                @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
         if (member.isEmailConfirm()) {
-            return "edit/alreadyEmailConfirm"; // 이미 인증된 이메일입니다 메세지 띄워야함
+            return "edit/alreadyEmailConfirm";
         }
 
         return "edit/EmailConfirmForm";
@@ -92,6 +92,10 @@ public class EditController {
     public String confirmEmail(@Valid @ModelAttribute EmailConfirmForm emailConfirmForm,
                                BindingResult bindingResult,
                                @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
+
+        if (memberService.findByEmail(emailConfirmForm.getEmail()) != null) {
+            bindingResult.reject("emailDoubleCheck");
+        }
 
         if (bindingResult.hasErrors()) {
             return "edit/EmailConfirmForm";

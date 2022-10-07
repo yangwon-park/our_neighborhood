@@ -9,6 +9,7 @@ public enum MenuType {
     BEVERAGE("음료"), DRINK("주류"),
     ADD("추가");
 
+
     private final String description;
 
     MenuType(String description) {

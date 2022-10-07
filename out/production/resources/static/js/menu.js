@@ -37,7 +37,7 @@ var main = {
                 el.addEventListener('change', function () {
                     _this.imgActive(el.id);
                 });
-            })
+            });
         }
     },
     

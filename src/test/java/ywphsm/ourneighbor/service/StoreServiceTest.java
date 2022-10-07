@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,6 +19,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.menu.QMenu;
@@ -51,6 +53,9 @@ class StoreServiceTest {
     private MockMvc mvc;
 
     @Autowired
+    MemberService memberService;
+
+    @Autowired
     StoreService storeService;
 
     @Autowired
@@ -64,9 +69,18 @@ class StoreServiceTest {
 
     JPAQueryFactory queryFactory;
 
+    MockHttpSession session;
+
     @BeforeEach
     void before() {
         queryFactory = new JPAQueryFactory(em);
+
+        Member member = memberService.findByUserId("ywonp94");
+
+//        Member member = memberService.findByEmail("ailey@nate.com");
+
+        session = new MockHttpSession();
+        session.setAttribute("loginMember", member);
 
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
@@ -127,7 +141,7 @@ class StoreServiceTest {
                 .closingTime(LocalTime.now())
                 .build();
 
-        mvc.perform(multipart("/seller/store")
+        mvc.perform(multipart("/seller/store").session(session)
                         .param("name", dto.getName())
                         .param("zipcode", dto.getZipcode())
                         .param("roadAddr", dto.getRoadAddr())
@@ -226,7 +240,7 @@ class StoreServiceTest {
 //            return request;
 //        });
 
-        mvc.perform(multipart("/seller/store/" + storeId)
+        mvc.perform(multipart("/seller/store/" + storeId).session(session)
                         .param("name", dto.getName())
                         .param("zipcode", dto.getZipcode())
                         .param("roadAddr", dto.getRoadAddr())

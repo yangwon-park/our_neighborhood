@@ -30,6 +30,7 @@
                       th:classappend="*{status}"></span>
             </div>
             <div class="col-6">
+<<<<<<< HEAD
                 <th:block th:if="${session.loginMember ne null}">
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
@@ -41,6 +42,14 @@
                         </div>
                     </th:block>
                 </th:block>
+=======
+                <div class="float-end">
+                    <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                            th:onclick="|location.href='@{/seller/store/edit/{storeId}(storeId=${store.storeId})}'|">
+                        정보 수정
+                    </button>
+                </div>
+>>>>>>> 1f49c78cc7b2d37dbcc13bf91da3a3616e26a4e9
             </div>
         </div>
         <hr class="my-2">
@@ -108,6 +117,7 @@
         </div>
         <div class="row">
             <div class="col-12">
+<<<<<<< HEAD
                 <th:block th:if="${session.loginMember ne null}">
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
@@ -123,15 +133,34 @@
                         </div>
                     </th:block>
                 </th:block>
+=======
+                <div class="float-end">
+                    <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                            th:onclick="|location.href='@{/seller/menu/edit/{storeId}(storeId=${store.storeId})}'|">
+                        메뉴 수정
+                    </button>
+                    <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                            th:onclick="|location.href='@{/seller/menu/add/{storeId}(storeId=${store.storeId})}'|">
+                        메뉴 등록
+                    </button>
+                </div>
+>>>>>>> 1f49c78cc7b2d37dbcc13bf91da3a3616e26a4e9
             </div>
         </div>
         <hr class="my-2">
         <div class="menu-list">
             <div class="row menu-sub" th:each="t: ${menuTypes}">
+<<<<<<< HEAD
                 <th:block th:each="menu, stat : ${menus}">
                     <th:block th:if="${#strings.equals(t.name(), menu.type)}"
                               th:with="isDuplicated=${stat.index > 0 &&
                                 menus[stat.index - 1].type == menus[stat.index].type}">
+=======
+                <th:block th:each="menu, stat : *{menuList}">
+                    <th:block th:if="${#strings.equals(t.name(), menu.type)}"
+                              th:with="isDuplicated=${stat.index > 0 &&
+                                store.menuList[stat.index - 1].type== store.menuList[stat.index].type}">
+>>>>>>> 1f49c78cc7b2d37dbcc13bf91da3a3616e26a4e9
                         <div class="col-12" th:if="${isDuplicated == false}">
                             <div class="menu-title my-3">
                                 <div class="col-12">

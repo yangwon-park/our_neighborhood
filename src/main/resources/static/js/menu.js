@@ -59,7 +59,7 @@ var main = {
         }
 
         if (name.value !== '' && storeId !== ''
-                && price.value !== '' && typeCheck === true) {
+            && price.value !== '' && typeCheck === true) {
             axios({
                 method: "get",
                 url: "/seller/menu/check",

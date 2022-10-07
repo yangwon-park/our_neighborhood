@@ -86,7 +86,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         HttpSession session = request.getSession();
                         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
-                        response.sendRedirect("/");
+                        String referer = request.getHeader("Referer");
+                        response.sendRedirect(referer);
                     }
                 })
 

@@ -6,11 +6,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
-import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.domain.member.MemberOfStore;
-import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
+
+import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,19 +72,8 @@ public class StoreApiController {
         return storeService.update(storeId, dto, categoryId);
     }
 
-    @DeleteMapping("/seller/store/{storeId}")
-    public Long delete(@PathVariable Long storeId,
-                       @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-                       HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        if (member.getRole().equals(Role.SELLER)) {
-            boolean storeOwner = storeService.OwnerCheck(member, storeId);
-            if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
-            }
-        }
-
+    @DeleteMapping("/admin/store/{storeId}")
+    public Long delete(@PathVariable Long storeId) {
         return storeService.delete(storeId);
     }
 }

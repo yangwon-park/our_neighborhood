@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
@@ -8,8 +9,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.domain.dto.MemberDTO;
 import ywphsm.ourneighbor.domain.member.EmailToken;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.email.EmailService;
 import ywphsm.ourneighbor.service.email.TokenService;
@@ -19,9 +22,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -39,7 +43,8 @@ public class MemberService {
 
     // 회원 한명 조회
     public Member findById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+        return memberRepository.findById(memberId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
     }
 
     // 회원 전체 조회
@@ -82,6 +87,11 @@ public class MemberService {
 
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElse(null);
+    }
+
+    public Member findByUserId(String userId) {
+        return memberRepository.findByUserId(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + userId));
     }
 
     //회원수정시 닉네임 변경
@@ -182,5 +192,17 @@ public class MemberService {
     @Transactional
     public void withdrawal(Long id) {
         memberRepository.findById(id).ifPresent(memberRepository::delete);
+    }
+
+    public Long updateRole(Long memberId, String role) {
+        Member findMember = memberRepository.findById(memberId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
+
+
+        Role findRole = Role.of(role);
+
+        findMember.updateRole(findRole);
+
+        return memberId;
     }
 }

@@ -2,7 +2,6 @@ package ywphsm.ourneighbor.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 
 import javax.validation.constraints.NotNull;

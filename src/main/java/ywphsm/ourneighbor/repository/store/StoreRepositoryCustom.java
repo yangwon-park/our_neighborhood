@@ -15,5 +15,4 @@ public interface StoreRepositoryCustom {
 
     List<Store> searchByCategory(Long categoryId);
 
-    Optional<Store> findByIdWithFetch(Long storeId);
 }

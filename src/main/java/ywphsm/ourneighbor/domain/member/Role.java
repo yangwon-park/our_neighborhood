@@ -16,7 +16,6 @@ public enum Role {
 
     // UnmodifiableMap : read-only Map
     // Map<Role Title, Role Name>
-
     // static 객체 => 앱 초기 구동 시 1회만 수행됨
     private static final Map<String, String> code = Collections.unmodifiableMap(
             Stream.of(values()).collect(Collectors.toMap(Role::getTitle, Role::name))

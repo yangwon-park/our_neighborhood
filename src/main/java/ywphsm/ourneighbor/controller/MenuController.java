@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
@@ -20,9 +23,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
-@RequestMapping("/seller/menu")
+@RequiredArgsConstructor
 @Controller
 public class MenuController {
 
@@ -33,7 +38,7 @@ public class MenuController {
         return MenuType.values();
     }
 
-    @GetMapping("/add/{storeId}")
+    @GetMapping("/seller/menu/add/{storeId}")
     public String addMenu(@PathVariable Long storeId, Model model,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                           HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -53,7 +58,7 @@ public class MenuController {
         return "menu/add_form";
     }
 
-    @GetMapping("/edit/{storeId}")
+    @GetMapping("/seller/menu/edit/{storeId}")
     public String editMenu(@PathVariable Long storeId, Model model,
                            @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                            HttpServletRequest request, HttpServletResponse response) throws IOException {

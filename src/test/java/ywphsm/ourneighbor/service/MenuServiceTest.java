@@ -8,12 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.menu.Menu;
-import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.domain.store.StoreStatus;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 
@@ -57,6 +56,7 @@ class MenuServiceTest {
     TestRestTemplate restTemplate;
 
     @Test
+    @WithMockUser(username = "ADMIN", roles = "ADMIN")
     @DisplayName("메뉴 등록")
     void saveMenu() throws Exception {
         Long storeId = 24L;
@@ -68,7 +68,7 @@ class MenuServiceTest {
                 new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
 //                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
-        mvc.perform(multipart("/menu")
+        mvc.perform(multipart("/seller/menu")
                         .file(file)
                         .param("storeId", String.valueOf(storeId))
                         .param("name", name)
@@ -87,6 +87,7 @@ class MenuServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "seller1", roles = "SELLER")
     @DisplayName("메뉴 수정")
     void updateMenu() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
@@ -111,7 +112,7 @@ class MenuServiceTest {
 //                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
 
-        mvc.perform(multipart("/menu/" + storeId)
+        mvc.perform(multipart("/seller/menu/" + storeId)
                         .file(newFile)
                         .param("id", String.valueOf(menuId))
                         .param("storeId", String.valueOf(storeId))
@@ -132,6 +133,7 @@ class MenuServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "seller1", roles = "SELLER")
     @DisplayName("메뉴 삭제")
     void deleteMenu() throws Exception {
         MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
@@ -149,7 +151,7 @@ class MenuServiceTest {
 
         Long menuId = menuService.save(dto);
 
-        String url = "http://localhost" + port + "/menu/" + storeId;
+        String url = "http://localhost" + port + "/seller/menu/" + storeId;
 
         mvc.perform(delete(url)
                         .param("menuId", String.valueOf(menuId)))

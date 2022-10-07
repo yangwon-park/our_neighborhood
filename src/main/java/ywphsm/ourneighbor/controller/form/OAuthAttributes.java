@@ -75,7 +75,7 @@ public class OAuthAttributes {
 
         int gender = 1;
 
-        if ((response.get("gender")).equals("male")) {
+        if ((response.get("gender") == null) || (response.get("gender")).equals("male")) {
             gender = 0;
         }
 

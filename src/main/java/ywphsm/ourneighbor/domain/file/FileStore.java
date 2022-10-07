@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.domain.file;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 // 파일 저장 로직 처리만을 담당하는 스프링 빈
+@Slf4j
 @Component
 public class FileStore {
 
@@ -45,17 +47,26 @@ public class FileStore {
             return null;
         }
 
-        String originalFilename = multipartFile.getOriginalFilename();
+        String originalFileName = multipartFile.getOriginalFilename();
+        String storeFileName;
 
-        // ex) image.png
-        // 서버 저장 파일명
-        String storeFileName = createStoreFileName(originalFilename);
+        if (originalFileName.equals("default.png")) {
+            
+            // 기본이미지 사용 시, 별도로 파일을 업로드해서 만들지 않음
+            // 저장 파일 자체를 미리 로컬에 만들어뒀음
+            storeFileName = "default.png";
+        } else {
 
-        // 경로 + 서버 저장 파일명을 가지고 File을 생성
-        // transferTo => 업로드한 파일 데이터를 new File(getFullPath(storeFileName)로 저장
-        multipartFile.transferTo(new File(getFullPath(storeFileName)));
+            // ex) UUID.png
+            // 서버 저장 파일명
+            storeFileName = createStoreFileName(originalFileName);
 
-        return new UploadFile(originalFilename, storeFileName);
+            // 경로 + 서버 저장 파일명을 가지고 File을 생성
+            // transferTo => 업로드한 파일 데이터를 new File(getFullPath(storeFileName)로 저장
+            multipartFile.transferTo(new File(getFullPath(storeFileName)));
+        }
+
+        return new UploadFile(originalFileName, storeFileName);
     }
 
     private String createStoreFileName(String originalFilename) {

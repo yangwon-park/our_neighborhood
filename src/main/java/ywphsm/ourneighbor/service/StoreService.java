@@ -15,7 +15,6 @@ import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -82,7 +81,7 @@ public class StoreService {
 
     // 매장 하나 조회
     public Store findById(Long storeId) {
-        Store store = storeRepository.findByIdWithFetch(storeId).orElseThrow(
+        Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
 
         store.autoUpdateStatus(store.getOffDays(), store.getBusinessTime());

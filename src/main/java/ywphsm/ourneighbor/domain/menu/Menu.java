@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {
         "id", "name", "price", "discountPrice",
-        "discountStart", "discountEnd"
+        "discountStart", "discountEnd", "type"
 })
 @Entity
 public class Menu extends BaseEntity {

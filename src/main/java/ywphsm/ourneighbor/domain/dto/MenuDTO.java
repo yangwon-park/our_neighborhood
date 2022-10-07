@@ -82,10 +82,13 @@ public class MenuDTO {
 
         private LocalDateTime discountEnd;
 
+        @NotBlank
+        private MenuType type;
+
         @Builder
         public Update(Long id, String name, Integer price, Long storeId,
                       String storedFileName, MultipartFile file,
-                      int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd) {
+                      int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd, MenuType type) {
             this.id = id;
             this.name = name;
             this.price = price;
@@ -95,6 +98,7 @@ public class MenuDTO {
             this.discountPrice = discountPrice;
             this.discountStart = discountStart;
             this.discountEnd = discountEnd;
+            this.type = type;
         }
 
         @Builder
@@ -107,6 +111,7 @@ public class MenuDTO {
             this.discountPrice = menu.getDiscountPrice();
             this.discountStart = menu.getDiscountStart();
             this.discountEnd = menu.getDiscountEnd();
+            this.type = menu.getType();
         }
 
         public Menu toEntity() {
@@ -117,6 +122,44 @@ public class MenuDTO {
                     .discountPrice(discountPrice)
                     .discountStart(discountStart)
                     .discountEnd(discountEnd)
+                    .type(type)
+                    .build();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class Simple {
+        @NotBlank
+        private String name;
+
+        @NotNull
+        private Integer price;
+
+        @NotNull
+        private int discountPrice;
+
+        @NotBlank
+        private MenuType type;
+
+        private String storedFileName;
+
+        @Builder
+        public Simple(String name, Integer price, int discountPrice, MenuType type, String storedFileName) {
+            this.name = name;
+            this.price = price;
+            this.discountPrice = discountPrice;
+            this.type = type;
+            this.storedFileName = storedFileName;
+        }
+
+        public static MenuDTO.Simple of(Menu entity) {
+            return Simple.builder()
+                    .name(entity.getName())
+                    .price(entity.getPrice())
+                    .discountPrice(entity.getDiscountPrice())
+                    .type(entity.getType())
+                    .storedFileName(entity.getFile().getStoredFileName())
                     .build();
         }
     }

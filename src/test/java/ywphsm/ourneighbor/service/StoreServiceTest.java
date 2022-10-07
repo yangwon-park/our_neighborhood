@@ -1,11 +1,16 @@
 package ywphsm.ourneighbor.service;
 
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +19,18 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.menu.MenuType;
+import ywphsm.ourneighbor.domain.menu.QMenu;
 import ywphsm.ourneighbor.domain.store.*;
 
+import javax.persistence.EntityManager;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -28,6 +39,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
+import static ywphsm.ourneighbor.domain.store.QStore.store;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
@@ -40,30 +53,64 @@ class StoreServiceTest {
     private MockMvc mvc;
 
     @Autowired
+    MemberService memberService;
+
+    @Autowired
     StoreService storeService;
 
     @Autowired
     CategoryService categoryService;
 
+    @LocalServerPort
+    private int port;
+
+    @Autowired
+    EntityManager em;
+
+    JPAQueryFactory queryFactory;
+
+    MockHttpSession session;
+
     @BeforeEach
     void before() {
+        queryFactory = new JPAQueryFactory(em);
+
+        Member member = memberService.findByUserId("ywonp94");
+
+//        Member member = memberService.findByEmail("ailey@nate.com");
+
+        session = new MockHttpSession();
+        session.setAttribute("loginMember", member);
+
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
     }
 
-    @LocalServerPort
-    private int port;
-
     @Test
-    @DisplayName("매장 한개 찾기")
-    void findOne() {
-        Store store = storeService.findById(440L);
-        assertThat(store.getId()).isEqualTo(440L);
+    @DisplayName("테스트")
+    void 테스트_중() {
+        NumberExpression<Integer> typeRank = new CaseBuilder()
+                .when(menu.type.eq(MenuType.MAIN)).then(1)
+                .when(menu.type.eq(MenuType.DESSERT)).then(2)
+                .when(menu.type.eq(MenuType.BEVERAGE)).then(3)
+                .when(menu.type.eq(MenuType.DRINK)).then(4)
+                .otherwise(5);
+
+        List<Menu> list = queryFactory
+                .selectFrom(menu)
+                .where(menu.store.id.eq(24L))
+                .orderBy(typeRank.asc())
+                .fetch();
+
+        for (Menu menu : list) {
+            System.out.println("menu = " + menu);
+        }
     }
 
     @Test
+    @WithMockUser(username = "seller", roles = "SELLER")
     @DisplayName("매장 등록")
     void saveStore() throws Exception {
 //      https://stackoverflow.com/questions/45044021/spring-mockmvc-request-parameter-list => 참고
@@ -94,7 +141,7 @@ class StoreServiceTest {
                 .closingTime(LocalTime.now())
                 .build();
 
-        mvc.perform(multipart("/store")
+        mvc.perform(multipart("/seller/store").session(session)
                         .param("name", dto.getName())
                         .param("zipcode", dto.getZipcode())
                         .param("roadAddr", dto.getRoadAddr())
@@ -128,6 +175,7 @@ class StoreServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "seller", roles = "SELLER")
     @DisplayName("매장 수정")
     void updateStore() throws Exception {
 
@@ -192,7 +240,7 @@ class StoreServiceTest {
 //            return request;
 //        });
 
-        mvc.perform(multipart("/store/" + storeId)
+        mvc.perform(multipart("/seller/store/" + storeId).session(session)
                         .param("name", dto.getName())
                         .param("zipcode", dto.getZipcode())
                         .param("roadAddr", dto.getRoadAddr())
@@ -228,6 +276,7 @@ class StoreServiceTest {
 
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("매장 삭제")
     void deleteStore() throws Exception {
         List<Long> categoryId = new ArrayList<>();
@@ -255,7 +304,7 @@ class StoreServiceTest {
                 .closingTime(LocalTime.now())
                 .build(), categoryList);
 
-        String url = "http://localhost:" + port + "/store/" + storeId;
+        String url = "http://localhost:" + port + "/admin/store/" + storeId;
 
         mvc.perform(delete(url))
                 .andDo(print())

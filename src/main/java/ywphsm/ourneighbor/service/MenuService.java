@@ -13,6 +13,7 @@ import ywphsm.ourneighbor.repository.menu.MenuRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,10 +30,15 @@ public class MenuService {
     public Long save(MenuDTO.Add menuAddDTO) throws IOException {
         Store linkedStore = storeRepository.findById(menuAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
 
-        UploadFile storedImage = fileStore.storeFile(menuAddDTO.getFile());
+        UploadFile newUploadFile = fileStore.storeFile(menuAddDTO.getFile());
+
+        log.info("fileName={}", newUploadFile.getStoredFileName());
+        log.info("fileName={}", newUploadFile.getUploadedFileName());
 
         Menu menu = menuAddDTO.toEntity(linkedStore);
-        storedImage.addMenu(menu);
+
+        newUploadFile.addMenu(menu);
+
         linkedStore.addMenu(menu);
 
         return menuRepository.save(menu).getId();
@@ -84,5 +90,9 @@ public class MenuService {
 
     public boolean checkMenuDuplicate(String name, Store store) {
         return menuRepository.existsByNameAndStore(name, store);
+    }
+
+    public List<Menu> findByStoreIdCaseByOrderByType(Long storeId) {
+        return menuRepository.findByStoreIdCaseByOrderByType(storeId);
     }
 }

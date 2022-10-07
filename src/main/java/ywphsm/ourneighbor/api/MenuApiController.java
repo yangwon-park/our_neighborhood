@@ -25,7 +25,7 @@ public class MenuApiController {
 
     private final FileStore fileStore;
 
-    @GetMapping("/check")
+    @GetMapping("/seller/menu/check")
     public ResponseEntity<Boolean> checkMenuDuplicate(String name, Long storeId) {
         Store store = storeService.findById(storeId);
 
@@ -36,26 +36,32 @@ public class MenuApiController {
     public Long save(MenuDTO.Add dto) throws IOException {
 
         log.info("dto={}", dto);
+        log.info("dto={}", dto.getFile());
+
         return menuService.save(dto);
     }
 
     @PutMapping("/seller/menu/{storeId}")
     public Long update(@PathVariable Long storeId, MenuDTO.Update dto) throws IOException {
 
+        log.info("dto={}", dto);
+        log.info("dto={}", dto.getFile());
+
         return menuService.update(storeId, dto);
     }
 
     @DeleteMapping("/seller/menu/{storeId}")
     public Long delete(@PathVariable Long storeId, @RequestParam Long menuId) {
+
         log.info("menuId={}", menuId);
+
         return menuService.delete(menuId);
     }
 
 
     // 메뉴 이미지 출력
-    @GetMapping("/{fileName}")
+    @GetMapping("/menu/{fileName}")
     public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
-
         return new UrlResource("file:" + fileStore.getFullPath(fileName));
     }
 }

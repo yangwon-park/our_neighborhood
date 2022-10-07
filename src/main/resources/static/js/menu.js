@@ -35,23 +35,19 @@ var main = {
     check: function () {
         const name = document.getElementById("name");
         const price = document.getElementById("price");
-        const file = document.getElementById("file");
         const type = document.getElementsByName("type");
 
         const storeId = document.getElementById("storeId").value;
 
         const nameValid = document.getElementById('menu-name-valid');
         const priceValid = document.getElementById('menu-price-valid');
-        const fileValid = document.getElementById('menu-file-valid');
         const typeValid = document.getElementById('menu-type-valid');
 
         name.classList.remove("valid-custom");
         price.classList.remove("valid-custom");
-        file.classList.remove("valid-custom");
 
         validation.removeValidation(nameValid);
         validation.removeValidation(priceValid);
-        validation.removeValidation(fileValid);
         validation.removeValidation(typeValid);
 
         let typeCheck = false;
@@ -66,7 +62,7 @@ var main = {
                 && price.value !== '' && typeCheck === true) {
             axios({
                 method: "get",
-                url: "/menu/check",
+                url: "/seller/menu/check",
                 params: {
                     name: name.value,
                     storeId: storeId
@@ -95,19 +91,31 @@ var main = {
             validation.addValidation(priceValid, "가격을 등록해주세요.");
         }
 
-        if (file.value === '') {
-            file.classList.add("valid-custom");
-            validation.addValidation(fileValid, "메뉴 이미지를 등록해주세요.");
-        }
-
         if (typeCheck === false) {
-            validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");gi
+            validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");
+        }
+    },
+
+    createDefaultImg: function (formData) {
+        let file = formData.get("file");
+
+        if (file.name === "") {
+            formData.delete("file");
         }
 
+        let defaultFile = new File(["foo"], "default.png", {
+            type: "image/png"
+        })
+
+        formData.append("file", defaultFile);
     },
 
     save: function () {
-        const menuForm = document.getElementById('menu-add-form')
+        const menuForm = document.getElementById("menu-add-form");
+
+        let formData = new FormData(menuForm);
+
+        this.createDefaultImg(formData);
 
         axios({
             headers: {
@@ -116,23 +124,24 @@ var main = {
             },
             method: "post",
             url: "/seller/menu",
-            data: new FormData(menuForm)
+            data: formData
         }).then((resp) => {
             alert('메뉴가 등록됐습니다.')
             window.location.reload()
             console.log(resp)
         }).catch((error) => {
             console.log(error)
-        })
+        });
     },
 
     update: function (btnId) {
         const id = btnId.substring(13);
 
         const menuForm = document.getElementById('menu-edit-form' + id);
-        const storeId = document.getElementById('storeId').value;
+        const storeIdVal = document.getElementById('storeId').value;
 
-        const formData = new FormData(menuForm);
+        let formData = new FormData(menuForm);
+        this.createDefaultImg(formData);
 
         axios({
             headers: {
@@ -140,7 +149,7 @@ var main = {
                 "Access-Control-Allow_Origin": "*"
             },
             method: "put",
-            url: "/seller/menu/" + storeId,
+            url: "/seller/menu/" + storeIdVal,
             data: formData
         }).then((resp) => {
             alert('메뉴 정보 수정이 완료됐습니다.');

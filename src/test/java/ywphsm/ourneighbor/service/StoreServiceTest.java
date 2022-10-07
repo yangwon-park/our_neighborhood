@@ -1,5 +1,8 @@
 package ywphsm.ourneighbor.service;
 
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,12 +18,17 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.menu.MenuType;
+import ywphsm.ourneighbor.domain.menu.QMenu;
 import ywphsm.ourneighbor.domain.store.*;
 
+import javax.persistence.EntityManager;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -29,6 +37,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
+import static ywphsm.ourneighbor.domain.store.QStore.store;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
@@ -49,14 +59,42 @@ class StoreServiceTest {
     @LocalServerPort
     private int port;
 
+    @Autowired
+    EntityManager em;
+
+    JPAQueryFactory queryFactory;
+
     @BeforeEach
     void before() {
+        queryFactory = new JPAQueryFactory(em);
+
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
     }
 
+    @Test
+    @DisplayName("테스트")
+    void 테스트_중() {
+        NumberExpression<Integer> typeRank = new CaseBuilder()
+                .when(menu.type.eq(MenuType.MAIN)).then(1)
+                .when(menu.type.eq(MenuType.DESSERT)).then(2)
+                .when(menu.type.eq(MenuType.BEVERAGE)).then(3)
+                .when(menu.type.eq(MenuType.DRINK)).then(4)
+                .otherwise(5);
+
+        List<Menu> list = queryFactory
+                .selectFrom(menu)
+                .where(menu.store.id.eq(24L))
+                .orderBy(typeRank.asc())
+                .fetch();
+
+        for (Menu menu : list) {
+            System.out.println("menu = " + menu);
+        }
+    }
+    
     @Test
     @WithMockUser(username = "seller", roles = "SELLER")
     @DisplayName("매장 등록")

@@ -30,14 +30,14 @@
                             로그아웃
                         </a>
                     </li>
-                    <th:block th:if="${#strings.equals(session.loginMember.getRole(), 'ADMIN')}">
+                    <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <li class="nav-item">
                             <a th:href="@{/admin/mypage/{memberId}(memberId=${session.loginMember.getId()})}" class="nav-link">
                                 운영자 페이지
                             </a>
                         </li>
                     </th:block>
-                    <th:block th:if="${#strings.equals(session.loginMember.getRole(), 'SELLER')}">
+                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')}">
                         <li class="nav-item">
                             <a href="/store/add" class="nav-link">
                                 매장 관리

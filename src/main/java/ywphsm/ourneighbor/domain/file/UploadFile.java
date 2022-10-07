@@ -23,6 +23,10 @@ public class UploadFile {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
+    public void setDefaultStoredFileName(String storedFileName) {
+        this.storedFileName = storedFileName;
+    }
+
 
     public UploadFile(String uploadedFileName, String storedFileName) {
         this.uploadedFileName = uploadedFileName;
@@ -40,9 +44,6 @@ public class UploadFile {
     /*
         비즈니스 로직 메소드
      */
-    public void updateMenu(Menu menu) {
-        this.menu = menu;
-    }
 
     public void updateUploadedFileName(String storedFileName, String uploadedFileName) {
         this.storedFileName = storedFileName;

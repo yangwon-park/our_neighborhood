@@ -160,7 +160,7 @@ public class StoreDTO {
 
         private StoreStatus status;               // 가게 오픈 상황
 
-        private List<MenuDTO.Detail> menuList;    // 메뉴
+//        private List<MenuDTO.Detail> menuList;    // 메뉴
 
         // 주소는 임베디드 타입으로 받음
 
@@ -194,9 +194,9 @@ public class StoreDTO {
             roadAddr = store.getAddress().getRoadAddr();
             numberAddr = store.getAddress().getNumberAddr();
             detail = store.getAddress().getDetail();
-            menuList = store.getMenuList().stream()
-                    .map(MenuDTO.Detail::new)
-                    .collect(Collectors.toList());
+//            menuList = store.getMenuList().stream()
+//                    .map(MenuDTO.Detail::new)
+//                    .collect(Collectors.toList());
             categoryList = store.getCategoryOfStoreList().stream()
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());

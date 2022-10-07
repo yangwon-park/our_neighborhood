@@ -41,10 +41,7 @@ input[type=radio] {
     accent-color: #fb6340;
     width: 1.25rem;
     height: 1.25rem;
-<<<<<<< HEAD
     vertical-align: middle;
-=======
->>>>>>> 1f49c78cc7b2d37dbcc13bf91da3a3616e26a4e9
 }
 
 html {
@@ -87,13 +84,10 @@ body {
     display: none;
 }
 
-<<<<<<< HEAD
 .radio-span {
     vertical-align: middle;
 }
 
-=======
->>>>>>> 1f49c78cc7b2d37dbcc13bf91da3a3616e26a4e9
 .hidden {
     display: none;
 }
@@ -492,3 +486,19 @@ body {
     color: #0b1526;
 }
 
+
+.menu-feat-SPICY {
+    background: #ff253a;
+}
+
+.menu-feat-BEST {
+    background: #FD7E14;
+}
+
+.menu-feat-SIGN {
+    background: #0dcaf0;
+}
+
+.menu-feat-SET {
+    background: #0c4128;
+}

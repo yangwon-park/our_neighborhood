@@ -48,24 +48,27 @@ public class MenuService {
     @Transactional
     public Long update(Long storeId, MenuDTO.Update dto) throws IOException {
 
-        // 새로 업로드한 파일 UploadFile로 생성
-        UploadFile newUploadFile = fileStore.storeFile(dto.getFile());
-
+        // 전달받은 dto => Entity 변환
+        Menu entity = dto.toEntity();
+        
         // 수정하고자 하는 메뉴 찾음
         Menu menu = menuRepository.findById(dto.getId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + dto.getId()));
 
-        // dto => Entity 변환
-        Menu entity = dto.toEntity();
+        // 파일이 null이 아닌 경우만 파일 수정
+        if (dto.getFile() != null) {
+            // 새로 업로드한 파일 UploadFile로 생성
+            UploadFile newUploadFile = fileStore.storeFile(dto.getFile());
+
+            // 기존 메뉴의 업로드 파일 찾음
+            UploadFile file = menu.getFile();
+
+            // 메뉴의 저장명, 업로드명 업데이트
+            file.updateUploadedFileName(newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName());
+        }
 
         // 기존 메뉴 업데이트
         menu.updateWithoutImage(entity);
-
-        // 기존 메뉴의 업로드 파일 찾음
-        UploadFile file = menu.getFile();
-
-        // 메뉴의 저장명, 업로드명 업데이트
-        file.updateUploadedFileName(newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName());
 
         return storeId;
     }

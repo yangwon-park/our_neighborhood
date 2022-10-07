@@ -140,16 +140,23 @@
                             </div>
                         </div>
                         <div class="px-0 col-lg-6 col-sm-12 d-flex border border-secondary">
-                            <div class="menu-detail border-end border-secondary">
+                            <div class="menu-detail border-end border-secondary col-4">
                                 <div class="menu-detail-img mb-2">
-                                    <img th:src="|/menu/${menu.storedFileName}|" width="180" height="180" alt="메뉴 사진">
+                                    <img th:src="|/menu/${menu.storedFileName}|" width="100%" alt="메뉴 사진">
                                 </div>
-                                <div class="menu-detail-info d-grid ">
-                                    <p class="ms-2 my-auto fw-bold" th:text="${menu.name}"></p>
-                                    <p class="ms-2 my-auto fw-bold" style="color: red" th:text="|${menu.price}원|"></p>
+                                <div class="menu-detail-info d-grid">
+                                    <div>
+                                        <span class="ms-2 my-auto fw-bold" th:text="${menu.name}"></span>
+                                        <span class="badge ms-1 m-auto" style="font-size: 0.85rem"
+                                              th:if="${!menu.feature.name().equals('NORMAL')}"
+                                              th:text="${menu.feature.description}"
+                                              th:classappend="|menu-feat-${menu.feature.name()}|">메뉴 특징</span>
+                                    </div>
+                                    <p class="ms-2 my-auto fw-bold" style="color: red"
+                                       th:text="|${menu.price}원|"></p>
                                 </div>
                             </div>
-                            <div class="menu-hashtag row row-cols-md-3 row-cols-2 ">
+                            <div class="menu-hashtag col-8 row row-cols-md-3 row-cols-2 ">
                                 <div class="my-auto text-center col text-nowrap">해쉬태그 1</div>
                                 <div class="my-auto text-center col text-nowrap">해쉬태그 2</div>
                                 <div class="my-auto text-center col text-nowrap">해쉬태그 3</div>

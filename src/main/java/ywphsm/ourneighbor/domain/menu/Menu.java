@@ -35,6 +35,9 @@ public class Menu extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MenuType type;
 
+    @Enumerated(EnumType.STRING)
+    private MenuFeat feature;
+
 
     /*
         JPA 연관 관계 매핑
@@ -64,7 +67,7 @@ public class Menu extends BaseEntity {
     @Builder
     public Menu(Long id, String name, Integer price, int discountPrice,
                 LocalDateTime discountStart, LocalDateTime discountEnd,
-                MenuType type, Store store, UploadFile file) {
+                MenuType type, MenuFeat feature, Store store, UploadFile file) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -72,6 +75,7 @@ public class Menu extends BaseEntity {
         this.discountStart = discountStart;
         this.discountEnd = discountEnd;
         this.type = type;
+        this.feature = feature;
         this.store = store;
         this.file = file;
     }
@@ -91,5 +95,6 @@ public class Menu extends BaseEntity {
         this.discountStart = menu.getDiscountStart();
         this.discountEnd = menu.getDiscountEnd();
         this.type = menu.getType();
+        this.feature = menu.getFeature();
     }
 }

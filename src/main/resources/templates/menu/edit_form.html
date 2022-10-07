@@ -28,17 +28,18 @@
     <div class="container-fluid mt--8 pb-5">
         <!-- Table -->
         <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-8">
+            <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent pb-5">
                         <div class="text-center mt-2 mb-4 fs-2 fw-bold">메뉴 수정</div>
                     </div>
                     <th:block th:each="menu, i: ${menuList}">
-                        <form class="form-floating mb-3" th:id="|menu-edit-form${i.index+1}|" enctype="multipart/form-data">
+                        <form class="form-floating mb-3" th:id="|menu-edit-form${i.index+1}|"
+                              enctype="multipart/form-data">
                             <div class="card-body">
                                 <div class="d-flex">
                                     <div class="col-6">
-                                        <img th:src="|/menu/${menu.getStoredFileName()}|" width="150" height="150"
+                                        <img th:src="|/menu/${menu.getStoredFileName()}|" width="85%"
                                              alt="메뉴 사진">
                                     </div>
                                     <div class="col-6 align-middle">
@@ -92,23 +93,50 @@
                                                        name="discountEnd" type="time" th:value="${menu.discountEnd}"/>
                                             </div>
                                         </div>
-                                        <div class="form-group d-flex text-nowrap">
-                                            <div th:each="t, i : ${menuTypes}"
-                                                 th:with="check = ${menu.type.name()}">
-                                                <input type="radio" th:id="|type${i.index+1}|" name="type"
-                                                       th:checked="${#strings.equals(t.name(), check)}"
-                                                       th:value="${t.name()}"/>
-                                                <label th:text="${t.description}"
-                                                       class="form-check-label fw-bold"></label>
+                                        <div>
+                                            <div class="mb-2">
+                                                <span>메뉴 특징</span>
+                                            </div>
+                                            <div class="form-group d-flex text-nowrap">
+                                                <div th:each="feat, i : ${menuFeats}"
+                                                     th:with="check = ${menu.feature.name()}">
+                                                    <input type="radio" th:id="|feature${i.index+1}|" name="feature"
+                                                           th:checked="${#strings.equals(feat.name(), check)}"
+                                                           th:value="${feat.name()}"/>
+                                                    <label th:text="${feat.description}"
+                                                           class="form-check-label fw-bold"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="mb-2">
+                                                <span>메뉴 타입</span>
+                                            </div>
+                                            <div class="form-group d-flex text-nowrap">
+                                                <div th:each="t, i : ${menuTypes}"
+                                                     th:with="check = ${menu.type.name()}">
+                                                    <input type="radio" th:id="|type${i.index+1}|" name="type"
+                                                           th:checked="${#strings.equals(t.name(), check)}"
+                                                           th:value="${t.name()}"/>
+                                                    <label th:text="${t.description}"
+                                                           class="form-check-label fw-bold"></label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div>
+                                                <label class="text-secondary" th:for="|active-upload${i.index+1}|">
+                                                    이미지 업로드를 하시려면 체크해주세요
+                                                </label>
+                                                <input class="menu-edit-image"
+                                                       th:id="|active-upload${i.index+1}|" type="checkbox"/>
+                                            </div>
                                             <div class="">
                                                 <label class="fw-bold" th:for="|menu-edit-image${i.index+1}|">
-                                                    이미지 (수정 시 재업로드가 필요합니다.)
+                                                    이미지 업로드
                                                 </label>
-                                                <input th:id="|menu-edit-image${i.index+1}|" name="file"
-                                                       type="file"/>
+                                                <input th:id="|menu-edit-image${i.index+1}|"
+                                                       name="file" type="file" disabled/>
                                                 <input id="storeId" th:value="${menu.storeId}" type="hidden"/>
                                                 <input th:id="|menuId${i.index+1}|" name="id" th:value="${menu.id}"
                                                        type="hidden"/>

@@ -13,6 +13,7 @@ import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
+import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
@@ -42,6 +43,11 @@ public class StoreController {
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
         return MenuType.values();
+    }
+
+    @ModelAttribute("menuFeats")
+    public MenuFeat[] menuFeats() {
+        return MenuFeat.values();
     }
 
     @ModelAttribute("offDays")

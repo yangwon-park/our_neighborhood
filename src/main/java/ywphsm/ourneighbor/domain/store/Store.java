@@ -54,6 +54,11 @@ public class Store extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StoreStatus status;               // 가게 오픈 상황
 
+    @Enumerated(EnumType.STRING)
+    private ParkAvailable park;
+
+    private String parkDetail;
+
     /*
         임베디드 타입
      */
@@ -62,6 +67,7 @@ public class Store extends BaseEntity {
 
     @Embedded
     private BusinessTime businessTime;
+
 
     /*
         JPA 연관 관계 매핑
@@ -95,26 +101,11 @@ public class Store extends BaseEntity {
     /*
         생성자
      */
-    public Store(String name, Double lat, Double lon,
-                 String phoneNumber, BusinessTime businessTime, String notice, String intro,
-                 List<String> offDays, StoreStatus status, Address address) {
-
-        this.name = name;
-        this.lat = lat;
-        this.lon = lon;
-        this.phoneNumber = phoneNumber;
-        this.businessTime = businessTime;
-        this.notice = notice;
-        this.intro = intro;
-        this.offDays = offDays;
-        this.status = status;
-        this.address = address;
-    }
-
     @Builder
     public Store(Long id, String name, Double lat, Double lon,
                  String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address,
+                 ParkAvailable park, String parkDetail,
                  List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,
                  List<HashtagOfStore> hashtagOfStoreList) {
         this.id = id;
@@ -128,6 +119,8 @@ public class Store extends BaseEntity {
         this.offDays = offDays;
         this.status = status;
         this.address = address;
+        this.park = park;
+        this.parkDetail = parkDetail;
         this.menuList = menuList;
         this.categoryOfStoreList = categoryOfStoreList;
         this.hashtagOfStoreList = hashtagOfStoreList;
@@ -157,6 +150,8 @@ public class Store extends BaseEntity {
         this.businessTime = store.getBusinessTime();
         this.notice = store.getNotice();
         this.intro = store.getIntro();
+        this.park = store.getPark();
+        this.parkDetail = store.getParkDetail();
         this.offDays = store.getOffDays();
         this.address = store.getAddress();
     }

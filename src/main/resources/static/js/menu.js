@@ -7,11 +7,12 @@ var main = {
         const menuSaveBtn = document.getElementById('menu-save');
         const menuUpdateBtnList = document.querySelectorAll('.menu-edit');
         const menuDeleteBtnList = document.querySelectorAll('.menu-delete');
+        const menuEditImageCheckList = document.querySelectorAll('.menu-edit-image');
 
         if (menuSaveBtn !== null) {
             menuSaveBtn.addEventListener('click', () => {
-                _this.check()
-                // _this.save()
+                _this.check();
+                // _this.save();
             });
         }
 
@@ -19,7 +20,7 @@ var main = {
             menuUpdateBtnList.forEach((btn) => {
                 btn.addEventListener('click', () => {
                     _this.update(btn.id);
-                })
+                });
             });
         }
 
@@ -27,9 +28,27 @@ var main = {
             menuDeleteBtnList.forEach((btn) => {
                 btn.addEventListener('click', () => {
                     _this.delete(btn.id);
-                })
-            })
+                });
+            });
         }
+
+        if (menuEditImageCheckList !== null) {
+            menuEditImageCheckList.forEach((el) => {
+                el.addEventListener('change', function () {
+                    _this.imgActive(el.id);
+                });
+            });
+        }
+    },
+    
+    // 이미지 업로드 여부 설정 함수
+    imgActive: function (elId) {
+        const id = elId.substring(13);
+
+        const activeCheckBox = document.getElementById("active-upload" + id);
+        const fileInput = document.getElementById("menu-edit-image" + id);
+
+        fileInput.disabled = !activeCheckBox.checked;
     },
 
     check: function () {
@@ -99,6 +118,10 @@ var main = {
     createDefaultImg: function (formData) {
         let file = formData.get("file");
 
+        if (file === null) {
+            return;
+        }
+
         if (file.name === "") {
             formData.delete("file");
         }
@@ -137,8 +160,8 @@ var main = {
     update: function (btnId) {
         const id = btnId.substring(13);
 
-        const menuForm = document.getElementById('menu-edit-form' + id);
-        const storeIdVal = document.getElementById('storeId').value;
+        const menuForm = document.getElementById("menu-edit-form" + id);
+        const storeIdVal = document.getElementById("storeId").value;
 
         let formData = new FormData(menuForm);
         this.createDefaultImg(formData);

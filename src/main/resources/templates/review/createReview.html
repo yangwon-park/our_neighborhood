@@ -37,7 +37,8 @@
               <small>리뷰 등록</small>
             </div>
             <div class="card-body px-lg-5 py-lg-5">
-              <form role="form" th:action th:object="${reviewForm}" method="post" id="myform">
+              <form role="form" th:action th:object="${reviewDTO}" method="post" id="myform"
+                    enctype="multipart/form-data">
                 <div class="form-group">
                   <div th:if="${#fields.hasGlobalErrors()}">
                     <p class="field-error" th:each="err : ${#fields.globalErrors()}"
@@ -69,11 +70,19 @@
                     <div class="field-error" th:errors="*{content}"></div>
                   </div>
                 </div>
+                <div class="form-group">
+                  <div class="mb-3">
+                    <input th:field="*{file}"
+                           th:errorclass="field-error"
+                           class="form-control"
+                           type="file"/>
+                    <div class="field-error" th:errors="*{file}"></div>
+                  </div>
+                </div>
                 <div class="text-center">
                   <button type="submit" class="btn btn-orange mt-4">등록</button>
                 </div>
               </form>
-
             </div>
           </div>
         </div>

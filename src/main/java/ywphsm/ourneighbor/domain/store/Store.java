@@ -83,6 +83,10 @@ public class Store extends BaseEntity {
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
     private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
 
+    // review(N:1)
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    private List<Review> reviewList = new ArrayList<>();
+
 
     // Many To Many인듯
 //    @ManyToOne(fetch = FetchType.LAZY)
@@ -139,6 +143,11 @@ public class Store extends BaseEntity {
     public void addMenu(Menu menu) {
         menu.setStore(this);
         menuList.add(menu);
+    }
+
+    public void addReview(Review review) {
+        review.setStore(this);
+        reviewList.add(review);
     }
 
 

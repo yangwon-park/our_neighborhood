@@ -3,6 +3,7 @@ package ywphsm.ourneighbor.domain.file;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ywphsm.ourneighbor.domain.Review;
 import ywphsm.ourneighbor.domain.menu.Menu;
 
 import javax.persistence.*;
@@ -23,6 +24,10 @@ public class UploadFile {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id")
+    private Review review;
+
     public void setDefaultStoredFileName(String storedFileName) {
         this.storedFileName = storedFileName;
     }
@@ -41,6 +46,11 @@ public class UploadFile {
         menu.setFile(this);
     }
 
+    public void addReview(Review review) {
+        this.review = review;
+        review.setFile(this);
+    }
+
     /*
         비즈니스 로직 메소드
      */
@@ -52,4 +62,6 @@ public class UploadFile {
         this.storedFileName = storedFileName;
         this.uploadedFileName = uploadedFileName;
     }
+
+
 }

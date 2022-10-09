@@ -165,6 +165,44 @@
                 </th:block>
             </div>
         </div>
+        <hr class="my-2 hr-orange">
+        <div class="row store-menu">
+            <h3><strong>리뷰</strong></h3>
+            <div class="col">
+                <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"
+                        th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">리뷰 등록
+                </button>
+            </div>
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>별점</th>
+                        <th>리뷰</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody> <tr th:each="review : ${review}">
+                        <td th:text="${review.reviewId}"></td>
+                        <td th:if="${review.rating == 1}">★☆☆☆☆</td>
+                        <td th:if="${review.rating == 2}">★★☆☆☆</td>
+                        <td th:if="${review.rating == 3}">★★★☆☆</td>
+                        <td th:if="${review.rating == 4}">★★★★☆</td>
+                        <td th:if="${review.rating == 5}">★★★★★</td>
+                        <td th:text="${review.content}"></td>
+                        <td th:text="${review.username}"></td>
+                        <td th:text="${review.createDate}"></td>
+                        <div class="menu-detail-img mb-2">
+                            <img th:src="|/menu/${review.storedFileName}|" width="180" height="180" alt="리뷰 사진">
+                        </div>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
     </div>
 </section>
 <footer th:replace="layout/footer :: common_footer">

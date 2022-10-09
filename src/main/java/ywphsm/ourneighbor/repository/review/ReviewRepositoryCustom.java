@@ -6,5 +6,5 @@ import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 
 public interface ReviewRepositoryCustom {
 
-    Slice<ReviewMemberDTO> ReviewPage(Pageable pageable);
+    Slice<ReviewMemberDTO> ReviewPage(Pageable pageable, Long storeId);
 }

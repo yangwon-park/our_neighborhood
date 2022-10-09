@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.controller.form;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,5 +16,7 @@ public class ReviewForm {
 
     @NotNull
     private Integer rating;
+
+    private MultipartFile file;
 
 }

@@ -1,52 +1,56 @@
 package ywphsm.ourneighbor.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.controller.form.ReviewForm;
 import ywphsm.ourneighbor.domain.Review;
+import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.repository.review.ReviewRepository;
 import ywphsm.ourneighbor.service.ReviewService;
 import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Slf4j
 public class ReviewController {
 
     private final ReviewService reviewService;
 
     private final StoreService storeService;
 
-    private final ReviewRepository reviewRepository;
 
     @GetMapping("/store/{storeId}/createReview")
-    public String createReview(@PathVariable Long storeId, @ModelAttribute ReviewForm reviewForm) {
+    public String createReview(@PathVariable Long storeId,
+                               @ModelAttribute(name = "reviewDTO") ReviewDTO.Add reviewDTO) {
         return "review/createReview";
     }
 
     @PostMapping("/store/{storeId}/createReview")
     public String createReview(@PathVariable Long storeId,
-                               @Valid @ModelAttribute ReviewForm reviewForm,
+                               @Valid @ModelAttribute(name = "reviewDTO") ReviewDTO.Add reviewDTO,
                                BindingResult bindingResult,
-                               @SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member) {
+                               @SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member) throws IOException {
+
+        log.info("reviewDTO.file={}", reviewDTO.getFile());
 
         if (bindingResult.hasErrors()) {
             return "review/createReview";
         }
 
-        Store store = storeService.findById(storeId);
-        Review review = new Review(reviewForm.getContent(), reviewForm.getRating(), member, store);
-        reviewService.saveReview(review);
+        reviewDTO.setStoreId(storeId);
+        reviewDTO.setMemberId(member.getId());
+        reviewService.save(reviewDTO);
 
         return "redirect:/store/{storeId}";
     }

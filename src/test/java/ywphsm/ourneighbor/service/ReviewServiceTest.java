@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.OurNeighborApplication;
@@ -29,6 +30,7 @@ import static ywphsm.ourneighbor.domain.store.QStore.*;
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = OurNeighborApplication.class)
+@ActiveProfiles("test")
 @Transactional
 class ReviewServiceTest {
 

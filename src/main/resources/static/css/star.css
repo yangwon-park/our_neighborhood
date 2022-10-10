@@ -1,26 +1,26 @@
-#myform fieldset{
+#review-add-form fieldset{
     display: inline-block;
     direction: rtl;
     border:0;
 }
-#myform fieldset legend{
+#review-add-form fieldset legend{
     text-align: right;
 }
-#myform input[type=radio]{
+#review-add-form input[type=radio]{
     display: none;
 }
-#myform label{
+#review-add-form label{
     font-size: 3em;
     color: transparent;
     text-shadow: 0 0 0 #f0f0f0;
 }
-#myform label:hover{
+#review-add-form label:hover{
     text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
-#myform label:hover ~ label{
+#review-add-form label:hover ~ label{
     text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
-#myform input[type=radio]:checked ~ label{
+#review-add-form input[type=radio]:checked ~ label{
     text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
 #reviewContents {

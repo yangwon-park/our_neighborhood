@@ -32,28 +32,13 @@ public class ReviewController {
 
     @GetMapping("/store/{storeId}/createReview")
     public String createReview(@PathVariable Long storeId,
-                               @ModelAttribute(name = "reviewDTO") ReviewDTO.Add reviewDTO) {
-        return "review/createReview";
-    }
-
-    @PostMapping("/store/{storeId}/createReview")
-    public String createReview(@PathVariable Long storeId,
-                               @Valid @ModelAttribute(name = "reviewDTO") ReviewDTO.Add reviewDTO,
-                               BindingResult bindingResult,
-                               @SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member) throws IOException {
-
-        log.info("reviewDTO.file={}", reviewDTO.getFile());
-
-        if (bindingResult.hasErrors()) {
-            return "review/createReview";
-        }
+                               @ModelAttribute(name = "reviewDTO") ReviewDTO.Add reviewDTO,
+                               @SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member) {
 
         reviewDTO.setStoreId(storeId);
         reviewDTO.setMemberId(member.getId());
-        reviewService.save(reviewDTO);
 
-        return "redirect:/store/{storeId}";
+        return "review/createReview";
     }
-
 
 }

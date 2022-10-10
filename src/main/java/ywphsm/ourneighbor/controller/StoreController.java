@@ -81,7 +81,7 @@ public class StoreController {
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
         //review paging
-        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId);
+        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
         List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
         boolean hasNext = true;
         log.info("content={}", content);
@@ -94,7 +94,6 @@ public class StoreController {
         model.addAttribute("categoryList", dtoList);
         //review
         model.addAttribute("review", content);
-        model.addAttribute("hasNext", hasNext);
 
         return "store/detail";
     }

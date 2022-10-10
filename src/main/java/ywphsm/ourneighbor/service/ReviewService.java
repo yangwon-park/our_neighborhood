@@ -71,8 +71,8 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
-    public Slice<ReviewMemberDTO> pagingReview(Long storeId) {
-        PageRequest pageRequest = PageRequest.of(0, 5);
+    public Slice<ReviewMemberDTO> pagingReview(Long storeId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 5);
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.ReviewPage(pageRequest, storeId);
         log.info("reviewMemberDTO={}", reviewMemberDTOS);
 

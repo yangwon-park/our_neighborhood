@@ -38,7 +38,6 @@ deploy:
 
     bucket: neighbor-build
     key: our_neighborhood.zip
-
     bundle_type: zip
     application: neighbor
     deployment_group: neighbor-group

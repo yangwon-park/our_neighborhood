@@ -87,6 +87,6 @@ public class MenuController {
 
         model.addAttribute("menuList", menuList);
 
-        return "/menu/edit_form";
+        return "menu/edit_form";
     }
 }

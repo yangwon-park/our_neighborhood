@@ -135,7 +135,7 @@ class StoreServiceTest {
         params.addAll("categoryId", categoryId);
 
         StoreDTO.Add dto = StoreDTO.Add.builder()
-                .name("테크노할인마트")
+                .name("aa22sdasa")
                 .zipcode("12345")
                 .roadAddr("우리집")
                 .numberAddr("아파트")

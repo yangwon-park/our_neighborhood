@@ -32,6 +32,20 @@ deploy:
     on:
       all_branches: true
 
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+
+    bucket: neighbor-build
+    key: our_neighborhood.zip
+
+    bundle_type: zip
+    application: neighbor
+    deployment_group: neighbor-group
+
+    region: ap-northeast-2
+    wait-until-deployed: true
+
 
 # CI 실행 완료 시 메일로 알람
 notifications:

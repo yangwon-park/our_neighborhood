@@ -11,7 +11,8 @@ import javax.persistence.EntityManager;
 import java.util.Optional;
 import java.util.UUID;
 
-@EnableJpaAuditing		//  Spring Data JPA에서 Auditing 기능 사용을 위해 필수 (등록, 수정 추적)
+//  Spring Data JPA에서 Auditing 기능 사용을 위해 필수 (등록, 수정 추적)
+@EnableJpaAuditing
 @SpringBootApplication
 public class OurNeighborApplication {
 

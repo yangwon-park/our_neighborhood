@@ -62,7 +62,6 @@ public class AwsS3FileStore {
     }
 
     private String storeFileToS3(File uploadFile, String fileName) {
-        log.info("uploadFile.getName={}", uploadFile.getName());
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, uploadFile)
                 .withCannedAcl(CannedAccessControlList.PublicRead);
 
@@ -84,7 +83,7 @@ public class AwsS3FileStore {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File("/tmp/"+file.getOriginalFilename());
+        File convertFile = new File(file.getOriginalFilename());
 
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {

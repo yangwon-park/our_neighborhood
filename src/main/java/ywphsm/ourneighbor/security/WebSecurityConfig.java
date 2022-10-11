@@ -67,14 +67,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/", "/css/**", "/images/**",
-                        "/js/**", "/fontawesome/**", "/node_modules/**",
-                        "/plugin/**" , "/profile").permitAll()
+//                .antMatchers("/profile").permitAll()
                 .antMatchers("/user/**").hasAnyRole("USER", "SELLER", "ADMIN")
                 .antMatchers("/seller/**").hasAnyRole("SELLER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-//                .anyRequest().permitAll();
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
+//                .anyRequest().authenticated();
 
         http
                 .formLogin()

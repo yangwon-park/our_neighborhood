@@ -65,7 +65,8 @@ public class MenuService {
             UploadFile file = menu.getFile();
 
             // 메뉴의 저장명, 업로드명 업데이트
-            file.updateUploadedFileName(newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName());
+            file.updateUploadedFileName(
+                    newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName(), newUploadFile.getUploadImageUrl());
         }
 
         // 기존 메뉴 업데이트

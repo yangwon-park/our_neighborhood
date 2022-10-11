@@ -2,13 +2,11 @@ package ywphsm.ourneighbor.domain.file;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -35,34 +33,38 @@ public class AwsS3FileStore {
             return null;
         }
 
-        String originalFileName = multipartFile.getOriginalFilename();
-        String storeFileName;
-        if (originalFileName.equals("default.png")) {
+        File uploadFile = convert(multipartFile).orElseThrow(
+                () -> new IllegalArgumentException("전환 실패"));
 
-            // 기본이미지 사용 시, 별도로 파일을 업로드해서 만들지 않음
-            // 저장 파일 자체를 미리 로컬에 만들어뒀음
-            storeFileName = "default.png";
-        } else {
+        String imageUrl = getImageUrl(uploadFile);
 
-            File file = convert(multipartFile).orElseThrow(
-                    () -> new IllegalArgumentException("MultipartFile -> File 전환이 실패했습니다."));
+        String storeFileName = createStoreFileName(multipartFile.getOriginalFilename());
 
-            // ex) UUID.png
-            // 서버 저장 파일명
-            storeFileName = createStoreFileName(originalFileName);
-
-            removeNewFile(file);
-
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(multipartFile.getInputStream().available());
-
-//        amazonS3Client.putObject(bucketName, storeFileName, multipartFile.getInputStream(), objectMetadata);
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, storeFileName, file)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-        }
-
-        return new UploadFile(originalFileName, storeFileName);
+        return new UploadFile(multipartFile.getOriginalFilename(), storeFileName, imageUrl);
     }
+
+    private String getImageUrl(File uploadFile) {
+        String fileName = dir + "/" + uploadFile.getName();
+        String uploadImageUrl = storeFileToS3(uploadFile, fileName);
+
+        removeNewFile(uploadFile);
+
+        return uploadImageUrl;
+    }
+
+    private String storeFileToS3(File uploadFile, String fileName) {
+        log.info("uploadFile.getName={}", uploadFile.getName());
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, uploadFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead);
+
+        String name = putObjectRequest.getFile().getName();
+        log.info("name={}", name);
+
+        amazonS3Client.putObject(putObjectRequest);
+
+        return amazonS3Client.getUrl(bucketName, fileName).toString();
+    }
+
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
@@ -74,8 +76,7 @@ public class AwsS3FileStore {
 
     private Optional<File> convert(MultipartFile file) throws IOException {
         File convertFile = new File(file.getOriginalFilename());
-
-        if (convertFile.createNewFile()) {
+        if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
             }
@@ -93,7 +94,7 @@ public class AwsS3FileStore {
         String ext = extractExt(originalFilename);
 
         // 최종 저장 명
-        return dir + "/" + uuid + "." + ext;
+        return uuid + "." + ext;
     }
 
     private String extractExt(String originalFilename) {

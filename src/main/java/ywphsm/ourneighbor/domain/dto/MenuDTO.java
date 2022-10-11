@@ -76,6 +76,8 @@ public class MenuDTO {
 
         private String storedFileName;
 
+        private String uploadImgUrl;
+
         private MultipartFile file;
 
         private int discountPrice;
@@ -92,7 +94,7 @@ public class MenuDTO {
         @Builder
         public Update(Long id, String name, Integer price, Long storeId,
                       MenuType type, MenuFeat feature,
-                      String storedFileName, MultipartFile file,
+                      String storedFileName, String uploadImgUrl, MultipartFile file,
                       int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd) {
             this.id = id;
             this.name = name;
@@ -101,6 +103,7 @@ public class MenuDTO {
             this.type = type;
             this.feature = feature;
             this.storedFileName = storedFileName;
+            this.uploadImgUrl = uploadImgUrl;
             this.file = file;
             this.discountPrice = discountPrice;
             this.discountStart = discountStart;
@@ -116,6 +119,7 @@ public class MenuDTO {
             this.type = menu.getType();
             this.feature = menu.getFeature();
             this.storedFileName = menu.getFile().getStoredFileName();
+            this.uploadImgUrl = menu.getFile().getUploadImageUrl();
             this.discountPrice = menu.getDiscountPrice();
             this.discountStart = menu.getDiscountStart();
             this.discountEnd = menu.getDiscountEnd();
@@ -154,15 +158,18 @@ public class MenuDTO {
 
         private String storedFileName;
 
+        private String uploadImgUrl;
+
         @Builder
         public Simple(String name, Integer price, int discountPrice,
-                      MenuType type, MenuFeat feature, String storedFileName) {
+                      MenuType type, MenuFeat feature, String storedFileName, String uploadImgUrl) {
             this.name = name;
             this.price = price;
             this.discountPrice = discountPrice;
             this.type = type;
             this.feature = feature;
             this.storedFileName = storedFileName;
+            this.uploadImgUrl = uploadImgUrl;
         }
 
         public static MenuDTO.Simple of(Menu entity) {
@@ -173,6 +180,7 @@ public class MenuDTO {
                     .type(entity.getType())
                     .feature(entity.getFeature())
                     .storedFileName(entity.getFile().getStoredFileName())
+                    .uploadImgUrl(entity.getFile().getUploadImageUrl())
                     .build();
         }
     }

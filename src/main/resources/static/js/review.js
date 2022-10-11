@@ -130,7 +130,8 @@ var main = {
         const reviewId = btnId.substring(17);
         const storeId = document.getElementById('storeId').value;
 
-        console.log(reviewId);
+        console.log("reviewId", reviewId);
+        console.log("storeId", storeId);
 
         axios({
             method: "delete",

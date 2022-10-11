@@ -42,6 +42,7 @@ public class ReviewController {
 
         List<ReviewMemberDTO> content = reviewService.myReviewList(member.getId());
         long count = reviewService.myReviewCount(member.getId());
+        log.info("storeId={}", content.get(0).getStoreId());
 
         model.addAttribute("review", content);
         model.addAttribute("count", count);

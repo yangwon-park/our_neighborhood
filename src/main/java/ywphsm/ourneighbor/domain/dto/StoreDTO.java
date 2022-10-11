@@ -156,6 +156,8 @@ public class StoreDTO {
 
         private String intro;                     // 가게 소개
 
+        private int average;
+
         private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
 
         private StoreStatus status;               // 가게 오픈 상황
@@ -188,6 +190,7 @@ public class StoreDTO {
             breakEnd = store.getBusinessTime().getBreakEnd();
             notice = store.getNotice();
             intro = store.getIntro();
+            average = store.getRatingTotal();
             offDays = store.getOffDays();
             status = store.getStatus();
             zipcode = store.getAddress().getZipcode();

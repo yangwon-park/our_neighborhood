@@ -4,7 +4,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 
+import java.util.List;
+
 public interface ReviewRepositoryCustom {
 
-    Slice<ReviewMemberDTO> ReviewPage(Pageable pageable, Long storeId);
+    Slice<ReviewMemberDTO> reviewPage(Pageable pageable, Long storeId);
+    List<ReviewMemberDTO> myReview(Long memberId);
+    long myReviewCount(Long memberId);
+
 }

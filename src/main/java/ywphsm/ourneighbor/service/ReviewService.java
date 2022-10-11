@@ -7,13 +7,11 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Review;
-import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.review.ReviewRepository;
@@ -73,11 +71,43 @@ public class ReviewService {
 
     public Slice<ReviewMemberDTO> pagingReview(Long storeId, int page) {
         PageRequest pageRequest = PageRequest.of(page, 5);
-        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.ReviewPage(pageRequest, storeId);
+        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, storeId);
         log.info("reviewMemberDTO={}", reviewMemberDTOS);
 
 
         return reviewMemberDTOS;
     }
 
+    public List<ReviewMemberDTO> myReviewList(Long memberId) {
+        List<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.myReview(memberId);
+        log.info("reviewMemberDTO={}", reviewMemberDTOS);
+
+        return reviewMemberDTOS;
+    }
+
+    public long myReviewCount(Long memberId) {
+        return reviewRepository.myReviewCount(memberId);
+    }
+
+    public double ratingAverage(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
+
+        if (store.getReviewList().size() == 0) {
+            return 0;
+        }
+
+        double ratingTotal = store.getRatingTotal();
+        double count = store.getReviewList().size();
+        double average = ratingTotal / count;
+
+        return Math.round(average * 10) / 10.0;
+
+    }
+
+    @Transactional
+    public void ratingDiscount(Long storeId, Long reviewId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
+        Review review = findOne(reviewId);
+        store.reviewDelete(review.getRating());
+    }
 }

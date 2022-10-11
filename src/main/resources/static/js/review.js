@@ -5,7 +5,9 @@ var main = {
         var _this = this;
 
         const reviewSaveBtn = document.getElementById('review-save');
+        const reviewDeleteBtnList = document.querySelectorAll('.review-delete');
         const reviewMoreBtn = document.getElementById('review-more');
+        const MyReviewMoreBtn = document.getElementById('MyReview-more');
 
         if (reviewSaveBtn !== null) {
             reviewSaveBtn.addEventListener('click', () => {
@@ -14,9 +16,24 @@ var main = {
             });
         }
 
+        if (reviewDeleteBtnList !== null) {
+            reviewDeleteBtnList.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    _this.delete(btn.id);
+                })
+            })
+        }
+
         if (reviewMoreBtn !== null) {
             reviewMoreBtn.addEventListener('click', () => {
                 _this.more()
+                // _this.save()
+            });
+        }
+
+        if (MyReviewMoreBtn !== null) {
+            reviewMoreBtn.addEventListener('click', () => {
+                _this.myReviewMore()
                 // _this.save()
             });
         }
@@ -109,12 +126,38 @@ var main = {
         });
     },
 
+    delete: function (btnId) {
+        const reviewId = btnId.substring(17);
+        const storeId = document.getElementById('storeId').value;
+
+        console.log(reviewId);
+
+        axios({
+            method: "delete",
+            url: "/review/delete/" + storeId,
+            params: {
+                reviewId: reviewId
+            }
+        }).then((resp) => {
+            alert('리뷰 삭제가 완료됐습니다.');
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error);
+        })
+    },
+
     more: function () {
         let page = $("#reviewBody tr").length / 5 + 1;  //마지막 리스트 번호를 알아내기 위해서 tr태그의 length를 구함.
         let addListHtml = "";
         console.log("page", page);
 
         const storeId = document.getElementById("storeId").value;
+
+        let loginMember = null;
+        let memberRoleList = document.querySelectorAll('.member-role');
+        loginMember = memberRoleList.item(0).value
+
+        console.log("loginMember", loginMember);
 
         axios({
             method: "get",
@@ -153,7 +196,13 @@ var main = {
                 }
                 addListHtml += "<td>" + contentElement.content + "</td>";
                 addListHtml += "<td>" + contentElement.username + "</td>";
-                addListHtml += "<td>" + contentElement.createDate + "</td>";
+                addListHtml += "<td>" + contentElement.createDate.substring(0, 10) + "</td>";
+                addListHtml += '<td><img src="/menu/' + contentElement.storedFileName + '" width="180" height="180" alt="리뷰 사진"></td>';
+                if (loginMember !== null) {
+                    if (loginMember === 'ADMIN') {
+                        addListHtml += '<td><button id="review-delete-btn' + contentElement.reviewId + '" type="button" class="btn btn-dark mt-4 review-delete"> 삭제 </button></td>';
+                    }
+                }
                 addListHtml += "</tr>";
             }
             $("#reviewBody").append(addListHtml);
@@ -162,7 +211,7 @@ var main = {
         }).catch((e) => {
             console.error(e);
         });
-    }
+    },
 };
 
 main.init();

@@ -45,6 +45,8 @@ public class Store extends BaseEntity {
 
     private String intro;                     // 가게 소개
 
+    private int ratingTotal;
+
 //    @OneToMany(mappedBy = "store")
 //    private List<DaysOfStore> daysOfStore;
 
@@ -146,6 +148,7 @@ public class Store extends BaseEntity {
     }
 
     public void addReview(Review review) {
+        this.ratingTotal += review.getRating();
         review.setStore(this);
         reviewList.add(review);
     }
@@ -216,5 +219,9 @@ public class Store extends BaseEntity {
         if (time.isAfter(businessTime.getBreakStart()) && time.isBefore(businessTime.getBreakEnd())) {
             updateStatus(StoreStatus.BREAK);
         }
+    }
+
+    public void reviewDelete(Integer rating) {
+        this.ratingTotal -= rating;
     }
 }

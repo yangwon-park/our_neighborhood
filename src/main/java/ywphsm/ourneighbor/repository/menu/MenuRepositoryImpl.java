@@ -5,7 +5,6 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ywphsm.ourneighbor.domain.file.QUploadFile;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 

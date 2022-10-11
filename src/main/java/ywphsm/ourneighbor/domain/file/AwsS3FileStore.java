@@ -33,14 +33,23 @@ public class AwsS3FileStore {
             return null;
         }
 
-        File uploadFile = convert(multipartFile).orElseThrow(
-                () -> new IllegalArgumentException("전환 실패"));
+        String originalFileName = multipartFile.getOriginalFilename();
+        String storeFileName;
+        String imageUrl;
 
-        String imageUrl = getImageUrl(uploadFile);
+        if (originalFileName.equals("default.png")) {
+            storeFileName = "defaultImg.png";
+            imageUrl = "https://neighbor-build.s3.ap-northeast-2.amazonaws.com/images/defaultImg.png";
+        } else {
+            File uploadFile = convert(multipartFile).orElseThrow(
+                    () -> new IllegalArgumentException("전환 실패"));
 
-        String storeFileName = createStoreFileName(multipartFile.getOriginalFilename());
+            imageUrl = getImageUrl(uploadFile);
 
-        return new UploadFile(multipartFile.getOriginalFilename(), storeFileName, imageUrl);
+            storeFileName = createStoreFileName(originalFileName);
+        }
+
+        return new UploadFile(originalFileName, storeFileName, imageUrl);
     }
 
     private String getImageUrl(File uploadFile) {

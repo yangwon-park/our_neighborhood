@@ -31,6 +31,10 @@ group = 'ywphsm'
 version = '1.0.1-SNAPSHOT-' +new Date().format("yyyyMMddHHmmss")
 sourceCompatibility = '11'
 
+
+/*
+	plain.jar 파일 생성 안 되게 막음
+ */
 jar {
 	enabled = false
 }

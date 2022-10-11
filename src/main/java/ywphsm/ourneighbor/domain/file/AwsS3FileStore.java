@@ -37,15 +37,15 @@ public class AwsS3FileStore {
 
         String originalFileName = multipartFile.getOriginalFilename();
         String storeFileName;
-        File file;
         if (originalFileName.equals("default.png")) {
 
             // 기본이미지 사용 시, 별도로 파일을 업로드해서 만들지 않음
             // 저장 파일 자체를 미리 로컬에 만들어뒀음
             storeFileName = "default.png";
         } else {
-            file = convert(multipartFile)
-                    .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환이 실패했습니다."));
+
+            File file = convert(multipartFile).orElseThrow(
+                    () -> new IllegalArgumentException("MultipartFile -> File 전환이 실패했습니다."));
 
             // ex) UUID.png
             // 서버 저장 파일명

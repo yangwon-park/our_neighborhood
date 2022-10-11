@@ -29,7 +29,6 @@ import static ywphsm.ourneighbor.domain.store.QStore.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = OurNeighborApplication.class)
 @ActiveProfiles("test")
 @Transactional
 class ReviewServiceTest {

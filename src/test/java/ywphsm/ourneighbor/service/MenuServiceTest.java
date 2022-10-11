@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = OurNeighborApplication.class)
 @ActiveProfiles("test")
 @Transactional
 class MenuServiceTest {

@@ -15,6 +15,12 @@ import java.util.UUID;
 @SpringBootApplication
 public class OurNeighborApplication {
 
+	// AWS 메타데이터 로딩으로 인한 서비스 연결 시점의 지연을 막기 위해
+	// disable 옵션을 true로 선언
+	static {
+		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(OurNeighborApplication.class, args);
 	}

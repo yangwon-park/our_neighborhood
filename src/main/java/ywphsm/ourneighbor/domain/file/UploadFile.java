@@ -7,8 +7,8 @@ import ywphsm.ourneighbor.domain.menu.Menu;
 
 import javax.persistence.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class UploadFile {
 

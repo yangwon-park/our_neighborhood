@@ -80,13 +80,6 @@ public class StoreController {
         List<MenuDTO.Simple> menuDTOList = menuList.stream()
                 .map(MenuDTO.Simple::of).collect(Collectors.toList());
 
-//        List<CategorySimpleDTO> dtoList = new ArrayList<>();
-//        for (CategoryOfStoreDTO categoryOfStoreDTO : categoryList) {
-//            Category category = categoryService.findById(categoryOfStoreDTO.getCategoryId());
-//            CategorySimpleDTO dto = CategorySimpleDTO.of(category);
-//            dtoList.add(dto);
-//        }
-
         List<CategorySimpleDTO> dtoList = dto.getCategoryList().stream()
                 .map(categoryOfStoreDTO ->
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))

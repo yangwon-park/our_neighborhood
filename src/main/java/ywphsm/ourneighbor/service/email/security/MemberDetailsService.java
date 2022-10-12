@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.security;
+package ywphsm.ourneighbor.service.email.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +10,7 @@ import ywphsm.ourneighbor.repository.member.MemberRepository;
 
 @Service
 @RequiredArgsConstructor
-public class MemberDetailService implements UserDetailsService {
+public class MemberDetailsService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 

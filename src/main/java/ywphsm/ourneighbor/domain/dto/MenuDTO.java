@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 
@@ -27,23 +28,23 @@ public class MenuDTO {
         @NotBlank
         private MenuType type;
 
+        private MenuFeat feature;
+
         @NotNull
         private Long storeId;
 
         private MultipartFile file;
 
         @Builder
-        public Add(String name, Integer price, MenuType type, Long storeId, MultipartFile file) {
+        public Add(String name, Integer price,
+                   MenuType type, MenuFeat feature,
+                   Long storeId, MultipartFile file) {
             this.name = name;
             this.price = price;
             this.type = type;
+            this.feature = feature;
             this.storeId = storeId;
             this.file = file;
-        }
-
-        public Add(Menu menu) {
-            this.name = menu.getName();
-            this.price = menu.getPrice();
         }
 
         public Menu toEntity(Store store) {
@@ -51,6 +52,7 @@ public class MenuDTO {
                     .name(name)
                     .price(price)
                     .type(type)
+                    .feature(feature)
                     .store(store)
                     .build();
         }
@@ -74,6 +76,8 @@ public class MenuDTO {
 
         private String storedFileName;
 
+        private String uploadImgUrl;
+
         private MultipartFile file;
 
         private int discountPrice;
@@ -85,20 +89,25 @@ public class MenuDTO {
         @NotBlank
         private MenuType type;
 
+        private MenuFeat feature;
+
         @Builder
         public Update(Long id, String name, Integer price, Long storeId,
-                      String storedFileName, MultipartFile file,
-                      int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd, MenuType type) {
+                      MenuType type, MenuFeat feature,
+                      String storedFileName, String uploadImgUrl, MultipartFile file,
+                      int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd) {
             this.id = id;
             this.name = name;
             this.price = price;
             this.storeId = storeId;
+            this.type = type;
+            this.feature = feature;
             this.storedFileName = storedFileName;
+            this.uploadImgUrl = uploadImgUrl;
             this.file = file;
             this.discountPrice = discountPrice;
             this.discountStart = discountStart;
             this.discountEnd = discountEnd;
-            this.type = type;
         }
 
         @Builder
@@ -107,11 +116,13 @@ public class MenuDTO {
             this.name = menu.getName();
             this.price = menu.getPrice();
             this.storeId = menu.getStore().getId();
+            this.type = menu.getType();
+            this.feature = menu.getFeature();
             this.storedFileName = menu.getFile().getStoredFileName();
+            this.uploadImgUrl = menu.getFile().getUploadImageUrl();
             this.discountPrice = menu.getDiscountPrice();
             this.discountStart = menu.getDiscountStart();
             this.discountEnd = menu.getDiscountEnd();
-            this.type = menu.getType();
         }
 
         public Menu toEntity() {
@@ -123,6 +134,7 @@ public class MenuDTO {
                     .discountStart(discountStart)
                     .discountEnd(discountEnd)
                     .type(type)
+                    .feature(feature)
                     .build();
         }
     }
@@ -142,15 +154,22 @@ public class MenuDTO {
         @NotBlank
         private MenuType type;
 
+        private MenuFeat feature;
+
         private String storedFileName;
 
+        private String uploadImgUrl;
+
         @Builder
-        public Simple(String name, Integer price, int discountPrice, MenuType type, String storedFileName) {
+        public Simple(String name, Integer price, int discountPrice,
+                      MenuType type, MenuFeat feature, String storedFileName, String uploadImgUrl) {
             this.name = name;
             this.price = price;
             this.discountPrice = discountPrice;
             this.type = type;
+            this.feature = feature;
             this.storedFileName = storedFileName;
+            this.uploadImgUrl = uploadImgUrl;
         }
 
         public static MenuDTO.Simple of(Menu entity) {
@@ -159,7 +178,9 @@ public class MenuDTO {
                     .price(entity.getPrice())
                     .discountPrice(entity.getDiscountPrice())
                     .type(entity.getType())
+                    .feature(entity.getFeature())
                     .storedFileName(entity.getFile().getStoredFileName())
+                    .uploadImgUrl(entity.getFile().getUploadImageUrl())
                     .build();
         }
     }

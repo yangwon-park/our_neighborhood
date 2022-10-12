@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,6 @@ import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
-import ywphsm.ourneighbor.domain.menu.QMenu;
 import ywphsm.ourneighbor.domain.store.*;
 
 import javax.persistence.EntityManager;
@@ -30,20 +30,18 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
-import static ywphsm.ourneighbor.domain.store.QStore.store;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 @Transactional
 class StoreServiceTest {
 
@@ -129,7 +127,7 @@ class StoreServiceTest {
         params.addAll("categoryId", categoryId);
 
         StoreDTO.Add dto = StoreDTO.Add.builder()
-                .name("테크노할인마트")
+                .name("aa22sdasa")
                 .zipcode("12345")
                 .roadAddr("우리집")
                 .numberAddr("아파트")

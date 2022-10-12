@@ -58,7 +58,7 @@ public class MenuApiController {
         return menuService.delete(menuId);
     }
 
-
+    // 로컬에 있는 이미지 출력
     // 메뉴 이미지 출력
     @GetMapping("/menu/{fileName}")
     public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {

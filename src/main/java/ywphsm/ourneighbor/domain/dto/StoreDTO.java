@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
+import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
@@ -64,6 +65,10 @@ public class StoreDTO {
 
         private List<String> offDays;
 
+        private ParkAvailable park;
+
+        private String parkDetail;
+
 
         private List<CategoryOfStoreDTO> categoryOfStores;
 
@@ -71,7 +76,9 @@ public class StoreDTO {
         public Add(String name, String zipcode, String roadAddr, String numberAddr, String detail,
                    Double lat, Double lon, String phoneNumber,
                    LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
-                   String notice, String intro, List<String> offDays, List<CategoryOfStoreDTO> categoryOfStores) {
+                   String notice, String intro, List<String> offDays,
+                   ParkAvailable park, String parkDetail,
+                   List<CategoryOfStoreDTO> categoryOfStores) {
             this.name = name;
             this.zipcode = zipcode;
             this.roadAddr = roadAddr;
@@ -87,6 +94,8 @@ public class StoreDTO {
             this.notice = notice;
             this.intro = intro;
             this.offDays = offDays;
+            this.park = park;
+            this.parkDetail = parkDetail;
             this.categoryOfStores = categoryOfStores;
         }
 
@@ -107,6 +116,8 @@ public class StoreDTO {
             roadAddr = store.getAddress().getRoadAddr();
             numberAddr = store.getAddress().getNumberAddr();
             detail = store.getAddress().getDetail();
+            park = store.getPark();
+            parkDetail = store.getParkDetail();
             categoryOfStores = store.getCategoryOfStoreList().stream()
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());
@@ -121,6 +132,8 @@ public class StoreDTO {
                     .lon(lon)
                     .notice(notice)
                     .intro(intro)
+                    .park(park)
+                    .parkDetail(parkDetail)
                     .offDays(offDays)
                     .address(new Address(roadAddr, numberAddr, zipcode, detail))
                     .categoryOfStoreList(new ArrayList<>())
@@ -156,16 +169,21 @@ public class StoreDTO {
 
         private String intro;                     // 가게 소개
 
+
         private int average;
 
         private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
 
+
         private StoreStatus status;               // 가게 오픈 상황
 
-//        private List<MenuDTO.Detail> menuList;    // 메뉴
+        private ParkAvailable park;
+
+        private String parkDetail;
+
+        private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
 
         // 주소는 임베디드 타입으로 받음
-
         @NotBlank
         private String zipcode;
 
@@ -193,13 +211,12 @@ public class StoreDTO {
             average = store.getRatingTotal();
             offDays = store.getOffDays();
             status = store.getStatus();
+            park = store.getPark();
+            parkDetail = store.getParkDetail();
             zipcode = store.getAddress().getZipcode();
             roadAddr = store.getAddress().getRoadAddr();
             numberAddr = store.getAddress().getNumberAddr();
             detail = store.getAddress().getDetail();
-//            menuList = store.getMenuList().stream()
-//                    .map(MenuDTO.Detail::new)
-//                    .collect(Collectors.toList());
             categoryList = store.getCategoryOfStoreList().stream()
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());
@@ -255,6 +272,10 @@ public class StoreDTO {
 
         private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
 
+        private ParkAvailable park;
+
+        private String parkDetail;
+
         @NotBlank
         private String zipcode;
 
@@ -272,6 +293,7 @@ public class StoreDTO {
         public Update(String name, String phoneNumber, Double lat, Double lon,
                       LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
                       String notice, String intro, List<String> offDays,
+                      ParkAvailable park, String parkDetail,
                       String zipcode, String roadAddr, String numberAddr, String detail,
                       List<CategoryOfStoreDTO> categoryList) {
             this.name = name;
@@ -285,6 +307,8 @@ public class StoreDTO {
             this.notice = notice;
             this.intro = intro;
             this.offDays = offDays;
+            this.park = park;
+            this.parkDetail = parkDetail;
             this.zipcode = zipcode;
             this.roadAddr = roadAddr;
             this.numberAddr = numberAddr;
@@ -306,6 +330,8 @@ public class StoreDTO {
             notice = store.getNotice();
             intro = store.getIntro();
             offDays = store.getOffDays();
+            park = store.getPark();
+            parkDetail = store.getParkDetail();
             zipcode = store.getAddress().getZipcode();
             roadAddr = store.getAddress().getRoadAddr();
             numberAddr = store.getAddress().getNumberAddr();
@@ -325,12 +351,11 @@ public class StoreDTO {
                     .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd))
                     .notice(notice)
                     .intro(intro)
+                    .park(park)
+                    .parkDetail(parkDetail)
                     .offDays(offDays)
                     .address(new Address(roadAddr, numberAddr, zipcode, detail))
                     .build();
         }
-
     }
-
-
 }

@@ -59,19 +59,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new DefaultHttpFirewall();
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf().disable()
                 .headers().frameOptions().disable();
 
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
+//                .antMatchers("/profile").permitAll()
                 .antMatchers("/user/**").hasAnyRole("USER", "SELLER", "ADMIN")
                 .antMatchers("/seller/**").hasAnyRole("SELLER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
+//                .anyRequest().authenticated();
 
-        http.formLogin()
+        http
+                .formLogin()
                 .usernameParameter("userId")    //default값 username
                 .passwordParameter("password")
                 .loginPage("/login")
@@ -82,7 +86,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
                 .addLogoutHandler(new LogoutHandler() {
                     @Override
                     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

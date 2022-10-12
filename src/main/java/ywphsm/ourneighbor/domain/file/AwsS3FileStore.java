@@ -83,6 +83,7 @@ public class AwsS3FileStore {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
+//        File convertFile = new File(file.getOriginalFilename());
         File convertFile = new File("/tmp/" + file.getOriginalFilename());
 
         if(convertFile.createNewFile()) {

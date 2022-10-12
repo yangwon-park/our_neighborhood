@@ -108,12 +108,14 @@
                 </th:block>
             </div>
             <div class="col-12 my-1">
-                <p>
-<!--                    <span class="mx-auto" th:text="*{park.description}"></span>-->
-                </p>
-                <p>
-<!--                    <span class="mx-auto" th:text="*{parkDetail}"></span>-->
-                </p>
+                <i class="fa-solid fa-square-parking orange fa-sm"></i>
+                <span>주차</span>
+                <th:block th:if="*{park ne null}">
+                    <span class="ms-2 me-3 fw-bold" th:text="*{park.description}" th:classappend="|park-*{park.name()}|"></span>
+                </th:block>
+                <th:block th:if="*{parkDetail ne null}">
+                    <span class="ms-3 fw-bold" th:text="|(*{parkDetail})|"></span>
+                </th:block>
             </div>
             <div class="col-12 my-1">
                 <p>

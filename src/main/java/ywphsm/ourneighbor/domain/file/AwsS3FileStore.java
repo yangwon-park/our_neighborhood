@@ -6,14 +6,19 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,6 +26,8 @@ import java.util.UUID;
 public class AwsS3FileStore {
 
     private final AmazonS3Client amazonS3Client;
+
+    private final Environment environment;
 
     @Value("${cloud.aws.s3.bucket-name}")
     private String bucketName;
@@ -46,7 +53,7 @@ public class AwsS3FileStore {
 
             imageUrl = getImageUrl(uploadFile);
 
-            storeFileName = createStoreFileName(originalFileName);
+            storeFileName = FileUtil.createStoreFileName(originalFileName);
         }
 
         return new UploadFile(originalFileName, storeFileName, imageUrl);
@@ -66,13 +73,11 @@ public class AwsS3FileStore {
                 .withCannedAcl(CannedAccessControlList.PublicRead);
 
         String name = putObjectRequest.getFile().getName();
-        log.info("name={}", name);
 
         amazonS3Client.putObject(putObjectRequest);
 
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
-
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
@@ -83,8 +88,22 @@ public class AwsS3FileStore {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
-//        File convertFile = new File("/tmp/" + file.getOriginalFilename());
+        List<String> profiles = Arrays.stream(environment.getActiveProfiles()).
+                                       collect(Collectors.toList());
+
+        String localProfile = "local";
+        String testProfile = "test";
+
+        boolean localCheck = profiles.contains(localProfile);
+        boolean testCheck = profiles.contains(testProfile);
+
+        File convertFile;
+
+        if (!localCheck && !testCheck) {
+            convertFile = new File("/tmp/" + file.getOriginalFilename());
+        } else {
+            convertFile = new File(file.getOriginalFilename());
+        }
 
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
@@ -94,21 +113,5 @@ public class AwsS3FileStore {
         }
 
         return Optional.empty();
-    }
-
-    private String createStoreFileName(String originalFilename) {
-        // 서버 저장명 imageUUID.png
-        String uuid = UUID.randomUUID().toString();
-
-        // 확장자 뽑아내기
-        String ext = extractExt(originalFilename);
-
-        // 최종 저장 명
-        return uuid + "." + ext;
-    }
-
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
-        return originalFilename.substring(pos + 1);
     }
 }

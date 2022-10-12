@@ -42,8 +42,8 @@ deploy:
     bucket: neighbor-build
     key: our_neighborhood.zip
     bundle_type: zip
-    application: neighbor
-    deployment_group: neighbor-group
+    application: our-neighbor
+    deployment_group: our-neighbor-group
     region: ap-northeast-2
     wait-until-deployed: true
     on:

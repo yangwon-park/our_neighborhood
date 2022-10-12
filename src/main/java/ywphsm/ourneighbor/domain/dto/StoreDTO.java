@@ -169,7 +169,6 @@ public class StoreDTO {
 
         private String intro;                     // 가게 소개
 
-
         private int average;
 
         private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
@@ -180,8 +179,6 @@ public class StoreDTO {
         private ParkAvailable park;
 
         private String parkDetail;
-
-        private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
 
         // 주소는 임베디드 타입으로 받음
         @NotBlank

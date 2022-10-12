@@ -2,13 +2,12 @@ package ywphsm.ourneighbor.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
-import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
-import ywphsm.ourneighbor.domain.dto.MenuDTO;
-import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.dto.*;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -19,6 +18,7 @@ import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.MenuService;
+import ywphsm.ourneighbor.service.ReviewService;
 import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
@@ -38,8 +38,8 @@ public class StoreController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
-
     private final MenuService menuService;
+    private final ReviewService reviewService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -85,9 +85,18 @@ public class StoreController {
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
+        //review paging
+        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
+        List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
+        log.info("content={}", content);
+        double ratingAverage = reviewService.ratingAverage(storeId);
+
         model.addAttribute("store", dto);
         model.addAttribute("menus", menuDTOList);
         model.addAttribute("categoryList", dtoList);
+        //review
+        model.addAttribute("review", content);
+        model.addAttribute("ratingAverage", ratingAverage);
 
         return "store/detail";
     }

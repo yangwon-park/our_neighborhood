@@ -135,6 +135,11 @@ public class Member extends BaseTimeEntity {
         this.role = role;
     }
 
+    public void addReview(Review review) {
+        review.setMember(this);
+        reviewList.add(review);
+    }
+
     /*
         JPA 연관 관계 매핑
      */

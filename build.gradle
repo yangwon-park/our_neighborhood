@@ -33,7 +33,7 @@ sourceCompatibility = '11'
 
 
 /*
-	plain.jar 파일 생성 안 되게 막음
+   plain.jar 파일 생성 안 되게 막음
  */
 jar {
 	enabled = false
@@ -56,11 +56,11 @@ dependencies {
 
 	// Spring Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-  
-  	// Lombok
+
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
-  	annotationProcessor 'org.projectlombok:lombok'
-  
+	annotationProcessor 'org.projectlombok:lombok'
+
 	// Spring Data JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 

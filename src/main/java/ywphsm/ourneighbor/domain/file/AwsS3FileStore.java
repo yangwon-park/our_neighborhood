@@ -53,7 +53,7 @@ public class AwsS3FileStore {
 
             imageUrl = getImageUrl(uploadFile);
 
-            storeFileName = createStoreFileName(originalFileName);
+            storeFileName = FileUtil.createStoreFileName(originalFileName);
         }
 
         return new UploadFile(originalFileName, storeFileName, imageUrl);
@@ -88,8 +88,8 @@ public class AwsS3FileStore {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        String[] activeProfiles = environment.getActiveProfiles();
-        List<String> profiles = Arrays.stream(activeProfiles).collect(Collectors.toList());
+        List<String> profiles = Arrays.stream(environment.getActiveProfiles()).
+                                       collect(Collectors.toList());
 
         String localProfile = "local";
         String testProfile = "test";
@@ -113,21 +113,5 @@ public class AwsS3FileStore {
         }
 
         return Optional.empty();
-    }
-
-    private String createStoreFileName(String originalFilename) {
-        // 서버 저장명 imageUUID.png
-        String uuid = UUID.randomUUID().toString();
-
-        // 확장자 뽑아내기
-        String ext = extractExt(originalFilename);
-
-        // 최종 저장 명
-        return uuid + "." + ext;
-    }
-
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
-        return originalFilename.substring(pos + 1);
     }
 }

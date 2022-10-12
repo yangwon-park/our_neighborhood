@@ -3,7 +3,6 @@ package ywphsm.ourneighbor.domain.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,7 +59,7 @@ public class FileStore {
 
             // ex) UUID.png
             // 서버 저장 파일명
-            storeFileName = createStoreFileName(originalFileName);
+            storeFileName = FileUtil.createStoreFileName(originalFileName);
 
             // 경로 + 서버 저장 파일명을 가지고 File을 생성
             // transferTo => 업로드한 파일 데이터를 new File(getFullPath(storeFileName)로 저장
@@ -69,22 +68,4 @@ public class FileStore {
 
         return new UploadFile(originalFileName, storeFileName);
     }
-
-    private String createStoreFileName(String originalFilename) {
-        // 서버 저장명 imageUUID.png
-        String uuid = UUID.randomUUID().toString();
-
-        // 확장자 뽑아내기
-        String ext = extractExt(originalFilename);
-
-        // 최종 저장 명
-        return uuid + "." + ext;
-    }
-
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
-        return originalFilename.substring(pos + 1);
-    }
-
-
 }

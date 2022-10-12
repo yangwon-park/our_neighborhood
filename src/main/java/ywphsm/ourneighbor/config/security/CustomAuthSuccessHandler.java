@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.security;
+package ywphsm.ourneighbor.config.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +11,7 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.service.email.security.MemberDetailsImpl;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;

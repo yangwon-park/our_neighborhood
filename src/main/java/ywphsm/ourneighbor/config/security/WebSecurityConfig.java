@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.security;
+package ywphsm.ourneighbor.config.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,17 +10,14 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
-import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.service.email.security.MemberDetailsService;
 import ywphsm.ourneighbor.service.login.CustomOAuthUserService;
-import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +31,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final MemberDetailService memberDetailService;
+    private final MemberDetailsService memberDetailService;
     private final CustomOAuthUserService customOAuthUserService;
     private final CustomAuthSuccessHandler customAuthSuccessHandler;
 

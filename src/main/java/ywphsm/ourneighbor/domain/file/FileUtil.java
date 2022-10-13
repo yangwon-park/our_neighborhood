@@ -18,5 +18,4 @@ public class FileUtil {
         // 최종 저장 명
         return uuid + "." + ext;
     }
-
 }

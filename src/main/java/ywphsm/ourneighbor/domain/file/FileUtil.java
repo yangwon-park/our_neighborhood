@@ -8,6 +8,7 @@ public class FileUtil {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }
+
     public static String createStoreFileName(String originalFilename) {
         // 서버 저장명 imageUUID.png
         String uuid = UUID.randomUUID().toString();

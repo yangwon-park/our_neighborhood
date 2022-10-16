@@ -11,9 +11,17 @@ import javax.persistence.EntityManager;
 import java.util.Optional;
 import java.util.UUID;
 
-@EnableJpaAuditing		//  Spring Data JPA에서 Auditing 기능 사용을 위해 필수 (등록, 수정 추적)
+// Spring Data JPA에서 Auditing 기능 사용을 위해 필수 (등록, 수정 추적)
+@EnableJpaAuditing
 @SpringBootApplication
 public class OurNeighborApplication {
+
+	// AWS 메타데이터 로딩으로 인한 서비스 연결 시점의 지연을 막기 위해
+	// disable 옵션을 true로 선언
+	// 이걸 키면 credentials.instanceProfile을 불러오지 못함
+	static {
+		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(OurNeighborApplication.class, args);

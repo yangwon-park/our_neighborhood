@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class MapSearchController {
 
     private final StoreService storeService;
-    private final CategoryService categoryService;
 
     // 메뉴 리스트는 불러오지 않음
     // 단순 조회이므로 fetch 조인으로 최적화

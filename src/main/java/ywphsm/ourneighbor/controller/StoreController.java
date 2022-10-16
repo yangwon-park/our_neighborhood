@@ -12,7 +12,9 @@ import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
+import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
+import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.MenuService;
@@ -44,6 +46,16 @@ public class StoreController {
         return MenuType.values();
     }
 
+    @ModelAttribute("menuFeats")
+    public MenuFeat[] menuFeats() {
+        return MenuFeat.values();
+    }
+
+    @ModelAttribute("parkAva")
+    public ParkAvailable[] parkAvailables() {
+        return ParkAvailable.values();
+    }
+
     @ModelAttribute("offDays")
     public Map<String, String> offDays() {
         Map<String, String> offDays = new LinkedHashMap<>();
@@ -67,13 +79,6 @@ public class StoreController {
         List<Menu> menuList = menuService.findByStoreIdCaseByOrderByType(storeId);
         List<MenuDTO.Simple> menuDTOList = menuList.stream()
                 .map(MenuDTO.Simple::of).collect(Collectors.toList());
-
-//        List<CategorySimpleDTO> dtoList = new ArrayList<>();
-//        for (CategoryOfStoreDTO categoryOfStoreDTO : categoryList) {
-//            Category category = categoryService.findById(categoryOfStoreDTO.getCategoryId());
-//            CategorySimpleDTO dto = CategorySimpleDTO.of(category);
-//            dtoList.add(dto);
-//        }
 
         List<CategorySimpleDTO> dtoList = dto.getCategoryList().stream()
                 .map(categoryOfStoreDTO ->

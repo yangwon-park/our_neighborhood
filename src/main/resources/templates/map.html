@@ -91,7 +91,16 @@
             </th:block>
         </ul>
     </div>
-    <div class="container-fluid" id="map" style="height: 100%"></div>
+    <div class="container-fluid map-wrap px-0">
+        <div id="map" class="map-wrap"></div>
+        <!-- 지도 확대, 축소 컨트롤 div 입니다 -->
+        <div class="custom_zoomcontrol radius_border">
+            <span id="moveToCurrentLocationBtn" class="m-auto">
+                <img src="/images/main/current_location.png" alt="현재위치로 이동">
+            </span>
+        </div>
+    </div>
+    <!--    <div class="container-fluid" id="map" style="height: 100%"></div>-->
 </main>
 <script th:inline="javascript">
 
@@ -107,15 +116,16 @@
     // 지도 생성
     var map = new kakao.maps.Map(mapContainer, mapOptions);
 
-    var imageSrc = '../images/main/map_marker.png',
-        imageSize = new kakao.maps.Size(55, 60),
-        imageOption = {offset: new kakao.maps.Point(27, 69)};
-
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
+    // var zoomControl = new kakao.maps.ZoomControl();
+    // map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
     // 현재 위치를 담기 위한 변수
     var currentPosition;
 
+    var pointerSrc = "../images/main/blink_pointer.gif",
+        pointerSize = new kakao.maps.Size(25, 25);
+
+    var pointerImage = new kakao.maps.MarkerImage(pointerSrc, pointerSize);
 
     // 현재 위치로 맵 중심 정렬 - geolocation (배포시, https 필수)
     if ('geolocation' in navigator) {
@@ -124,6 +134,13 @@
                 lon = position.coords.longitude;
 
             currentPosition = new kakao.maps.LatLng(lat, lon);
+
+            var marker = new kakao.maps.Marker({
+                position: currentPosition,
+                image: pointerImage
+            })
+
+            marker.setMap(map);
 
             map.setCenter(currentPosition);
         })

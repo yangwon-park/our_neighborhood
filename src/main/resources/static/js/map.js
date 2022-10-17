@@ -1,12 +1,19 @@
 var main = {
     init: async function () {
-        var _this = this;
+        let _this = this;
 
         _this.setSearchKeywordEvent();
         await _this.getCategories();
 
         let findCate = document.querySelectorAll("a.search-main-cate")
         _this.searchByCategories(findCate);
+
+        let moveToCurrentLocationBtn = document.getElementById("moveToCurrentLocationBtn");
+
+        moveToCurrentLocationBtn.addEventListener("click", () => {
+            _this.moveToCurrentLocation();
+        })
+
     },
 
     setSearchKeywordEvent: function () {
@@ -170,6 +177,12 @@ var main = {
     },
 
     addMarker: function(data) {
+        var imageSrc = '../images/main/map_marker.png',
+            imageSize = new kakao.maps.Size(55, 60),
+            imageOption = {offset: new kakao.maps.Point(27, 69)};
+
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
         var position = new kakao.maps.LatLng(data.lat, data.lon);
 
         // 마커를 생성하는 시점에 인포윈도우를 등록하지 않으면
@@ -245,6 +258,12 @@ var main = {
         this.infowindows = [];
         this.searchResult = [];
     },
+
+    moveToCurrentLocation: function () {
+        map.setLevel(1);
+        map.panTo(currentPosition);
+    },
+
 
 };
 

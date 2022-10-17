@@ -100,60 +100,9 @@
             </span>
         </div>
     </div>
-    <!--    <div class="container-fluid" id="map" style="height: 100%"></div>-->
 </main>
-<script th:inline="javascript">
-
-    // 지도를 담을 div를 찾음
-    var mapContainer = document.getElementById('map');
-
-    // 지도에 관한 옵션 부여
-    var mapOptions = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
-        level: 1		// 확대 레벨
-    };
-
-    // 지도 생성
-    var map = new kakao.maps.Map(mapContainer, mapOptions);
-
-    // var zoomControl = new kakao.maps.ZoomControl();
-    // map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-    // 현재 위치를 담기 위한 변수
-    var currentPosition;
-
-    var pointerSrc = "../images/main/blink_pointer.gif",
-        pointerSize = new kakao.maps.Size(25, 25);
-
-    var pointerImage = new kakao.maps.MarkerImage(pointerSrc, pointerSize);
-
-    // 현재 위치로 맵 중심 정렬 - geolocation (배포시, https 필수)
-    if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            var lat = position.coords.latitude,
-                lon = position.coords.longitude;
-
-            currentPosition = new kakao.maps.LatLng(lat, lon);
-
-            var marker = new kakao.maps.Marker({
-                position: currentPosition,
-                image: pointerImage
-            })
-
-            marker.setMap(map);
-
-            map.setCenter(currentPosition);
-        })
-    } else {
-        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-            message = 'geolocation을 사용할 수 없음'
-
-        map.setCenter(locPosition)
-    }
-
-    // ============================================================================================
-</script>
 <script th:replace="layout/footer :: common_js(~{::scipt})"></script>
+<script type="module" th:src="@{/js/app.js}"></script>
 <script type="module" th:src="@{/js/map.js}"></script>
 </body>
 </html>

@@ -2,35 +2,87 @@ var main = {
     init: async function () {
         let _this = this;
 
-        _this.setSearchKeywordEvent();
+        let map = _this.getMap();
+
+        _this.setSearchKeywordEvent(map);
         await _this.getCategories();
 
-        let findCate = document.querySelectorAll("a.search-main-cate")
-        _this.searchByCategories(findCate);
+        let findCate = document.querySelectorAll("a.search-main-cate");
+        _this.searchByCategories(findCate, map);
 
-        let moveToCurrentLocationBtn = document.getElementById("moveToCurrentLocationBtn");
-
-        moveToCurrentLocationBtn.addEventListener("click", () => {
-            _this.moveToCurrentLocation();
-        })
 
     },
 
-    setSearchKeywordEvent: function () {
+    getMap: function () {
+        // 지도를 담을 div를 찾음
+        var mapContainer = document.getElementById('map');
+
+        // 지도에 관한 옵션 부여
+        var mapOptions = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
+            level: 1		// 확대 레벨
+        };
+
+        // 지도 생성
+        var map = new kakao.maps.Map(mapContainer, mapOptions);
+
+        // var zoomControl = new kakao.maps.ZoomControl();
+        // map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+        var currentPosition;
+        var pointerSrc = "../images/main/blink_pointer.gif",
+            pointerSize = new kakao.maps.Size(25, 25);
+
+        var pointerImage = new kakao.maps.MarkerImage(pointerSrc, pointerSize);
+
+        // 현재 위치로 맵 중심 정렬 - geolocation (배포시, https 필수)
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                var lat = position.coords.latitude,
+                    lon = position.coords.longitude;
+
+                currentPosition = new kakao.maps.LatLng(lat, lon);
+
+                var marker = new kakao.maps.Marker({
+                    position: currentPosition,
+                    image: pointerImage
+                });
+
+                marker.setMap(map);
+
+                map.setCenter(currentPosition);
+
+                let moveToCurrentLocationBtn = document.getElementById("moveToCurrentLocationBtn");
+
+                moveToCurrentLocationBtn.addEventListener("click", () => {
+                    this.moveToCurrentLocation(map, currentPosition);
+                });
+            })
+        } else {
+            var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+                message = 'geolocation을 사용할 수 없음'
+
+            map.setCenter(locPosition)
+        }
+
+        return map;
+    },
+
+    setSearchKeywordEvent: function (map) {
         // 엔터키 입력하면 searchByKeyword 동작
         document.getElementById('keyword').addEventListener('keydown', (e) => {
             if (e.isComposing === false && e.code == 'Enter') { // 한글 입력 시 이벤트 두번 발생 방지
-                this.searchByKeyword();
+                this.searchByKeyword(map);
             }
         })
 
         // 클릭 이벤트 시 searchByKeyword 동작
         document.getElementById('searchBtn').addEventListener('click', () => {
-            this.searchByKeyword();
+            this.searchByKeyword(map);
         });
     },
 
-    searchByKeyword: function() {
+    searchByKeyword: function(map) {
         const keyword = document.getElementById('keyword').value;
 
         if (!keyword.replace(/^\s+|\s+$/g, '')) {
@@ -55,7 +107,7 @@ var main = {
                     this.searchResult.push(resp.data.data[i])
                 }
 
-                this.displayMarker(this.searchResult);
+                this.displayMarker(this.searchResult, map);
 
                 // input 태그 값 지움
                 const input = document.getElementById('keyword');
@@ -66,7 +118,7 @@ var main = {
             });
     },
 
-    searchByCategories: function (findCate) {
+    searchByCategories: function (findCate, map) {
         for (const el of findCate) {
             el.addEventListener('click', () => {
 
@@ -98,7 +150,11 @@ var main = {
                             this.searchResult.push(res.data.data[i])
                         }
 
-                        this.displayMarker(this.searchResult);
+                        this.displayMarker(this.searchResult, map);
+
+                        sessionStorage.clear();
+                        sessionStorage.setItem("radio", radio.value);
+                        sessionStorage.setItem("categoryId", categoryId);
                     })
                     .catch((error) => {
                         alert('왜 에러가 뜰까요??');
@@ -154,13 +210,14 @@ var main = {
 
     searchResult: [],
 
-    displayMarker: function (result) {
+    displayMarker: function (result, map) {
         this.removeMarker();
 
         var bounds = new kakao.maps.LatLngBounds();
 
-        for (var i = 0; i < result.length; i++) {
-            var marker = this.addMarker(result[i]);
+        for (let i = 0; i < result.length; i++) {
+
+            var marker = this.addMarker(result[i], map);
             var position = new kakao.maps.LatLng(result[i].lat, result[i].lon);
 
             bounds.extend(position);
@@ -176,7 +233,7 @@ var main = {
         }
     },
 
-    addMarker: function(data) {
+    addMarker: function(data, map) {
         var imageSrc = '../images/main/map_marker.png',
             imageSize = new kakao.maps.Size(55, 60),
             imageOption = {offset: new kakao.maps.Point(27, 69)};
@@ -194,7 +251,7 @@ var main = {
 
         var infowindow = new kakao.maps.InfoWindow();
 
-        kakao.maps.event.addListener(marker, 'click', this.addInfoWindow(marker, data, infowindow));
+        kakao.maps.event.addListener(marker, 'click', this.addInfoWindow(marker, data, infowindow, map));
 
         marker.setMap(map);
         this.markers.push(marker);
@@ -203,14 +260,14 @@ var main = {
         return marker;
     },
 
-    addInfoWindow: function(marker, data, infowindow) {
+    addInfoWindow: function(marker, data, infowindow, map) {
         return () => {
             this.closeInfowindow();
             infowindow.setContent(
                 '<div class="container text-nowrap">' +
                 '    <div class="row mt-2">' +
                 '        <div class="col m-auto">' +
-                '           <a style="text-decoration: none; color: #0b1526" href="/store/' + data.storeId + '" class="fs-5 me-2">' + data.name + '</a>' +
+                '           <a style="text-decoration: none; color: #0b1526" href="/store/' + data.storeId + '" id="info-title" class="fs-5 me-2">' + data.name + '</a>' +
                 '           <span class="badge mb-2 ' + data.status + '">' + data.status + '</span>' +
                 '        </div>' +
                 '    </div>' +
@@ -259,7 +316,7 @@ var main = {
         this.searchResult = [];
     },
 
-    moveToCurrentLocation: function () {
+    moveToCurrentLocation: function (map, currentPosition) {
         map.setLevel(1);
         map.panTo(currentPosition);
     },

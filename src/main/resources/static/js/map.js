@@ -74,7 +74,7 @@ var main = {
 
         // 엔터키 입력하면 searchByKeyword 동작
         document.getElementById('keyword').addEventListener('keydown', (e) => {
-            if (e.isComposing === false && e.code == 'Enter') { // 한글 입력 시 이벤트 두번 발생 방지
+            if (e.isComposing === false && e.code === 'Enter') { // 한글 입력 시 이벤트 두번 발생 방지
                 this.searchByKeyword(prevKeyword, map);
             }
         });
@@ -85,15 +85,16 @@ var main = {
         });
     },
 
-    searchByKeyword: function (keyword, map) {
+    searchByKeyword: function (prevKeyword, map) {
+        let keyword = document.getElementById("keyword").value;
 
-        if (keyword === null) {
-            keyword = document.getElementById('keyword').value;
-        }
-
-        if (!keyword.replace(/^\s+|\s+$/g, '')) {
-            alert('키워드를 입력해주세요!');
-            return false;
+        if (!keyword.replace(/^\s+|\s+$/g, "")) {
+            if (prevKeyword === null) {
+                alert("키워드를 입력해주세요!");
+                return false;
+            } else {
+                keyword = prevKeyword;
+            }
         }
 
         axios({
@@ -132,7 +133,6 @@ var main = {
         for (const el of findCate) {
             el.addEventListener('click', () => {
 
-                console.log("searchByCate Start");
                 // input radio에서 selected된 값 가져옴
                 let radio = document.querySelector('input[name="dist"]:checked');
 
@@ -192,7 +192,6 @@ var main = {
         })
     },
 
-
     getMainCategories: function (children) {
         const mapCategory = document.getElementById("map-category");
 
@@ -233,7 +232,7 @@ var main = {
 
         for (let i = 0; i < result.length; i++) {
 
-            var marker = this.addMarker(result[i], map);
+            this.addMarker(result[i], map);
             var position = new kakao.maps.LatLng(result[i].lat, result[i].lon);
 
             bounds.extend(position);
@@ -343,21 +342,30 @@ var main = {
                 (performance.getEntriesByType("navigation")[0].type === "reload" ||
                     performance.getEntriesByType("navigation")[0].type === "back_forward"))) {
 
+                console.log("새로고침 or 뒤로가기로 접근");
+
                 // sessionStorage 지원 여부 확인
                 if (("sessionStorage" in window) && window["sessionStorage"] !== null) {
 
-                    if (sessionStorage.getItem("keyword") === null) {
-                        let dist = sessionStorage.getItem("dist");
-                        let categoryId = sessionStorage.getItem("categoryId");
+                    if (sessionStorage.getItem("keyword") !== null) {
 
-                        this.searchByCategories(categoryId, dist, map);
-                    } else {
+                        console.log("keyword not null")
                         let prevKeyword = sessionStorage.getItem("keyword");
+
+                        console.log("prevKeyword=", prevKeyword);
 
                         this.searchByKeyword(prevKeyword, map);
                     }
 
+                    if (sessionStorage.getItem("dist") !== null &&
+                        sessionStorage.getItem("categoryId") !== null) {
 
+                        console.log("dist, categoryId not null")
+                        let dist = sessionStorage.getItem("dist");
+                        let categoryId = sessionStorage.getItem("categoryId");
+
+                        this.searchByCategories(categoryId, dist, map);
+                    }
                 }
 
                 sessionStorage.clear();

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>우리 동네</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
 
-  <style>
+    <style>
 
-  </style>
+    </style>
 </head>
 <link rel="stylesheet" href="/css/argon.css">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
@@ -17,92 +17,103 @@
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
 <section class="header">
-  <div class="header py-7 py-lg-8">
-    <div class="separator separator-bottom separator-skew zindex-100">
-      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-           xmlns="http://www.w3.org/2000/svg">
-        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-      </svg>
+    <div class="header py-7 py-lg-8">
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
     </div>
-  </div>
 </section>
 <!-- loginForm -->
 <section class="main">
-  <div class="container mt--8 pb-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-6">
-        <div class="card bg-secondary shadow border-0">
-          <div class="card-header bg-transparent pb-5">
-            <div class="text-muted text-center mt-2 mb-4">
-              <small>리뷰 등록</small>
-            </div>
-            <div class="card-body px-lg-5 py-lg-5">
-              <form th:object="${reviewDTO}" id="review-add-form"
-                    enctype="multipart/form-data">
-                <div class="form-group">
-                  <fieldset>
-                    <span class="text-bold">별점을 선택해주세요</span>
-                    <input type="radio" th:field="*{rating}" value="5" id="rating5"><label
-                          for="rating5">★</label>
-                    <input type="radio" th:field="*{rating}" value="4" id="rating4"><label
-                          for="rating4">★</label>
-                    <input type="radio" th:field="*{rating}" value="3" id="rating3"><label
-                          for="rating3">★</label>
-                    <input type="radio" th:field="*{rating}" value="2" id="rating2"><label
-                          for="rating2">★</label>
-                    <input type="radio" th:field="*{rating}" value="1" id="rating1"><label
-                          for="rating1">★</label>
-                  </fieldset>
-                  <div id="review-rating-valid" class="my-1 valid-custom"></div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group input-group-alternative mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+    <div class="container mt--8 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="card-header bg-transparent pb-5">
+                        <div class="text-muted text-center mt-2 mb-4">
+                            <div class="text-muted text-center mt-2 fs-2">리뷰 등록</div>
+                        </div>
+                        <div class="card-body px-lg-5 py-lg-5">
+                            <form th:object="${reviewDTO}" id="review-add-form" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <div>
+                                        <span class="text-muted" style="font-size: 1rem">별점을 선택해주세요</span>
+                                    </div>
+                                    <div>
+                                        <fieldset>
+                                            <input type="radio" th:field="*{rating}" value="5" id="rating5"><label
+                                                class="fs-3" for="rating5">★</label>
+                                            <input type="radio" th:field="*{rating}" value="4" id="rating4"><label
+                                                class="fs-3" for="rating4">★</label>
+                                            <input type="radio" th:field="*{rating}" value="3" id="rating3"><label
+                                                class="fs-3" for="rating3">★</label>
+                                            <input type="radio" th:field="*{rating}" value="2" id="rating2"><label
+                                                class="fs-3" for="rating2">★</label>
+                                            <input type="radio" th:field="*{rating}" value="1" id="rating1"><label
+                                                class="fs-3" for="rating1">★</label>
+                                        </fieldset>
+                                    </div>
+                                    <div id="review-rating-valid" class="my-1 valid-custom"></div>
+                                </div>
+                                <div class="form-group" style="height: 10rem">
+                                    <div class="mb-3">
+                                        <label class="mb-2" for="content">리뷰 작성</label>
+                                        <textarea class="form-control" style="height: 100%" placeholder="200자 이하여야 합니다"
+                                                  id="content" th:field="*{content}" rows="5"
+                                                  th:errorclass="field-error"></textarea>
+                                    </div>
+                                    <div id="review-content-valid" class="my-1 valid-custom"></div>
+                                </div>
+                                <div class="form-group">
+                                    <span class="mb-2">해쉬태그 추가</span>
+                                    <div class="mb-3">
+                                        <input id="hashtag" class="tagify--outside"
+                                               name="hashtag" type="hidden" style="width: 100%">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <input th:field="*{file}"
+                                               th:errorclass="field-error"
+                                               class="form-control"
+                                               type="file"/>
+                                    </div>
+                                    <div class="field-error" th:errors="*{file}"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <input th:field="*{storeId}" class="form-control"
+                                               placeholder="매장 번호" type="hidden">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <input th:field="*{memberId}" class="form-control"
+                                               placeholder="회원 번호" type="hidden">
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-orange mt-4"
+                                            id="review-save">등록
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <textarea class="form-control" placeholder="200자 이하여야 합니다"
-                              id="content"
-                              th:field="*{content}"
-                              th:errorclass="field-error"></textarea>
-                    <div id="review-content-valid" class="my-1 valid-custom"></div>
-                  </div>
                 </div>
-                <div class="form-group">
-                  <div class="mb-3">
-                    <input th:field="*{file}"
-                           th:errorclass="field-error"
-                           class="form-control"
-                           type="file"/>
-                    <div class="field-error" th:errors="*{file}"></div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="mb-3">
-                    <input th:field="*{storeId}" class="form-control"
-                           placeholder="매장 번호" type="hidden">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="mb-3">
-                    <input th:field="*{memberId}" class="form-control"
-                           placeholder="회원 번호" type="hidden">
-                  </div>
-                </div>
-                <div class="text-center">
-                  <button type="button" class="btn btn-orange mt-4" id="review-save">등록</button>
-                </div>
-              </form>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 </section>
 </body>
 <footer th:replace="layout/footer :: common_footer">
-  템플릿 푸터
+    템플릿 푸터
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/review.js}"></script>
+<script type="module" th:src="@{/js/hashtag.js}"></script>
 
 </html>

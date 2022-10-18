@@ -69,7 +69,6 @@ public class StoreDTO {
 
         private String parkDetail;
 
-
         private List<CategoryOfStoreDTO> categoryOfStores;
 
         @Builder

@@ -24,9 +24,10 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
-    private final FileStore fileStore;
 
     private final AwsS3FileStore awsS3FileStore;
+
+    private final FileStore fileStore;
 
     // 메뉴 등록
     @Transactional

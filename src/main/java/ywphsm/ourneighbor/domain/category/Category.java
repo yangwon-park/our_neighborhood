@@ -6,10 +6,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity
 @ToString(of = {"id", "name", "depth"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Category {
 
     @Id

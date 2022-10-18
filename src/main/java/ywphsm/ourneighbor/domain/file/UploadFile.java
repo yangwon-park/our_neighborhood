@@ -30,10 +30,6 @@ public class UploadFile {
     @JoinColumn(name = "review_id")
     private Review review;
 
-    public void setDefaultStoredFileName(String storedFileName) {
-        this.storedFileName = storedFileName;
-    }
-
     public UploadFile(String uploadedFileName, String storedFileName, String uploadImageUrl) {
         this.uploadedFileName = uploadedFileName;
         this.storedFileName = storedFileName;
@@ -61,10 +57,6 @@ public class UploadFile {
     /*
         비즈니스 로직 메소드
      */
-    public void updateMenu(Menu menu) {
-        this.menu = menu;
-    }
-
     public void updateUploadedFileName(String storedFileName, String uploadedFileName, String uploadImageUrl) {
         this.storedFileName = storedFileName;
         this.uploadedFileName = uploadedFileName;

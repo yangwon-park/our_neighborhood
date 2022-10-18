@@ -4,23 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.Review;
-import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
-import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.ReviewService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.io.IOException;
 
-@RestController
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@RestController
 public class ReviewApiController {
 
     private final ReviewService reviewService;
-    private final StoreService storeService;
 
     @PostMapping("/user/review")
     public Long save(ReviewDTO.Add dto) throws IOException {

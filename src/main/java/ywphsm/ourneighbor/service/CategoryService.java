@@ -75,8 +75,7 @@ public class CategoryService {
 
     public CategoryDTO findByName(String name) {
         Category category = categoryRepository.findByName(name);
-        CategoryDTO dto = new CategoryDTO(category);
-        return dto;
+        return new CategoryDTO(category);
     }
 
     // 단순히 모든 카테고리들을 보여주는 쿼리

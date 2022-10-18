@@ -22,7 +22,6 @@ import ywphsm.ourneighbor.service.ReviewService;
 import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
-import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 public class StoreController {
 

@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 // 파일 저장 로직 처리만을 담당하는 스프링 빈
 @Slf4j

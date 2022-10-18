@@ -31,11 +31,7 @@ public class Category {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
-
-    public void addParentCategory(Category parent) {
-        this.parent = parent;
-    }
-
+    
     public void addParentCategoryAndDepth(Category parent, Long depth) {
         this.parent = parent;
         this.depth = depth;

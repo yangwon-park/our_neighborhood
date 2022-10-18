@@ -21,10 +21,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
-@Slf4j
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;

@@ -10,8 +10,8 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 public class MyPageController {
 
     private final MemberService memberService;

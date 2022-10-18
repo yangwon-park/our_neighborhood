@@ -9,18 +9,18 @@
 #review-add-form input[type=radio]{
     display: none;
 }
-#review-add-form label{
+#review-add-form fieldset label{
     font-size: 3em;
     color: transparent;
     text-shadow: 0 0 0 #f0f0f0;
 }
-#review-add-form label:hover{
+#review-add-form fieldset label:hover{
     text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
-#review-add-form label:hover ~ label{
+#review-add-form fieldset label:hover ~ label{
     text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
-#review-add-form input[type=radio]:checked ~ label{
+#review-add-form fieldset input[type=radio]:checked ~ label{
     text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
 #reviewContents {

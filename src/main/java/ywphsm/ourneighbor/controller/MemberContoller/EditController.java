@@ -13,8 +13,8 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@RequestMapping("/user/member_edit")
 @Controller
+@RequestMapping("/user/member_edit")
 public class EditController {
 
     private final MemberService memberService;

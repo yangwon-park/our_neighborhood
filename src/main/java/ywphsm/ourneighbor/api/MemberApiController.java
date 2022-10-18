@@ -3,7 +3,6 @@ package ywphsm.ourneighbor.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.dto.MemberDTO;
 import ywphsm.ourneighbor.service.MemberService;
 
 @Slf4j

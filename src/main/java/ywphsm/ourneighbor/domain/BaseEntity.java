@@ -14,9 +14,9 @@ import javax.persistence.MappedSuperclass;
     Auditing을 위한 등록, 수정 관련 엔티티
  */
 
+@Getter
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass // 속성만 단순 상속시켜주는 애노테이션
-@Getter
 public class BaseEntity extends BaseTimeEntity{
 
     @CreatedBy

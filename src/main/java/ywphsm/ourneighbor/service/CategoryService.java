@@ -28,8 +28,6 @@ public class CategoryService {
     @Transactional
     public Long save(CategoryDTO dto) {
 
-        log.info("dto.getParentId={}", dto.getParentId());
-
         // parent, child는 빠져있음
         Category category = dto.toEntity();
 
@@ -75,13 +73,13 @@ public class CategoryService {
 
     public CategoryDTO findByName(String name) {
         Category category = categoryRepository.findByName(name);
-        CategoryDTO dto = new CategoryDTO(category);
-        return dto;
+        return new CategoryDTO(category);
     }
 
     // 단순히 모든 카테고리들을 보여주는 쿼리
     public List<CategoryDTO> findAll() {
-        return categoryRepository.findAllByOrderByDepthAscParentIdAscNameAsc().stream().map(CategoryDTO::new).collect(Collectors.toList());
+        return categoryRepository.findAllByOrderByDepthAscParentIdAscNameAsc().stream()
+                .map(CategoryDTO::new).collect(Collectors.toList());
     }
 
     // 하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리

@@ -2,31 +2,67 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.Review;
-import ywphsm.ourneighbor.domain.dto.MenuDTO;
+import ywphsm.ourneighbor.domain.dto.HashtagDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
+import ywphsm.ourneighbor.domain.hashtag.Hashtag;
+import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.service.HashtagService;
 import ywphsm.ourneighbor.service.ReviewService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-@RestController
-@RequiredArgsConstructor
+import static ywphsm.ourneighbor.domain.hashtag.HashtagOfStore.*;
+
 @Slf4j
+@RequiredArgsConstructor
+@RestController
 public class ReviewApiController {
 
     private final ReviewService reviewService;
+
+    private final HashtagService hashtagService;
+
     private final StoreService storeService;
 
     @PostMapping("/user/review")
-    public Long save(ReviewDTO.Add dto) throws IOException {
+    public Long save(ReviewDTO.Add dto, @RequestParam String hashtag) throws IOException, ParseException {
+        if (!hashtag.isEmpty()) {
+            JSONParser parser = new JSONParser();
+            JSONArray array = (JSONArray) parser.parse(hashtag);
 
-        log.info("dto={}", dto);
-        log.info("dto={}", dto.getFile());
+            Store findStore = storeService.findById(dto.getStoreId());
+
+            for (Object o : array) {
+                JSONObject jsonObject = (JSONObject) o;
+
+                HashtagDTO hashtagDTO = HashtagDTO.builder()
+                        .name(jsonObject.get("value").toString())
+                        .build();
+
+                boolean duplicateCheck = hashtagService.checkHashtagDuplicate(hashtagDTO.getName());
+
+                Hashtag savedHashtag;
+
+                if (!duplicateCheck) {
+                    savedHashtag = hashtagService.save(hashtagDTO);
+                } else {
+                    savedHashtag = hashtagService.findByName(hashtagDTO.getName());
+                }
+
+                linkHashtagAndStore(savedHashtag, findStore);
+            }
+        }
 
         return reviewService.save(dto);
     }

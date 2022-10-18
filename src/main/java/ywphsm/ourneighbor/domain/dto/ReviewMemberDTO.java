@@ -27,24 +27,29 @@ public class ReviewMemberDTO {
 
     private Long storeId;
 
+    private String uploadImgUrl;
+
     @QueryProjection
-    public ReviewMemberDTO(Long reviewId, String content, Integer rating, LocalDateTime createDate, Long memberId, String username, String storedFileName) {
+    public ReviewMemberDTO(Long reviewId, String content, Integer rating,
+                           LocalDateTime createDate, Long memberId, String username,
+                           String uploadImgUrl) {
         this.reviewId = reviewId;
         this.content = content;
         this.rating = rating;
         this.createDate = createDate;
         this.memberId = memberId;
         this.username = username;
-        this.storedFileName = storedFileName;
+        this.uploadImgUrl = uploadImgUrl;
     }
 
     @QueryProjection
-    public ReviewMemberDTO(Long reviewId, String content, Integer rating, LocalDateTime createDate, String storedFileName, String storeName, Long storeId) {
+    public ReviewMemberDTO(Long reviewId, String content, Integer rating,
+                           LocalDateTime createDate, String uploadImgUrl, String storeName, Long storeId) {
         this.reviewId = reviewId;
         this.content = content;
         this.rating = rating;
         this.createDate = createDate;
-        this.storedFileName = storedFileName;
+        this.uploadImgUrl = uploadImgUrl;
         this.storeName = storeName;
         this.storeId = storeId;
     }

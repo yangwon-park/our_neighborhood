@@ -22,7 +22,6 @@ import ywphsm.ourneighbor.service.ReviewService;
 import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
-import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 public class StoreController {
 
@@ -88,12 +87,13 @@ public class StoreController {
         //review paging
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
         List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
-        log.info("content={}", content);
+
         double ratingAverage = reviewService.ratingAverage(storeId);
 
         model.addAttribute("store", dto);
         model.addAttribute("menus", menuDTOList);
         model.addAttribute("categoryList", dtoList);
+
         //review
         model.addAttribute("review", content);
         model.addAttribute("ratingAverage", ratingAverage);

@@ -23,7 +23,8 @@ import java.util.Locale;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {
         "id", "name", "lon", "lat",
-        "phoneNumber", "notice", "intro", "status"})
+        "phoneNumber", "notice", "intro", "status"
+})
 @Entity
 public class Store extends BaseEntity {
 
@@ -80,7 +81,7 @@ public class Store extends BaseEntity {
     private List<Menu> menuList = new ArrayList<>();
 
     // Category (N:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
     // Hashtag (N:N)

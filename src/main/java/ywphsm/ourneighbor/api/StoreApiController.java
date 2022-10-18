@@ -41,11 +41,6 @@ public class StoreApiController {
             }
         }
 
-        log.info("dto={}", dto);
-        for (Long id : categoryId) {
-            log.info("id={}", id);
-        }
-
         List<Category> categoryList = categoryId.stream()
                 .map(categoryService::findById)
                 .collect(Collectors.toList());

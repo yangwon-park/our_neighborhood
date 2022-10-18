@@ -3,7 +3,6 @@ package ywphsm.ourneighbor.domain.member;
 import lombok.*;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
 import ywphsm.ourneighbor.domain.Review;
-import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -2,7 +2,6 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
@@ -25,9 +24,10 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
-    private final FileStore fileStore;
 
     private final AwsS3FileStore awsS3FileStore;
+
+    private final FileStore fileStore;
 
     // 메뉴 등록
     @Transactional

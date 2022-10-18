@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Review;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
+import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -21,15 +22,20 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
-@Slf4j
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+
     private final StoreRepository storeRepository;
+
     private final MemberRepository memberRepository;
+
+    private final AwsS3FileStore awsS3FileStore;
+
     private final FileStore fileStore;
 
     @Transactional
@@ -37,7 +43,8 @@ public class ReviewService {
         Store linkedStore = storeRepository.findById(reviewAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
         Member linkedMember = memberRepository.findById(reviewAddDTO.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
 
-        UploadFile newUploadFile = fileStore.storeFile(reviewAddDTO.getFile());
+//        UploadFile newUploadFile = fileStore.storeFile(reviewAddDTO.getFile());
+        UploadFile newUploadFile = awsS3FileStore.storeFile(reviewAddDTO.getFile());
         log.info("fileName={}", newUploadFile.getStoredFileName());
         log.info("fileName={}", newUploadFile.getUploadedFileName());
 

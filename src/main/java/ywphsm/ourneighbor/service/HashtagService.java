@@ -53,4 +53,6 @@ public class HashtagService {
     public Hashtag findByName(String name) {
         return hashtagRepository.findByName(name);
     }
+
+//    public HashtagDTO findHashtag
 }

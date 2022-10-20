@@ -16,10 +16,7 @@ import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.service.CategoryService;
-import ywphsm.ourneighbor.service.MenuService;
-import ywphsm.ourneighbor.service.ReviewService;
-import ywphsm.ourneighbor.service.StoreService;
+import ywphsm.ourneighbor.service.*;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,9 +33,14 @@ import java.util.stream.Collectors;
 public class StoreController {
 
     private final StoreService storeService;
+
     private final CategoryService categoryService;
+
     private final MenuService menuService;
+
     private final ReviewService reviewService;
+
+    private final HashtagService hashtagService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -73,16 +75,28 @@ public class StoreController {
     @GetMapping("/store/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model) {
         Store store = storeService.findById(storeId);
-        StoreDTO.Detail dto = new StoreDTO.Detail(store);
+        StoreDTO.Detail storeDTO = new StoreDTO.Detail(store);
+
+        List<CategorySimpleDTO> categorySimpleDTOList = storeDTO.getCategoryList().stream()
+                .map(categoryOfStoreDTO ->
+                        categoryService.findById(categoryOfStoreDTO.getCategoryId()))
+                .map(CategorySimpleDTO::of).collect(Collectors.toList());
+
+        List<HashtagDTO> hashtagDTOList = storeDTO.getHashtagList().stream()
+                .map(hashtagOfStoreDTO ->
+                        hashtagService.findById(hashtagOfStoreDTO.getHashtagId()))
+                .collect(Collectors.toList());
+
+
+        // 스토어에 등록된 모든 카테고리를 다 불러옴
+        List<HashtagDTO> hashtagDTOList = storeDTO.getHashtagList().stream()
+                .map(hashtagOfStoreDTO ->
+                        hashtagService.findById(hashtagOfStoreDTO.getHashtagId()))
+                .collect(Collectors.toList());
 
         List<Menu> menuList = menuService.findByStoreIdCaseByOrderByType(storeId);
         List<MenuDTO.Simple> menuDTOList = menuList.stream()
                 .map(MenuDTO.Simple::of).collect(Collectors.toList());
-
-        List<CategorySimpleDTO> dtoList = dto.getCategoryList().stream()
-                .map(categoryOfStoreDTO ->
-                        categoryService.findById(categoryOfStoreDTO.getCategoryId()))
-                .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
         //review paging
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
@@ -90,9 +104,10 @@ public class StoreController {
 
         double ratingAverage = reviewService.ratingAverage(storeId);
 
-        model.addAttribute("store", dto);
-        model.addAttribute("menus", menuDTOList);
-        model.addAttribute("categoryList", dtoList);
+        model.addAttribute("store", storeDTO);
+        model.addAttribute("menuList", menuDTOList);
+        model.addAttribute("categoryList", categorySimpleDTOList);
+        model.addAttribute("hashtagList", hashtagDTOList);
 
         //review
         model.addAttribute("review", content);

@@ -89,10 +89,10 @@ public class StoreController {
 
 
         // 스토어에 등록된 모든 카테고리를 다 불러옴
-        List<HashtagDTO> hashtagDTOList = storeDTO.getHashtagList().stream()
-                .map(hashtagOfStoreDTO ->
-                        hashtagService.findById(hashtagOfStoreDTO.getHashtagId()))
-                .collect(Collectors.toList());
+//        List<HashtagDTO> hashtagDTOList = storeDTO.getHashtagList().stream()
+//                .map(hashtagOfStoreDTO ->
+//                        hashtagService.findById(hashtagOfStoreDTO.getHashtagId()))
+//                .collect(Collectors.toList());
 
         List<Menu> menuList = menuService.findByStoreIdCaseByOrderByType(storeId);
         List<MenuDTO.Simple> menuDTOList = menuList.stream()

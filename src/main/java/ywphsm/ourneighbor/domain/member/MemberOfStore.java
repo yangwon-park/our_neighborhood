@@ -15,6 +15,10 @@ public class MemberOfStore {
     @Id @GeneratedValue
     private Long Id;
 
+    private boolean myStore;
+
+    private boolean storeLike;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -34,5 +38,13 @@ public class MemberOfStore {
         store.getMemberOfStoreList().add(memberOfStore);
 
         return memberOfStore;
+    }
+
+    public void updateMyStore(boolean myStore) {
+        this.myStore = myStore;
+    }
+
+    public void updateStoreLike(boolean storeLike) {
+        this.storeLike = storeLike;
     }
 }

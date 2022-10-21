@@ -69,6 +69,8 @@ public class StoreDTO {
 
         private String parkDetail;
 
+        private Long memberId;
+
 
         private List<CategoryOfStoreDTO> categoryOfStores;
 
@@ -77,7 +79,7 @@ public class StoreDTO {
                    Double lat, Double lon, String phoneNumber,
                    LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
                    String notice, String intro, List<String> offDays,
-                   ParkAvailable park, String parkDetail,
+                   ParkAvailable park, String parkDetail, Long memberId,
                    List<CategoryOfStoreDTO> categoryOfStores) {
             this.name = name;
             this.zipcode = zipcode;
@@ -96,6 +98,7 @@ public class StoreDTO {
             this.offDays = offDays;
             this.park = park;
             this.parkDetail = parkDetail;
+            this.memberId = memberId;
             this.categoryOfStores = categoryOfStores;
         }
 

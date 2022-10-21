@@ -12,6 +12,7 @@ import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.review.ReviewRepository;
@@ -45,14 +46,16 @@ public class ReviewService {
         newUploadFile.addReview(review);
         linkedStore.addReview(review);
         linkedMember.addReview(review);
+        log.info("save_직전");
 
         return reviewRepository.save(review).getId();
     }
 
     @Transactional
-    public Long delete(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 리뷰입니다. id = " + reviewId));
+    public Long delete(Long storeId, Long reviewId) {
+        Review review = findOne(reviewId);
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
+        store.reviewDelete(review.getRating());
 
         log.info("review={}", review);
 
@@ -104,10 +107,5 @@ public class ReviewService {
 
     }
 
-    @Transactional
-    public void ratingDiscount(Long storeId, Long reviewId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
-        Review review = findOne(reviewId);
-        store.reviewDelete(review.getRating());
-    }
+
 }

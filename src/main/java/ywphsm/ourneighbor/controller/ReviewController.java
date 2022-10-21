@@ -45,6 +45,6 @@ public class ReviewController {
 
         model.addAttribute("review", content);
         model.addAttribute("count", count);
-        return "member/MyReview";
+        return "member/myReview";
     }
 }

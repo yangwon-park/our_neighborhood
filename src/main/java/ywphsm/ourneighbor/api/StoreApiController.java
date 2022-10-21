@@ -29,17 +29,7 @@ public class StoreApiController {
 
     @PostMapping("/seller/store")
     public Long save(@Validated StoreDTO.Add dto,
-                     @RequestParam(value = "categoryId") List<Long> categoryId,
-                     @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-                     HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        if (member.getRole().equals(Role.SELLER)) {
-            boolean storeOwner = storeService.OwnerCheck(member, dto.toEntity().getId());
-            if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
-            }
-        }
+                     @RequestParam(value = "categoryId") List<Long> categoryId) throws IOException {
 
         log.info("dto={}", dto);
         for (Long id : categoryId) {

@@ -34,12 +34,9 @@ public class ReviewApiController {
     @DeleteMapping("/review/delete/{storeId}")
     public Long delete(@PathVariable Long storeId, @RequestParam Long reviewId) {
 
-        log.info("menuId={}", reviewId);
+        log.info("reviewId={}", reviewId);
 
-        //review삭제시 별점 총점 빼기
-        reviewService.ratingDiscount(storeId, reviewId);
-
-        return reviewService.delete(reviewId);
+        return reviewService.delete(storeId, reviewId);
     }
 
     @GetMapping("/review/more")

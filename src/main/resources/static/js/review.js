@@ -7,7 +7,7 @@ var main = {
         const reviewSaveBtn = document.getElementById('review-save');
         const reviewDeleteBtnList = document.querySelectorAll('.review-delete');
         const reviewMoreBtn = document.getElementById('review-more');
-        const MyReviewMoreBtn = document.getElementById('MyReview-more');
+        const likeBtn = document.getElementById('like-btn');
 
         if (reviewSaveBtn !== null) {
             reviewSaveBtn.addEventListener('click', () => {
@@ -31,9 +31,9 @@ var main = {
             });
         }
 
-        if (MyReviewMoreBtn !== null) {
-            reviewMoreBtn.addEventListener('click', () => {
-                _this.myReviewMore()
+        if (likeBtn !== null) {
+            likeBtn.addEventListener('click', () => {
+                _this.likeUpdate()
                 // _this.save()
             });
         }
@@ -102,7 +102,6 @@ var main = {
         for (let k of formData.keys()) {
             console.log(k);
         }
-
         for (let v of formData.values()) {
             console.log(v);
         }
@@ -211,6 +210,29 @@ var main = {
 
         }).catch((e) => {
             console.error(e);
+        });
+    },
+
+    likeUpdate: function () {
+
+        const storeId = document.getElementById("storeId").value;
+        const memberId = document.getElementById("memberId").value;
+        const likeStatus = document.getElementById("like-btn").value;
+
+
+        axios({
+            method: "get",
+            url: "/user/like",
+            params: {
+                likeStatus: likeStatus,
+                memberId: memberId,
+                storeId: storeId
+            }
+        }).then((resp) => {
+            // alert('리뷰 삭제가 완료됐습니다.');
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error);
         });
     },
 };

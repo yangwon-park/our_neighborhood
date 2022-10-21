@@ -6,44 +6,57 @@ var main = {
     init: function () {
         this.getHashtags();
 
-        var inputElm = document.querySelector('input[name=hashtag]')
-        var whitelist = this.hashtags;
+        var inputElm = document.querySelector("input[name=hashtag]")
 
-        // initialize Tagify on the above input node reference
-        var tagify = new Tagify(inputElm, {
+        if (inputElm !== null) {
+            var whitelist = this.hashtags;
 
-            // make an array from the initial input value
-            whitelist: inputElm.value.trim().split(/\s*,\s*/)
-        })
+            // initialize Tagify on the above input node reference
+            var tagify = new Tagify(inputElm, {
 
-        // Chainable event listeners
-        tagify.on('input', onInput);
+                // make an array from the initial input value
+                whitelist: inputElm.value.trim().split(/\s*,\s*/)
+            })
 
-        var mockAjax = (function mockAjax(){
-            var timeout;
-            return function(duration){
-                clearTimeout(timeout);
-                return new Promise(function(resolve, reject){
-                    timeout = setTimeout(resolve, duration || 700, whitelist)
-                })
+            // Chainable event listeners
+            tagify.on('input', onInput);
+
+            var mockAjax = (function mockAjax(){
+                var timeout;
+                return function(duration){
+                    clearTimeout(timeout);
+                    return new Promise(function(resolve, reject){
+                        timeout = setTimeout(resolve, duration || 700, whitelist)
+                    })
+                }
+            })();
+
+            // on character(s) added/removed (user is typing/deleting)
+            function onInput(e){
+                tagify.settings.whitelist.length = 0;                   // reset current whitelist
+                tagify.loading(true).dropdown.hide.call(tagify); // show the loader animation
+
+                // get new whitelist from a delayed mocked request (Promise)
+                mockAjax()
+                    .then(function(result){
+                        // replace tagify "whitelist" array values with new values
+                        // and add back the ones already choses as Tags
+                        tagify.settings.whitelist.push(...result, ...tagify.value)
+
+                        // render the suggestions dropdown.
+                        tagify.loading(false).dropdown.show.call(tagify, e.detail.value);
+                    })
             }
-        })();
+        }
 
-        // on character(s) added/removed (user is typing/deleting)
-        function onInput(e){
-            tagify.settings.whitelist.length = 0;                   // reset current whitelist
-            tagify.loading(true).dropdown.hide.call(tagify); // show the loader animation
+        const hashtagDeleteBtnList = document.querySelectorAll(".hashtag-delete-btn");
 
-            // get new whitelist from a delayed mocked request (Promise)
-            mockAjax()
-                .then(function(result){
-                    // replace tagify "whitelist" array values with new values
-                    // and add back the ones already choses as Tags
-                    tagify.settings.whitelist.push(...result, ...tagify.value)
-
-                    // render the suggestions dropdown.
-                    tagify.loading(false).dropdown.show.call(tagify, e.detail.value);
+        if (hashtagDeleteBtnList !== null) {
+            hashtagDeleteBtnList.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    this.delete(btn.id);
                 })
+            })
         }
     },
 
@@ -59,6 +72,24 @@ var main = {
             }
         }).catch((error) => {
             console.error(error);
+        })
+    },
+
+    delete: function (btnId) {
+        const hashtagId = btnId.substring(18);
+        const storeId = document.getElementById("storeId").value;
+
+        axios({
+            method: "delete",
+            url: "/seller/hashtag/" + hashtagId,
+            params: {
+                storeId: storeId
+            }
+        }).then((resp) => {
+            alert("해쉬태그 삭제가 완료됐습니다.");
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error);
         })
     },
 }

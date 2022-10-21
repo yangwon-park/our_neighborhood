@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.domain.dto.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.repository.hashtagofstore.HashtagOfStoreRepository;
-import ywphsm.ourneighbor.repository.hashtagofstore.dto.HashtagOfStoreCountDTO;
 
 import java.util.List;
 
@@ -17,7 +17,15 @@ public class HashtagOfStoreService {
 
     private final HashtagOfStoreRepository hashtagOfStoreRepository;
 
-    public List<HashtagOfStoreCountDTO> findHashtagCountGroupByStoreTop9() {
-        return hashtagOfStoreRepository.findHashtagCountGroupByStoreTop9();
+    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdTop9(Long storeId) {
+        return hashtagOfStoreRepository.findHashtagAndCountByStoreIdTop9(storeId);
+    }
+
+    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreId(Long storeId) {
+        return hashtagOfStoreRepository.findAllHashtagAndCountByStoreId(storeId);
+    }
+
+    public Long delete(Long hashtagId, Long storeId) {
+        return hashtagOfStoreRepository.deleteByHashtagIdByStoreId(hashtagId, storeId);
     }
 }

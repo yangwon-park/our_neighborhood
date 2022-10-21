@@ -142,15 +142,7 @@
             <div class="col-5">
                 <div class="menu-hashtag col-8 row row-cols-md-3 row-cols-2" style="width:100%; height: 100%">
                     <th:block th:each="hashtag: ${hashtagList}">
-                    <div th:text="${hashtag.name}" class="my-auto text-center col text-nowrap">해쉬태그</div>
-<!--                    <div class="my-auto text-center col text-nowrap">해쉬태그 2</div>-->
-<!--                    <div class="my-auto text-center col text-nowrap">해쉬태그 3</div>-->
-<!--                    <div class="my-auto text-center col text-nowrap">해쉬태그 1</div>-->
-<!--                    <div class="my-auto text-center col text-nowrap">해쉬태그 2</div>-->
-<!--                    <div class="my-auto text-center col text-nowrap">해쉬태그 3</div>-->
-<!--                    <div class="my-auto text-center col text-nowrap">해쉬태그 1</div>-->
-<!--                    <div class="my-auto text-center col text-nowrap">해쉬태그 2</div>-->
-<!--                    <div class="my-auto text-center col text-nowrap">해쉬태그 3</div>-->
+                        <div th:text="${hashtag.hashtagName}" class="my-auto text-center col text-nowrap">해쉬태그</div>
                     </th:block>
                 </div>
             </div>
@@ -226,7 +218,7 @@
         <div class="row review">
             <h3><strong>리뷰</strong></h3>
             <div class="col">
-                <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"
+                <button class="btn btn-orange float-end" style="font-size: 1.1rem; color: #ffffff"
                         th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">
                     리뷰 등록
                 </button>
@@ -249,7 +241,6 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>#</th>
                     <th>별점</th>
                     <th>리뷰</th>
                     <th>작성자</th>
@@ -257,7 +248,6 @@
                 </tr>
                 </thead>
                 <tr th:each="review : ${review}">
-                    <td th:text="${review.reviewId}"></td>
                     <td th:if="${review.rating == 1}">★☆☆☆☆</td>
                     <td th:if="${review.rating == 2}">★★☆☆☆</td>
                     <td th:if="${review.rating == 3}">★★★☆☆</td>

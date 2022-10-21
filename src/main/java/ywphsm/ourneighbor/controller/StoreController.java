@@ -40,7 +40,7 @@ public class StoreController {
 
     private final ReviewService reviewService;
 
-    private final HashtagService hashtagService;
+    private final HashtagOfStoreService hashtagOfStoreService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -82,17 +82,7 @@ public class StoreController {
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
-        List<HashtagDTO> hashtagDTOList = storeDTO.getHashtagList().stream()
-                .map(hashtagOfStoreDTO ->
-                        hashtagService.findById(hashtagOfStoreDTO.getHashtagId()))
-                .collect(Collectors.toList());
-
-
-        // 스토어에 등록된 모든 카테고리를 다 불러옴
-//        List<HashtagDTO> hashtagDTOList = storeDTO.getHashtagList().stream()
-//                .map(hashtagOfStoreDTO ->
-//                        hashtagService.findById(hashtagOfStoreDTO.getHashtagId()))
-//                .collect(Collectors.toList());
+        List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdTop9(storeId);
 
         List<Menu> menuList = menuService.findByStoreIdCaseByOrderByType(storeId);
         List<MenuDTO.Simple> menuDTOList = menuList.stream()
@@ -107,7 +97,7 @@ public class StoreController {
         model.addAttribute("store", storeDTO);
         model.addAttribute("menuList", menuDTOList);
         model.addAttribute("categoryList", categorySimpleDTOList);
-        model.addAttribute("hashtagList", hashtagDTOList);
+        model.addAttribute("hashtagList", hashtagGroupDTO);
 
         //review
         model.addAttribute("review", content);

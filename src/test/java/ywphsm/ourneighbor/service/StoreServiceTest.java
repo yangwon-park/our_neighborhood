@@ -33,8 +33,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
@@ -50,15 +50,6 @@ class StoreServiceTest {
 
     private MockMvc mvc;
 
-    @Autowired
-    MemberService memberService;
-
-    @Autowired
-    StoreService storeService;
-
-    @Autowired
-    CategoryService categoryService;
-
     @LocalServerPort
     private int port;
 
@@ -68,6 +59,16 @@ class StoreServiceTest {
     JPAQueryFactory queryFactory;
 
     MockHttpSession session;
+
+    @Autowired
+    MemberService memberService;
+
+    @Autowired
+    StoreService storeService;
+
+    @Autowired
+    CategoryService categoryService;
+
 
     @BeforeEach
     void before() {

@@ -194,7 +194,7 @@ public class StoreDTO {
 
         private List<CategoryOfStoreDTO> categoryList;
 
-        private List<HashtagOfStoreDTO> hashtagList;
+        private List<HashtagOfStoreDTO.Detail> hashtagList;
 
         @Builder
         public Detail(Store store) {
@@ -220,7 +220,7 @@ public class StoreDTO {
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());
             hashtagList = store.getHashtagOfStoreList().stream()
-                    .map(HashtagOfStoreDTO::new)
+                    .map(HashtagOfStoreDTO.Detail::new)
                     .collect(Collectors.toList());
         }
 

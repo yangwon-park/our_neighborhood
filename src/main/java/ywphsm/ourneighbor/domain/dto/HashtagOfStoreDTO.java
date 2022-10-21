@@ -2,31 +2,63 @@ package ywphsm.ourneighbor.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+
 public class HashtagOfStoreDTO {
 
-    @NotNull
-    private Long storeId;
+    @Data
+    @NoArgsConstructor
+    public static class Detail {
 
-    @NotNull
-    private Long hashtagId;
+        @NotNull
+        private Long storeId;
 
-    private String hashtagName;
+        @NotNull
+        private Long hashtagId;
 
-    @Builder
-    public HashtagOfStoreDTO(Long storeId, Long hashtagId, String hashtagName) {
-        this.storeId = storeId;
-        this.hashtagId = hashtagId;
-        this.hashtagName = hashtagName;
+        private String hashtagName;
+
+        @Builder
+        public Detail(Long storeId, Long hashtagId, String hashtagName) {
+            this.storeId = storeId;
+            this.hashtagId = hashtagId;
+            this.hashtagName = hashtagName;
+        }
+
+        public Detail(HashtagOfStore hashtagOfStore) {
+            storeId = hashtagOfStore.getStore().getId();
+            hashtagId = hashtagOfStore.getHashtag().getId();
+            hashtagName = hashtagOfStore.getHashtag().getName();
+        }
+
+        public static Detail of(HashtagOfStore entity) {
+            return Detail.builder()
+                    .storeId(entity.getStore().getId())
+                    .hashtagId(entity.getHashtag().getId())
+                    .hashtagName(entity.getHashtag().getName())
+                    .build();
+        }
     }
 
-    public HashtagOfStoreDTO(HashtagOfStore hashtagOfStore) {
-        storeId = hashtagOfStore.getStore().getId();
-        hashtagId = hashtagOfStore.getHashtag().getId();
-        hashtagName = hashtagOfStore.getHashtag().getName();
+    @Data
+    @NoArgsConstructor
+    public static class WithCount {
+        private Long hashtagId;
+        private String hashtagName;
+        private Long storeId;
+        private Long count;
+
+        @Builder
+        public WithCount(Long hashtagId, String hashtagName, Long storeId, Long count) {
+            this.hashtagId = hashtagId;
+            this.hashtagName = hashtagName;
+            this.storeId = storeId;
+            this.count = count;
+        }
     }
+
 }

@@ -43,8 +43,8 @@ public class ReviewApiController {
 
             Store findStore = storeService.findById(dto.getStoreId());
 
-            for (Object o : array) {
-                JSONObject jsonObject = (JSONObject) o;
+            for (Object object : array) {
+                JSONObject jsonObject = (JSONObject)object;
 
                 HashtagDTO hashtagDTO = HashtagDTO.builder()
                         .name(jsonObject.get("value").toString())

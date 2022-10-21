@@ -11,6 +11,10 @@ var main = {
         _this.setSearchByCategoriesEvent(findCate, map);
 
         _this.setPreviousData(map);
+
+        kakao.maps.event.addListener(map, "click", () => {
+            _this.closeInfoWindow();
+        });
     },
 
     getMap: function () {
@@ -221,7 +225,7 @@ var main = {
      */
     markers: [],
 
-    infowindows: [],
+    infoWindows: [],
 
     searchResult: [],
 
@@ -242,9 +246,9 @@ var main = {
         map.panTo(bounds);
     },
 
-    closeInfowindow: function () {
-        for (var i = 0; i < this.infowindows.length; i++) {
-            this.infowindows[i].close();
+    closeInfoWindow: function () {
+        for (var i = 0; i < this.infoWindows.length; i++) {
+            this.infoWindows[i].close();
         }
     },
 
@@ -261,29 +265,34 @@ var main = {
         // 마커 하나에 인포 윈도우 position이 다 고정됨
         var marker = new kakao.maps.Marker({
             position: position,
-            image: markerImage
+            image: markerImage,
         });
 
-        var infowindow = new kakao.maps.InfoWindow();
+        var infoWindow = new kakao.maps.InfoWindow({
+            removable: true
+        });
 
-        kakao.maps.event.addListener(marker, 'click', this.addInfoWindow(marker, data, infowindow, map));
+        kakao.maps.event.addListener(marker, 'click', this.addInfoWindow(marker, data, infoWindow, map));
 
         marker.setMap(map);
         this.markers.push(marker);
-        this.infowindows.push(infowindow);
+        this.infoWindows.push(infoWindow);
 
         return marker;
     },
 
     addInfoWindow: function (marker, data, infowindow, map) {
         return () => {
-            this.closeInfowindow();
+            this.closeInfoWindow();
             infowindow.setContent(
                 '<div class="container text-nowrap">' +
                 '    <div class="row mt-2">' +
-                '        <div class="col m-auto">' +
+                '        <div class="col m-auto d-inline">' +
                 '           <a style="text-decoration: none; color: #0b1526" href="/store/' + data.storeId + '" id="info-title" class="fs-5 me-2">' + data.name + '</a>' +
                 '           <span class="badge mb-2 ' + data.status + '">' + data.status + '</span>' +
+                // '           <span class="float-end mt-1">' +
+                // '               <button type="button" class="btn-close" aria-label="Close"></button>' +
+                // '           </span>' +
                 '        </div>' +
                 '    </div>' +
                 '    <div class="row d-flex">' +
@@ -318,7 +327,7 @@ var main = {
     },
 
     removeMarker: function () {
-        this.closeInfowindow();
+        this.closeInfoWindow();
 
         for (var i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
@@ -327,7 +336,7 @@ var main = {
         // 전역 변수로 선언한 아래의 배열들 초기화
         // 해줘야 매번 검색 시, 새로운 조건으로 검색 가능
         this.markers = [];
-        this.infowindows = [];
+        this.infoWindows = [];
         this.searchResult = [];
     },
 

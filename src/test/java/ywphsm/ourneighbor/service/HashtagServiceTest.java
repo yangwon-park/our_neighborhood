@@ -13,8 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import ywphsm.ourneighbor.domain.dto.HashtagDTO;
-import ywphsm.ourneighbor.domain.dto.HashtagOfStoreDTO;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 
 import javax.persistence.EntityManager;

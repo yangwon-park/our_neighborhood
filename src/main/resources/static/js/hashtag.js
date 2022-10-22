@@ -1,15 +1,39 @@
 // https://inpa.tistory.com/m/entry/Tagify-%F0%9F%93%9A-%ED%95%B4%EC%8B%9C-%ED%83%9C%EA%B7%B8tag-%EC%9E%85%EB%A0%A5%EC%9D%84-%EC%9D%B4%EC%81%98%EA%B2%8C-%EA%B0%84%ED%8E%B8%ED%9E%88-%EA%B5%AC%ED%98%84-%EC%82%AC%EC%9A%A9%EB%B2%95
-
 var main = {
-    hashtags: [],
+    allHashtags: [],
 
     init: function () {
-        this.getHashtags();
+        this.getAllHashtags();
 
-        var inputElm = document.querySelector("input[name=hashtag]")
+        const hashtagDeleteBtnList = document.querySelectorAll(".hashtag-delete-btn");
+
+        if (hashtagDeleteBtnList !== null) {
+            hashtagDeleteBtnList.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    this.delete(btn.id);
+                });
+            });
+        }
+
+        const hashtagInputList = document.querySelectorAll(".tagify--outside");
+
+        if (hashtagInputList !== null) {
+            hashtagInputList.forEach((el) => {
+                this.createHashtagInput(el.id.substring(7))
+            });
+        }
+    },
+
+    createHashtagInput: function (menuId) {
+        var inputElm = document.getElementById("hashtag" + menuId);
 
         if (inputElm !== null) {
-            var whitelist = this.hashtags;
+
+            this.getHashtags(menuId).then((resp) => {
+                inputElm.value = resp;
+            })
+
+            var whitelist = this.allHashtags;
 
             // initialize Tagify on the above input node reference
             var tagify = new Tagify(inputElm, {
@@ -48,32 +72,46 @@ var main = {
                     })
             }
         }
-
-        const hashtagDeleteBtnList = document.querySelectorAll(".hashtag-delete-btn");
-
-        if (hashtagDeleteBtnList !== null) {
-            hashtagDeleteBtnList.forEach((btn) => {
-                btn.addEventListener("click", () => {
-                    this.delete(btn.id);
-                })
-            })
-        }
     },
 
-    getHashtags: function () {
-        this.hashtags = [];
+    getHashtags: async function (menuId) {
+        let defaultValue = "";
+
+        await axios({
+            method: "get",
+            url: "/hashtags",
+            params: {
+                menuId: menuId
+            }
+        }).then((resp) => {
+            for (const el of resp.data.data) {
+                defaultValue += (String(el.name) + ", ");
+            }
+
+        }).catch((error) => {
+            console.error(error);
+        });
+
+        return defaultValue.trim();
+    },
+
+    getAllHashtags: function () {
+        
+        // 초기화
+        this.allHashtags = [];
 
         axios({
             method: "get",
-            url: "/hashtags"
+            url: "/hashtags/all"
         }).then((resp) => {
             for (const el of resp.data.data) {
-                this.hashtags.push(el.name);
+                this.allHashtags.push(el.name);
             }
         }).catch((error) => {
             console.error(error);
         })
     },
+
 
     delete: function (btnId) {
         const hashtagId = btnId.substring(18);

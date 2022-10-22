@@ -3,7 +3,8 @@ package ywphsm.ourneighbor.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.dto.HashtagDTO;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
+import ywphsm.ourneighbor.service.HashtagOfMenuService;
 import ywphsm.ourneighbor.service.HashtagOfStoreService;
 import ywphsm.ourneighbor.service.HashtagService;
 
@@ -18,14 +19,22 @@ public class HashtagApiController {
 
     private final HashtagOfStoreService hashtagOfStoreService;
 
-    @GetMapping("/hashtags")
+    private final HashtagOfMenuService hashtagOfMenuService;
+
+    @GetMapping("/hashtags/all")
     public ResultClass<?> findAllHashtags() {
         List<HashtagDTO> hashtags = hashtagService.findAll();
         return new ResultClass<>(hashtags);
     }
 
+    @GetMapping("/hashtags")
+    public ResultClass<?> findHashtagsByMenuId(@RequestParam Long menuId) {
+        List<HashtagDTO> hashtags = hashtagOfMenuService.findHashtagsByMenuId(menuId);
+        return new ResultClass<>(hashtags);
+    }
+
     @DeleteMapping("/seller/hashtag/{hashtagId}")
-    public Long delete(@PathVariable Long hashtagId, @RequestParam Long storeId) {
-        return hashtagOfStoreService.delete(hashtagId, storeId);
+    public Long deleteHashtagOfStore(@PathVariable Long hashtagId, @RequestParam Long storeId) {
+        return hashtagOfStoreService.deleteHashtagOfStore(hashtagId, storeId);
     }
 }

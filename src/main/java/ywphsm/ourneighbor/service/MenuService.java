@@ -2,19 +2,32 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
+import ywphsm.ourneighbor.domain.hashtag.Hashtag;
+import ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
+import ywphsm.ourneighbor.repository.hashtag.hashtagofmenu.HashtagOfMenuRepository;
 import ywphsm.ourneighbor.repository.menu.MenuRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.linkHashtagAndMenu;
+import static ywphsm.ourneighbor.domain.hashtag.HashtagOfStore.linkHashtagAndStore;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,35 +36,72 @@ import java.util.List;
 public class MenuService {
 
     private final MenuRepository menuRepository;
+
     private final StoreRepository storeRepository;
 
     private final AwsS3FileStore awsS3FileStore;
+
+    private final HashtagRepository hashtagRepository;
+
+    private final HashtagOfMenuRepository hashtagOfMenuRepository;
 
     private final FileStore fileStore;
 
     // 메뉴 등록
     @Transactional
-    public Long save(MenuDTO.Add menuAddDTO) throws IOException {
+    public Long save(MenuDTO.Add dto) throws IOException, ParseException {
 
-        Store linkedStore = storeRepository.findById(menuAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
-        UploadFile newUploadFile = awsS3FileStore.storeFile(menuAddDTO.getFile());
+        Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
+                () -> new IllegalArgumentException("해당 매장이 없습니다. id = " + dto.getStoreId()));
 
-        Menu menu = menuAddDTO.toEntity(linkedStore);
+        UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
+
+        Menu menu = dto.toEntity(linkedStore);
 
         newUploadFile.addMenu(menu);
 
         linkedStore.addMenu(menu);
 
-        return menuRepository.save(menu).getId();
+        Long savedMenuId = menuRepository.save(menu).getId();
+
+        // 해쉬태그 저장 로직
+        if (!dto.getHashtag().isEmpty()) {
+            JSONParser parser = new JSONParser();
+            JSONArray array = (JSONArray) parser.parse(dto.getHashtag());
+
+            Menu savedMenu = menuRepository.findById(savedMenuId).orElseThrow(
+                    () -> new IllegalArgumentException("해당 메뉴가 없습니다. id = " + savedMenuId));
+
+            for (Object object : array) {
+                JSONObject jsonObject = (JSONObject)object;
+
+                HashtagDTO hashtagDTO = HashtagDTO.builder()
+                        .name(jsonObject.get("value").toString())
+                        .build();
+
+                boolean duplicateCheck = hashtagRepository.existsByName(hashtagDTO.getName());
+
+                Hashtag newHashtag;
+
+                if (!duplicateCheck) {
+                    newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
+                } else {
+                    newHashtag = hashtagRepository.findByName(hashtagDTO.getName());
+                }
+
+                linkHashtagAndMenu(newHashtag, savedMenu);
+            }
+        }
+
+        return savedMenuId;
     }
 
     // 메뉴 수정
     @Transactional
-    public Long update(Long storeId, MenuDTO.Update dto) throws IOException {
-
+    public Long update(Long storeId, MenuDTO.Update dto) throws IOException, ParseException {
         // 전달받은 dto => Entity 변환
         Menu entity = dto.toEntity();
-        
+
         // 수정하고자 하는 메뉴 찾음
         Menu menu = menuRepository.findById(dto.getId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + dto.getId()));

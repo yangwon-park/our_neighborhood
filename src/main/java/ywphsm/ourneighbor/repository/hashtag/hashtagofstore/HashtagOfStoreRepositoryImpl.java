@@ -1,12 +1,11 @@
-package ywphsm.ourneighbor.repository.hashtagofstore;
+package ywphsm.ourneighbor.repository.hashtag.hashtagofstore;
 
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ywphsm.ourneighbor.domain.dto.HashtagOfStoreDTO;
-import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 
 import java.util.List;
 
@@ -46,15 +45,6 @@ public class HashtagOfStoreRepositoryImpl implements HashtagOfStoreRepositoryCus
                 .groupBy(hashtagOfStore.hashtag, hashtagOfStore.store)
                 .having(hashtagOfStore.store.id.eq(storeId))
                 .orderBy(hashtagOfStore.id.count().desc())
-                .fetch();
-    }
-
-    @Override
-    public List<HashtagOfStore> findAllHashtagByStoreId(Long storeId) {
-        return queryFactory
-                .select(hashtagOfStore)
-                .from(hashtagOfStore)
-                .where(hashtagOfStore.store.id.eq(storeId))
                 .fetch();
     }
 

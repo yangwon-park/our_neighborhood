@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.repository.hashtagofstore;
+package ywphsm.ourneighbor.repository.hashtag.hashtagofstore;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;

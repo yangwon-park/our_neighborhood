@@ -23,9 +23,10 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     public List<Menu> findByStoreIdCaseByOrderByType(Long storeId) {
         NumberExpression<Integer> typeRank = new CaseBuilder()
                 .when(menu.type.eq(MenuType.MAIN)).then(1)
-                .when(menu.type.eq(MenuType.DESSERT)).then(2)
-                .when(menu.type.eq(MenuType.BEVERAGE)).then(3)
-                .when(menu.type.eq(MenuType.DRINK)).then(4)
+                .when(menu.type.eq(MenuType.SIDE)).then(2)
+                .when(menu.type.eq(MenuType.DESSERT)).then(3)
+                .when(menu.type.eq(MenuType.BEVERAGE)).then(4)
+                .when(menu.type.eq(MenuType.DRINK)).then(5)
                 .otherwise(5);
 
         return queryFactory

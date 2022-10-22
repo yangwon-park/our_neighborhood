@@ -8,19 +8,16 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-import ywphsm.ourneighbor.domain.dto.HashtagDTO;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
-import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.HashtagService;
 import ywphsm.ourneighbor.service.ReviewService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfStore.*;
 
@@ -35,6 +32,8 @@ public class ReviewApiController {
 
     private final StoreService storeService;
 
+
+    // hastag는 Store에 연관돼있음
     @PostMapping("/user/review")
     public Long save(ReviewDTO.Add dto, @RequestParam String hashtag) throws IOException, ParseException {
         if (!hashtag.isEmpty()) {

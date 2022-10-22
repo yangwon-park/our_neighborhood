@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.*;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -41,6 +42,8 @@ public class StoreController {
     private final ReviewService reviewService;
 
     private final HashtagOfStoreService hashtagOfStoreService;
+
+    private final HashtagOfMenuService hashtagOfMenuService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -85,8 +88,9 @@ public class StoreController {
         List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdTop9(storeId);
 
         List<Menu> menuList = menuService.findByStoreIdCaseByOrderByType(storeId);
-        List<MenuDTO.Simple> menuDTOList = menuList.stream()
-                .map(MenuDTO.Simple::of).collect(Collectors.toList());
+
+        List<MenuDTO.Detail> menuDTOList = menuList.stream()
+                .map(MenuDTO.Detail::of).collect(Collectors.toList());
 
         //review paging
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);

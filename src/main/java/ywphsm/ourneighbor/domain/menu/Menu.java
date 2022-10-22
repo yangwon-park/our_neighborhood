@@ -3,10 +3,13 @@ package ywphsm.ourneighbor.domain.menu;
 import lombok.*;
 import ywphsm.ourneighbor.domain.BaseEntity;
 import ywphsm.ourneighbor.domain.file.UploadFile;
+import ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,14 +63,19 @@ public class Menu extends BaseEntity {
         this.file = file;
     }
 
+    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<HashtagOfMenu> hashtagOfMenuList = new ArrayList<>();
+
+
+
     /*
-            생성자를 강제하고 setter를 닫음으로써 값이 변경될 가능성을 차단함
-            수정이 필요한 경우의 메소드는 별도로 작성하자
-    */
+        생성자
+     */
     @Builder
     public Menu(Long id, String name, Integer price, int discountPrice,
                 LocalDateTime discountStart, LocalDateTime discountEnd,
-                MenuType type, MenuFeat feature, Store store, UploadFile file) {
+                MenuType type, MenuFeat feature, Store store, UploadFile file,
+                List<HashtagOfMenu> hashtagOfMenuList) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -78,6 +86,7 @@ public class Menu extends BaseEntity {
         this.feature = feature;
         this.store = store;
         this.file = file;
+        this.hashtagOfMenuList = hashtagOfMenuList;
     }
 
     /*
@@ -96,5 +105,6 @@ public class Menu extends BaseEntity {
         this.discountEnd = menu.getDiscountEnd();
         this.type = menu.getType();
         this.feature = menu.getFeature();
+        this.hashtagOfMenuList = menu.getHashtagOfMenuList();
     }
 }

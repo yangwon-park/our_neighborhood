@@ -10,21 +10,22 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.OurNeighborApplication;
-import ywphsm.ourneighbor.domain.menu.Menu;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
+import ywphsm.ourneighbor.domain.menu.Menu;
 
 import java.io.FileInputStream;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,7 +63,7 @@ class MenuServiceTest {
     @Test
     @WithMockUser(username = "ADMIN", roles = "ADMIN")
     @DisplayName("메뉴 등록")
-    void saveMenu() throws Exception {
+    void save() throws Exception {
         Long storeId = 24L;
         String name = "test";
         Integer price = 10000;
@@ -93,7 +94,7 @@ class MenuServiceTest {
     @Test
     @WithMockUser(username = "seller1", roles = "SELLER")
     @DisplayName("메뉴 수정")
-    void updateMenu() throws Exception {
+    void update() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
                 new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
 //                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));

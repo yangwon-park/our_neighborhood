@@ -58,6 +58,7 @@ public class MenuController {
         MenuDTO.Add dto = new MenuDTO.Add();
         dto.setStoreId(storeId);
         model.addAttribute("menu", dto);
+
         return "menu/add_form";
     }
 

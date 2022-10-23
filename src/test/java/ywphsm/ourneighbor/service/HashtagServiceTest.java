@@ -2,22 +2,27 @@ package ywphsm.ourneighbor.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.domain.member.Role;
-import ywphsm.ourneighbor.repository.hashtagofstore.dto.HashtagOfStoreCountDTO;
+import org.springframework.web.context.WebApplicationContext;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
+import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 
 import javax.persistence.EntityManager;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.assertj.core.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
@@ -26,38 +31,87 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 class HashtagServiceTest {
 
     @Autowired
+    WebApplicationContext context;
+
+    private MockMvc mvc;
+
+    @LocalServerPort
+    private int port;
+
+    @Autowired
     EntityManager em;
+
+    JPAQueryFactory queryFactory;
+
+    MockHttpSession session;
+
+    @Autowired
+    HashtagService hashtagService;
 
     @Autowired
     HashtagOfStoreService hashtagOfStoreService;
 
-    JPAQueryFactory queryFactory;
+
 
     @BeforeEach
     void before() {
         queryFactory = new JPAQueryFactory(em);
 
-        Member member1 = new Member("kkk", "kkk", "user1",
-                "유저1", null, "010-1234-1234", 19, 0, Role.USER);
-
-        Member member2 = new Member("JJJ", "JJJ", "user2",
-                "유저2", null, "010-1234-1234", 35, 1, Role.USER);
-
-        Member member3 = new Member("ㅁㅁㅁ", "ㅁㅁㅁ", "user3",
-                "유저3", null, "010-1234-1234", 25, 0, Role.USER);
-
-        em.persist(member1);
-        em.persist(member2);
-        em.persist(member3);
     }
 
     @Test
-    void 해쉬태그_조회() {
-        List<HashtagOfStoreCountDTO> list =
-                hashtagOfStoreService.findHashtagCountGroupByStoreTop9();
+    @DisplayName("해쉬태그 저장 후 삭제")
+    void saveAndDelete() {
+        String name = "hashtag";
 
-        for (HashtagOfStoreCountDTO dto : list) {
+        HashtagDTO dto = HashtagDTO.builder()
+                .name(name)
+                .build();
+
+        Hashtag hashtag = hashtagService.save(dto);
+
+        assertThat(hashtag.getName()).isEqualTo(name);
+
+        hashtagService.delete(hashtag.getId());
+
+        assertThatThrownBy(() -> hashtagService.findById(hashtag.getId()))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    @DisplayName("매장과 연관된 해쉬태그 저장 후 삭제")
+    void deleteHashtag() {
+        String name = "hashtag";
+
+        HashtagDTO dto = HashtagDTO.builder()
+                .name(name)
+                .build();
+
+        Hashtag hashtag = hashtagService.save(dto);
+
+        assertThat(hashtag.getName()).isEqualTo(name);
+
+        String url = "http://localhost:" + port + "/seller/hashtag/" + hashtag.getId();
+
+//        mvc.perform(delete(url).param())
+
+    }
+
+    @Test
+    @DisplayName("매장 상위9개_해쉬태그_조회")
+    void findTop9HashtagInAStore() {
+
+        Long storeId = 28L;
+
+        List<HashtagOfStoreDTO.WithCount> list =
+                hashtagOfStoreService.findHashtagAndCountByStoreIdTop9(storeId);
+
+        for (HashtagOfStoreDTO.WithCount dto : list) {
             System.out.println("dto = " + dto);
         }
     }
+
+
+    
 }

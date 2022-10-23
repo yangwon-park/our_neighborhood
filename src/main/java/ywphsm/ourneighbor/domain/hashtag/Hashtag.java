@@ -19,22 +19,24 @@ public class Hashtag {
 
     private String name;
 
-    @OneToMany(mappedBy = "hashtag", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<HashtagOfStore> hashtagOfStoreList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<HashtagOfMenu> hashtagOfMenuList = new ArrayList<>();
+
 
     /*
         생성자
      */
     @Builder
-    public Hashtag(Long id, String name, List<HashtagOfStore> hashtagOfStoreList) {
+    public Hashtag(Long id, String name,
+                   List<HashtagOfStore> hashtagOfStoreList,
+                   List<HashtagOfMenu> hashtagOfMenuList) {
         this.id = id;
         this.name = name;
         this.hashtagOfStoreList = hashtagOfStoreList;
-    }
-
-    public Hashtag(String name, List<HashtagOfStore> hashtagOfStoreList) {
-        this.name = name;
-        this.hashtagOfStoreList = hashtagOfStoreList;
+        this.hashtagOfMenuList = hashtagOfMenuList;
     }
 }
 

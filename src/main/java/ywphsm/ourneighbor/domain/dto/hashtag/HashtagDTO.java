@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.domain.dto;
+package ywphsm.ourneighbor.domain.dto.hashtag;
 
 import lombok.Builder;
 import lombok.Data;
@@ -28,10 +28,13 @@ public class HashtagDTO {
         name = hashtag.getName();
     }
 
+    // List 자체가 null로 들어오면 NPE 발생
+    // 빈 ArrayList를 넣어줌으로써 해결
     public Hashtag toEntity() {
         return Hashtag.builder()
                 .name(name)
                 .hashtagOfStoreList(new ArrayList<>())
+                .hashtagOfMenuList(new ArrayList<>())
                 .build();
     }
 

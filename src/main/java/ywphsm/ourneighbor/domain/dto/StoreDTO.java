@@ -4,9 +4,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import ywphsm.ourneighbor.domain.dto.category.CategoryOfStoreDTO;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
-import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
@@ -194,7 +195,7 @@ public class StoreDTO {
 
         private List<CategoryOfStoreDTO> categoryList;
 
-        private List<HashtagOfStoreDTO> hashtagList;
+        private List<HashtagOfStoreDTO.Detail> hashtagList;
 
         @Builder
         public Detail(Store store) {
@@ -220,7 +221,7 @@ public class StoreDTO {
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());
             hashtagList = store.getHashtagOfStoreList().stream()
-                    .map(HashtagOfStoreDTO::new)
+                    .map(HashtagOfStoreDTO.Detail::new)
                     .collect(Collectors.toList());
         }
 

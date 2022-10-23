@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfMenuDTO;
+import ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
@@ -12,6 +14,9 @@ import ywphsm.ourneighbor.domain.store.Store;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MenuDTO {
 
@@ -35,16 +40,20 @@ public class MenuDTO {
 
         private MultipartFile file;
 
+        private String hashtag;
+
+
         @Builder
         public Add(String name, Integer price,
                    MenuType type, MenuFeat feature,
-                   Long storeId, MultipartFile file) {
+                   Long storeId, MultipartFile file, String hashtag) {
             this.name = name;
             this.price = price;
             this.type = type;
             this.feature = feature;
             this.storeId = storeId;
             this.file = file;
+            this.hashtag = hashtag;
         }
 
         public Menu toEntity(Store store) {
@@ -54,6 +63,7 @@ public class MenuDTO {
                     .type(type)
                     .feature(feature)
                     .store(store)
+                    .hashtagOfMenuList(new ArrayList<>())
                     .build();
         }
     }
@@ -91,9 +101,11 @@ public class MenuDTO {
 
         private MenuFeat feature;
 
+        private String hashtag;
+
         @Builder
         public Update(Long id, String name, Integer price, Long storeId,
-                      MenuType type, MenuFeat feature,
+                      MenuType type, MenuFeat feature, String hashtag,
                       String storedFileName, String uploadImgUrl, MultipartFile file,
                       int discountPrice, LocalDateTime discountStart, LocalDateTime discountEnd) {
             this.id = id;
@@ -102,6 +114,7 @@ public class MenuDTO {
             this.storeId = storeId;
             this.type = type;
             this.feature = feature;
+            this.hashtag = hashtag;
             this.storedFileName = storedFileName;
             this.uploadImgUrl = uploadImgUrl;
             this.file = file;
@@ -141,7 +154,8 @@ public class MenuDTO {
 
     @Data
     @NoArgsConstructor
-    public static class Simple {
+    public static class Detail {
+
         @NotBlank
         private String name;
 
@@ -160,62 +174,37 @@ public class MenuDTO {
 
         private String uploadImgUrl;
 
+        private List<HashtagOfMenuDTO.Simple> hashtagOfMenuDTOList;
+
+
         @Builder
-        public Simple(String name, Integer price, int discountPrice,
-                      MenuType type, MenuFeat feature, String storedFileName, String uploadImgUrl) {
+        public Detail(String name, Integer price, int discountPrice,
+                      MenuType type, MenuFeat feature,
+                      List<HashtagOfMenuDTO.Simple> hashtagOfMenuDTOList,
+                      String storedFileName, String uploadImgUrl) {
             this.name = name;
             this.price = price;
             this.discountPrice = discountPrice;
             this.type = type;
             this.feature = feature;
+            this.hashtagOfMenuDTOList = hashtagOfMenuDTOList;
             this.storedFileName = storedFileName;
             this.uploadImgUrl = uploadImgUrl;
         }
 
-        public static MenuDTO.Simple of(Menu entity) {
-            return Simple.builder()
+        public static Detail of(Menu entity) {
+            return Detail.builder()
                     .name(entity.getName())
                     .price(entity.getPrice())
                     .discountPrice(entity.getDiscountPrice())
                     .type(entity.getType())
                     .feature(entity.getFeature())
+                    .hashtagOfMenuDTOList(entity.getHashtagOfMenuList().stream()
+                            .map(HashtagOfMenuDTO.Simple::new)
+                            .collect(Collectors.toList()))
                     .storedFileName(entity.getFile().getStoredFileName())
                     .uploadImgUrl(entity.getFile().getUploadImageUrl())
                     .build();
         }
     }
-
-    @Data
-    @NoArgsConstructor
-    public static class Detail {
-
-        @NotBlank
-        private String name;
-
-        @NotNull
-        private Integer price;
-
-        @NotNull
-        private int discountPrice;
-
-        @NotBlank
-        private MenuType type;
-
-        private String storedFileName;
-
-        private LocalDateTime discountStart;
-
-        private LocalDateTime discountEnd;
-
-        public Detail(Menu menu) {
-            this.name = menu.getName();
-            this.price = menu.getPrice();
-            this.discountPrice = menu.getDiscountPrice();
-            this.type = menu.getType();
-            this.storedFileName = menu.getFile().getStoredFileName();
-            this.discountStart = menu.getDiscountStart();
-            this.discountEnd = menu.getDiscountEnd();
-        }
-    }
-
 }

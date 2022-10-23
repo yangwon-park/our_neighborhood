@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.*;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -40,7 +41,9 @@ public class StoreController {
 
     private final ReviewService reviewService;
 
-    private final HashtagService hashtagService;
+    private final HashtagOfStoreService hashtagOfStoreService;
+
+    private final HashtagOfMenuService hashtagOfMenuService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -82,21 +85,12 @@ public class StoreController {
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
-        List<HashtagDTO> hashtagDTOList = storeDTO.getHashtagList().stream()
-                .map(hashtagOfStoreDTO ->
-                        hashtagService.findById(hashtagOfStoreDTO.getHashtagId()))
-                .collect(Collectors.toList());
-
-
-        // 스토어에 등록된 모든 카테고리를 다 불러옴
-//        List<HashtagDTO> hashtagDTOList = storeDTO.getHashtagList().stream()
-//                .map(hashtagOfStoreDTO ->
-//                        hashtagService.findById(hashtagOfStoreDTO.getHashtagId()))
-//                .collect(Collectors.toList());
+        List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdTop9(storeId);
 
         List<Menu> menuList = menuService.findByStoreIdCaseByOrderByType(storeId);
-        List<MenuDTO.Simple> menuDTOList = menuList.stream()
-                .map(MenuDTO.Simple::of).collect(Collectors.toList());
+
+        List<MenuDTO.Detail> menuDTOList = menuList.stream()
+                .map(MenuDTO.Detail::of).collect(Collectors.toList());
 
         //review paging
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
@@ -107,7 +101,7 @@ public class StoreController {
         model.addAttribute("store", storeDTO);
         model.addAttribute("menuList", menuDTOList);
         model.addAttribute("categoryList", categorySimpleDTOList);
-        model.addAttribute("hashtagList", hashtagDTOList);
+        model.addAttribute("hashtagList", hashtagGroupDTO);
 
         //review
         model.addAttribute("review", content);

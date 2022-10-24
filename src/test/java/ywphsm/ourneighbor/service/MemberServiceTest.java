@@ -1,8 +1,6 @@
 package ywphsm.ourneighbor.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.With;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +33,6 @@ import static ywphsm.ourneighbor.domain.member.QMember.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = OurNeighborApplication.class)
 @ActiveProfiles("test")
 @Transactional
 class MemberServiceTest {

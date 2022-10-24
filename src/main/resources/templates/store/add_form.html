@@ -35,6 +35,8 @@
                     <div class="card-body px-lg-5 py-lg-5">
                         <form id="store-add-form" class="form-floating" th:object="${store}">
                             <div class="form-group">
+                                <input th:field="*{memberId}" class="form-control"
+                                       placeholder="회원 번호" type="hidden">
                                 <div class="">
                                     <input th:field="*{name}" class="form-control"
                                            placeholder="매장 이름을 입력해주세요." type="text">

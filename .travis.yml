@@ -15,9 +15,13 @@ cache:
 script: "./gradlew clean build"
 
 before_deploy:
-  - zip -r our_neighborhood *
-  - mkdir -p deploy
-  - mv our_neighborhood.zip deploy/our_neighborhood.zip
+  - mkdir -p before-deploy
+  - cp scripts/*.sh before-deploy/
+  - cp appspec.yml before-deploy/
+  - cp build/libs/*.jar before-deploy/
+  - cd before-deploy && zip -r before-deploy *
+  - cd ../ && mkdir -p deploy
+  - mv before-deploy/before-deploy.zip deploy/our_neighborhood.zip
 
 deploy:
   - provider: s3
@@ -35,17 +39,15 @@ deploy:
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
-
     bucket: neighbor-build
     key: our_neighborhood.zip
-
     bundle_type: zip
     application: neighbor
     deployment_group: neighbor-group
-
     region: ap-northeast-2
     wait-until-deployed: true
-
+    on:
+      all_branches: true
 
 # CI 실행 완료 시 메일로 알람
 notifications:

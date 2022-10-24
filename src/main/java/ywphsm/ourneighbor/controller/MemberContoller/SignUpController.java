@@ -104,6 +104,10 @@ public class SignUpController {
     public String certifiedPhone(@Valid @ModelAttribute PhoneCertifiedForm phoneCertifiedForm,
                                  BindingResult bindingResult) {
 
+        if (memberService.findByPhoneNumber(phoneCertifiedForm.getPhoneNumber()) != null) {
+            bindingResult.reject("phoneDoubleCheck");
+        }
+
         if (bindingResult.hasErrors()) {
             return "signUp/certifiedPhoneForm";
         }

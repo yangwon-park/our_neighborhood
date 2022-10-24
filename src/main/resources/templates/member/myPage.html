@@ -80,6 +80,22 @@
                 <span th:if="${memberDetail.gender == 0}">남자</span>
             </div>
         </div>
+        <div class="col-6">
+            <div class="float-end">
+                <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                        th:onclick="|location.href='@{/user/member_edit/review}'|">
+                    내가 쓴 리뷰 관리
+                </button>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="float-end">
+                <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                        th:onclick="|location.href='@{/user/myLike}'|">
+                    내 찜 목록
+                </button>
+            </div>
+        </div>
     </div>
 </section>
 <footer th:replace="layout/footer :: common_footer">

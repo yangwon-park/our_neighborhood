@@ -37,26 +37,24 @@
               <small>리뷰 등록</small>
             </div>
             <div class="card-body px-lg-5 py-lg-5">
-              <form role="form" th:action th:object="${reviewForm}" method="post" id="myform">
+              <form th:object="${reviewDTO}" id="review-add-form"
+                    enctype="multipart/form-data">
                 <div class="form-group">
-                  <div th:if="${#fields.hasGlobalErrors()}">
-                    <p class="field-error" th:each="err : ${#fields.globalErrors()}"
-                       th:text="${err}">전체 오류 메시지</p>
-                  </div>
+                  <fieldset>
+                    <span class="text-bold">별점을 선택해주세요</span>
+                    <input type="radio" th:field="*{rating}" value="5" id="rating5"><label
+                          for="rating5">★</label>
+                    <input type="radio" th:field="*{rating}" value="4" id="rating4"><label
+                          for="rating4">★</label>
+                    <input type="radio" th:field="*{rating}" value="3" id="rating3"><label
+                          for="rating3">★</label>
+                    <input type="radio" th:field="*{rating}" value="2" id="rating2"><label
+                          for="rating2">★</label>
+                    <input type="radio" th:field="*{rating}" value="1" id="rating1"><label
+                          for="rating1">★</label>
+                  </fieldset>
+                  <div id="review-rating-valid" class="my-1 valid-custom"></div>
                 </div>
-                <fieldset>
-                  <span class="text-bold">별점을 선택해주세요</span>
-                  <input type="radio" th:field="*{rating}" value="5" id="rating1"><label
-                        for="rating1">★</label>
-                  <input type="radio" th:field="*{rating}" value="4" id="rating2"><label
-                        for="rating2">★</label>
-                  <input type="radio" th:field="*{rating}" value="3" id="rating3"><label
-                        for="rating3">★</label>
-                  <input type="radio" th:field="*{rating}" value="2" id="rating4"><label
-                        for="rating4">★</label>
-                  <input type="radio" th:field="*{rating}" value="1" id="rating5"><label
-                        for="rating5">★</label>
-                </fieldset>
                 <div class="form-group">
                   <div class="input-group input-group-alternative mb-3">
                     <div class="input-group-prepend">
@@ -66,33 +64,45 @@
                               id="content"
                               th:field="*{content}"
                               th:errorclass="field-error"></textarea>
-                    <div class="field-error" th:errors="*{content}"></div>
+                    <div id="review-content-valid" class="my-1 valid-custom"></div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="mb-3">
+                    <input th:field="*{file}"
+                           th:errorclass="field-error"
+                           class="form-control"
+                           type="file"/>
+                    <div class="field-error" th:errors="*{file}"></div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="mb-3">
+                    <input th:field="*{storeId}" class="form-control"
+                           placeholder="매장 번호" type="hidden">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="mb-3">
+                    <input th:field="*{memberId}" class="form-control"
+                           placeholder="회원 번호" type="hidden">
                   </div>
                 </div>
                 <div class="text-center">
-                  <button type="submit" class="btn btn-orange mt-4">등록</button>
+                  <button type="button" class="btn btn-orange mt-4" id="review-save">등록</button>
                 </div>
               </form>
-
             </div>
           </div>
         </div>
       </div>
     </div>
 </section>
-
 </body>
 <footer th:replace="layout/footer :: common_footer">
   템플릿 푸터
-  <script th:replace="layout/footer :: common_js(~{::script})"></script>
 </footer>
-
-</html>
-
-</body>
-<footer th:replace="layout/footer :: common_footer">
-  템플릿 푸터
-  <script th:replace="layout/footer :: common_js(~{::script})"></script>
-</footer>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/review.js}"></script>
 
 </html>

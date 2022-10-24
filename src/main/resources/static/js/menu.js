@@ -138,6 +138,14 @@ var main = {
 
         let formData = new FormData(menuForm);
 
+        for (let k of formData.keys()) {
+            console.log(k);
+        }
+
+        for (let v of formData.values()) {
+            console.log(v);
+        }
+
         this.createDefaultImg(formData);
 
         axios({

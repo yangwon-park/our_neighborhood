@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.domain.member;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
@@ -13,6 +14,10 @@ public class MemberOfStore {
 
     @Id @GeneratedValue
     private Long Id;
+
+    private boolean myStore;
+
+    private boolean storeLike;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -33,5 +38,13 @@ public class MemberOfStore {
         store.getMemberOfStoreList().add(memberOfStore);
 
         return memberOfStore;
+    }
+
+    public void updateMyStore(boolean myStore) {
+        this.myStore = myStore;
+    }
+
+    public void updateStoreLike(boolean storeLike) {
+        this.storeLike = storeLike;
     }
 }

@@ -1,9 +1,10 @@
-package ywphsm.ourneighbor.domain.dto;
+package ywphsm.ourneighbor.domain.dto.Member;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import lombok.Builder;
+import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import java.util.ArrayList;
 import java.util.List;

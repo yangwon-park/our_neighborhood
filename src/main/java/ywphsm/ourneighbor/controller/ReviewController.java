@@ -14,10 +14,10 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 
 import java.util.List;
 
-@Controller
-@RequiredArgsConstructor
-@RequestMapping("/user")
 @Slf4j
+@RequiredArgsConstructor
+@Controller
+@RequestMapping("/user")
 public class ReviewController {
 
     private final ReviewService reviewService;

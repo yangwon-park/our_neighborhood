@@ -110,22 +110,4 @@ public class EditControllerTest {
         //then
         assertThat(memberService.findById(loginMember.getId()).getPhoneNumber()).isEqualTo("01038352379");
     }
-
-//    @Test
-//    public void 회원탈퇴() throws Exception {
-//        //given
-//        Member loginMember = login("arnold1998", "Arnold!(97");
-//        MockHttpSession session = new MockHttpSession();
-//        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
-//
-//        mvc.perform(
-//                        MockMvcRequestBuilders.get("/user/member_edit/withdrawal")
-//                                .session(session))
-//                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-//                .andExpect(MockMvcResultMatchers.redirectedUrl("/logout"));
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-//            memberService.findById(loginMember.getId());
-//        });
-//    }
 }

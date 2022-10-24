@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
     BaseEntity에서 이 클래스를 상속받아 시간 + 작성자, 수정자까지 담당
     필요한 엔티티에 알맞게 상속받아서 사용하면 됨
  */
+@Getter
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass // 속성만 단순 상속시켜주는 애노테이션
-@Getter
 public class BaseTimeEntity {
 
     @CreatedDate

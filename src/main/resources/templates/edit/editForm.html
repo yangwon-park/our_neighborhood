@@ -49,8 +49,18 @@
                                 <div class="field-error" th:errors="*{nickname}" />
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                </div>
+                                <input class="form-control" placeholder="email" type="text" id="email" th:field="*{email}"
+                                       th:errorclass="field-error">
+                                <div class="field-error" th:errors="*{email}" />
+                            </div>
+                        </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-orange mt-4">닉네임 변경</button>
+                            <button type="submit" class="btn btn-orange mt-4">회원정보 수정</button>
                         </div>
                     </form>
                     <br>

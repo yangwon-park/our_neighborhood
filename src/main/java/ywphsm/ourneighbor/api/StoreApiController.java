@@ -31,11 +31,6 @@ public class StoreApiController {
     public Long save(@Validated StoreDTO.Add dto,
                      @RequestParam(value = "categoryId") List<Long> categoryId) throws IOException {
 
-        log.info("dto={}", dto);
-        for (Long id : categoryId) {
-            log.info("id={}", id);
-        }
-
         List<Category> categoryList = categoryId.stream()
                 .map(categoryService::findById)
                 .collect(Collectors.toList());

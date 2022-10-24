@@ -23,7 +23,8 @@ import java.util.Locale;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {
         "id", "name", "lon", "lat",
-        "phoneNumber", "notice", "intro", "status"})
+        "phoneNumber", "notice", "intro", "status"
+})
 @Entity
 public class Store extends BaseEntity {
 
@@ -79,28 +80,21 @@ public class Store extends BaseEntity {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Menu> menuList = new ArrayList<>();
 
-    // Category (N:N)
+    // Meview(N:1)
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviewList = new ArrayList<>();
+
+    // Category (N:N)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
     // Hashtag (N:N)
-    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<HashtagOfStore> hashtagOfStoreList = new ArrayList<>();
 
-    // member (N:N)
+    // Member (N:N)
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
     private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
-
-    // review(N:1)
-    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
-    private List<Review> reviewList = new ArrayList<>();
-
-
-    // Many To Many인듯
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
-
 
 
 
@@ -190,7 +184,6 @@ public class Store extends BaseEntity {
                 }
             }
         }
-
 
         // null인 경우를 처리하지 않으면 에러 발생 (검색 결과가 2개 이상인 경우 그냥 터져버림)
         if (businessTime.getOpeningTime() == null || businessTime.getClosingTime() == null) {

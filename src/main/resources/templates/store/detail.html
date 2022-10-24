@@ -5,18 +5,21 @@
     <title>우리 동네</title>
     <style>
         .star-rating {
-            width:205px;
+            width: 205px;
         }
-        .star-rating,.star-rating span {
-            display:inline-block;
-            height:39px;
-            overflow:hidden;
-            background:url(/images/star/star.png)no-repeat;
+
+        .star-rating, .star-rating span {
+            display: inline-block;
+            height: 39px;
+            overflow: hidden;
+            background: url(/images/star/star.png) no-repeat;
         }
-        .star-rating span{
-            background-position:left bottom;
-            line-height:0;
-            vertical-align:top; }
+
+        .star-rating span {
+            background-position: left bottom;
+            line-height: 0;
+            vertical-align: top;
+        }
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
@@ -40,18 +43,16 @@
                 <h1 class="my-auto" style="font-size: 2.0rem" th:text="*{name}">가게명</h1>
                 <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
                       th:classappend="*{status}"></span>
-                <th:block th:if="${session.loginMember ne null}">
-                    <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
-                    <button id="like-btn" th:text="${likeStatus} ? '찜 취소' : '찜 하기'"
-                            type="button" class="btn btn-info like" th:value="${!likeStatus}">
-                    </button>
-                </th:block>
             </div>
             <div class="col-6">
                 <th:block th:if="${session.loginMember ne null}">
-                    <th:block th:if="${storeRole} or
+                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <div class="float-end">
+                            <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
+                                    th:onclick="|location.href='@{/seller/hashtag/{storeId}(storeId=${store.storeId})}'|">
+                                해쉬태그
+                            </button>
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
                                     th:onclick="|location.href='@{/seller/store/edit/{storeId}(storeId=${store.storeId})}'|">
                                 정보 수정
@@ -62,80 +63,94 @@
             </div>
         </div>
         <hr class="my-2">
-        <div class="row store-info" style="font-size: 1rem">
-            <span class="ms-3 m-auto">
-                    <th:block th:each="cate : ${categoryList}">
-                        <a style="color: #6c757d" href="#" th:text="${cate.name}"></a>
-                        >
-                    </th:block>
-            </span>
-            <div class="col-12 my-1">
-                <i class="fa-solid fa-map-location-dot orange fa-sm"></i>
-                <span>주소</span>
-                <span th:text="*{roadAddr}"></span>
-            </div>
-            <div class="col-12 my-1" style="font-size: 0.8rem">
-                <span class="badge bg-dark my-auto ms-3">지번</span>
-                <span th:text="*{numberAddr}"></span>
-            </div>
-            <div class="col-12 my-1">
-                <i class="fa-solid fa-square-phone orange fa-sm"></i>
-                <span>전화 번호</span>
-                <a th:href="@{tel:{phoneNumber}(phoneNumeber=*{phoneNumber})}"
-                   th:text="*{phoneNumber}" style="color: #000000">전화번호</a>
-            </div>
-            <div class="col-12 d-flex align-items-center my-1">
-                <i class="fa-solid fa-calendar orange me-1 fa-sm"></i>
-                <span th:each="day : *{offDays}" class="me-2">
+        <div class="row store-info d-flex" style="font-size: 1rem">
+            <div class="col-7">
+                <div class="col-12 my-1">
+                <span class="ms-3 m-auto">
+                        <th:block th:each="cate : ${categoryList}">
+                            <a style="color: #6c757d" href="#" th:text="${cate.name}"></a>
+                            >
+                        </th:block>
+                </span>
+                </div>
+                <div class="col-12 my-1">
+                    <i class="fa-solid fa-map-location-dot orange fa-sm"></i>
+                    <span>주소</span>
+                    <span th:text="*{roadAddr}"></span>
+                </div>
+                <div class="col-12 my-1" style="font-size: 0.8rem">
+                    <span class="badge bg-dark my-auto ms-3">지번</span>
+                    <span th:text="*{numberAddr}"></span>
+                </div>
+                <div class="col-12 my-1">
+                    <i class="fa-solid fa-square-phone orange fa-sm"></i>
+                    <span>전화 번호</span>
+                    <a th:href="@{tel:{phoneNumber}(phoneNumeber=*{phoneNumber})}"
+                       th:text="*{phoneNumber}" style="color: #000000">전화번호</a>
+                </div>
+                <div class="col-12 d-flex align-items-center my-1">
+                    <i class="fa-solid fa-calendar orange me-1 fa-sm"></i>
+                    <span th:each="day : *{offDays}" class="me-2">
                     <th:block th:text="${day}"></th:block>
                 </span>
-                <span th:if="${not #lists.isEmpty(store.offDays)}">휴무</span>
-                <span th:if="${#lists.isEmpty(store.offDays)}">휴무일 없음</span>
-            </div>
-            <div class="col-12 my-1">
-                <i class="fa-solid fa-clock orange fa-sm"></i>
-                <span>영업 시간</span>
-                <span th:text="*{#temporals.format(openingTime, 'a hh:mm')}"></span>
-                ~
-                <span th:text="*{#temporals.format(closingTime, 'a hh:mm')}"></span>
-            </div>
-            <div class="col-12 my-1">
-                <i class="fa-solid fa-clock orange fa-sm"></i>
-                <span>휴식 시간</span>
-                <th:block th:if="*{breakStart ne null}">
-                    <th:block th:if="*{breakStart ne breakEnd}">
-                        <span th:text="*{#temporals.format(breakStart, 'a hh:mm')}"></span>
-                        ~
-                        <span th:text="*{#temporals.format(breakEnd, 'a hh:mm')}"></span>
+                    <span th:if="${not #lists.isEmpty(store.offDays)}">휴무</span>
+                    <span th:if="${#lists.isEmpty(store.offDays)}">휴무일 없음</span>
+                </div>
+                <div class="col-12 my-1">
+                    <i class="fa-solid fa-clock orange fa-sm"></i>
+                    <span>영업 시간</span>
+                    <span th:text="*{#temporals.format(openingTime, 'a hh:mm')}"></span>
+                    ~
+                    <span th:text="*{#temporals.format(closingTime, 'a hh:mm')}"></span>
+                </div>
+                <div class="col-12 my-1">
+                    <i class="fa-solid fa-clock orange fa-sm"></i>
+                    <span>휴식 시간</span>
+                    <th:block th:if="*{breakStart ne null}">
+                        <th:block th:if="*{breakStart ne breakEnd}">
+                            <span th:text="*{#temporals.format(breakStart, 'a hh:mm')}"></span>
+                            ~
+                            <span th:text="*{#temporals.format(breakEnd, 'a hh:mm')}"></span>
+                        </th:block>
                     </th:block>
-                </th:block>
-                <th:block th:if="*{breakStart eq null}">
-                    없음
-                </th:block>
+                    <th:block th:if="*{breakStart eq null}">
+                        없음
+                    </th:block>
+                </div>
+                <div class="col-12 my-1">
+                    <i class="fa-solid fa-square-parking orange fa-sm"></i>
+                    <span>주차</span>
+                    <th:block th:if="*{park ne null}">
+                    <span class="ms-2 me-3 fw-bold" th:text="*{park.description}"
+                          th:classappend="|park-*{park.name()}|"></span>
+                    </th:block>
+                    <th:block th:if="*{parkDetail ne null}">
+                        <span class="ms-3 fw-bold" th:text="|(*{parkDetail})|"></span>
+                    </th:block>
+                </div>
+                <div class="col-12 my-1">
+                    <p>
+                        <span class="mx-auto" th:text="*{intro}"></span>
+                    </p>
+                </div>
+                <div class="col-12 my-1">
+                    <p>
+                        <span class="fw-bold mx-auto" style="color: red" th:text="*{notice}"></span>
+                    </p>
+                </div>
             </div>
-<!--            <div class="col-12 my-1">-->
-<!--                <p>-->
-<!--                    <span class="mx-auto" th:text="*{park.description}"></span>-->
-<!--                </p>-->
-<!--                <p>-->
-<!--                    <span class="mx-auto" th:text="*{parkDetail}"></span>-->
-<!--                </p>-->
-<!--            </div>-->
-            <div class="col-12 my-1">
-                <p>
-                    <span class="mx-auto" th:text="*{intro}"></span>
-                </p>
-            </div>
-            <div class="col-12 my-1">
-                <p>
-                    <span class="fw-bold mx-auto" style="color: red" th:text="*{notice}"></span>
-                </p>
+            <div class="col-5">
+                <div class="menu-hashtag col-8 row row-cols-md-3 row-cols-2" style="width:100%; height: 100%">
+                    <th:block th:each="hashtag: ${hashtagList}">
+                        <div th:text="${hashtag.hashtagName}" class="my-auto text-center col text-nowrap">해쉬태그</div>
+                    </th:block>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <th:block th:if="${session.loginMember ne null}">
-                    <th:block th:if="${storeRole} or
+                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <div class="float-end">
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
@@ -154,10 +169,10 @@
         <hr class="my-2">
         <div class="menu-list">
             <div class="row menu-sub" th:each="t: ${menuTypes}">
-                <th:block th:each="menu, stat : ${menus}">
+                <th:block th:each="menu, stat : ${menuList}">
                     <th:block th:if="${#strings.equals(t.name(), menu.type)}"
                               th:with="isDuplicated=${stat.index > 0 &&
-                                menus[stat.index - 1].type == menus[stat.index].type}">
+                                menuList[stat.index - 1].type == menuList[stat.index].type}">
                         <div class="col-12" th:if="${isDuplicated == false}">
                             <div class="menu-title my-3">
                                 <div class="col-12">
@@ -168,7 +183,7 @@
                         <div class="px-0 col-lg-6 col-sm-12 d-flex border border-secondary">
                             <div class="menu-detail border-end border-secondary col-4">
                                 <div class="menu-detail-img mb-2">
-<!--                                    <img th:src="|/menu/${menu.storedFileName}|" width="100%" alt="메뉴 사진">-->
+                                    <!--                                    <img th:src="|/menu/${menu.storedFileName}|" width="100%" alt="메뉴 사진">-->
                                     <img th:src="${menu.uploadImgUrl}" width="100%" height="222px" alt="메뉴 사진">
                                 </div>
                                 <div class="menu-detail-info d-grid">
@@ -184,27 +199,23 @@
                                 </div>
                             </div>
                             <div class="menu-hashtag col-8 row row-cols-md-3 row-cols-2 ">
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 1</div>
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 2</div>
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 3</div>
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 1</div>
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 2</div>
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 3</div>
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 1</div>
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 2</div>
-                                <div class="my-auto text-center col text-nowrap">해쉬태그 3</div>
+                                <th:block th:each="hashtag: ${menu.hashtagOfMenuDTOList}">
+                                    <div class="my-auto text-center col text-nowrap"
+                                         th:text="${hashtag.hashtagName}">해쉬태그</div>
+                                </th:block>
                             </div>
                         </div>
                     </th:block>
                 </th:block>
             </div>
         </div>
-        <hr class="my-2 hr-orange">
-        <div class="row store-menu">
+        <hr class="my-2 mt-5">
+        <div class="row review">
             <h3><strong>리뷰</strong></h3>
             <div class="col">
-                <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"
-                        th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">리뷰 등록
+                <button class="btn btn-orange float-end" style="font-size: 1.1rem; color: #ffffff"
+                        th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">
+                    리뷰 등록
                 </button>
             </div>
             <div class="mb-3">
@@ -225,15 +236,13 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>#</th>
                     <th>별점</th>
                     <th>리뷰</th>
                     <th>작성자</th>
                     <th>작성일</th>
                 </tr>
                 </thead>
-                    <tr th:each="review : ${review}">
-                    <td th:text="${review.reviewId}"></td>
+                <tr th:each="review : ${review}">
                     <td th:if="${review.rating == 1}">★☆☆☆☆</td>
                     <td th:if="${review.rating == 2}">★★☆☆☆</td>
                     <td th:if="${review.rating == 3}">★★★☆☆</td>
@@ -243,7 +252,7 @@
                     <td th:text="${review.username}"></td>
                     <td th:text="${#strings.substring(review.createDate, 0, 10)}"></td>
                     <td>
-                        <img th:src="|/menu/${review.storedFileName}|" width="180" height="180" alt="리뷰 사진">
+                        <img th:src="${review.uploadImgUrl}" width="180" height="180" alt="리뷰 사진">
                     </td>
                     <th:block th:if="${session.loginMember ne null}">
                         <td th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">

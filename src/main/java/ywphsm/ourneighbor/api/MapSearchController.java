@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ywphsm.ourneighbor.domain.distance.Distance;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
-import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

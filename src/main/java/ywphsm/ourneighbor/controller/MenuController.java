@@ -24,9 +24,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -61,6 +58,7 @@ public class MenuController {
         MenuDTO.Add dto = new MenuDTO.Add();
         dto.setStoreId(storeId);
         model.addAttribute("menu", dto);
+
         return "menu/add_form";
     }
 

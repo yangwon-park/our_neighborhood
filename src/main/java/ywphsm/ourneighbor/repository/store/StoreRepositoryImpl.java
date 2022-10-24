@@ -9,7 +9,6 @@ import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import java.util.List;
-import java.util.Optional;
 
 import static ywphsm.ourneighbor.domain.category.QCategory.*;
 import static ywphsm.ourneighbor.domain.category.QCategoryOfStore.*;

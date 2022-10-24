@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{/css/argon.css}">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<body class="bg-default">
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
+<section class="header">
+    <div class="header py-7 py-lg-8">
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
+    </div>
+</section>
+<!--addForm-->
+<section class="add-form">
+    <!-- Page content -->
+    <div class="container-fluid mt--8 pb-5">
+        <!-- Table -->
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="card-header bg-transparent">
+                        <div class="text-muted text-center mt-2 mb-4 fs-2">해쉬태그 관리</div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width: 20%" class="text-start">번호</th>
+                            <th scope="col" class="text-center">이름</th>
+                            <th scope="col" class="text-center">누적 횟수</th>
+                            <th scope="col" class="text-right">삭제</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="hashtag, i: ${hashtagList}" style="height: 1rem">
+                            <th scope="row" th:text="${i.index+1}"
+                                class="text-start align-items-center">번호</th>
+                            <td th:text="${hashtag.hashtagName}" class="text-center">해쉬태그 이름</td>
+                            <td th:text="${hashtag.count}" class="text-center">누적 횟수</td>
+                            <td class="text-right" style="width: 30%">
+                                <button th:id="|hashtag-delete-btn${hashtag.hashtagId}|"
+                                        class="btn btn-orange text-center hashtag-delete-btn" style="color: #ffffff">
+                                    삭제</button>
+                            </td>
+                            <td style="display: none">
+                                <input th:id="storeId" th:value="${hashtag.storeId}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:replace="layout/footer :: common_footer">
+
+</footer>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/hashtag.js}"></script>
+</body>
+</html>

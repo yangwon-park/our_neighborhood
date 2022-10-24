@@ -27,8 +27,11 @@ import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+
     private final CategoryRepository categoryRepository;
+
     private final MemberOfStoreRepository memberOfStoreRepository;
+    
     private final MemberService memberService;
 
     // 매장 등록

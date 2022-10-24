@@ -51,6 +51,8 @@ public class EditControllerTest {
 
     }
 
+
+
     @Test
     public void 닉네임_수정() throws Exception {
         //given

@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import ywphsm.ourneighbor.config.AuditingConfig;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;

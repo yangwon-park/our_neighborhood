@@ -9,9 +9,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.dto.MemberDTO;
 import ywphsm.ourneighbor.domain.member.EmailToken;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.email.EmailService;
@@ -20,7 +20,6 @@ import ywphsm.ourneighbor.service.email.TokenService;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,7 +30,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-
     private final EmailService emailService;
 
     // 회원 가입
@@ -96,22 +94,16 @@ public class MemberService {
 
     //회원수정시 닉네임 변경
     @Transactional
-    public void updateNickname(Long id, String nickname) {
-        Member member = memberRepository.findById(id).orElse(null);
-
-        if (member != null) {
-            member.updateNickname(nickname);
-        }
+    public void updateNickname(Long memberId, String nickname) {
+        Member member = findById(memberId);
+        member.updateNickname(nickname);
     }
 
     //회원수정시 전화번호 변경
     @Transactional
-    public void updatePhoneNumber(Long id, String phoneNumber) {
-        Member member = memberRepository.findById(id).orElse(null);
-
-        if (member != null) {
+    public void updatePhoneNumber(Long memberId, String phoneNumber) {
+        Member member = findById(memberId);
         member.updatePhoneNumber(phoneNumber);
-        }
     }
 
     //비밀번호 확인
@@ -121,22 +113,16 @@ public class MemberService {
 
     //비밀번호 수정 변경 감지(회원수정)
     @Transactional
-    public void updatePassword(Long id, String encodedPassword) {
-        Member member = memberRepository.findById(id).orElse(null);
-
-        if (member != null) {
+    public void updatePassword(Long memberId, String encodedPassword) {
+        Member member = findById(memberId);
         member.updatePassword(encodedPassword);
-        }
     }
 
     //비밀번호 찾기 수정 변경 감지(비밀번호 찾기)
     @Transactional
     public void updatePassword(String userId, String encodedPassword) {
-        Member member = memberRepository.findByUserId(userId).orElse(null);
-
-        if (member != null) {
-            member.updatePassword(encodedPassword);
-        }
+        Member member = findByUserId(userId);
+        member.updatePassword(encodedPassword);
     }
 
     //비밀번호 찾기시 있는 아이디인지 확인
@@ -205,4 +191,20 @@ public class MemberService {
 
         return memberId;
     }
+
+    //찜 상태 확인 - detail에 뿌리기 위함
+    public boolean likeStatus(Long memberId, Long storeId) {
+        Member member = findById(memberId);
+
+        List<MemberOfStore> memberOfStoreList = member.getMemberOfStoreList();
+        if (!memberOfStoreList.isEmpty()) {
+            for (MemberOfStore memberOfStore : memberOfStoreList) {
+                if (memberOfStore.getStore().getId().equals(storeId) && memberOfStore.isStoreLike()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

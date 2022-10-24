@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
@@ -15,8 +16,8 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 import java.io.IOException;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class MenuService {
@@ -25,15 +26,14 @@ public class MenuService {
     private final StoreRepository storeRepository;
     private final FileStore fileStore;
 
+    private final AwsS3FileStore awsS3FileStore;
+
     // 메뉴 등록
     @Transactional
     public Long save(MenuDTO.Add menuAddDTO) throws IOException {
+
         Store linkedStore = storeRepository.findById(menuAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
-
-        UploadFile newUploadFile = fileStore.storeFile(menuAddDTO.getFile());
-
-        log.info("fileName={}", newUploadFile.getStoredFileName());
-        log.info("fileName={}", newUploadFile.getUploadedFileName());
+        UploadFile newUploadFile = awsS3FileStore.storeFile(menuAddDTO.getFile());
 
         Menu menu = menuAddDTO.toEntity(linkedStore);
 
@@ -58,13 +58,14 @@ public class MenuService {
         // 파일이 null이 아닌 경우만 파일 수정
         if (dto.getFile() != null) {
             // 새로 업로드한 파일 UploadFile로 생성
-            UploadFile newUploadFile = fileStore.storeFile(dto.getFile());
+            UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
 
             // 기존 메뉴의 업로드 파일 찾음
             UploadFile file = menu.getFile();
 
             // 메뉴의 저장명, 업로드명 업데이트
-            file.updateUploadedFileName(newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName());
+            file.updateUploadedFileName(
+                    newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName(), newUploadFile.getUploadImageUrl());
         }
 
         // 기존 메뉴 업데이트

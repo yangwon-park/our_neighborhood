@@ -69,6 +69,7 @@ public class StoreDTO {
 
         private String parkDetail;
 
+        private Long memberId;
 
         private List<CategoryOfStoreDTO> categoryOfStores;
 
@@ -77,7 +78,7 @@ public class StoreDTO {
                    Double lat, Double lon, String phoneNumber,
                    LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
                    String notice, String intro, List<String> offDays,
-                   ParkAvailable park, String parkDetail,
+                   ParkAvailable park, String parkDetail, Long memberId,
                    List<CategoryOfStoreDTO> categoryOfStores) {
             this.name = name;
             this.zipcode = zipcode;
@@ -96,6 +97,7 @@ public class StoreDTO {
             this.offDays = offDays;
             this.park = park;
             this.parkDetail = parkDetail;
+            this.memberId = memberId;
             this.categoryOfStores = categoryOfStores;
         }
 
@@ -169,13 +171,15 @@ public class StoreDTO {
 
         private String intro;                     // 가게 소개
 
+        private int average;
+
+        private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
+
         private StoreStatus status;               // 가게 오픈 상황
 
         private ParkAvailable park;
 
         private String parkDetail;
-
-        private List<String> offDays;             // 쉬는 날 (0 : 일요일 ~ 6 : 토요일)
 
         // 주소는 임베디드 타입으로 받음
         @NotBlank
@@ -202,6 +206,7 @@ public class StoreDTO {
             breakEnd = store.getBusinessTime().getBreakEnd();
             notice = store.getNotice();
             intro = store.getIntro();
+            average = store.getRatingTotal();
             offDays = store.getOffDays();
             status = store.getStatus();
             park = store.getPark();

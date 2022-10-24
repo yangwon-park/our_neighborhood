@@ -10,11 +10,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.OurNeighborApplication;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
@@ -30,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = OurNeighborApplication.class)
 @ActiveProfiles("test")
 @Transactional
 class MenuServiceTest {

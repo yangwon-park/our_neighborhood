@@ -2,13 +2,12 @@ package ywphsm.ourneighbor.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
-import ywphsm.ourneighbor.domain.dto.CategoryOfStoreDTO;
-import ywphsm.ourneighbor.domain.dto.MenuDTO;
-import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.dto.*;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -17,12 +16,9 @@ import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.service.CategoryService;
-import ywphsm.ourneighbor.service.MenuService;
-import ywphsm.ourneighbor.service.StoreService;
+import ywphsm.ourneighbor.service.*;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
-import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,8 +34,10 @@ public class StoreController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
-
     private final MenuService menuService;
+    private final ReviewService reviewService;
+
+    private final MemberService memberService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -72,7 +70,8 @@ public class StoreController {
     }
 
     @GetMapping("/store/{storeId}")
-    public String storeDetail(@PathVariable Long storeId, Model model) {
+    public String storeDetail(@PathVariable Long storeId, Model model,
+                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         Store store = storeService.findById(storeId);
         StoreDTO.Detail dto = new StoreDTO.Detail(store);
 
@@ -80,28 +79,50 @@ public class StoreController {
         List<MenuDTO.Simple> menuDTOList = menuList.stream()
                 .map(MenuDTO.Simple::of).collect(Collectors.toList());
 
-//        List<CategorySimpleDTO> dtoList = new ArrayList<>();
-//        for (CategoryOfStoreDTO categoryOfStoreDTO : categoryList) {
-//            Category category = categoryService.findById(categoryOfStoreDTO.getCategoryId());
-//            CategorySimpleDTO dto = CategorySimpleDTO.of(category);
-//            dtoList.add(dto);
-//        }
-
         List<CategorySimpleDTO> dtoList = dto.getCategoryList().stream()
                 .map(categoryOfStoreDTO ->
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
+        //review paging
+        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
+        List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
+        log.info("content={}", content);
+        double ratingAverage = reviewService.ratingAverage(storeId);
+
+        //찜, 스토어 수정 권한
+        if (member != null) {
+            //찜
+            boolean likeStatus = memberService.likeStatus(member.getId(), storeId);
+            //스토어 수정 권한
+            boolean storeRole = false;
+            if (member.getRole().equals(Role.SELLER)) {
+                boolean storeOwner = storeService.OwnerCheck(member, storeId);
+                if (storeOwner) {
+                    storeRole = true;
+                }
+            }
+            model.addAttribute("likeStatus", likeStatus);
+            model.addAttribute("storeRole", storeRole);
+        }
+
+
         model.addAttribute("store", dto);
         model.addAttribute("menus", menuDTOList);
         model.addAttribute("categoryList", dtoList);
+        //review
+        model.addAttribute("review", content);
+        model.addAttribute("ratingAverage", ratingAverage);
 
         return "store/detail";
     }
 
     @GetMapping("/seller/store/add")
-    public String addStore(Model model) {
-        model.addAttribute("store", new StoreDTO.Add());
+    public String addStore(Model model,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
+        StoreDTO.Add add = new StoreDTO.Add();
+        add.setMemberId(member.getId());
+        model.addAttribute("store", add);
         return "store/add_form";
     }
 

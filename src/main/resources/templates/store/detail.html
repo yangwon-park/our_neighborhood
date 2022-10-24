@@ -4,7 +4,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
     <style>
-
+        .star-rating {
+            width:205px;
+        }
+        .star-rating,.star-rating span {
+            display:inline-block;
+            height:39px;
+            overflow:hidden;
+            background:url(/images/star/star.png)no-repeat;
+        }
+        .star-rating span{
+            background-position:left bottom;
+            line-height:0;
+            vertical-align:top; }
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
@@ -28,10 +40,16 @@
                 <h1 class="my-auto" style="font-size: 2.0rem" th:text="*{name}">가게명</h1>
                 <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
                       th:classappend="*{status}"></span>
+                <th:block th:if="${session.loginMember ne null}">
+                    <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
+                    <button id="like-btn" th:text="${likeStatus} ? '찜 취소' : '찜 하기'"
+                            type="button" class="btn btn-info like" th:value="${!likeStatus}">
+                    </button>
+                </th:block>
             </div>
             <div class="col-6">
                 <th:block th:if="${session.loginMember ne null}">
-                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
+                    <th:block th:if="${storeRole} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <div class="float-end">
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
@@ -95,6 +113,14 @@
                     없음
                 </th:block>
             </div>
+<!--            <div class="col-12 my-1">-->
+<!--                <p>-->
+<!--                    <span class="mx-auto" th:text="*{park.description}"></span>-->
+<!--                </p>-->
+<!--                <p>-->
+<!--                    <span class="mx-auto" th:text="*{parkDetail}"></span>-->
+<!--                </p>-->
+<!--            </div>-->
             <div class="col-12 my-1">
                 <p>
 <!--                    <span class="mx-auto" th:text="*{park.description}"></span>-->
@@ -117,7 +143,7 @@
         <div class="row">
             <div class="col-12">
                 <th:block th:if="${session.loginMember ne null}">
-                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
+                    <th:block th:if="${storeRole} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <div class="float-end">
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
@@ -150,7 +176,8 @@
                         <div class="px-0 col-lg-6 col-sm-12 d-flex border border-secondary">
                             <div class="menu-detail border-end border-secondary col-4">
                                 <div class="menu-detail-img mb-2">
-                                    <img th:src="|/menu/${menu.storedFileName}|" width="100%" alt="메뉴 사진">
+<!--                                    <img th:src="|/menu/${menu.storedFileName}|" width="100%" alt="메뉴 사진">-->
+                                    <img th:src="${menu.uploadImgUrl}" width="100%" height="222px" alt="메뉴 사진">
                                 </div>
                                 <div class="menu-detail-info d-grid">
                                     <div>
@@ -180,12 +207,72 @@
                 </th:block>
             </div>
         </div>
+        <hr class="my-2 hr-orange">
+        <div class="row store-menu">
+            <h3><strong>리뷰</strong></h3>
+            <div class="col">
+                <button class="btn btn-info float-end" style="font-size: 1.1rem; color: #ffffff"
+                        th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">리뷰 등록
+                </button>
+            </div>
+            <div class="mb-3">
+                <input th:field="*{storeId}" class="form-control"
+                       placeholder="매장 번호" type="hidden">
+                <input th:if="${session.loginMember ne null}" th:value="${session.loginMember.role}"
+                       id="member-role" type="hidden" class="member-role">
+                <input th:if="${session.loginMember == null}" value=""
+                       id="member-role-null" type="hidden" class="member-role">
+            </div>
+            <h4>평균 평점</h4>
+            <h4 th:text="${ratingAverage}">평균 평점</h4>
+            <div class="wrap-star">
+                <span class='star-rating'>
+                    <span th:style="${'width:' + (ratingAverage * 20) + '%'}"></span>
+                </span>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>별점</th>
+                    <th>리뷰</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                </tr>
+                </thead>
+                    <tr th:each="review : ${review}">
+                    <td th:text="${review.reviewId}"></td>
+                    <td th:if="${review.rating == 1}">★☆☆☆☆</td>
+                    <td th:if="${review.rating == 2}">★★☆☆☆</td>
+                    <td th:if="${review.rating == 3}">★★★☆☆</td>
+                    <td th:if="${review.rating == 4}">★★★★☆</td>
+                    <td th:if="${review.rating == 5}">★★★★★</td>
+                    <td th:text="${review.content}"></td>
+                    <td th:text="${review.username}"></td>
+                    <td th:text="${#strings.substring(review.createDate, 0, 10)}"></td>
+                    <td>
+                        <img th:src="|/menu/${review.storedFileName}|" width="180" height="180" alt="리뷰 사진">
+                    </td>
+                    <th:block th:if="${session.loginMember ne null}">
+                        <td th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
+                            <button th:id="|review-delete-btn${review.reviewId}|"
+                                    type="button" class="btn btn-dark mt-4 review-delete">
+                                삭제
+                            </button>
+                        </td>
+                    </th:block>
+                </tr>
+                <tbody id="reviewBody">
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-orange mt-4" id="review-more">더보기</button>
+        </div>
     </div>
 </section>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
 </footer>
-<script th:replace="layout/footer :: common_js(~{::script})">
-</script>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/review.js}"></script>
 </body>
 </html>

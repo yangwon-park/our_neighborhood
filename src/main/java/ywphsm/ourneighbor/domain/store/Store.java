@@ -45,6 +45,8 @@ public class Store extends BaseEntity {
 
     private String intro;                     // 가게 소개
 
+    private int ratingTotal;
+
 //    @OneToMany(mappedBy = "store")
 //    private List<DaysOfStore> daysOfStore;
 
@@ -89,6 +91,10 @@ public class Store extends BaseEntity {
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
     private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
 
+    // review(N:1)
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    private List<Review> reviewList = new ArrayList<>();
+
 
     // Many To Many인듯
 //    @ManyToOne(fetch = FetchType.LAZY)
@@ -132,6 +138,12 @@ public class Store extends BaseEntity {
     public void addMenu(Menu menu) {
         menu.setStore(this);
         menuList.add(menu);
+    }
+
+    public void addReview(Review review) {
+        this.ratingTotal += review.getRating();
+        review.setStore(this);
+        reviewList.add(review);
     }
 
 
@@ -202,5 +214,9 @@ public class Store extends BaseEntity {
         if (time.isAfter(businessTime.getBreakStart()) && time.isBefore(businessTime.getBreakEnd())) {
             updateStatus(StoreStatus.BREAK);
         }
+    }
+
+    public void reviewDelete(Integer rating) {
+        this.ratingTotal -= rating;
     }
 }

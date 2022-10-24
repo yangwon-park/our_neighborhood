@@ -3,6 +3,8 @@ package ywphsm.ourneighbor.domain.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 
 @Data
 public class ReviewMemberDTO {
@@ -13,28 +15,38 @@ public class ReviewMemberDTO {
 
     private Integer rating;
 
-    private String createdBy;
+    private LocalDateTime createDate;
 
     private Long memberId;
 
     private String username;
 
+    private String storedFileName;
+
+    private String storeName;
+
+    private Long storeId;
+
     @QueryProjection
-    public ReviewMemberDTO(Long reviewId, String content, Integer rating, String createdBy, Long memberId, String username) {
+    public ReviewMemberDTO(Long reviewId, String content, Integer rating, LocalDateTime createDate, Long memberId, String username, String storedFileName) {
         this.reviewId = reviewId;
         this.content = content;
         this.rating = rating;
-        this.createdBy = createdBy;
+        this.createDate = createDate;
         this.memberId = memberId;
         this.username = username;
+        this.storedFileName = storedFileName;
     }
 
-    public ReviewMemberDTO(ReviewMemberDTO reviewMemberDTO) {
-        this.reviewId = reviewMemberDTO.getReviewId();
-        this.content = reviewMemberDTO.getContent();;
-        this.rating = reviewMemberDTO.getRating();;
-        this.createdBy = reviewMemberDTO.getCreatedBy();;
-        this.memberId = reviewMemberDTO.getMemberId();;
-        this.username = reviewMemberDTO.getUsername();;
+    @QueryProjection
+    public ReviewMemberDTO(Long reviewId, String content, Integer rating, LocalDateTime createDate, String storedFileName, String storeName, Long storeId) {
+        this.reviewId = reviewId;
+        this.content = content;
+        this.rating = rating;
+        this.createDate = createDate;
+        this.storedFileName = storedFileName;
+        this.storeName = storeName;
+        this.storeId = storeId;
     }
+
 }

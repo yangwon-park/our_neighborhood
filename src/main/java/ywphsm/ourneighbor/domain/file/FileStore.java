@@ -51,7 +51,7 @@ public class FileStore {
         String storeFileName;
 
         if (originalFileName.equals("default.png")) {
-            
+
             // 기본이미지 사용 시, 별도로 파일을 업로드해서 만들지 않음
             // 저장 파일 자체를 미리 로컬에 만들어뒀음
             storeFileName = "default.png";

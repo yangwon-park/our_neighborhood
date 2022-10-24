@@ -1,5 +1,7 @@
 package ywphsm.ourneighbor.service;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,15 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.config.security.MemberDetailService;
+import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
+import ywphsm.ourneighbor.repository.member.MemberRepository;
+import ywphsm.ourneighbor.service.login.SessionConst;
 
 import java.io.FileInputStream;
 import java.util.List;
@@ -45,12 +54,33 @@ class MenuServiceTest {
     @Autowired
     StoreService storeService;
 
+    @Autowired
+    MemberService memberService;
+
+    @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void before() {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+
+        Member member1 = new Member("kkk", "kkk", "user1",
+                "유저1", "localhost@gmail.com", "010-1234-1234", 19, 0, Role.USER);
+
+        memberService.join(member1);
+
+        memberRepository.findByUserId(member1.getUserId())
+                .filter(member -> passwordEncoder.matches(member1.getPassword(), member.getPassword()))
+                .orElse(null);
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(SessionConst.LOGIN_MEMBER, member1);
     }
 
     @LocalServerPort
@@ -72,11 +102,20 @@ class MenuServiceTest {
                 new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
 //                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
+        JSONObject json = new JSONObject();
+
+        json.put("value", "해쉬태그1");
+        json.put("value", "해쉬태그2");
+
+        JSONArray array = new JSONArray();
+        array.add(json);
+
         mvc.perform(multipart("/seller/menu")
                         .file(file)
                         .param("storeId", String.valueOf(storeId))
                         .param("name", name)
-                        .param("price", String.valueOf(price)))
+                        .param("price", String.valueOf(price))
+                        .param("hashtag", String.valueOf(array)))
                 .andDo(print())
                 .andExpect(status().isOk());
 

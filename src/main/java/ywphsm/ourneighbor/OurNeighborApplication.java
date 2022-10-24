@@ -51,6 +51,5 @@ public class OurNeighborApplication {
 				return Optional.of(member.getEmail());
 			}
 		};
-
 	}
 }

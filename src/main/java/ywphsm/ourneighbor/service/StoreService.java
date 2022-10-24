@@ -36,7 +36,8 @@ public class StoreService {
     public Long save(StoreDTO.Add dto, List<Category> categoryList) {
         Store store = dto.toEntity();
         Member member = memberService.findById(dto.getMemberId());
-        MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, store);
+
+        MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, storeRepository.save(store));
         memberOfStore.updateMyStore(true);
 
         for (Category category : categoryList) {
@@ -47,7 +48,7 @@ public class StoreService {
         store.updateStatus(StoreStatus.OPEN);
 
         memberOfStoreRepository.save(memberOfStore);
-        storeRepository.save(store);
+
         return store.getId();
     }
 

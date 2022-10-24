@@ -6,10 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.security.MemberDetailsImpl;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.persistence.EntityManager;

@@ -151,6 +151,7 @@ class StoreServiceTest {
                         .param("phoneNumber", dto.getPhoneNumber())
                         .param("openingTime", dto.getOpeningTime().format(DateTimeFormatter.ofPattern("HH:mm")))
                         .param("closingTime", dto.getClosingTime().format(DateTimeFormatter.ofPattern("HH:mm")))
+                        .param("memberId", String.valueOf(453))
                         .params(params))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -204,6 +205,7 @@ class StoreServiceTest {
                 .phoneNumber("0123456789")
                 .openingTime(LocalTime.now())
                 .closingTime(LocalTime.now())
+                .memberId(453L)
                 .build(), categoryList);
 
         List<String> updateCategoryId = new ArrayList<>();
@@ -301,6 +303,7 @@ class StoreServiceTest {
                 .phoneNumber("0123456789")
                 .openingTime(LocalTime.now())
                 .closingTime(LocalTime.now())
+                .memberId(453L)
                 .build(), categoryList);
 
         String url = "http://localhost:" + port + "/admin/store/" + storeId;
@@ -312,22 +315,6 @@ class StoreServiceTest {
         assertThatThrownBy(() -> storeService.findById(storeId))
                 .isInstanceOf(IllegalArgumentException.class);
     }
-//
-//    // 쉬는 날이 있는 가게 등록 한 후 다시 구현
-//    @Test
-//    @DisplayName("현재 요일 구하기")
-//    void today() {
-//        LocalDate date = LocalDate.now();
-//        String today = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
-//
-//        LocalTime time = LocalTime.now();
-//
-//        Store findStore = storeService.searchByKeyword("맥도").get(0);
-//
-//        List<String> offDays = findStore.getOffDays();
-//
-//
-//    }
 
 
 

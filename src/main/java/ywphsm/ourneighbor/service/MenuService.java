@@ -65,16 +65,20 @@ public class MenuService {
 
         String hashtagJson = dto.getHashtag();
 
-        // 해쉬태그 저장 로직
-        if (!hashtagJson.isEmpty()) {
-            Menu savedMenu = menuRepository.findById(savedMenuId).orElseThrow(
-                    () -> new IllegalArgumentException("해당 메뉴가 없습니다. id = " + savedMenuId));
+        log.info("hashtagJson={}", hashtagJson);
 
-            List<String> hashtagNameList = getHashtagNameList(hashtagJson);
+        if (hashtagJson != null) {
+            // 해쉬태그 저장 로직
+            if (!hashtagJson.isEmpty()) {
+                log.info("hashtagJson={}", hashtagJson);
+                Menu savedMenu = menuRepository.findById(savedMenuId).orElseThrow(
+                        () -> new IllegalArgumentException("해당 메뉴가 없습니다. id = " + savedMenuId));
 
-            saveHashtag(savedMenu, hashtagNameList);
+                List<String> hashtagNameList = getHashtagNameList(hashtagJson);
+
+                saveHashtag(savedMenu, hashtagNameList);
+            }
         }
-
         return savedMenuId;
     }
 
@@ -101,20 +105,24 @@ public class MenuService {
         //      => 해쉬태그를 모두 삭제한 경우
         // 하나 하나 삭제하기보단 걍 통째로 지우는게 좋을듯
         // 실제로 이럴 경우는 잘 없다고 봄
-        if (previousHashtagName.size() != 0 && hashtagJson.isEmpty()) {
-            log.info("해쉬태그 모두 삭제");
-            hashtagOfMenuRepository.deleteByMenu(menu);
-        }
+        if (hashtagJson != null) {
 
-        // 해쉬태그에 새로운 값을 추가한 경우
-        if (!(hashtagJson.isEmpty())) {
-            List<String> newHashtagNameList = getHashtagNameList(hashtagJson);
 
-            // 기존 해쉬태그가 없는 경우 => 그냥 처음 저장하는 과정과 동일
-            if (previousHashtagName.size() == 0) {
-                saveHashtag(menu, newHashtagNameList);
-            } else {
-                updateAndDeleteHashtag(menu, previousHashtagName, newHashtagNameList);
+            if (previousHashtagName.size() != 0 && hashtagJson.isEmpty()) {
+                log.info("해쉬태그 모두 삭제");
+                hashtagOfMenuRepository.deleteByMenu(menu);
+            }
+
+            // 해쉬태그에 새로운 값을 추가한 경우
+            if (!(hashtagJson.isEmpty())) {
+                List<String> newHashtagNameList = getHashtagNameList(hashtagJson);
+
+                // 기존 해쉬태그가 없는 경우 => 그냥 처음 저장하는 과정과 동일
+                if (previousHashtagName.size() == 0) {
+                    saveHashtag(menu, newHashtagNameList);
+                } else {
+                    updateAndDeleteHashtag(menu, previousHashtagName, newHashtagNameList);
+                }
             }
         }
 
@@ -220,7 +228,7 @@ public class MenuService {
                     linkHashtagAndMenu(hashtag, menu);
                 }
 
-            // 수정 중, 완전히 새로운 해쉬태그를 만들 경우
+                // 수정 중, 완전히 새로운 해쉬태그를 만들 경우
             } else {
                 HashtagDTO hashtagDTO = HashtagDTO.builder()
                         .name(name)

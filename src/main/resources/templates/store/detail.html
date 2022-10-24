@@ -49,7 +49,7 @@
             </div>
             <div class="col-6">
                 <th:block th:if="${session.loginMember ne null}">
-                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
+                    <th:block th:if="${storeRole} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <div class="float-end">
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
@@ -135,7 +135,7 @@
         <div class="row">
             <div class="col-12">
                 <th:block th:if="${session.loginMember ne null}">
-                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
+                    <th:block th:if="${storeRole} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <div class="float-end">
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"

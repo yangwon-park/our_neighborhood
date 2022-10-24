@@ -91,11 +91,22 @@ public class StoreController {
         log.info("content={}", content);
         double ratingAverage = reviewService.ratingAverage(storeId);
 
-        //찜
+        //찜, 스토어 수정 권한
         if (member != null) {
+            //찜
             boolean likeStatus = memberService.likeStatus(member.getId(), storeId);
+            //스토어 수정 권한
+            boolean storeRole = false;
+            if (member.getRole().equals(Role.SELLER)) {
+                boolean storeOwner = storeService.OwnerCheck(member, storeId);
+                if (storeOwner) {
+                    storeRole = true;
+                }
+            }
             model.addAttribute("likeStatus", likeStatus);
+            model.addAttribute("storeRole", storeRole);
         }
+
 
         model.addAttribute("store", dto);
         model.addAttribute("menus", menuDTOList);

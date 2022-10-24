@@ -20,7 +20,6 @@ import java.io.IOException;
 public class ReviewApiController {
 
     private final ReviewService reviewService;
-    private final StoreService storeService;
 
     @PostMapping("/user/review")
     public Long save(ReviewDTO.Add dto) throws IOException {

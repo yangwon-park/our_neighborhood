@@ -93,7 +93,8 @@ public class EditController {
                                BindingResult bindingResult,
                                @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
-        if (memberService.findByEmail(emailConfirmForm.getEmail()) != null) {
+        if (memberService.findByEmail(emailConfirmForm.getEmail()) != null
+                && !member.getEmail().equals(emailConfirmForm.getEmail())) {
             bindingResult.reject("emailDoubleCheck");
         }
 

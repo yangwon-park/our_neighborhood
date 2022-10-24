@@ -33,7 +33,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                         QReview.review.createdDate,
                         QMember.member.id.as("memberId"),
                         QMember.member.username,
-                        QUploadFile.uploadFile.storedFileName))
+                        QUploadFile.uploadFile.uploadImageUrl))
                 .from(QReview.review)
                 .where(storeIdEq(storeId))
                 .leftJoin(QReview.review.member, QMember.member)
@@ -60,7 +60,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                         QReview.review.content,
                         QReview.review.rating,
                         QReview.review.createdDate,
-                        QUploadFile.uploadFile.storedFileName,
+                        QUploadFile.uploadFile.uploadImageUrl,
                         QStore.store.name.as("storeName"),
                         QStore.store.id.as("storeId")))
                 .from(QReview.review)

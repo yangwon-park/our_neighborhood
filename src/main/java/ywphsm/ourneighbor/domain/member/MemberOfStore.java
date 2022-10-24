@@ -2,7 +2,6 @@ package ywphsm.ourneighbor.domain.member;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;

@@ -1,34 +1,104 @@
 var main = {
     init: async function () {
-        var _this = this;
+        let _this = this;
 
-        _this.setSearchKeywordEvent();
+        let map = _this.getMap();
+
+        _this.setSearchKeywordEvent(map);
         await _this.getCategories();
 
-        let findCate = document.querySelectorAll("a.search-main-cate")
-        _this.searchByCategories(findCate);
-    },
+        let findCate = document.querySelectorAll("a.search-main-cate");
+        _this.setSearchByCategoriesEvent(findCate, map);
 
-    setSearchKeywordEvent: function () {
-        // 엔터키 입력하면 searchByKeyword 동작
-        document.getElementById('keyword').addEventListener('keydown', (e) => {
-            if (e.isComposing === false && e.code == 'Enter') { // 한글 입력 시 이벤트 두번 발생 방지
-                this.searchByKeyword();
-            }
-        })
+        _this.setPreviousData(map);
 
-        // 클릭 이벤트 시 searchByKeyword 동작
-        document.getElementById('searchBtn').addEventListener('click', () => {
-            this.searchByKeyword();
+        kakao.maps.event.addListener(map, "click", () => {
+            _this.closeInfoWindow();
         });
     },
 
-    searchByKeyword: function() {
-        const keyword = document.getElementById('keyword').value;
+    getMap: function () {
+        // 지도를 담을 div를 찾음
+        var mapContainer = document.getElementById('map');
 
-        if (!keyword.replace(/^\s+|\s+$/g, '')) {
-            alert('키워드를 입력해주세요!');
-            return false;
+        // 지도에 관한 옵션 부여
+        var mapOptions = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
+            level: 1		// 확대 레벨
+        };
+
+        // 지도 생성
+        var map = new kakao.maps.Map(mapContainer, mapOptions);
+
+        // var zoomControl = new kakao.maps.ZoomControl();
+        // map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+        var currentPosition;
+        var pointerSrc = "../images/main/blink_pointer.gif",
+            pointerSize = new kakao.maps.Size(25, 25);
+
+        var pointerImage = new kakao.maps.MarkerImage(pointerSrc, pointerSize);
+
+        // 현재 위치로 맵 중심 정렬 - geolocation (배포시, https 필수)
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                var lat = position.coords.latitude,
+                    lon = position.coords.longitude;
+
+                currentPosition = new kakao.maps.LatLng(lat, lon);
+
+                var marker = new kakao.maps.Marker({
+                    position: currentPosition,
+                    image: pointerImage
+                });
+
+                marker.setMap(map);
+
+                map.setCenter(currentPosition);
+
+                let moveToCurrentLocationBtn = document.getElementById("moveToCurrentLocationBtn");
+
+                moveToCurrentLocationBtn.addEventListener("click", () => {
+                    this.moveToCurrentLocation(map, currentPosition);
+                });
+            })
+        } else {
+            var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+                message = 'geolocation을 사용할 수 없음'
+
+            map.setCenter(locPosition)
+        }
+
+        return map;
+    },
+
+    setSearchKeywordEvent: function (map) {
+
+        let prevKeyword = sessionStorage.getItem("keyword");
+
+        // 엔터키 입력하면 searchByKeyword 동작
+        document.getElementById('keyword').addEventListener('keydown', (e) => {
+            if (e.isComposing === false && e.code === 'Enter') { // 한글 입력 시 이벤트 두번 발생 방지
+                this.searchByKeyword(prevKeyword, map);
+            }
+        });
+
+        // 클릭 이벤트 시 searchByKeyword 동작
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            this.searchByKeyword(prevKeyword, map);
+        });
+    },
+
+    searchByKeyword: function (prevKeyword, map) {
+        let keyword = document.getElementById("keyword").value;
+
+        if (!keyword.replace(/^\s+|\s+$/g, "")) {
+            if (prevKeyword === null) {
+                alert("키워드를 입력해주세요!");
+                return false;
+            } else {
+                keyword = prevKeyword;
+            }
         }
 
         axios({
@@ -48,18 +118,22 @@ var main = {
                     this.searchResult.push(resp.data.data[i])
                 }
 
-                this.displayMarker(this.searchResult);
+                this.displayMarker(this.searchResult, map);
+
+                sessionStorage.clear();
+                sessionStorage.setItem("keyword", keyword);
 
                 // input 태그 값 지움
                 const input = document.getElementById('keyword');
                 input.value = null;
             })
-            .catch((error) => {
+            .catch((e) => {
+                console.error(e);
                 alert('왜 에러가 뜰까요??');
             });
     },
 
-    searchByCategories: function (findCate) {
+    setSearchByCategoriesEvent: function (findCate, map) {
         for (const el of findCate) {
             el.addEventListener('click', () => {
 
@@ -70,35 +144,44 @@ var main = {
                     alert("원하는 거리를 설정해주세요!!!");
                 }
 
-                let dist = radio.value;
                 let categoryId = el.getAttribute('data-value');
+                let dist = radio.value;
 
-                axios({
-                    method: "get",
-                    url: "/searchByCategory",
-                    params: {
-                        categoryId: categoryId,
-                        dist: dist
-                    }
-                })
-                    .then((res) => {
-                        if (res.data.count < 1) {
-                            alert('검색 결과가 없습니다.');
-                            window.location.href = 'http://localhost:8080/map';
-                        }
-
-                        for (let i = 0; i < res.data.data.length; i++) {
-                            this.searchResult.push(res.data.data[i])
-                        }
-
-                        this.displayMarker(this.searchResult);
-                    })
-                    .catch((error) => {
-                        alert('왜 에러가 뜰까요??');
-                    });
+                this.searchByCategories(categoryId, dist, map);
             });
         }
 
+    },
+
+    searchByCategories: function (categoryId, dist, map) {
+        axios({
+            method: "get",
+            url: "/searchByCategory",
+            params: {
+                categoryId: categoryId,
+                dist: dist
+            }
+        })
+            .then((res) => {
+                if (res.data.count < 1) {
+                    alert('검색 결과가 없습니다.');
+                    window.location.href = 'http://localhost:8080/map';
+                }
+
+                for (let i = 0; i < res.data.data.length; i++) {
+                    this.searchResult.push(res.data.data[i])
+                }
+
+                this.displayMarker(this.searchResult, map);
+
+                sessionStorage.clear();
+                sessionStorage.setItem("dist", dist);
+                sessionStorage.setItem("categoryId", categoryId);
+            })
+            .catch((e) => {
+                console.error(e);
+                alert('왜 에러가 뜰까요??');
+            });
     },
 
     getCategories: async function () {
@@ -112,7 +195,6 @@ var main = {
             console.error(e);
         })
     },
-
 
     getMainCategories: function (children) {
         const mapCategory = document.getElementById("map-category");
@@ -143,17 +225,18 @@ var main = {
      */
     markers: [],
 
-    infowindows: [],
+    infoWindows: [],
 
     searchResult: [],
 
-    displayMarker: function (result) {
+    displayMarker: function (result, map) {
         this.removeMarker();
 
         var bounds = new kakao.maps.LatLngBounds();
 
-        for (var i = 0; i < result.length; i++) {
-            var marker = this.addMarker(result[i]);
+        for (let i = 0; i < result.length; i++) {
+
+            this.addMarker(result[i], map);
             var position = new kakao.maps.LatLng(result[i].lat, result[i].lon);
 
             bounds.extend(position);
@@ -163,42 +246,53 @@ var main = {
         map.panTo(bounds);
     },
 
-    closeInfowindow: function() {
-        for (var i = 0; i < this.infowindows.length; i++) {
-            this.infowindows[i].close();
+    closeInfoWindow: function () {
+        for (var i = 0; i < this.infoWindows.length; i++) {
+            this.infoWindows[i].close();
         }
     },
 
-    addMarker: function(data) {
+    addMarker: function (data, map) {
+        var imageSrc = '../images/main/map_marker.png',
+            imageSize = new kakao.maps.Size(55, 60),
+            imageOption = {offset: new kakao.maps.Point(27, 69)};
+
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
         var position = new kakao.maps.LatLng(data.lat, data.lon);
 
         // 마커를 생성하는 시점에 인포윈도우를 등록하지 않으면
         // 마커 하나에 인포 윈도우 position이 다 고정됨
         var marker = new kakao.maps.Marker({
             position: position,
-            image: markerImage
+            image: markerImage,
         });
 
-        var infowindow = new kakao.maps.InfoWindow();
+        var infoWindow = new kakao.maps.InfoWindow({
+            removable: true
+        });
 
-        kakao.maps.event.addListener(marker, 'click', this.addInfoWindow(marker, data, infowindow));
+        kakao.maps.event.addListener(marker, 'click', this.addInfoWindow(marker, data, infoWindow, map));
 
         marker.setMap(map);
         this.markers.push(marker);
-        this.infowindows.push(infowindow);
+        this.infoWindows.push(infoWindow);
 
         return marker;
     },
 
-    addInfoWindow: function(marker, data, infowindow) {
+    addInfoWindow: function (marker, data, infowindow, map) {
         return () => {
-            this.closeInfowindow();
+            this.closeInfoWindow();
             infowindow.setContent(
                 '<div class="container text-nowrap">' +
                 '    <div class="row mt-2">' +
-                '        <div class="col m-auto">' +
-                '           <a style="text-decoration: none; color: #0b1526" href="/store/' + data.storeId + '" class="fs-5 me-2">' + data.name + '</a>' +
+                '        <div class="col m-auto d-inline">' +
+                '           <a style="text-decoration: none; color: #0b1526" href="/store/' + data.storeId + '" id="info-title" class="fs-5 me-2">' + data.name + '</a>' +
                 '           <span class="badge mb-2 ' + data.status + '">' + data.status + '</span>' +
+                // '           <span class="float-end mt-1">' +
+                // '               <button type="button" class="btn-close" aria-label="Close"></button>' +
+                // '           </span>' +
                 '        </div>' +
                 '    </div>' +
                 '    <div class="row d-flex">' +
@@ -233,7 +327,7 @@ var main = {
     },
 
     removeMarker: function () {
-        this.closeInfowindow();
+        this.closeInfoWindow();
 
         for (var i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
@@ -242,8 +336,50 @@ var main = {
         // 전역 변수로 선언한 아래의 배열들 초기화
         // 해줘야 매번 검색 시, 새로운 조건으로 검색 가능
         this.markers = [];
-        this.infowindows = [];
+        this.infoWindows = [];
         this.searchResult = [];
+    },
+
+    moveToCurrentLocation: function (map, currentPosition) {
+        map.setLevel(1);
+        map.panTo(currentPosition);
+    },
+
+    setPreviousData: function (map) {
+        window.onpageshow = (ev) => {
+            if (ev.persisted || (window.performance &&
+                (performance.getEntriesByType("navigation")[0].type === "reload" ||
+                    performance.getEntriesByType("navigation")[0].type === "back_forward"))) {
+
+                console.log("새로고침 or 뒤로가기로 접근");
+
+                // sessionStorage 지원 여부 확인
+                if (("sessionStorage" in window) && window["sessionStorage"] !== null) {
+
+                    if (sessionStorage.getItem("keyword") !== null) {
+
+                        console.log("keyword not null")
+                        let prevKeyword = sessionStorage.getItem("keyword");
+
+                        console.log("prevKeyword=", prevKeyword);
+
+                        this.searchByKeyword(prevKeyword, map);
+                    }
+
+                    if (sessionStorage.getItem("dist") !== null &&
+                        sessionStorage.getItem("categoryId") !== null) {
+
+                        console.log("dist, categoryId not null")
+                        let dist = sessionStorage.getItem("dist");
+                        let categoryId = sessionStorage.getItem("categoryId");
+
+                        this.searchByCategories(categoryId, dist, map);
+                    }
+                }
+
+                sessionStorage.clear();
+            }
+        }
     },
 
 };

@@ -6,10 +6,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity
 @ToString(of = {"id", "name", "depth"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Category {
 
     @Id
@@ -31,11 +31,7 @@ public class Category {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
-
-    public void addParentCategory(Category parent) {
-        this.parent = parent;
-    }
-
+    
     public void addParentCategoryAndDepth(Category parent, Long depth) {
         this.parent = parent;
         this.depth = depth;

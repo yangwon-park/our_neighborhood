@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import ywphsm.ourneighbor.service.StoreService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,28 +35,17 @@ public class MenuApiController {
     }
 
     @PostMapping("/seller/menu")
-    public Long save(MenuDTO.Add dto) throws IOException {
-
-        log.info("dto={}", dto);
-        log.info("dto={}", dto.getFile());
-
+    public Long save(MenuDTO.Add dto) throws IOException, ParseException {
         return menuService.save(dto);
     }
 
     @PutMapping("/seller/menu/{storeId}")
-    public Long update(@PathVariable Long storeId, MenuDTO.Update dto) throws IOException {
-
-        log.info("dto={}", dto);
-        log.info("dto={}", dto.getFile());
-
+    public Long update(@PathVariable Long storeId, MenuDTO.Update dto) throws IOException, ParseException {
         return menuService.update(storeId, dto);
     }
 
     @DeleteMapping("/seller/menu/{storeId}")
     public Long delete(@PathVariable Long storeId, @RequestParam Long menuId) {
-
-        log.info("menuId={}", menuId);
-
         return menuService.delete(menuId);
     }
 

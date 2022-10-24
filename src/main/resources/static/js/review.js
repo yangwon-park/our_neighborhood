@@ -99,6 +99,7 @@ var main = {
 
         let formData = new FormData(reviewForm);
 
+<<<<<<< HEAD
         for (let k of formData.keys()) {
             console.log(k);
         }
@@ -106,6 +107,8 @@ var main = {
             console.log(v);
         }
 
+=======
+>>>>>>> 19c25c35ed7e2704bcb37822f75320eff279cdec
         this.createDefaultImg(formData);
 
         axios({

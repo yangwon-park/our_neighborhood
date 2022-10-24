@@ -1,19 +1,18 @@
 package ywphsm.ourneighbor.domain;
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-@Entity
 @Getter
+@ToString(of = {
+        "id", "content", "rating"
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
+@Entity
 public class Review extends BaseEntity{
 
     @Id

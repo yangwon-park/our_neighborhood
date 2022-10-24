@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.domain.dto;
+package ywphsm.ourneighbor.domain.dto.Member;
 
 import lombok.Builder;
 import lombok.Data;

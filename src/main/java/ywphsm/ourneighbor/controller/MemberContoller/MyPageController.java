@@ -5,8 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
-import ywphsm.ourneighbor.domain.dto.MemberDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.service.MemberService;
@@ -15,8 +15,8 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 public class MyPageController {
 
     private final MemberService memberService;

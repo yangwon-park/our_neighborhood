@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import ywphsm.ourneighbor.controller.form.LoginForm;
 
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 public class LoginController {
 
     @GetMapping("/login")

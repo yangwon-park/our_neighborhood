@@ -18,6 +18,8 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -38,9 +40,7 @@ public class StoreService {
         memberOfStore.updateMyStore(true);
 
         for (Category category : categoryList) {
-            CategoryOfStore categoryOfStore = CategoryOfStore.linkCategoryAndStore(category, store);
-            log.info("categoryOfStore={}", categoryOfStore.getCategory().getName());
-            log.info("categoryOfStore={}", categoryOfStore.getStore().getName());
+            linkCategoryAndStore(category, store);
         }
 
         // default: OPEN

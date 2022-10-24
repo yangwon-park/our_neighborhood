@@ -24,16 +24,12 @@ var main = {
     },
 
     init: async function () {
-        console.log("==== init Start ====")
         var _this = this;
 
         await _this.findCoords();
-
-        console.log("==== init End ====")
     },
 
     findCoords: async function () {
-        console.log("findCoords Start");
         let position = await this.getCoords();
         await this.success(position);
 
@@ -44,8 +40,6 @@ var main = {
     },
 
     setWeatherInfo: function () {
-        console.log("setWeather Start");
-
         axios({
             method: "get",
             url: "/weather",
@@ -85,26 +79,20 @@ var main = {
             _skyStatus.appendChild(fontAwesome);
             _tmp.innerText = "현재 기온 : " + resp.data.tmp + "℃";
             _pop.innerText = "강수 확률 : " + resp.data.pop + "%";
-            console.log("setWeather Success");
 
             mask.closeMask();
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         })
-
-        console.log("setWeather End");
     },
 
     getCoords: function (options) {
-        console.log("getCoords Start");
         return new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject, options);
-            console.log("getCoords End");
         })
     },
 
     getSidoName: async function (position) {
-        console.log("getSidoName Start")
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
 
@@ -113,7 +101,6 @@ var main = {
         let sidoName = data.result[0].region_1depth_name;
 
         main.setCookie("sidoName", sidoName, 6);
-        console.log("getSidoName End")
     },
 
     getRegionCode: function (lat, lon) {
@@ -121,20 +108,18 @@ var main = {
         var geocoder = new kakao.maps.services.Geocoder();
 
         var loc = new kakao.maps.LatLng(lat, lon);
-        console.log("callback Start")
         return new Promise((resolve, reject) => {
             geocoder.coord2RegionCode(loc.getLng(), loc.getLat(), function (result, status) {
                 if (status === kakao.maps.services.Status.OK) {
-                    resolve({result})
+                    resolve({result});
                 } else {
-                    reject(status)
+                    reject(status);
                 }
             });
         })
     },
 
     success: async function (position) {
-        console.log("success Start");
         let lat = position.coords.latitude;
         let lon = position.coords.longitude;
 
@@ -149,8 +134,6 @@ var main = {
         main.setCookie("lon", lon, 6);
 
         await this.getSidoName(position);
-
-        console.log("success End");
     },
 
     error: function () {

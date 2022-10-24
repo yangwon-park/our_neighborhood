@@ -94,16 +94,24 @@ public class MemberService {
 
     //회원수정시 닉네임 변경
     @Transactional
-    public void updateNickname(Long memberId, String nickname) {
-        Member member = findById(memberId);
-        member.updateNickname(nickname);
+    public void updateNickname(Long id, String nickname) {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + id));
+
+        if (member != null) {
+            member.updateNickname(nickname);
+        }
     }
 
     //회원수정시 전화번호 변경
     @Transactional
-    public void updatePhoneNumber(Long memberId, String phoneNumber) {
-        Member member = findById(memberId);
-        member.updatePhoneNumber(phoneNumber);
+    public void updatePhoneNumber(Long id, String phoneNumber) {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + id));
+
+        if (member != null) {
+            member.updatePhoneNumber(phoneNumber);
+        }
     }
 
     //비밀번호 확인
@@ -113,21 +121,30 @@ public class MemberService {
 
     //비밀번호 수정 변경 감지(회원수정)
     @Transactional
-    public void updatePassword(Long memberId, String encodedPassword) {
-        Member member = findById(memberId);
-        member.updatePassword(encodedPassword);
+    public void updatePassword(Long id, String encodedPassword) {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + id));
+
+        if (member != null) {
+            member.updatePassword(encodedPassword);
+        }
     }
 
     //비밀번호 찾기 수정 변경 감지(비밀번호 찾기)
     @Transactional
     public void updatePassword(String userId, String encodedPassword) {
-        Member member = findByUserId(userId);
-        member.updatePassword(encodedPassword);
+        Member member = memberRepository.findByUserId(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + userId));
+
+        if (member != null) {
+            member.updatePassword(encodedPassword);
+        }
     }
 
     //비밀번호 찾기시 있는 아이디인지 확인
     public Member userIdCheck(String userId) {
-        return memberRepository.findByUserId(userId).orElse(null);
+        return memberRepository.findByUserId(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + userId));
     }
 
     //휴대폰에 인증번호 발송
@@ -141,7 +158,7 @@ public class MemberService {
         params.put("to", phoneNumber);    // 수신전화번호
         params.put("from", "010383523755");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
         params.put("type", "SMS");
-        params.put("text", "Our neighborhood 휴대폰인증 메시지 : 인증번호는" + "["+cerNum+"]" + "입니다.");
+        params.put("text", "Our neighborhood 휴대폰인증 메시지 : 인증번호는" + "[" + cerNum + "]" + "입니다.");
 
         try {
             JSONObject obj = (JSONObject) coolsms.send(params);
@@ -155,13 +172,15 @@ public class MemberService {
 
     //휴대폰번호 중복검사
     public Member findByPhoneNumber(String phoneNumber) {
-        return memberRepository.findByPhoneNumber(phoneNumber).orElse(null);
+        return memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 전화번호입니다. phoneNumber = " + phoneNumber));
     }
 
     //아이디 찾기
     public String findUserId(String receiverEmail) {
 
-        String userId = memberRepository.findByEmail(receiverEmail).orElse(null).getUserId();
+        String userId = memberRepository.findByEmail(receiverEmail).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 이메일입니다. receiverEmail = " + receiverEmail)).getUserId();
 
         if (userId != null) {
             SimpleMailMessage mailMessage = new SimpleMailMessage();

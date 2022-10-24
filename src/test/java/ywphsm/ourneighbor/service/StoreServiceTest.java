@@ -12,14 +12,12 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
-import ywphsm.ourneighbor.OurNeighborApplication;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -43,7 +41,6 @@ import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = OurNeighborApplication.class)
 @ActiveProfiles("test")
 @Transactional
 class StoreServiceTest {
@@ -52,15 +49,6 @@ class StoreServiceTest {
     WebApplicationContext context;
 
     private MockMvc mvc;
-
-    @Autowired
-    MemberService memberService;
-
-    @Autowired
-    StoreService storeService;
-
-    @Autowired
-    CategoryService categoryService;
 
     @LocalServerPort
     private int port;
@@ -71,6 +59,16 @@ class StoreServiceTest {
     JPAQueryFactory queryFactory;
 
     MockHttpSession session;
+
+    @Autowired
+    MemberService memberService;
+
+    @Autowired
+    StoreService storeService;
+
+    @Autowired
+    CategoryService categoryService;
+
 
     @BeforeEach
     void before() {

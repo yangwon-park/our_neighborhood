@@ -1,7 +1,6 @@
 package ywphsm.ourneighbor.domain.member;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
 import java.util.Map;

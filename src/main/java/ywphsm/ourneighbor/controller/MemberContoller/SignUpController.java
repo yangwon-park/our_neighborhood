@@ -18,10 +18,10 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Random;
 
-@RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/sign_up")
+@RequiredArgsConstructor
 @Controller
+@RequestMapping("/sign_up")
 public class SignUpController {
 
     private final MemberService memberService;

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long>, CategoryRepositoryCustom {
 
-
     List<Category> findAllByOrderByDepthAscParentIdAscNameAsc();
 
     @Query("select c from Category c where c.parent is NULL")

@@ -23,14 +23,14 @@
                     <div class="row gallery-body">
                         <th:block th:each="root: ${rootCategoryList}">
                             <div class="col-md-6 col-sm-6 mb-4 gallery-item">
-                                <a href="#">
-                                    <div class="card card-body border-0 p-0">
-                                        <div class="overlay d-flex flex-column justify-content-center
-                                                align-items-center h-100 w-100 border-2">
-                                            <h2 th:text="${root.name}" class="gallery-title">카테고리 이름</h2>
-                                        </div>
+                                <div class="card card-body category-div border-0 p-0">
+                                    <div class="overlay d-flex flex-column justify-content-center
+                                            align-items-center h-100 w-100 border-2">
+                                        <h2 th:text="${root.name}" class="gallery-title">카테고리 이름</h2>
                                     </div>
-                                </a>
+                                    <input id="index-category" class="index-category" name="categoryId"
+                                           type="hidden" th:value="${root.categoryId}">
+                                </div>
                             </div>
                         </th:block>
                     </div>

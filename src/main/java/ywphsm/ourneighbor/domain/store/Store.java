@@ -2,7 +2,6 @@ package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import ywphsm.ourneighbor.config.AuditingConfig;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
@@ -41,7 +40,6 @@ public class Store extends BaseEntity {
     private Double lon;                // 경도
 
     private String phoneNumber;
-
 
     private String notice;                    // 가게 소식
 

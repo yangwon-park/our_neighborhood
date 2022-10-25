@@ -11,10 +11,16 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
+import ywphsm.ourneighbor.domain.store.distance.Direction;
+import ywphsm.ourneighbor.domain.store.distance.Distance;
+import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
+import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +31,8 @@ import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
 @Service
 @Transactional(readOnly = true) // 데이터 변경 X
 public class StoreService {
+
+    private final EntityManager em;
 
     private final StoreRepository storeRepository;
 
@@ -162,7 +170,36 @@ public class StoreService {
                 memberOfStoreRepository.delete(memberOfStore);
             }
         }
+    }
 
+    // 참고
+    // https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
+    public List<Store> getTop5ByCategories(String categoryId, double lat, double lon) {
 
+        double dist = 1.5;
+
+        Location northEast = Distance.calculatePoint(lat, lon, dist, Direction.NORTHEAST.getAngle());
+        Location southWest = Distance.calculatePoint(lat, lon, dist, Direction.SOUTHWEST.getAngle());
+
+        double nex = northEast.getLat();
+        double ney = northEast.getLon();
+        double swx = southWest.getLat();
+        double swy = southWest.getLon();
+
+        // Native Query
+        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)'", nex, ney, swx, swy);
+
+        return (List<Store>) em.createNativeQuery(
+                        "select * " +
+                                "from store as s " +
+                                "join category_of_store as cs on cs.store_id = s.store_id " +
+                                "where mbrcontains(" +
+                                "ST_LineStringFromText(" + pointFormat + "), " +
+                                "POINT(s.lat, s.lon)) " +
+                                "and cs.category_id = :categoryId",
+                        Store.class)
+                .setParameter("categoryId", Long.parseLong(categoryId))
+                .setMaxResults(5)
+                .getResultList();
     }
 }

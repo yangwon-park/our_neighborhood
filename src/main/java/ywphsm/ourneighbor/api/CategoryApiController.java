@@ -34,6 +34,7 @@ public class CategoryApiController {
         return ResponseEntity.ok(categoryService.checkCategoryDuplicate(name, parent));
     }
 
+
     // @RequestBody 생략 시, Test에서 받아오질 못함
     @PostMapping(value = "/admin/category", produces = "application/json;")
     public Long save(@RequestBody CategoryDTO.Detail dto) {

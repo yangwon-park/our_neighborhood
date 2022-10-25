@@ -110,8 +110,8 @@ var main = {
         })
             .then((resp) => {
                 if (resp.data.count < 1) {
-                    alert('검색 결과가 없어요!!');
-                    window.location.href = 'http://localhost:8080/map';
+                    alert("검색 결과가 없습니다.");
+                    // window.location.href = 'http://localhost:8080/map';
                 }
 
                 for (let i = 0; i < resp.data.data.length; i++) {
@@ -129,7 +129,7 @@ var main = {
             })
             .catch((e) => {
                 console.error(e);
-                alert('왜 에러가 뜰까요??');
+                alert("왜 에러가 뜰까요??");
             });
     },
 
@@ -164,8 +164,8 @@ var main = {
         })
             .then((res) => {
                 if (res.data.count < 1) {
-                    alert('검색 결과가 없습니다.');
-                    window.location.href = 'http://localhost:8080/map';
+                    alert("검색 결과가 없습니다.");
+                    // window.location.href = 'http://localhost:8080/map';
                 }
 
                 for (let i = 0; i < res.data.data.length; i++) {
@@ -382,6 +382,36 @@ var main = {
         }
     },
 
+    getTop5Categories: function (categoryId) {
+        axios({
+            method: "get",
+            url: "/getTop5Categories",
+            params: {
+                categoryId: categoryId
+            }
+        })
+            .then((res) => {
+                if (res.data.count < 1) {
+                    window.location.href = "http://localhost:8080/map";
+                    alert("검색 결과가 없습니다.");
+                }
+
+                console.log(res.data.data);
+
+                for (let i = 0; i < res.data.data.length; i++) {
+                    this.searchResult.push(res.data.data[i])
+                }
+
+                this.displayMarker(this.searchResult, this.getMap());
+
+                sessionStorage.clear();
+                sessionStorage.setItem("categoryId", categoryId);
+            })
+            .catch((e) => {
+                console.error(e);
+                alert('왜 에러가 뜰까요??');
+            });
+    },
 };
 
 main.init();

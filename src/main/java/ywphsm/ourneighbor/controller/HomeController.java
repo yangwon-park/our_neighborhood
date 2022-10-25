@@ -6,22 +6,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import ywphsm.ourneighbor.domain.category.Category;
-import ywphsm.ourneighbor.domain.dto.StoreDTO;
-import ywphsm.ourneighbor.service.CategoryService;
+import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
-import ywphsm.ourneighbor.service.StoreService;
+import ywphsm.ourneighbor.service.CategoryService;
 
-import java.util.ArrayList;
 import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
 public class HomeController {
 
+    private final CategoryService categoryService;
+
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findTop4ByDepth(1L);
+
+        model.addAttribute("rootCategoryList", rootCategoryList);
+
         return "index";
     }
 

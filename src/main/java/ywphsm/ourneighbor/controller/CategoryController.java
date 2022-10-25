@@ -19,8 +19,7 @@ public class CategoryController {
 
     @GetMapping("/admin/category/add")
     public String addCategory(Model model) {
-        List<CategoryDTO> all = categoryService.findAll();
-        log.info("all={}", all);
+        List<CategoryDTO.Detail> all = categoryService.findAll();
         model.addAttribute("all", all);
         model.addAttribute("category", new CategoryDTO());
 

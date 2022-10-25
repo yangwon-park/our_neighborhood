@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -14,9 +15,13 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import ywphsm.ourneighbor.config.security.MemberDetailService;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
@@ -46,6 +51,8 @@ class MenuServiceTest {
     @Autowired
     private WebApplicationContext context;
 
+    MockHttpSession session;
+
     private MockMvc mvc;
 
     @Autowired
@@ -63,6 +70,19 @@ class MenuServiceTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @LocalServerPort
+    private int port;
+
+    @Autowired
+    TestRestTemplate restTemplate;
+
+    public Member login(String userId, String password) {
+        return memberRepository.findByUserId(userId)
+                .filter(member -> passwordEncoder.matches(password, member.getPassword()))
+                .orElse(null);
+
+    }
+
     @BeforeEach
     void before() {
         mvc = MockMvcBuilders
@@ -70,24 +90,12 @@ class MenuServiceTest {
                 .apply(springSecurity())
                 .build();
 
-        Member member1 = new Member("kkk", "kkk", "user1",
-                "유저1", "localhost@gmail.com", "010-1234-1234", 19, 0, Role.USER);
-
-        memberService.join(member1);
-
-        memberRepository.findByUserId(member1.getUserId())
-                .filter(member -> passwordEncoder.matches(member1.getPassword(), member.getPassword()))
-                .orElse(null);
-
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER, member1);
+        Member loginMember = login("arnold1998", "Arnold!(97");
+        session = new MockHttpSession();
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
     }
 
-    @LocalServerPort
-    private int port;
 
-    @Autowired
-    TestRestTemplate restTemplate;
 
     @Test
     @WithMockUser(username = "ADMIN", roles = "ADMIN")
@@ -111,7 +119,7 @@ class MenuServiceTest {
         array.add(json);
 
         mvc.perform(multipart("/seller/menu")
-                        .file(file)
+                        .file(file).session(session)
                         .param("storeId", String.valueOf(storeId))
                         .param("name", name)
                         .param("price", String.valueOf(price))
@@ -133,22 +141,8 @@ class MenuServiceTest {
     @WithMockUser(username = "seller1", roles = "SELLER")
     @DisplayName("메뉴 수정")
     void update() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
-                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
-//                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
-
         Long storeId = 24L;
-
-        MenuDTO.Add dto = MenuDTO.Add.builder()
-                .storeId(storeId)
-                .name("menu")
-                .price(10000)
-                .file(file)
-                .build();
-
-        Long menuId = menuService.save(dto);
-
-        System.out.println("menuId = " + menuId);
+        Long menuId = 970L;
 
         MockMultipartFile newFile = new MockMultipartFile("file", "new.png", "image/png",
                 new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
@@ -169,6 +163,7 @@ class MenuServiceTest {
                 .andExpect(status().isOk());
 
         Menu menu = menuService.findById(menuId);
+
         assertThat(menu.getFile().getUploadedFileName()).isEqualTo("new.png");
         assertThat(menu.getName()).isEqualTo("new");
         assertThat(menu.getPrice()).isEqualTo(12000);
@@ -179,20 +174,8 @@ class MenuServiceTest {
     @WithMockUser(username = "seller1", roles = "SELLER")
     @DisplayName("메뉴 삭제")
     void deleteMenu() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
-//                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
-
         Long storeId = 24L;
-
-        MenuDTO.Add dto = MenuDTO.Add.builder()
-                .storeId(storeId)
-                .name("menu")
-                .price(10000)
-                .file(file)
-                .build();
-
-        Long menuId = menuService.save(dto);
+        Long menuId = 970L;
 
         String url = "http://localhost" + port + "/seller/menu/" + storeId;
 

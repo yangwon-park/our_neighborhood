@@ -44,8 +44,6 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private boolean emailConfirm;
-
     //(N:N) Store
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
@@ -111,15 +109,11 @@ public class Member extends BaseTimeEntity {
         return this.role.getKey();
     }
 
-    //이메일 인증 성공
-    public void emailConfirmSuccess() {
-        this.emailConfirm = true;
-    }
-
 
     //회원 수정
-    public void updateNickname(String nickname) {
+    public void updateMember(String nickname, String email) {
         this.nickname = nickname;
+        this.email =email;
     }
 
     public void updatePhoneNumber(String phoneNumber) {

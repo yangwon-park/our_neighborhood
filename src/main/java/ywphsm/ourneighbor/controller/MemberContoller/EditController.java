@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.*;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.MemberService;
-import ywphsm.ourneighbor.service.email.TokenService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.validation.Valid;
@@ -18,7 +17,6 @@ import javax.validation.Valid;
 public class EditController {
 
     private final MemberService memberService;
-    private final TokenService tokenService;
 
     @GetMapping
     public String memberEdit(@ModelAttribute EditForm editForm,
@@ -26,6 +24,7 @@ public class EditController {
 
         editForm.setId(member.getId());
         editForm.setNickname(member.getNickname());
+        editForm.setEmail(member.getEmail());
 
         return "edit/editForm";
     }
@@ -38,13 +37,16 @@ public class EditController {
         if (memberService.doubleCheck(editForm.getNickname()) != null &&
                 !member.getNickname().equals(editForm.getNickname())) {
             bindingResult.reject("doubleCheck", new Object[]{editForm.getNickname()}, null);
-
-            if (bindingResult.hasErrors()) {
-                return "edit/editForm";
-            }
+        }
+        if (memberService.findByEmail(editForm.getEmail()) != null
+                && !member.getEmail().equals(editForm.getEmail())) {
+            bindingResult.reject("emailDoubleCheck");
+        }
+        if (bindingResult.hasErrors()) {
+            return "edit/editForm";
         }
 
-        memberService.updateNickname(editForm.getId(), editForm.getNickname());
+        memberService.updateMember(editForm.getId(), editForm.getNickname(), editForm.getEmail());
         return "redirect:/user/myPage";
     }
 
@@ -75,36 +77,6 @@ public class EditController {
         memberService.updatePassword(member.getId(), encodedPassword);
 
         return "redirect:/logout";
-    }
-
-    @GetMapping("/confirm_email")
-    public String confirmEmail(@ModelAttribute EmailConfirmForm emailConfirmForm,
-                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
-
-        if (member.isEmailConfirm()) {
-            return "edit/alreadyEmailConfirm";
-        }
-
-        return "edit/EmailConfirmForm";
-    }
-
-    @PostMapping("/confirm_email")
-    public String confirmEmail(@Valid @ModelAttribute EmailConfirmForm emailConfirmForm,
-                               BindingResult bindingResult,
-                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
-
-        if (memberService.findByEmail(emailConfirmForm.getEmail()) != null
-                && !member.getEmail().equals(emailConfirmForm.getEmail())) {
-            bindingResult.reject("emailDoubleCheck");
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "edit/EmailConfirmForm";
-        }
-
-        tokenService.createEmailToken(member.getId(), emailConfirmForm.getEmail());
-
-        return "signUp/confirmEmail";
     }
 
     @GetMapping("/phoneCertified")

@@ -10,7 +10,6 @@ import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.service.MemberService;
-import ywphsm.ourneighbor.service.email.TokenService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,6 @@ import java.util.Random;
 public class SignUpController {
 
     private final MemberService memberService;
-    private final TokenService tokenService;
 
     @GetMapping
     public String signUp(@ModelAttribute MemberForm memberForm, HttpServletRequest request) {
@@ -82,18 +80,8 @@ public class SignUpController {
                 memberForm.getEmail(), memberForm.getNickname(), Role.USER);
 
         memberService.join(member);
-        tokenService.createEmailToken(member.getId(), member.getEmail());
 
-        return "signUp/confirmEmail";
-    }
-
-    @GetMapping("/confirm-email")
-    public String viewConfirmEmail(@RequestParam String token) {
-        if (memberService.confirmEmail(token)) {
-            return "redirect:/login";
-        }
-
-        return "signUp/emailFail";
+        return "redirect:/login";
     }
 
     @GetMapping("/certifiedPhone")

@@ -9,13 +9,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.member.EmailToken;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.email.EmailService;
-import ywphsm.ourneighbor.service.email.TokenService;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -29,7 +27,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenService tokenService;
     private final EmailService emailService;
 
     // 회원 가입
@@ -69,20 +66,6 @@ public class MemberService {
         return passwordEncoder.encode(password);
     }
 
-    //이메일 토큰만료, 인증된 이메일로 변경
-    @Transactional
-    public boolean confirmEmail(String tokenId) {
-        EmailToken findToken = tokenService.findByIdAndExpirationDateAfterAndExpired(tokenId);  //유효한 토큰 찾기
-        if (findToken != null) {
-            findToken.useToken();   // 토큰 만료 로직을 구현 ex) expired 값을 true로 변경
-            Member findMember = findById(findToken.getMemberId());
-            findMember.emailConfirmSuccess(); // 유저의 이메일 인증 값 변경 로직을 구현해주면 된다.
-            return true;
-        }
-
-        return false;
-    }
-
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElse(null);
     }
@@ -94,13 +77,10 @@ public class MemberService {
 
     //회원수정시 닉네임 변경
     @Transactional
-    public void updateNickname(Long id, String nickname) {
-        Member member = memberRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + id));
+    public void updateMember (Long id, String nickname, String email) {
+        Member member = findById(id);
 
-        if (member != null) {
-            member.updateNickname(nickname);
-        }
+        member.updateMember(nickname, email);
     }
 
     //회원수정시 전화번호 변경

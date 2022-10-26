@@ -14,38 +14,48 @@
 <section id="top" class="position-relative">
     <div class="section-content overlay d-flex justify-content-center align-items-center">
         <div class="container-xxl">
-            <div class="row align-items-center">
-                <div class="col-md-9 welcome">
-                    <h1 class="welcome-title fw-light">
-                        Welcome <span class="text-warning fw-bold">주변 핫한 지역 5개 회전목마</span>. Lorem ipsum dolor sit amet,
-                        consectetur adipisicing elit. Hic, officia!
-                    </h1>
+            <div class="row align-items-center mt-3">
+                <div class="gallery-header text-center mt-5">
+                    <h1 class="display-4">주변 인기 스팟 검색</h1>
                     <div class="divider"></div>
-                    <p class="col-sm-10 col-md-12 lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque
-                        deserunt dignissimos doloremque eum odit officia possimus provident quam qui soluta!</p>
-                    <p class="col-sm-2 col-md-12">
-                        <a href="#" class="btn btn-primary">Read More</a>
-                    </p>
                 </div>
-
+                <div class="col-md-9 welcome">
+                    <div class="row gallery-body">
+                        <th:block th:each="root: ${rootCategoryList}">
+                            <div class="col-md-6 col-sm-6 mb-4 gallery-item">
+                                <a href="#">
+                                    <div class="card card-body border-0 p-0">
+                                        <div class="overlay d-flex flex-column justify-content-center
+                                                align-items-center h-100 w-100 border-2">
+                                            <h2 th:text="${root.name}" class="gallery-title">카테고리 이름</h2>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
                 <!--   d-none으로 일단 모든 기기에서 안 보기에 설정 => d-md-block로 md 이상에선 보이게 다시 설정 => 최종적으로 sm 이하에선 안 보임-->
                 <div class="col-md-3 d-none d-md-block letsgo">
                     <div class="card card-body letsgo-card">
                         <div class="letsgo my-3">
-                            <h4 class="lestgo-title card-title text-dark mb-3">핫 플레이스 검색</h4>
+                            <h4 class="lestgo-title card-title text-dark mb-3">인기 스팟 직접 검색</h4>
                             <p class="card-text text-secondary">
                                 <th:block th:if="${session.loginMember eq null}">
-                                    회원님이 원하시는 장소를 가까운 <br/> 순서대로 보여드려요!
+                                    회원님이 원하시는 장소를 <br/>
+                                    필터에 맞게 보여드려요!
                                 </th:block>
                                 <th:block th:if="${session.loginMember ne null}">
-                                    <span th:type="${session.loginMember.getUsername()}"></span>님이 원하시는 장소를 가까운 <br/> 순서대로 보여드려요!
+                                    <span th:type="${session.loginMember.getUsername()}"></span>님이 원하시는 장소를 <br/>
+                                    필터에 맞게 보여드려요!
                                 </th:block>
                             </p>
                         </div>
                         <div class="letsgo-card-form">
                             <form>
                                 <p class="mb-3">
-                                    <button class="btn btn-orange w-100" type="button" onclick=location.href="map">이동</button>
+                                    <button class="btn btn-orange w-100" type="button" onclick=location.href="map">이동
+                                    </button>
                                 </p>
                             </form>
                         </div>
@@ -55,7 +65,7 @@
         </div>
     </div>
 </section>
-
+<div class="main-divider"></div>
 <section id="weather">
     <div class="section-content">
         <div class="container weather">
@@ -64,28 +74,32 @@
                     <div class="row px-md-3">
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
-                                <div id="sky-status" class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+                                <div id="sky-status"
+                                     class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
 
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
-                                <div id="tmp" class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+                                <div id="tmp"
+                                     class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
 
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
-                                <div id="pop" class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+                                <div id="pop"
+                                     class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
 
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
-                                <div id="pm-10-value" class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+                                <div id="pm-10-value"
+                                     class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
 
                                 </div>
                             </div>
@@ -105,7 +119,7 @@
         </div>
     </div>
 </section>
-
+<div class="main-divider"></div>
 <section id="intro">
     <div class="section-content">
         <div class="container intro">
@@ -164,7 +178,7 @@
         </div>
     </div>
 </section>
-
+<div class="main-divider"></div>
 <section id="services">
     <div class="section-content">
         <div class="container services">
@@ -271,7 +285,7 @@
         </div>
     </div>
 </section>
-
+<div class="main-divider"></div>
 <section id="slogan">
     <div class="section-content d-flex align-items-center h-100">
         <div class="container slogan">
@@ -288,7 +302,7 @@
         </div>
     </div>
 </section>
-
+<div class="main-divider"></div>
 <section id="features">
     <div class="section-content">
         <div class="container features">
@@ -330,72 +344,10 @@
         </div>
     </div>
 </section>
-
-<section id="gallery">
-    <div class="section-content">
-        <div class="container gallery">
-            <div class="gallery-header text-center mb-5">
-                <h1 class="display-4">Our Gallery</h1>
-                <div class="divider"></div>
-                <p class="lead text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem debitis
-                    labore nobis nostrum quam quidem voluptatem. Accusantium commodi mollitia voluptatum.</p>
-            </div>
-            <div class="row gallery-body">
-                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
-                    <div class="card card-body border-0 p-0">
-                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
-                            <h2 class="gallery-title">Gallery 1</h2>
-                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
-                    <div class="card card-body border-0 p-0">
-                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
-                            <h2 class="gallery-title">Gallery 2</h2>
-                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
-                    <div class="card card-body border-0 p-0">
-                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
-                            <h2 class="gallery-title">Gallery 3</h2>
-                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
-                    <div class="card card-body border-0 p-0">
-                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
-                            <h2 class="gallery-title">Gallery 4</h2>
-                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
-                    <div class="card card-body border-0 p-0">
-                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
-                            <h2 class="gallery-title">Gallery 5</h2>
-                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4 gallery-item">
-                    <div class="card card-body border-0 p-0">
-                        <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 w-100 border-2">
-                            <h2 class="gallery-title">Gallery 6</h2>
-                            <a class="link-warning text-decoration-none" href="#">View this gallery</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="main-divider"></div>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/weather.js}"></script>
-<!--<script th:src="@{/js/mask.js}"></script>-->
+<script type="module" th:src="@{/js/app.js}"></script>
 </body>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터

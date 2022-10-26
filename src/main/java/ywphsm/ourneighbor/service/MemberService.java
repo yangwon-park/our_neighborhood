@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
@@ -31,7 +32,17 @@ public class MemberService {
 
     // 회원 가입
     @Transactional
-    public Long join(Member member) {
+    public Long save(MemberDTO.Add dto) {
+
+        int age = ChangeBirthToAge(dto.getBirthDate());
+        //패스워드 암호화
+        String encodedPassword = encodedPassword(dto.getPassword());
+
+        Member member = new Member(dto.getUsername(), dto.getBirthDate(),
+                age, dto.getPhoneNumber(),
+                dto.getGender(), dto.getUserId(), encodedPassword,
+                dto.getEmail(), dto.getNickname(), Role.USER);
+
         memberRepository.save(member);
         return member.getId();
     }
@@ -86,12 +97,9 @@ public class MemberService {
     //회원수정시 전화번호 변경
     @Transactional
     public void updatePhoneNumber(Long id, String phoneNumber) {
-        Member member = memberRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + id));
+        Member member = findById(id);
+        member.updatePhoneNumber(phoneNumber);
 
-        if (member != null) {
-            member.updatePhoneNumber(phoneNumber);
-        }
     }
 
     //비밀번호 확인
@@ -102,23 +110,16 @@ public class MemberService {
     //비밀번호 수정 변경 감지(회원수정)
     @Transactional
     public void updatePassword(Long id, String encodedPassword) {
-        Member member = memberRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + id));
-
-        if (member != null) {
-            member.updatePassword(encodedPassword);
-        }
+        Member member = findById(id);
+        member.updatePassword(encodedPassword);
     }
 
     //비밀번호 찾기 수정 변경 감지(비밀번호 찾기)
     @Transactional
     public void updatePassword(String userId, String encodedPassword) {
-        Member member = memberRepository.findByUserId(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + userId));
+        Member member = findByUserId(userId);
+        member.updatePassword(encodedPassword);
 
-        if (member != null) {
-            member.updatePassword(encodedPassword);
-        }
     }
 
     //비밀번호 찾기시 있는 아이디인지 확인

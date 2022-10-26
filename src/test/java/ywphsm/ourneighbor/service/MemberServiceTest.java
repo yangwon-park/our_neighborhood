@@ -59,28 +59,15 @@ class MemberServiceTest {
                 .build();
 
         queryFactory = new JPAQueryFactory(em);
-
-        Member member1 = new Member("kkk", "kkk", "user1",
-                "유저1", null, "010-1234-1234", 19, 0, Role.USER);
-
-        Member member2 = new Member("JJJ", "JJJ", "user2",
-                "유저2", null, "010-1234-1234", 35, 1, Role.USER);
-
-        Member member3 = new Member("ㅁㅁㅁ", "ㅁㅁㅁ", "user3",
-                "유저3", null, "010-1234-1234", 25, 0, Role.USER);
-
-        em.persist(member1);
-        em.persist(member2);
-        em.persist(member3);
     }
 
     @Test
     @DisplayName("회원 가입")
     void join() {
         Member member4 = new Member("kkk", "kkk", "user4",
-                "유저4", null, "010-1234-1234", 19, 0);
+                "유저4", "localhost@naver.com", "010-1234-1234", 19, 0);
 
-        Long memberId = memberService.join(member4);
+        Long memberId = memberService.save(member4);
 
         Member findMember = memberService.findById(memberId);
 
@@ -96,7 +83,7 @@ class MemberServiceTest {
                 .where(member.age.goe(10).and(member.age.lt(30)))
                 .fetch();
 
-        assertThat(memberList).extracting("username").contains("user1", "user3");
+        assertThat(memberList).extracting("username").contains("박양원", "문한성");
     }
 
     @Test
@@ -113,12 +100,12 @@ class MemberServiceTest {
     @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("계정의 권한 업데이트")
     void updateRole() throws Exception {
-        String userId = "kkk";
+        String userId = "ywonp94";
         String role = "판매자";
 
         Member findMember = memberService.findByUserId(userId);
 
-        assertThat(findMember.getRole()).isEqualTo(Role.USER);
+        assertThat(findMember.getRole()).isEqualTo(Role.ADMIN);
 
         String url = "http://localhost:" + port + "/admin/update_role/" + findMember.getId();
 

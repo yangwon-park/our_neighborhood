@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.web.context.request.RequestContextListener;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
@@ -14,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-// Spring Data JPA에서 Auditing 기능 사용을 위해 필수 (등록, 수정 추적)
-@EnableJpaAuditing
 @SpringBootApplication
 public class OurNeighborApplication {
 
@@ -36,20 +35,4 @@ public class OurNeighborApplication {
 		return new JPAQueryFactory(entityManager);
 	}
 
-	// 이게 있어야 작성자 수정자 받을 수 있음
-	// UUID 부분은 실무에선 session에서 사용자 아이디를 받아와서 처리
-	@Bean
-	public AuditorAware<String> auditorProvider(HttpServletRequest request) {
-		return new AuditorAware<String>() {
-			@Override
-			public Optional<String> getCurrentAuditor() {
-				HttpSession session = request.getSession();
-				Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-				if (member == null) {
-					return Optional.empty();
-				}
-				return Optional.of(member.getEmail());
-			}
-		};
-	}
 }

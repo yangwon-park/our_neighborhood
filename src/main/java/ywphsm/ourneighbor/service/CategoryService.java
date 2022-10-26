@@ -26,7 +26,7 @@ public class CategoryService {
 
     // 카테고리 등록
     @Transactional
-    public Long save(CategoryDTO dto) {
+    public Long save(CategoryDTO.Detail dto) {
 
         // parent, child는 빠져있음
         Category category = dto.toEntity();
@@ -71,22 +71,28 @@ public class CategoryService {
         return categoryId;
     }
 
-    public CategoryDTO findByName(String name) {
-        Category category = categoryRepository.findByName(name);
-        return new CategoryDTO(category);
+    public CategoryDTO.Detail findByName(String name) {
+        return new CategoryDTO.Detail(categoryRepository.findByName(name));
+    }
+
+    public List<CategoryDTO.Simple> findTop4ByDepth(Long depth) {
+        List<Category> category = categoryRepository.findTop4ByDepth(depth);
+
+        return category.stream().map(CategoryDTO.Simple::of).collect(Collectors.toList());
     }
 
     // 단순히 모든 카테고리들을 보여주는 쿼리
-    public List<CategoryDTO> findAll() {
+    public List<CategoryDTO.Detail> findAll() {
         return categoryRepository.findAllByOrderByDepthAscParentIdAscNameAsc().stream()
-                .map(CategoryDTO::new).collect(Collectors.toList());
+                .map(CategoryDTO.Detail::new).collect(Collectors.toList());
     }
 
     // 하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리
-    public List<CategoryDTO> findAllCategoriesHier() {
-        return categoryRepository.findByCategories().stream().map(CategoryDTO::of).collect(Collectors.toList());
+    public List<CategoryDTO.Detail> findAllCategoriesHier() {
+        return categoryRepository.findByCategories().stream().map(CategoryDTO.Detail::of).collect(Collectors.toList());
     }
 
+    // 중복 체크 로직
     public boolean checkCategoryDuplicate(String categoryName, Category parent) {
         return categoryRepository.existsByNameAndParent(categoryName, parent);
     }

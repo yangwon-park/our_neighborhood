@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ywphsm.ourneighbor.domain.store.distance.Distance;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.StoreService;
@@ -68,12 +67,13 @@ public class MapSearchController {
 
         List<Store> findStores = storeService.getTop5ByCategories(categoryId, Double.parseDouble(myLat), Double.parseDouble(myLon));
 
-        for (Store findStore : findStores) {
-            System.out.println("findStore = " + findStore.getName());
-        }
-
-        List<SimpleSearchStoreDTO> result = findStores.stream()
+        List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
+
+        calculateHowFarToTheTarget(myLat, myLon, dto);
+
+        List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
+                -> simpleSearchStoreDTO.getDistance() <= 1.5).collect(Collectors.toList());
 
         return new ResultClass<>(result.size(), result);
     }

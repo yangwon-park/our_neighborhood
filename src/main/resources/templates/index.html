@@ -36,10 +36,10 @@
                     </div>
                 </div>
                 <!--   d-none으로 일단 모든 기기에서 안 보기에 설정 => d-md-block로 md 이상에선 보이게 다시 설정 => 최종적으로 sm 이하에선 안 보임-->
-                <div class="col-md-3 d-none d-md-block letsgo">
-                    <div class="card card-body letsgo-card">
-                        <div class="letsgo my-3">
-                            <h4 class="lestgo-title card-title text-dark mb-3">인기 스팟 직접 검색</h4>
+                <div class="col-md-3 d-none d-md-block search-div">
+                    <div class="card card-body search-card">
+                        <div class="my-3">
+                            <h4 class="search-div-title card-title text-dark mb-3">인기 스팟 직접 검색</h4>
                             <p class="card-text text-secondary">
                                 <th:block th:if="${session.loginMember eq null}">
                                     회원님이 원하시는 장소를 <br/>

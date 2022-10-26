@@ -40,7 +40,7 @@ var main = {
         var pointerImage = new kakao.maps.MarkerImage(pointerSrc, pointerSize);
 
         // 현재 위치로 맵 중심 정렬 - geolocation (배포시, https 필수)
-        if ('geolocation' in navigator) {
+        if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
                 var lat = position.coords.latitude,
                     lon = position.coords.longitude;
@@ -64,27 +64,26 @@ var main = {
             })
         } else {
             var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-                message = 'geolocation을 사용할 수 없음'
+                message = "geolocation을 사용할 수 없음"
 
-            map.setCenter(locPosition)
+            map.setCenter(locPosition, message)
         }
 
         return map;
     },
 
     setSearchKeywordEvent: function (map) {
-
         let prevKeyword = sessionStorage.getItem("keyword");
 
         // 엔터키 입력하면 searchByKeyword 동작
-        document.getElementById('keyword').addEventListener('keydown', (e) => {
-            if (e.isComposing === false && e.code === 'Enter') { // 한글 입력 시 이벤트 두번 발생 방지
+        document.getElementById("keyword").addEventListener("keydown", (e) => {
+            if (e.isComposing === false && e.code === "Enter") { // 한글 입력 시 이벤트 두번 발생 방지
                 this.searchByKeyword(prevKeyword, map);
             }
         });
 
         // 클릭 이벤트 시 searchByKeyword 동작
-        document.getElementById('searchBtn').addEventListener('click', () => {
+        document.getElementById("searchBtn").addEventListener("click", () => {
             this.searchByKeyword(prevKeyword, map);
         });
     },
@@ -150,7 +149,6 @@ var main = {
                 this.searchByCategories(categoryId, dist, map);
             });
         }
-
     },
 
     searchByCategories: function (categoryId, dist, map) {
@@ -184,13 +182,44 @@ var main = {
             });
     },
 
+    getTop5Categories: function (categoryId, map) {
+        axios({
+            method: "get",
+            url: "/getTop5Categories",
+            params: {
+                categoryId: categoryId
+            }
+        })
+            .then((res) => {
+                if (res.data.count < 1) {
+                    sessionStorage.clear();
+                    alert("검색 결과가 없습니다. 다른 조건으로 검색해보시겠어요?");
+
+                    return;
+                }
+
+                for (let i = 0; i < res.data.data.length; i++) {
+                    this.searchResult.push(res.data.data[i])
+                }
+
+                this.displayMarker(this.searchResult, map);
+
+                sessionStorage.clear();
+                sessionStorage.setItem("cateFromHome", categoryId);
+            })
+            .catch((e) => {
+                console.error(e);
+                alert("왜 에러가 뜰까요??");
+            });
+    },
+
     getCategories: async function () {
         await axios({
             method: "get",
             url: "/categoriesHier",
         }).then((resp) => {
             let rootChildren = resp.data.children;
-            let mainChildren = this.getMainCategories(rootChildren);
+            this.getMainCategories(rootChildren);
         }).catch((e) => {
             console.error(e);
         })
@@ -221,7 +250,7 @@ var main = {
 
 
     /*
-        ===== 아래부터 지도 표현 메소드 =====
+        === 아래부터 지도 표현 로직 ===
      */
     markers: [],
 
@@ -346,71 +375,49 @@ var main = {
     },
 
     setPreviousData: function (map) {
-        window.onpageshow = (ev) => {
-            if (ev.persisted || (window.performance &&
+        window.onpageshow = (e) => {
+            if (e.persisted || window.performance &&
+                (performance.getEntriesByType("navigation")[0].type === "navigate")) {
+
+                if (("sessionStorage" in window) && window["sessionStorage"] !== null) {
+                    if (sessionStorage.getItem("cateFromHome") !== null) {
+                        let cateFromHome = sessionStorage.getItem("cateFromHome");
+
+                        this.getTop5Categories(cateFromHome, map);
+                    }
+                }
+            }
+
+            if (e.persisted || (window.performance &&
                 (performance.getEntriesByType("navigation")[0].type === "reload" ||
                     performance.getEntriesByType("navigation")[0].type === "back_forward"))) {
 
-                console.log("새로고침 or 뒤로가기로 접근");
-
                 // sessionStorage 지원 여부 확인
                 if (("sessionStorage" in window) && window["sessionStorage"] !== null) {
-
                     if (sessionStorage.getItem("keyword") !== null) {
-
-                        console.log("keyword not null")
                         let prevKeyword = sessionStorage.getItem("keyword");
-
-                        console.log("prevKeyword=", prevKeyword);
 
                         this.searchByKeyword(prevKeyword, map);
                     }
 
                     if (sessionStorage.getItem("dist") !== null &&
                         sessionStorage.getItem("categoryId") !== null) {
-
-                        console.log("dist, categoryId not null")
                         let dist = sessionStorage.getItem("dist");
                         let categoryId = sessionStorage.getItem("categoryId");
 
                         this.searchByCategories(categoryId, dist, map);
+                    }
+
+                    if (sessionStorage.getItem("cateFromHome") != null) {
+                        let cateFromHome = sessionStorage.getItem("cateFromHome");
+
+                        this.getTop5Categories(cateFromHome, map);
                     }
                 }
 
                 sessionStorage.clear();
             }
         }
-    },
-
-    getTop5Categories: function (categoryId) {
-        axios({
-            method: "get",
-            url: "/getTop5Categories",
-            params: {
-                categoryId: categoryId
-            }
-        })
-            .then((res) => {
-                if (res.data.count < 1) {
-                    window.location.href = "http://localhost:8080/map";
-                    alert("검색 결과가 없습니다.");
-                }
-
-                console.log(res.data.data);
-
-                for (let i = 0; i < res.data.data.length; i++) {
-                    this.searchResult.push(res.data.data[i])
-                }
-
-                this.displayMarker(this.searchResult, this.getMap());
-
-                sessionStorage.clear();
-                sessionStorage.setItem("categoryId", categoryId);
-            })
-            .catch((e) => {
-                console.error(e);
-                alert('왜 에러가 뜰까요??');
-            });
     },
 };
 

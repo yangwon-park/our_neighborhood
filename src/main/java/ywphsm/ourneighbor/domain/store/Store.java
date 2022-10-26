@@ -6,6 +6,7 @@ import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
+import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.menu.Menu;
@@ -74,6 +75,12 @@ public class Store extends BaseEntity {
     /*
         JPA 연관 관계 매핑
      */
+    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL)
+    private UploadFile file;
+
+    public void setFile(UploadFile file) {
+        this.file = file;
+    }
 
     // Menu (1:N)
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

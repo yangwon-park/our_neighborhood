@@ -29,7 +29,7 @@ main {
 .btn-toggle:focus {
   /*color: rgba(0, 0, 0, .85);*/
   color: rgba(255, 255, 255);
-  background-color: #fd7e14;
+  background-color: #F01D04;
 }
 
 /* 버튼 > 모양*/
@@ -56,7 +56,7 @@ main {
 .btn-toggle[aria-expanded="true"] {
   /*color: rgba(0, 0, 0, .85);*/
   color: rgba(255, 255, 255);
-  background-color: #fd7e14;
+  background-color: #F01D04;
 }
 .btn-toggle[aria-expanded="true"]::before {
   transform: rotate(90deg);
@@ -72,7 +72,7 @@ main {
 .btn-toggle-nav a:hover,
 .btn-toggle-nav a:focus {
   color: rgba(255, 255, 255);
-  background-color: #fd7e14;
+  background-color: #F01D04;
 }
 
 .scrollarea {

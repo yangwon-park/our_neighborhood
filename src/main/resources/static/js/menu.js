@@ -136,7 +136,7 @@ var main = {
     save: function () {
         const menuForm = document.getElementById("menu-add-form");
 
-        let formData = new FormData(menuForm);
+        const formData = new FormData(menuForm);
 
         for (let k of formData.keys()) {
             console.log(k);

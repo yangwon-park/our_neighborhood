@@ -349,59 +349,6 @@
     </div>
 </section>
 <div class="main-divider"></div>
-<script th:inline="javascript">
-    function ranDomInt(min, max) {
-        return Math.floor(Math.random() * (max)) + min;
-    }
-
-    const restDiv = document.getElementById("cate-img1");
-    const cafeDiv = document.getElementById("cate-img2");
-    const barDiv = document.getElementById("cate-img3");
-    const leisureDiv = document.getElementById("cate-img4");
-
-    let restaurantImages = [];
-    let cafeImages = [];
-    let barImages = [];
-    let leisureImages = [];
-
-    [# th:each="img: ${restaurantImages}"]
-    restaurantImages.push([[${img}]]);
-    [/]
-
-    [# th:each="img: ${cafeImages}"]
-    cafeImages.push([[${img}]]);
-    [/]
-
-    [# th:each="img: ${barImages}"]
-    barImages.push([[${img}]]);
-    [/]
-
-    [# th:each="img: ${leisureImages}"]
-    leisureImages.push([[${img}]]);
-    [/]
-
-    if (restaurantImages.length > 0) {
-        let restNum = ranDomInt(0, restaurantImages.length);
-        restDiv.style.backgroundImage = `url(${restaurantImages[restNum]})`;
-    }
-
-    if (cafeImages.length > 0) {
-        let cafeNum = ranDomInt(0, cafeImages.length);
-        cafeDiv.style.backgroundImage = `url(${cafeImages[cafeNum]})`;
-    }
-
-    if (barImages.length > 0) {
-        let barNum = ranDomInt(0, barImages.length);
-        barDiv.style.backgroundImage = `url(${barImages[barNum]})`;
-    }
-
-    if (leisureImages.length > 0) {
-        let leisureNum = ranDomInt(0, leisureImages.length);
-        leisureDiv.style.backgroundImage = `url(${leisureImages[leisureNum]})`;
-    }
-
-
-</script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/weather.js}"></script>
 <script type="module" th:src="@{/js/app.js}"></script>

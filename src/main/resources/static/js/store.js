@@ -53,15 +53,14 @@ var main = {
 
 
         const cateValid = document.getElementById("store-category-valid");
-
         const mainCateVal = document.getElementById("main-cate").options
                             [document.getElementById("main-cate").selectedIndex].value;
         const midCateVal = document.getElementById("mid-cate").options
                             [document.getElementById("mid-cate").selectedIndex].value;
         const subCateVal = document.getElementById("sub-cate").options
                             [document.getElementById("sub-cate").selectedIndex].value;
-
         const storeForm = document.getElementById('store-add-form');
+
         const formData = new FormData(storeForm);
 
         for (const el in els) {

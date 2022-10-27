@@ -31,25 +31,28 @@ public class HomeController {
 
         List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
 
-        // 최선의 코드인 것 같지가 않음
-        // 더 좋은 방법이 생각나거나 알게 된다면 추후에 리팩토링하자
-        List<String> restaurantImages = storeService.getTop5ImageByCategories((rootCategoryList.get(0).getCategoryId().toString()),
-                Double.parseDouble(lat), Double.parseDouble(lon));
 
-        List<String> cafeImages = storeService.getTop5ImageByCategories((rootCategoryList.get(1).getCategoryId().toString()),
-                Double.parseDouble(lat), Double.parseDouble(lon));
+        if (lat != null && lon != null) {
+            // 최선의 코드인 것 같지가 않음
+            // 더 좋은 방법이 생각나거나 알게 된다면 추후에 리팩토링하자
+            List<String> restaurantImages = storeService.getTop5ImageByCategories((rootCategoryList.get(0).getCategoryId().toString()),
+                    Double.parseDouble(lat), Double.parseDouble(lon));
 
-        List<String> barImages = storeService.getTop5ImageByCategories((rootCategoryList.get(2).getCategoryId().toString()),
-                Double.parseDouble(lat), Double.parseDouble(lon));
+            List<String> cafeImages = storeService.getTop5ImageByCategories((rootCategoryList.get(1).getCategoryId().toString()),
+                    Double.parseDouble(lat), Double.parseDouble(lon));
 
-        List<String> leisureImages = storeService.getTop5ImageByCategories((rootCategoryList.get(3).getCategoryId().toString()),
-                Double.parseDouble(lat), Double.parseDouble(lon));
+            List<String> barImages = storeService.getTop5ImageByCategories((rootCategoryList.get(2).getCategoryId().toString()),
+                    Double.parseDouble(lat), Double.parseDouble(lon));
+
+            List<String> leisureImages = storeService.getTop5ImageByCategories((rootCategoryList.get(3).getCategoryId().toString()),
+                    Double.parseDouble(lat), Double.parseDouble(lon));
 
 
-        model.addAttribute("restaurantImages", restaurantImages);
-        model.addAttribute("cafeImages", cafeImages);
-        model.addAttribute("barImages", barImages);
-        model.addAttribute("leisureImages", leisureImages);
+            model.addAttribute("restaurantImages", restaurantImages);
+            model.addAttribute("cafeImages", cafeImages);
+            model.addAttribute("barImages", barImages);
+            model.addAttribute("leisureImages", leisureImages);
+        }
 
         model.addAttribute("rootCategoryList", rootCategoryList);
 

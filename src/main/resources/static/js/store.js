@@ -6,24 +6,24 @@ var main = {
 
         _this.getCategories();
 
-        const storeSaveBtn = document.getElementById('store-save');
-        const storeUpdateBtn = document.getElementById('store-update');
-        const storeDeleteBtn = document.getElementById('store-delete');
+        const storeSaveBtn = document.getElementById("store-save");
+        const storeUpdateBtn = document.getElementById("store-update");
+        const storeDeleteBtn = document.getElementById("store-delete");
 
         if (storeSaveBtn !== null) {
-            storeSaveBtn.addEventListener('click', () => {
+            storeSaveBtn.addEventListener("click", () => {
                 _this.save();
             });
         }
 
         if (storeUpdateBtn !== null) {
-            storeUpdateBtn.addEventListener('click', () => {
+            storeUpdateBtn.addEventListener("click", () => {
                 _this.update();
             });
         }
 
         if (storeDeleteBtn !== null) {
-            storeDeleteBtn.addEventListener('click', () => {
+            storeDeleteBtn.addEventListener("click", () => {
                 _this.delete();
             });
         }
@@ -136,13 +136,13 @@ var main = {
     },
 
     delete: function () {
-        const storeIdVal = document.getElementById('storeId').value;
+        const storeIdVal = document.getElementById("storeId").value;
 
         axios({
             method: "delete",
             url: "/admin/store/" + storeIdVal
         }).then((resp) => {
-            alert('매장 삭제가 완료됐습니다.');
+            alert("매장 삭제가 완료됐습니다.");
             window.location.href = "/";
         }).catch((error) => {
             console.error(error);

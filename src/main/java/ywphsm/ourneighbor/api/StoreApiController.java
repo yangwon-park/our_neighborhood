@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
@@ -55,6 +56,40 @@ public class StoreApiController {
         log.info("dto={}", dto);
 
         return storeService.update(storeId, dto, categoryId);
+    }
+
+
+
+    @PostMapping("/seller/store/editImage/{storeId}")
+    public Long saveImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
+                            @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+                            HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        if (member.getRole().equals(Role.SELLER)) {
+            boolean storeOwner = storeService.OwnerCheck(member, storeId);
+            if (!storeOwner) {
+                String referer = request.getHeader("Referer");
+                response.sendRedirect(referer);
+            }
+        }
+
+        return storeService.saveMainImage(storeId, file);
+    }
+
+    @PutMapping("/seller/store/editImage/{storeId}")
+    public Long updateImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
+                            @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+                            HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        if (member.getRole().equals(Role.SELLER)) {
+            boolean storeOwner = storeService.OwnerCheck(member, storeId);
+            if (!storeOwner) {
+                String referer = request.getHeader("Referer");
+                response.sendRedirect(referer);
+            }
+        }
+
+        return storeService.updateMainImage(storeId, file);
     }
 
     @DeleteMapping("/admin/store/{storeId}")

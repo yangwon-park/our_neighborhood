@@ -33,9 +33,6 @@ var main = {
         let mask = document.getElementById('mask');
         mask.style.display = "none";
         mask.remove();
-
-        // $('#mask').hide();
-        // $('#mask').remove();
     },
 }
 

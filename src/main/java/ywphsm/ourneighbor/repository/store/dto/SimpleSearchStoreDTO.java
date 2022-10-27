@@ -11,11 +11,17 @@ import ywphsm.ourneighbor.domain.store.StoreStatus;
 public class SimpleSearchStoreDTO {
 
     private Long storeId;
+
     private String name;
+
     private Double lon;
+
     private Double lat;
+
     private String phoneNumber;
+
     private StoreStatus status;
+
     private Address address;
 
     private Double distance;

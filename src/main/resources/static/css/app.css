@@ -34,11 +34,11 @@
     --breakpoint-xl: 1200px;
     --font-family-sans-serif: Open Sans, sans-serif;
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    accent-color: #fb6340;
+    accent-color: #F01D04;
 }
 
 input[type=radio] {
-    accent-color: #fb6340;
+    accent-color: #F01D04;
     width: 1.25rem;
     height: 1.25rem;
     vertical-align: middle;
@@ -147,7 +147,7 @@ body {
 }
 
 .navbar {
-    background-color: #FD7E14;
+    background-color: #F01D04;
 }
 
 .navbar li,
@@ -157,12 +157,12 @@ body {
 }
 
 .orange {
-    color: #FD7E14;
+    color: #F01D04;
 }
 
 .hr-orange {
     height: 1rem;
-    background: #FD7E14;
+    background: #F01D04;
     border: 0;
 }
 
@@ -196,15 +196,15 @@ body {
 
 .btn-orange {
     color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
+    border-color: #F01D04;
+    background-color: #F01D04;
     box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
 }
 
 .btn-orange:hover {
     color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
+    border-color: #F01D04;
+    background-color: #F01D04;
 }
 
 .btn-orange:focus {
@@ -213,13 +213,13 @@ body {
 
 .btn-orange:disabled {
     color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
+    border-color: #F01D04;
+    background-color: #F01D04;
 }
 
 .btn-orange:not(:disabled):not(.disabled):active {
     color: #fff;
-    border-color: #FD7E14;
+    border-color: #F01D04;
     background-color: #EBE40D;
 }
 
@@ -292,6 +292,9 @@ body {
     transition: all 0.4s ease-in-out;
 }
 
+#top .search-card {
+    border: 1px solid #F01D04 !important;
+}
 
 #top .gallery-item:nth-of-type(1) .card {
     background-image: url('../images/port1.jpg');
@@ -490,7 +493,7 @@ body {
 
 
 .OPEN {
-    background: #fd7e14;
+    background: #F01D04;
 }
 
 .BREAK {
@@ -508,7 +511,7 @@ body {
 }
 
 .menu-feat-BEST {
-    background: #FD7E14;
+    background: #0c63e4;
 }
 
 .menu-feat-SIGN {
@@ -529,4 +532,21 @@ body {
 
 .park-NOPARKINGSPACE {
     color: #ff253a;
+}
+
+.star-rating {
+    width: 205px;
+}
+
+.star-rating, .star-rating span {
+    display: inline-block;
+    height: 39px;
+    overflow: hidden;
+    background: url(/images/star/star.png) no-repeat;
+}
+
+.star-rating span {
+    background-position: left bottom;
+    line-height: 0;
+    vertical-align: top;
 }

@@ -42,8 +42,8 @@ public class StoreController {
     private final ReviewService reviewService;
 
     private final MemberService memberService;
+
     private final HashtagOfStoreService hashtagOfStoreService;
-    private final HashtagOfMenuService hashtagOfMenuService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -163,4 +163,5 @@ public class StoreController {
         model.addAttribute("store", new StoreDTO.Detail());
         return "store/list_by_admin";
     }
+
 }

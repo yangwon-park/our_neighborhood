@@ -2,122 +2,36 @@ package ywphsm.ourneighbor.controller.MemberContoller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.*;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.login.SessionConst;
-
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user/member_edit")
 public class EditController {
 
-    private final MemberService memberService;
-
     @GetMapping
-    public String memberEdit(@ModelAttribute EditForm editForm,
+    public String memberEdit(@ModelAttribute(name = "editForm") EditForm editForm,
                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
-        editForm.setId(member.getId());
+        editForm.setMemberId(member.getId());
         editForm.setNickname(member.getNickname());
         editForm.setEmail(member.getEmail());
+        editForm.setPhoneNumber(member.getPhoneNumber());
 
-        return "edit/editForm";
+        return "member/edit/editForm";
     }
 
-    @PostMapping
-    public String memberEdit(@Valid @ModelAttribute EditForm editForm, BindingResult bindingResult) {
-
-        Member member = memberService.findById(editForm.getId());
-
-        if (memberService.doubleCheck(editForm.getNickname()) != null &&
-                !member.getNickname().equals(editForm.getNickname())) {
-            bindingResult.reject("doubleCheck", new Object[]{editForm.getNickname()}, null);
-        }
-        if (memberService.findByEmail(editForm.getEmail()) != null
-                && !member.getEmail().equals(editForm.getEmail())) {
-            bindingResult.reject("emailDoubleCheck");
-        }
-        if (bindingResult.hasErrors()) {
-            return "edit/editForm";
-        }
-
-        memberService.updateMember(editForm.getId(), editForm.getNickname(), editForm.getEmail());
-        return "redirect:/user/myPage";
-    }
-
-    @GetMapping("/password_edit")
+    @GetMapping("/password")
     public String passwordEdit(@ModelAttribute PasswordEditForm passwordEditForm) {
-        return "edit/passwordEditForm";
+        return "member/edit/passwordEditForm";
     }
 
-    @PostMapping("/password_edit")
-    public String passwordEdit(@Valid @ModelAttribute PasswordEditForm passwordEditForm,
-                               BindingResult bindingResult,
-                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
-
-        if (!memberService.passwordCheck(member.getPassword(), passwordEditForm.getBeforePassword())) {
-            bindingResult.reject("passwordEqCheck");
-        }
-
-        if (!passwordEditForm.getAfterPassword().equals(passwordEditForm.getPasswordCheck())) {
-            bindingResult.reject("passwordCheck");
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "/edit/passwordEditForm";
-        }
-
-        String encodedPassword = memberService.encodedPassword(passwordEditForm.getAfterPassword());
-
-        memberService.updatePassword(member.getId(), encodedPassword);
-
-        return "redirect:/logout";
+    @GetMapping("/phoneNumber")
+    public String edit_phoneNumber(@ModelAttribute(name = "form") PhoneNumberEditForm phoneNumberEditForm) {
+        return "member/edit/phoneEditForm";
     }
 
-    @GetMapping("/phoneCertified")
-    public String edit_phoneCertified(@ModelAttribute PhoneNumberEditForm phoneNumberEditForm,
-                                      @SessionAttribute(name = SessionConst.PHONE_CERTIFIED) PhoneCertifiedForm phoneSession) {
-
-        phoneNumberEditForm.setPhoneNumber(phoneSession.getPhoneNumber());
-        return "edit/phoneCertifiedForm";
-    }
-
-    @PostMapping("/phoneCertified")
-    public String edit_phoneCertified(@Valid @ModelAttribute PhoneNumberEditForm phoneNumberEditForm,
-                                      BindingResult bindingResult,
-                                      @SessionAttribute(name = SessionConst.PHONE_CERTIFIED) PhoneCertifiedForm phoneSession,
-                                      @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
-
-        if (!phoneNumberEditForm.getPhoneNumber().equals(phoneSession.getPhoneNumber()) ||
-                !phoneNumberEditForm.getCertifiedNumber().equals(phoneSession.getCertifiedNumber())) {
-            bindingResult.reject("phoneCertifiedFail");
-        }
-
-        if (memberService.findByPhoneNumber(phoneNumberEditForm.getPhoneNumber()) != null &&
-        !member.getPhoneNumber().equals(phoneNumberEditForm.getPhoneNumber())) {
-            bindingResult.reject("phoneDoubleCheck");
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "edit/phoneCertifiedForm";
-        }
-
-        memberService.updatePhoneNumber(member.getId(), phoneNumberEditForm.getPhoneNumber());
-
-
-        return "redirect:/logout";
-    }
-
-    //회원탈퇴
-    @GetMapping("/withdrawal")
-    public String withdrawal(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
-
-        memberService.withdrawal(member.getId());
-        return "redirect:/logout";
-    }
 }

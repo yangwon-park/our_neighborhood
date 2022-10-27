@@ -4,13 +4,74 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import lombok.Builder;
+import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.menu.MenuFeat;
+import ywphsm.ourneighbor.domain.menu.MenuType;
+import ywphsm.ourneighbor.domain.store.Store;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MemberDTO {
+
+    @Data
+    @NoArgsConstructor
+    public static class Add {
+
+        @NotBlank
+        private String username;
+
+        @NotBlank
+        private String nickname;
+
+        @NotBlank
+        private String birthDate;
+
+        @NotNull
+        private int gender;
+
+        @NotBlank
+        private String userId;
+
+        @NotBlank
+        private String password;
+
+        @NotBlank
+        private String passwordCheck;
+
+        @Email
+        @NotBlank
+        private String email;
+
+        @NotBlank
+        private String phoneNumber;
+
+        @NotBlank
+        private String certifiedNumber;
+
+
+        @Builder
+        public Add(String username, String nickname, String birthDate, int gender, String userId, String password, String passwordCheck, String email, String phoneNumber, String certifiedNumber) {
+            this.username = username;
+            this.nickname = nickname;
+            this.birthDate = birthDate;
+            this.gender = gender;
+            this.userId = userId;
+            this.password = password;
+            this.passwordCheck = passwordCheck;
+            this.email = email;
+            this.phoneNumber = phoneNumber;
+            this.certifiedNumber = certifiedNumber;
+        }
+    }
 
     @Data
     @NoArgsConstructor

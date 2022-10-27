@@ -69,7 +69,7 @@ class MemberServiceTest {
         Member member4 = new Member("kkk", "kkk", "user4",
                 "유저4", "localhost@naver.com", "010-1234-1234", 19, 0);
 
-        Long memberId = memberService.join(member4);
+        Long memberId = memberService.save(member4);
 
         Member findMember = memberService.findById(memberId);
 

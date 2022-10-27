@@ -6,7 +6,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ywphsm.ourneighbor.controller.form.FindPasswordForm;
 import ywphsm.ourneighbor.controller.form.FindUserIdForm;
 import ywphsm.ourneighbor.service.MemberService;
@@ -21,7 +20,7 @@ public class FindUserController {
 
     @GetMapping("/findUserId")
     public String findId(@ModelAttribute FindUserIdForm findUserIdForm) {
-        return "login/findUserId";
+        return "member/findUserId";
     }
 
     @PostMapping("/findUserId")
@@ -29,7 +28,7 @@ public class FindUserController {
                          BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "login/findUserId";
+            return "member/findUserId";
         }
 
         memberService.findUserId(findUserIdForm.getEmail());
@@ -39,7 +38,7 @@ public class FindUserController {
 
     @GetMapping("/findPassword")
     public String findPassword(@ModelAttribute FindPasswordForm findPasswordForm) {
-        return "login/findPassword";
+        return "member/findPassword";
     }
 
     @PostMapping("/findPassword")
@@ -55,7 +54,7 @@ public class FindUserController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "login/findPassword";
+            return "member/findPassword";
         }
 
         String encodedPassword = memberService.encodedPassword(findPasswordForm.getNewPassword());

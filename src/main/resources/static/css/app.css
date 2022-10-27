@@ -255,10 +255,28 @@ body {
     top: 0;
 }
 
-#top .card .overlay:hover {
-    opacity: 1;
-    /*color: #fff;*/
+#top .card .overlay {
+    background-color: rgba(96, 125, 139, 0.3);
+    padding: 1.5rem;
+    border-radius: 0.25rem;
+    /*transition: all 0.4s ease-in-out;*/
+    font-weight: bold;
+    color: #fff;
 }
+
+
+#top .search-card {
+    border: 1px solid #F01D04 !important;
+    transition: all 0.4s ease-in-out;
+}
+
+#top .search-div .search-card .btn {
+    transition: all 0.4s ease-in-out;
+}
+
+/*#top .card .overlay:hover {*/
+/*    color: #fff;*/
+/*}*/
 
 #top .divider {
     width: 10%;
@@ -284,17 +302,7 @@ body {
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
-#top .card .overlay {
-    background-color: rgba(96, 125, 139, 0.3);
-    opacity: 0;
-    padding: 1.5rem;
-    border-radius: 0.25rem;
-    transition: all 0.4s ease-in-out;
-}
 
-#top .search-card {
-    border: 1px solid #F01D04 !important;
-}
 
 #top .gallery-item:nth-of-type(1) .card {
     background-image: url('../images/port1.jpg');

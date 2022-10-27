@@ -16,16 +16,19 @@
         <div class="container-xxl">
             <div class="row align-items-center mt-3">
                 <div class="gallery-header text-center mt-5">
-                    <h1 class="display-4">주변 인기 스팟 검색</h1>
+                    <h1 class="display-4 orange">주변 인기 스팟 검색</h1>
                     <div class="divider"></div>
                 </div>
                 <div class="col-md-9 welcome">
                     <div class="row gallery-body">
-                        <th:block th:each="root: ${rootCategoryList}">
+                        <th:block th:each="root, i: ${rootCategoryList}">
                             <div class="col-md-6 col-sm-6 mb-4 gallery-item">
                                 <div class="card card-body category-div border-0 p-0">
                                     <div class="overlay d-flex flex-column justify-content-center
-                                            align-items-center h-100 w-100 border-2">
+                                            align-items-center h-100 w-100 border-2"
+                                         style="background-size: cover; background-position: center;
+                                                background-repeat: no-repeat"
+                                         th:id="|cate-img${i.index+1}|">
                                         <h2 th:text="${root.name}" class="gallery-title">카테고리 이름</h2>
                                     </div>
                                     <input id="index-category" class="index-category" name="categoryId"
@@ -39,7 +42,8 @@
                 <div class="col-md-3 d-none d-md-block search-div">
                     <div class="card card-body search-card">
                         <div class="my-3">
-                            <h4 class="search-div-title card-title text-dark mb-3">인기 스팟 직접 검색</h4>
+                            <h4 class="search-div-title card-title
+                                       text-dark mb-3">인기 스팟 직접 검색</h4>
                             <p class="card-text text-secondary">
                                 <th:block th:if="${session.loginMember eq null}">
                                     회원님이 원하시는 장소를 <br/>
@@ -345,6 +349,59 @@
     </div>
 </section>
 <div class="main-divider"></div>
+<script th:inline="javascript">
+    function ranDomInt(min, max) {
+        return Math.floor(Math.random() * (max)) + min;
+    }
+
+    const restDiv = document.getElementById("cate-img1");
+    const cafeDiv = document.getElementById("cate-img2");
+    const barDiv = document.getElementById("cate-img3");
+    const leisureDiv = document.getElementById("cate-img4");
+
+    let restaurantImages = [];
+    let cafeImages = [];
+    let barImages = [];
+    let leisureImages = [];
+
+    [# th:each="img: ${restaurantImages}"]
+    restaurantImages.push([[${img}]]);
+    [/]
+
+    [# th:each="img: ${cafeImages}"]
+    cafeImages.push([[${img}]]);
+    [/]
+
+    [# th:each="img: ${barImages}"]
+    barImages.push([[${img}]]);
+    [/]
+
+    [# th:each="img: ${leisureImages}"]
+    leisureImages.push([[${img}]]);
+    [/]
+
+    if (restaurantImages.length > 0) {
+        let restNum = ranDomInt(0, restaurantImages.length);
+        restDiv.style.backgroundImage = `url(${restaurantImages[restNum]})`;
+    }
+
+    if (cafeImages.length > 0) {
+        let cafeNum = ranDomInt(0, cafeImages.length);
+        cafeDiv.style.backgroundImage = `url(${cafeImages[cafeNum]})`;
+    }
+
+    if (barImages.length > 0) {
+        let barNum = ranDomInt(0, barImages.length);
+        barDiv.style.backgroundImage = `url(${barImages[barNum]})`;
+    }
+
+    if (leisureImages.length > 0) {
+        let leisureNum = ranDomInt(0, leisureImages.length);
+        leisureDiv.style.backgroundImage = `url(${leisureImages[leisureNum]})`;
+    }
+
+
+</script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/weather.js}"></script>
 <script type="module" th:src="@{/js/app.js}"></script>

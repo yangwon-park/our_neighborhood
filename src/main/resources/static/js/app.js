@@ -1,5 +1,3 @@
-import mapJs from "./map.js"
-
 var app = {
     init: function () {
 

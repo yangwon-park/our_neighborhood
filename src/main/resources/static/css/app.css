@@ -156,6 +156,11 @@ body {
     color: #ffffff;
 }
 
+.nav-font {
+    color: #ffffff !important;
+    font-weight: bolder;
+}
+
 .orange {
     color: #F01D04;
 }

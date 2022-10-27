@@ -101,8 +101,8 @@ var main = {
     },
 
     update: function () {
-        const storeForm = document.getElementById('store-edit-form');
-        const storeIdVal = document.getElementById('storeId').value;
+        const storeForm = document.getElementById("store-edit-form");
+        const storeIdVal = document.getElementById("storeId").value;
 
         const formData = new FormData(storeForm);
 

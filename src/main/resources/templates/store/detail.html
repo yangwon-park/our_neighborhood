@@ -94,10 +94,14 @@
         <div class="row store-info d-flex" style="font-size: 1rem">
             <div class="col-7">
                 <div class="col-12 my-1">
-                <span class="ms-3 m-auto">
-                        <th:block th:each="cate : ${categoryList}">
-                            <a style="color: #6c757d" href="#" th:text="${cate.name}"></a>
-                            >
+                <span class="m-auto">
+                        <th:block th:each="cate, i : ${categoryList}">
+                            <th:block>
+                                <a href="#" th:text="${cate.name}" class="text-dark fw-bold">카테고리명</a>
+                            </th:block>
+                            <th:block th:if="${i.index+1 < categoryList.size()}">
+                                <span class="text-dark fw-bold mx-2">></span>
+                            </th:block>
                         </th:block>
                 </span>
                 </div>

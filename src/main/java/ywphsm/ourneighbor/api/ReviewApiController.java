@@ -32,6 +32,11 @@ public class ReviewApiController {
 
     private final StoreService storeService;
 
+    @GetMapping("/review/more")
+    public Slice<ReviewMemberDTO> more(Long storeId, int page) {
+        return reviewService.pagingReview(storeId, page);
+    }
+
     // hastag는 Store에 연관돼있음
     @PostMapping("/user/review")
     public Long save(ReviewDTO.Add dto, @RequestParam String hashtag) throws IOException, ParseException {
@@ -72,10 +77,4 @@ public class ReviewApiController {
 
         return reviewService.delete(storeId, reviewId);
     }
-
-    @GetMapping("/review/more")
-    public Slice<ReviewMemberDTO> more(Long storeId, int page) {
-        return reviewService.pagingReview(storeId, page);
-    }
-
 }

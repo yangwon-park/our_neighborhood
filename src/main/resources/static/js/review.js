@@ -4,10 +4,12 @@ var main = {
     init: async function () {
         var _this = this;
 
-        const reviewSaveBtn = document.getElementById('review-save');
-        const reviewDeleteBtnList = document.querySelectorAll('.review-delete');
-        const reviewMoreBtn = document.getElementById('review-more');
-        const likeBtn = document.getElementById('like-btn');
+        const reviewSaveBtn = document.getElementById("review-save");
+        const reviewDeleteBtnList = document.querySelectorAll(".review-delete");
+        const reviewMoreBtn = document.getElementById("review-more");
+        const likeBtn = document.getElementById("like-btn");
+        const storeImgBtn = document.getElementById("store-image-btn");
+        const mainImg = document.getElementById("main-image");
 
         if (reviewSaveBtn !== null) {
             reviewSaveBtn.addEventListener('click', () => {
@@ -36,6 +38,19 @@ var main = {
                 _this.likeUpdate()
                 // _this.save()
             });
+        }
+
+        if (storeImgBtn !== null) {
+            if (mainImg.getAttribute("src") === null || mainImg.getAttribute("src") === "") {
+                storeImgBtn.addEventListener("click", () => {
+                    _this.saveMainImage();
+                })
+            } else {
+                storeImgBtn.addEventListener("click", () => {
+                    _this.updateMainImage();
+                })
+            }
+
         }
     },
 
@@ -234,6 +249,51 @@ var main = {
             window.location.reload();
         }).catch((error) => {
             console.log(error);
+        });
+    },
+
+
+    saveMainImage: function () {
+        const storeId = document.getElementById("storeId").innerText
+        const form = document.getElementById("main-image-form");
+
+        const formData = new FormData(form);
+
+        axios({
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Access-Control-Allow_Origin": "*"
+            },
+            method: "post",
+            url: "/seller/store/editImage/" + storeId,
+            data: formData
+        }).then((resp) => {
+            alert("메인 이미지가 등록됐습니다.");
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error)
+        });
+    },
+
+    updateMainImage: function () {
+        const storeId = document.getElementById("storeId").innerText
+        const form = document.getElementById("main-image-form");
+
+        const formData = new FormData(form);
+
+        axios({
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Access-Control-Allow_Origin": "*"
+            },
+            method: "put",
+            url: "/seller/store/editImage/" + storeId,
+            data: formData
+        }).then((resp) => {
+            alert("메인 이미지가 수정됐습니다.");
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error)
         });
     },
 };

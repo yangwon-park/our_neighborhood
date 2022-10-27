@@ -99,15 +99,6 @@ dependencies {
 	// p6spy
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
-	// spring-boot-start-test
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-	// spring-security
-	testImplementation 'org.springframework.security:spring-security-test'
-
-	//테스트에서 lombok 사용
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	//이메일인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -120,6 +111,20 @@ dependencies {
 
 	// AWS S3
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2'
+
+	// 공간 데이터 => 안 해도 작동하길래 일단 빼둠
+	// https://mvnrepository.com/artifact/org.hibernate/hibernate-spatial
+//	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.5.Final', ext: 'pom'
+
+	// spring-boot-start-test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// spring-security
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//테스트에서 lombok 사용
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 }
 

@@ -11,7 +11,6 @@ var main = {
         let cookieValue = null;
 
         if (document.cookie) {
-
             let array = document.cookie.split((encodeURI(name) + '='));
 
             if (array.length >= 2) {
@@ -23,8 +22,12 @@ var main = {
         return cookieValue;
     },
 
+    randomInt: function (min, max) {
+        return Math.floor(Math.random() * (max)) + min;
+    },
+
     init: async function () {
-        var _this = this;
+        let _this = this;
 
         await _this.findCoords();
     },
@@ -34,9 +37,49 @@ var main = {
         await this.success(position);
 
         this.setWeatherInfo();
+        this.setCateImages();
 
         main.getCookie("nx");
         main.getCookie("ny");
+    },
+
+    setCateImages: function () {
+        axios({
+            method: "get",
+            url: "/getImages"
+        }).then((resp) => {
+            const restaurantImages = resp.data[0];
+            const cafeImages = resp.data[1];
+            const barImages = resp.data[2];
+            const leisureImages = resp.data[3];
+
+            const restDiv = document.getElementById("cate-img1");
+            const cafeDiv = document.getElementById("cate-img2");
+            const barDiv = document.getElementById("cate-img3");
+            const leisureDiv = document.getElementById("cate-img4");
+
+            if (restaurantImages.length > 0) {
+                let restNum = this.randomInt(0, restaurantImages.length);
+                restDiv.style.backgroundImage = `url(${restaurantImages[restNum]})`;
+            }
+
+            if (cafeImages.length > 0) {
+                let cafeNum = this.randomInt(0, cafeImages.length);
+                cafeDiv.style.backgroundImage = `url(${cafeImages[cafeNum]})`;
+            }
+
+            if (barImages.length > 0) {
+                let barNum = this.randomInt(0, barImages.length);
+                barDiv.style.backgroundImage = `url(${barImages[barNum]})`;
+            }
+
+            if (leisureImages.length > 0) {
+                let leisureNum = this.randomInt(0, leisureImages.length);
+                leisureDiv.style.backgroundImage = `url(${leisureImages[leisureNum]})`;
+            }
+        }).catch((error) => {
+            console.error(error);
+        })
     },
 
     setWeatherInfo: function () {
@@ -44,13 +87,13 @@ var main = {
             method: "get",
             url: "/weather",
         }).then((resp) => {
-            var _skyStatus = document.getElementById("sky-status");
-            var _tmp = document.getElementById("tmp");
-            var _pop = document.getElementById("pop");
-            var _pm10Value = document.getElementById("pm-10-value")
+            let _skyStatus = document.getElementById("sky-status");
+            let _tmp = document.getElementById("tmp");
+            let _pop = document.getElementById("pop");
+            let _pm10Value = document.getElementById("pm-10-value")
 
-            var skyStatus = resp.data.status;
-            var pm10Value = resp.data.pm10Value;
+            let skyStatus = resp.data.status;
+            let pm10Value = resp.data.pm10Value;
 
             const fontAwesome = document.createElement("i")
 
@@ -83,6 +126,8 @@ var main = {
             mask.closeMask();
         }).catch((error) => {
             console.error(error);
+            alert("현재 날씨 정보를 불러올 수 없습니다.");
+            mask.closeMask();
         })
     },
 
@@ -123,10 +168,10 @@ var main = {
         let lat = position.coords.latitude;
         let lon = position.coords.longitude;
 
-        var coords = main.dfs_xy_conv("toXY", lat, lon);
+        let coords = main.dfs_xy_conv("toXY", lat, lon);
 
-        var nx = coords["nx"];
-        var ny = coords["ny"];
+        let nx = coords["nx"];
+        let ny = coords["ny"];
 
         main.setCookie("nx", nx, 6);
         main.setCookie("ny", ny, 6);
@@ -228,14 +273,3 @@ var main = {
 };
 
 main.init();
-
-// const params = {
-//     RE: 6371.00877,     // 지구 반경(km)
-//     GRID: 5.0,          // 격자 간격(km)
-//     SLAT1: 30.0,         // 투영 위도1(degree)
-//     SLAT2: 60.0,        // 투영 위도2(degree)
-//     OLON: 126.0,        // 기준점 경도(degree)
-//     OLAT: 38.0,         // 기준점 위도(degree)
-//     XO: 43,             // 기준점 X좌표(GRID)
-//     YO: 136             // 기1준점 Y좌표(GRID)
-// }

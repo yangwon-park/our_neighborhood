@@ -34,11 +34,11 @@
     --breakpoint-xl: 1200px;
     --font-family-sans-serif: Open Sans, sans-serif;
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    accent-color: #fb6340;
+    accent-color: #F01D04;
 }
 
 input[type=radio] {
-    accent-color: #fb6340;
+    accent-color: #F01D04;
     width: 1.25rem;
     height: 1.25rem;
     vertical-align: middle;
@@ -147,7 +147,7 @@ body {
 }
 
 .navbar {
-    background-color: #FD7E14;
+    background-color: #F01D04;
 }
 
 .navbar li,
@@ -157,12 +157,12 @@ body {
 }
 
 .orange {
-    color: #FD7E14;
+    color: #F01D04;
 }
 
 .hr-orange {
     height: 1rem;
-    background: #FD7E14;
+    background: #F01D04;
     border: 0;
 }
 
@@ -196,15 +196,15 @@ body {
 
 .btn-orange {
     color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
+    border-color: #F01D04;
+    background-color: #F01D04;
     box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
 }
 
 .btn-orange:hover {
     color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
+    border-color: #F01D04;
+    background-color: #F01D04;
 }
 
 .btn-orange:focus {
@@ -213,13 +213,13 @@ body {
 
 .btn-orange:disabled {
     color: #fff;
-    border-color: #FD7E14;
-    background-color: #FD7E14;
+    border-color: #F01D04;
+    background-color: #F01D04;
 }
 
 .btn-orange:not(:disabled):not(.disabled):active {
     color: #fff;
-    border-color: #FD7E14;
+    border-color: #F01D04;
     background-color: #EBE40D;
 }
 
@@ -253,12 +253,31 @@ body {
     width: 100%;
     left: 0;
     top: 0;
+
 }
 
-#top .card .overlay:hover {
-    opacity: 1;
-    /*color: #fff;*/
+#top .card .overlay {
+    background-color: rgba(96, 125, 139, 0.3);
+    padding: 1.5rem;
+    border-radius: 0.25rem;
+    /*transition: all 0.4s ease-in-out;*/
+    font-weight: bold;
+    color: #fff;
 }
+
+
+#top .search-card {
+    border: 1px solid #F01D04 !important;
+    transition: all 0.4s ease-in-out;
+}
+
+#top .search-div .search-card .btn {
+    transition: all 0.4s ease-in-out;
+}
+
+/*#top .card .overlay:hover {*/
+/*    color: #fff;*/
+/*}*/
 
 #top .divider {
     width: 10%;
@@ -284,19 +303,9 @@ body {
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
-#top .card .overlay {
-    background-color: rgba(96, 125, 139, 0.3);
-    opacity: 0;
-    padding: 1.5rem;
-    border-radius: 0.25rem;
-    transition: all 0.4s ease-in-out;
-}
-
-
 #top .gallery-item:nth-of-type(1) .card {
     background-image: url('../images/port1.jpg');
 }
-
 
 /* 767 아래인 경우로만 동작 (스몰 디바이스 이하)*/
 @media screen and (max-width: 767px) {
@@ -490,7 +499,7 @@ body {
 
 
 .OPEN {
-    background: #fd7e14;
+    background: #F01D04;
 }
 
 .BREAK {
@@ -508,7 +517,7 @@ body {
 }
 
 .menu-feat-BEST {
-    background: #FD7E14;
+    background: #0c63e4;
 }
 
 .menu-feat-SIGN {
@@ -529,4 +538,21 @@ body {
 
 .park-NOPARKINGSPACE {
     color: #ff253a;
+}
+
+.star-rating {
+    width: 205px;
+}
+
+.star-rating, .star-rating span {
+    display: inline-block;
+    height: 39px;
+    overflow: hidden;
+    background: url(/images/star/star.png) no-repeat;
+}
+
+.star-rating span {
+    background-position: left bottom;
+    line-height: 0;
+    vertical-align: top;
 }

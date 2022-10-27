@@ -153,7 +153,8 @@ public class MemberService {
 
     //휴대폰번호 중복검사
     public Member findByPhoneNumber(String phoneNumber) {
-        return memberRepository.findByPhoneNumber(phoneNumber).orElse(null);
+        return memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 전화번호입니다. phoneNumber = " + phoneNumber));
     }
 
     //아이디 찾기

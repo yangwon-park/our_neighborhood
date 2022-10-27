@@ -11,9 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 
@@ -60,18 +62,43 @@ class MemberServiceTest {
 
         queryFactory = new JPAQueryFactory(em);
     }
-//    @Test
-//    @DisplayName("회원 가입")
-//    void join() {
-//        Member member4 = new Member("kkk", "kkk", "user4",
-//                "유저4", "localhost@naver.com", "010-1234-1234", 19, 0);
-//
-//        Long memberId = memberService.save(member4);
-//
-//        Member findMember = memberService.findById(memberId);
-//
-//        assertThat(memberId).isEqualTo(findMember.getId());
-//    }
+
+    @Test
+    @DisplayName("회원 가입")
+    void join() throws Exception {
+        MemberDTO.Add dto = MemberDTO.Add.builder()
+                .username("테스트1")
+                .nickname("닉네임1")
+                .birthDate("1994-05-23")
+                .email("test@1234.com")
+                .phoneNumber("01012341234")
+                .gender(0)
+                .certifiedNumber("789234")
+                .password("!234")
+                .passwordCheck("!1234")
+                .build();
+
+        String url = "http://localhost:" + port + "/member/add";
+
+        ResultActions resultActions = mvc.perform(multipart(url)
+                        .param("username", dto.getUsername())
+                        .param("nickname", dto.getNickname())
+                        .param("birthDate", dto.getBirthDate())
+                        .param("email", dto.getEmail())
+                        .param("phoneNumber", dto.getPhoneNumber())
+                        .param("gender", String.valueOf(dto.getGender()))
+                        .param("certifiedNumber", dto.getCertifiedNumber())
+                        .param("password", dto.getPassword())
+                        .param("passwordCheck", dto.getPasswordCheck()))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Long memberId = Long.parseLong(resultActions.andReturn().getResponse().getContentAsString());
+
+        Member findMember = memberService.findById(memberId);
+
+        assertThat(findMember.getNickname()).isEqualTo(dto.getNickname());
+    }
 
     @Test
     @DisplayName("10대, 20대인 회원 찾기")

@@ -42,7 +42,7 @@ public class StoreService {
     private final CategoryRepository categoryRepository;
 
     private final MemberOfStoreRepository memberOfStoreRepository;
-    
+
     private final MemberService memberService;
 
     private final AwsS3FileStore awsS3FileStore;
@@ -90,12 +90,14 @@ public class StoreService {
         // 먼저 카테고리를 업데이트
         List<CategoryOfStore> categoryOfStoreList = findStore.getCategoryOfStoreList();
 
-        for (int i = 0; i < categoryOfStoreList.size(); i++) {
-            Long categoryId = categoryIdList.get(i);
+        if (categoryOfStoreList != null) {
+            for (int i = 0; i < categoryOfStoreList.size(); i++) {
+                Long categoryId = categoryIdList.get(i);
 
-            Category category = categoryRepository.findById(categoryId).orElseThrow(
-                    () -> new IllegalArgumentException("존재하지 않는 카테고리입니다. id = " + categoryId));
-            categoryOfStoreList.get(i).updateCategory(category);
+                Category category = categoryRepository.findById(categoryId).orElseThrow(
+                        () -> new IllegalArgumentException("존재하지 않는 카테고리입니다. id = " + categoryId));
+                categoryOfStoreList.get(i).updateCategory(category);
+            }
         }
 
         // 그 후, dto로 전달받은 수정된 정보를 별도로 업데이트 시킴
@@ -198,21 +200,21 @@ public class StoreService {
         return storeRepository.getTop5ByCategories(categoryId, lat, lon);
     }
 
-   public List<String> getTop5ImageByCategories(String categoryId, double lat, double lon) {
-       List<Store> top5 = storeRepository.getTop5ByCategories(categoryId, lat, lon);
+    public List<String> getTop5ImageByCategories(String categoryId, double lat, double lon) {
+        List<Store> top5 = storeRepository.getTop5ByCategories(categoryId, lat, lon);
 
-       List<String> top5UrlList = new ArrayList<>();
+        List<String> top5UrlList = new ArrayList<>();
 
-       for (Store store : top5) {
-           if (store.getFile() != null) {
-               String url = store.getFile().getUploadImageUrl();
+        for (Store store : top5) {
+            if (store.getFile() != null) {
+                String url = store.getFile().getUploadImageUrl();
 
-               top5UrlList.add(url);
-           }
-       }
+                top5UrlList.add(url);
+            }
+        }
 
-       return top5UrlList;
-   }
+        return top5UrlList;
+    }
 
 
     //매장주인이 맞는지 체크

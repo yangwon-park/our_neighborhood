@@ -24,8 +24,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Model model) {
-        List<CategoryDTO.Simple> rootCategoryList = categoryService.findTop4ByDepth(1L);
-        
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
+
         model.addAttribute("rootCategoryList", rootCategoryList);
 
         return "index";

@@ -109,8 +109,8 @@ var main = {
         })
             .then((resp) => {
                 if (resp.data.count < 1) {
-                    alert("검색 결과가 없습니다.");
-                    // window.location.href = 'http://localhost:8080/map';
+                    alert("검색 결과가 없습니다. 다른 조건으로 검색해보시겠어요?");
+                    return;
                 }
 
                 for (let i = 0; i < resp.data.data.length; i++) {
@@ -162,8 +162,8 @@ var main = {
         })
             .then((res) => {
                 if (res.data.count < 1) {
-                    alert("검색 결과가 없습니다.");
-                    // window.location.href = 'http://localhost:8080/map';
+                    alert("검색 결과가 없습니다. 다른 조건으로 검색해보시겠어요?");
+                    return;
                 }
 
                 for (let i = 0; i < res.data.data.length; i++) {
@@ -194,7 +194,6 @@ var main = {
                 if (res.data.count < 1) {
                     sessionStorage.clear();
                     alert("검색 결과가 없습니다. 다른 조건으로 검색해보시겠어요?");
-
                     return;
                 }
 

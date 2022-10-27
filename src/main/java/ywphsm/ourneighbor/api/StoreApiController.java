@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
@@ -17,6 +18,7 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,24 @@ public class StoreApiController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
+
+    @GetMapping("/getImages")
+    public List<List<String>> getImages(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
+                                        @CookieValue(value = "lon", required = false, defaultValue = "") String lon) {
+
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
+
+        List<List<String>> categoryImageList = new ArrayList<>();
+
+        if (lat != null && lon != null) {
+            for (CategoryDTO.Simple simple : rootCategoryList) {
+                categoryImageList.add(storeService.getTop5ImageByCategories(
+                        (simple.getCategoryId().toString()), Double.parseDouble(lat), Double.parseDouble(lon)));
+            }
+        }
+
+        return categoryImageList;
+    }
 
     @PostMapping("/seller/store")
     public Long save(@Validated StoreDTO.Add dto,
@@ -57,8 +77,6 @@ public class StoreApiController {
 
         return storeService.update(storeId, dto, categoryId);
     }
-
-
 
     @PostMapping("/seller/store/editImage/{storeId}")
     public Long saveImage(@PathVariable Long storeId, @RequestParam MultipartFile file,

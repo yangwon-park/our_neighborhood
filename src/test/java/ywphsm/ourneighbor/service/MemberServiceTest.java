@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -15,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import ywphsm.ourneighbor.config.AuditingConfig;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 
@@ -63,18 +61,18 @@ class MemberServiceTest {
         queryFactory = new JPAQueryFactory(em);
     }
 
-    @Test
-    @DisplayName("회원 가입")
-    void join() {
-        Member member4 = new Member("kkk", "kkk", "user4",
-                "유저4", "localhost@naver.com", "010-1234-1234", 19, 0);
-
-        Long memberId = memberService.join(member4);
-
-        Member findMember = memberService.findById(memberId);
-
-        assertThat(memberId).isEqualTo(findMember.getId());
-    }
+//    @Test
+//    @DisplayName("회원 가입")
+//    void join() {
+//        Member member4 = new Member("kkk", "kkk", "user4",
+//                "유저4", "localhost@naver.com", "010-1234-1234", 19, 0);
+//
+//        Long memberId = memberService.join(member4);
+//
+//        Member findMember = memberService.findById(memberId);
+//
+//        assertThat(memberId).isEqualTo(findMember.getId());
+//    }
 
     @Test
     @DisplayName("10대, 20대인 회원 찾기")

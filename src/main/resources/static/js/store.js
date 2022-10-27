@@ -51,14 +51,9 @@ var main = {
             closingTimeValid: document.getElementById("store-closingTime-valid")
         }
 
-
         const cateValid = document.getElementById("store-category-valid");
         const mainCateVal = document.getElementById("main-cate").options
-                            [document.getElementById("main-cate").selectedIndex].value;
-        const midCateVal = document.getElementById("mid-cate").options
-                            [document.getElementById("mid-cate").selectedIndex].value;
-        const subCateVal = document.getElementById("sub-cate").options
-                            [document.getElementById("sub-cate").selectedIndex].value;
+            [document.getElementById("main-cate").selectedIndex].value;
         const storeForm = document.getElementById('store-add-form');
 
         const formData = new FormData(storeForm);
@@ -74,13 +69,11 @@ var main = {
         validation.removeValidation(cateValid);
 
         this.categoryLayerEl.main.classList.remove("input-error-border");
-        this.categoryLayerEl.mid.classList.remove("input-error-border");
-        this.categoryLayerEl.sub.classList.remove("input-error-border");
 
         if (els["name"].value !== '' && els["zipcode"].value !== ''
             && els["roadAddr"].value !== '' && els["numberAddr"].value !== ''
             && els["openingTime"].value !== '' && els["closingTime"].value !== ''
-            && mainCateVal !== '' && midCateVal !== '' && subCateVal !== '') {
+            && mainCateVal !== '') {
 
             axios({
                 method: "post",
@@ -101,24 +94,15 @@ var main = {
             }
         }
 
-        if (subCateVal === '') {
-            this.categoryLayerEl.sub.classList.add("input-error-border");
-            validation.addValidation(cateValid, "소분류를 선택해주세요.");
-        }
-        if (midCateVal === '') {
-            this.categoryLayerEl.mid.classList.add("input-error-border");
-            validation.addValidation(cateValid, "중분류를 선택해주세요.");
-        }
-
         if (mainCateVal === '') {
             this.categoryLayerEl.main.classList.add("input-error-border");
-            validation.addValidation(cateValid, "대분류를 선택해주세요.");
+            validation.addValidation(cateValid, "대분류는 필수입니다.");
         }
     },
 
     update: function () {
-        const storeForm = document.getElementById('store-edit-form');
-        const storeIdVal = document.getElementById('storeId').value;
+        const storeForm = document.getElementById("store-edit-form");
+        const storeIdVal = document.getElementById("storeId").value;
 
         const formData = new FormData(storeForm);
 

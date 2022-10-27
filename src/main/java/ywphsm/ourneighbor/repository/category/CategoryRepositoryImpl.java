@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
-import ywphsm.ourneighbor.domain.category.QCategory;
 
 import java.util.List;
 
@@ -42,6 +41,14 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
                 .limit(4)
                 .orderBy(rank.asc())
                 .fetch();
+    }
+
+    @Override
+    public void deleteByCategory(Category category) {
+        queryFactory
+                .delete(categoryOfStore)
+                .where(categoryOfStore.category.eq(category))
+                .execute();
     }
 }
 

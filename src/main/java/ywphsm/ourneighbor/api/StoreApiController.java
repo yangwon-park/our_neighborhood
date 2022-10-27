@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -50,18 +51,13 @@ public class StoreApiController {
 
     @PostMapping("/seller/store")
     public Long save(@Validated StoreDTO.Add dto,
-                     @RequestParam(value = "categoryId") List<Long> categoryId) throws IOException {
-
-        List<Category> categoryList = categoryId.stream()
-                .map(categoryService::findById)
-                .collect(Collectors.toList());
-
-        return storeService.save(dto, categoryList);
+                     @RequestParam(value = "categoryId") List<Long> categoryIdList) throws IOException {
+        return storeService.save(dto, categoryIdList);
     }
 
     @PutMapping("/seller/store/{storeId}")
     public Long update(@PathVariable Long storeId, @Validated StoreDTO.Update dto,
-                       @RequestParam List<Long> categoryId,
+                       @RequestParam(value = "categoryId") List<Long> categoryIdList,
                        @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                        HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -73,9 +69,7 @@ public class StoreApiController {
             }
         }
 
-        log.info("dto={}", dto);
-
-        return storeService.update(storeId, dto, categoryId);
+        return storeService.update(storeId, dto, categoryIdList);
     }
 
     @PostMapping("/seller/store/editImage/{storeId}")

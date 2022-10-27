@@ -14,17 +14,14 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
-import ywphsm.ourneighbor.domain.store.distance.Direction;
-import ywphsm.ourneighbor.domain.store.distance.Distance;
-import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
@@ -35,8 +32,6 @@ import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
 @Transactional(readOnly = true) // 데이터 변경 X
 public class StoreService {
 
-    private final EntityManager em;
-
     private final StoreRepository storeRepository;
 
     private final CategoryRepository categoryRepository;
@@ -45,16 +40,21 @@ public class StoreService {
 
     private final MemberService memberService;
 
+    private final CategoryService categoryService;
+
     private final AwsS3FileStore awsS3FileStore;
 
     // 매장 등록
     @Transactional
-    public Long save(StoreDTO.Add dto, List<Category> categoryList) {
+    public Long save(StoreDTO.Add dto, List<Long> categoryIdList) {
+
         Store store = dto.toEntity();
         Member member = memberService.findById(dto.getMemberId());
 
         MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, storeRepository.save(store));
         memberOfStore.updateMyStore(true);
+
+        List<Category> categoryList = getNotNullCategoryList(categoryIdList);
 
         for (Category category : categoryList) {
             linkCategoryAndStore(category, store);
@@ -68,18 +68,6 @@ public class StoreService {
         return store.getId();
     }
 
-    @Transactional
-    public Long saveMainImage(Long storeId, MultipartFile file) throws IOException {
-        Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
-
-        UploadFile newUploadFile = awsS3FileStore.storeFile(file);
-
-        newUploadFile.addStore(store);
-
-        return storeId;
-    }
-
 
     @Transactional
     public Long update(Long storeId, StoreDTO.Update dto, List<Long> categoryIdList) {
@@ -88,20 +76,57 @@ public class StoreService {
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
 
         // 먼저 카테고리를 업데이트
-        List<CategoryOfStore> categoryOfStoreList = findStore.getCategoryOfStoreList();
+        List<CategoryOfStore> prevCategoryOfStoreList = findStore.getCategoryOfStoreList();
 
-        if (categoryOfStoreList != null) {
-            for (int i = 0; i < categoryOfStoreList.size(); i++) {
-                Long categoryId = categoryIdList.get(i);
+        List<Category> categoryList = getNotNullCategoryList(categoryIdList);
+        
+        // 카테고리는 무조건 1개 이상 존재해야 함
+        if (prevCategoryOfStoreList != null) {
+            if (prevCategoryOfStoreList.size() == categoryList.size()) {
+                for (int i = 0; i < prevCategoryOfStoreList.size(); i++) {
+                    prevCategoryOfStoreList.get(i).updateCategory(categoryList.get(i));
+                }
+            }
 
-                Category category = categoryRepository.findById(categoryId).orElseThrow(
-                        () -> new IllegalArgumentException("존재하지 않는 카테고리입니다. id = " + categoryId));
-                categoryOfStoreList.get(i).updateCategory(category);
+            if (prevCategoryOfStoreList.size() < categoryList.size()) {
+                int i;
+
+                for (i = 0; i < prevCategoryOfStoreList.size(); i++) {
+                    prevCategoryOfStoreList.get(i).updateCategory(categoryList.get(i));
+                }
+
+                for (int j = i; j < categoryList.size(); j++) {
+                    linkCategoryAndStore(categoryList.get(j), findStore);
+                }
+            }
+
+            if (prevCategoryOfStoreList.size() > categoryList.size()) {
+                int i;
+
+                for (i = 0; i < categoryList.size(); i++) {
+                    prevCategoryOfStoreList.get(i).updateCategory(categoryList.get(i));
+                }
+
+                for (int j = i; j < prevCategoryOfStoreList.size(); j++) {
+                    categoryService.deleteByCategory(prevCategoryOfStoreList.get(j).getCategory());
+                }
             }
         }
 
         // 그 후, dto로 전달받은 수정된 정보를 별도로 업데이트 시킴
         findStore.update(dto.toEntity());
+
+        return storeId;
+    }
+
+    @Transactional
+    public Long saveMainImage(Long storeId, MultipartFile file) throws IOException {
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
+
+        UploadFile newUploadFile = awsS3FileStore.storeFile(file);
+
+        newUploadFile.addStore(store);
 
         return storeId;
     }
@@ -232,6 +257,16 @@ public class StoreService {
         }
 
         return false;
+    }
+
+    // 대 중 소 분류 모두가 들어오지 않을 수도 있으므로
+    // null이 아닌 categoryId만 리스트로 반환
+    private List<Category> getNotNullCategoryList(List<Long> categoryIdList) {
+        List<Long> collect = categoryIdList.stream().filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return collect.stream().map(categoryService::findById)
+                .collect(Collectors.toList());
     }
 
 }

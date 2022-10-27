@@ -16,7 +16,6 @@ public class CategoryDTO {
     @NoArgsConstructor
     public static class Detail {
 
-
         private Long categoryId;
 
         //    @NotBlank

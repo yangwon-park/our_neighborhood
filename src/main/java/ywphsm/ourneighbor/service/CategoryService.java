@@ -71,6 +71,11 @@ public class CategoryService {
         return categoryId;
     }
 
+    @Transactional
+    public void deleteByCategory(Category category) {
+        categoryRepository.deleteByCategory(category);
+    }
+
     public CategoryDTO.Detail findByName(String name) {
         return new CategoryDTO.Detail(categoryRepository.findByName(name));
     }

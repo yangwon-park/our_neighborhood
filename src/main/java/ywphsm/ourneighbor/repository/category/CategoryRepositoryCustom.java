@@ -10,5 +10,7 @@ public interface CategoryRepositoryCustom {
     CategoryOfStore findCategoryOfStore(Long storeId, Long categoryId);
 
     List<Category> findByDepth(Long depth);
+
+    void deleteByCategory(Category category);
 }
 

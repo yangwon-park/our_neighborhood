@@ -40,7 +40,7 @@ var main = {
             });
         }
     },
-    
+
     // 이미지 업로드 여부 설정 함수
     imgActive: function (elId) {
         const id = elId.substring(13);
@@ -55,12 +55,14 @@ var main = {
         const name = document.getElementById("name");
         const price = document.getElementById("price");
         const type = document.getElementsByName("type");
+        const feature = document.getElementsByName("feature")
+
+        const nameValid = document.getElementById("menu-name-valid");
+        const priceValid = document.getElementById("menu-price-valid");
+        const typeValid = document.getElementById("menu-type-valid");
+        const featureValid = document.getElementById("menu-feature-valid");
 
         const storeId = document.getElementById("storeId").value;
-
-        const nameValid = document.getElementById('menu-name-valid');
-        const priceValid = document.getElementById('menu-price-valid');
-        const typeValid = document.getElementById('menu-type-valid');
 
         name.classList.remove("valid-custom");
         price.classList.remove("valid-custom");
@@ -68,17 +70,28 @@ var main = {
         validation.removeValidation(nameValid);
         validation.removeValidation(priceValid);
         validation.removeValidation(typeValid);
+        validation.removeValidation(featureValid);
 
         let typeCheck = false;
+        let featureCheck = false;
+
+        let numReg = /^[0-9]+$/;
+        let numRegCheck = numReg.test(price.value);
 
         for (let i = 0; i < type.length; i++) {
             if (type[i].checked === true) {
-                typeCheck = true
+                typeCheck = true;
             }
         }
 
-        if (name.value !== '' && storeId !== ''
-            && price.value !== '' && typeCheck === true) {
+        for (let i = 0; i < feature.length; i++) {
+            if (feature[i].checked === true) {
+                featureCheck = true;
+            }
+        }
+
+        if (name.value !== "" && storeId !== "" && price.value !== ""
+            && typeCheck === true && featureCheck === true && numRegCheck) {
             axios({
                 method: "get",
                 url: "/seller/menu/check",
@@ -100,18 +113,27 @@ var main = {
             });
         }
 
-        if (name.value === '') {
+        if (name.value === "") {
             name.classList.add("valid-custom");
             validation.addValidation(nameValid, "메뉴 이름을 등록해주세요.");
         }
 
-        if (price.value === '') {
+        if (price.value === "") {
             price.classList.add("valid-custom");
             validation.addValidation(priceValid, "가격을 등록해주세요.");
+        } else {
+            if (!numRegCheck) {
+                price.classList.add("valid-custom");
+                validation.addValidation(priceValid, "숫자만 입력해주세요");
+            }
         }
 
         if (typeCheck === false) {
             validation.addValidation(typeValid, "메뉴의 종류를 선택해주세요.");
+        }
+
+        if (featureCheck === false) {
+            validation.addValidation(featureValid, "메뉴의 특징을 선택해주세요.");
         }
     },
 
@@ -135,16 +157,7 @@ var main = {
 
     save: function () {
         const menuForm = document.getElementById("menu-add-form");
-
         const formData = new FormData(menuForm);
-
-        for (let k of formData.keys()) {
-            console.log(k);
-        }
-
-        for (let v of formData.values()) {
-            console.log(v);
-        }
 
         this.createDefaultImg(formData);
 

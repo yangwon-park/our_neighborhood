@@ -75,9 +75,8 @@ public class CategoryService {
         return new CategoryDTO.Detail(categoryRepository.findByName(name));
     }
 
-    public List<CategoryDTO.Simple> findTop4ByDepth(Long depth) {
-        List<Category> category = categoryRepository.findTop4ByDepth(depth);
-
+    public List<CategoryDTO.Simple> findByDepth(Long depth) {
+        List<Category> category = categoryRepository.findByDepth(depth);
         return category.stream().map(CategoryDTO.Simple::of).collect(Collectors.toList());
     }
 

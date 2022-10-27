@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
+import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.CategoryService;
+import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Model model) {
-        List<CategoryDTO.Simple> rootCategoryList = categoryService.findTop4ByDepth(1L);
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
 
         model.addAttribute("rootCategoryList", rootCategoryList);
 

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.dto.category.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.embedded.Address;
@@ -195,6 +196,10 @@ public class StoreDTO {
 
         private String detail;
 
+        private String uploadImgUrl;
+
+        private MultipartFile file;
+
         private List<CategoryOfStoreDTO> categoryList;
 
         private List<HashtagOfStoreDTO.Detail> hashtagList;
@@ -219,6 +224,11 @@ public class StoreDTO {
             roadAddr = store.getAddress().getRoadAddr();
             numberAddr = store.getAddress().getNumberAddr();
             detail = store.getAddress().getDetail();
+
+            if (store.getFile() != null) {
+                uploadImgUrl = store.getFile().getUploadImageUrl();
+            }
+
             categoryList = store.getCategoryOfStoreList().stream()
                     .map(CategoryOfStoreDTO::new)
                     .collect(Collectors.toList());

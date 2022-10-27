@@ -28,7 +28,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
     }
 
     @Override
-    public List<Category> findTop4ByDepth(Long depth) {
+    public List<Category> findByDepth(Long depth) {
         NumberExpression<Integer> rank = new CaseBuilder()
                 .when(category.name.eq("동네 맛집")).then(1)
                 .when(category.name.eq("카페")).then(2)

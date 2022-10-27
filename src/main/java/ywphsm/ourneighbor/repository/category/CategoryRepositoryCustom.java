@@ -9,6 +9,6 @@ public interface CategoryRepositoryCustom {
 
     CategoryOfStore findCategoryOfStore(Long storeId, Long categoryId);
 
-    List<Category> findTop4ByDepth(Long depth);
+    List<Category> findByDepth(Long depth);
 }
 

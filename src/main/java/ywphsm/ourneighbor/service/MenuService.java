@@ -51,7 +51,7 @@ public class MenuService {
     public Long save(MenuDTO.Add dto) throws IOException, ParseException {
 
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
-                () -> new IllegalArgumentException("해당 매장이 없습니다. id = " + dto.getStoreId()));
+                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + dto.getStoreId()));
 
         UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
 
@@ -126,18 +126,17 @@ public class MenuService {
             }
         }
 
-
         // 파일이 null이 아닌 경우만 파일 수정
         if (dto.getFile() != null) {
             // 새로 업로드한 파일 UploadFile로 생성
-            UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
+            UploadFile uploadFile = awsS3FileStore.storeFile(dto.getFile());
 
             // 기존 메뉴의 업로드 파일 찾음
-            UploadFile file = menu.getFile();
+            UploadFile prevFile = menu.getFile();
 
             // 메뉴의 저장명, 업로드명 업데이트
-            file.updateUploadedFileName(
-                    newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName(), newUploadFile.getUploadImageUrl());
+            prevFile.updateUploadedFileName(
+                    uploadFile.getStoredFileName(), uploadFile.getUploadedFileName(), uploadFile.getUploadImageUrl());
         }
 
         // 기존 메뉴 업데이트

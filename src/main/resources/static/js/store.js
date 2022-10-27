@@ -6,24 +6,24 @@ var main = {
 
         _this.getCategories();
 
-        const storeSaveBtn = document.getElementById('store-save');
-        const storeUpdateBtn = document.getElementById('store-update');
-        const storeDeleteBtn = document.getElementById('store-delete');
+        const storeSaveBtn = document.getElementById("store-save");
+        const storeUpdateBtn = document.getElementById("store-update");
+        const storeDeleteBtn = document.getElementById("store-delete");
 
         if (storeSaveBtn !== null) {
-            storeSaveBtn.addEventListener('click', () => {
+            storeSaveBtn.addEventListener("click", () => {
                 _this.save();
             });
         }
 
         if (storeUpdateBtn !== null) {
-            storeUpdateBtn.addEventListener('click', () => {
+            storeUpdateBtn.addEventListener("click", () => {
                 _this.update();
             });
         }
 
         if (storeDeleteBtn !== null) {
-            storeDeleteBtn.addEventListener('click', () => {
+            storeDeleteBtn.addEventListener("click", () => {
                 _this.delete();
             });
         }
@@ -53,15 +53,14 @@ var main = {
 
 
         const cateValid = document.getElementById("store-category-valid");
-
         const mainCateVal = document.getElementById("main-cate").options
                             [document.getElementById("main-cate").selectedIndex].value;
         const midCateVal = document.getElementById("mid-cate").options
                             [document.getElementById("mid-cate").selectedIndex].value;
         const subCateVal = document.getElementById("sub-cate").options
                             [document.getElementById("sub-cate").selectedIndex].value;
-
         const storeForm = document.getElementById('store-add-form');
+
         const formData = new FormData(storeForm);
 
         for (const el in els) {
@@ -136,13 +135,13 @@ var main = {
     },
 
     delete: function () {
-        const storeIdVal = document.getElementById('storeId').value;
+        const storeIdVal = document.getElementById("storeId").value;
 
         axios({
             method: "delete",
             url: "/admin/store/" + storeIdVal
         }).then((resp) => {
-            alert('매장 삭제가 완료됐습니다.');
+            alert("매장 삭제가 완료됐습니다.");
             window.location.href = "/";
         }).catch((error) => {
             console.error(error);

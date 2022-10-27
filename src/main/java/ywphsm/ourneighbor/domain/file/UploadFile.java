@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ywphsm.ourneighbor.domain.Review;
 import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
 
@@ -21,7 +22,11 @@ public class UploadFile {
 
     private String uploadImageUrl;
 
-    // Menu와 File 사진
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
@@ -44,6 +49,11 @@ public class UploadFile {
     /*
         === 연관 관계 편의 메소드 ===
      */
+    public void addStore(Store store) {
+        this.store = store;
+        store.setFile(this);
+    }
+
     public void addMenu(Menu menu) {
         this.menu = menu;
         menu.setFile(this);

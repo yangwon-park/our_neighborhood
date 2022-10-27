@@ -4,22 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
     <style>
-        .star-rating {
-            width: 205px;
-        }
-
-        .star-rating, .star-rating span {
-            display: inline-block;
-            height: 39px;
-            overflow: hidden;
-            background: url(/images/star/star.png) no-repeat;
-        }
-
-        .star-rating span {
-            background-position: left bottom;
-            line-height: 0;
-            vertical-align: top;
-        }
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
@@ -43,6 +27,13 @@
                 <h1 class="my-auto" style="font-size: 2.0rem" th:text="*{name}">가게명</h1>
                 <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
                       th:classappend="*{status}"></span>
+<!--                <div class="hidden" id="storeId" th:text="*{storeId}"></div>-->
+                <th:block th:if="${session.loginMember ne null}">
+                    <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
+                    <button id="like-btn" th:text="${likeStatus} ? '찜 취소' : '찜 하기'"
+                            type="button" class="btn btn-info like" th:value="${!likeStatus}">
+                    </button>
+                </th:block>
             </div>
             <div class="col-6">
                 <th:block th:if="${session.loginMember ne null}">
@@ -53,6 +44,12 @@
                                     th:onclick="|location.href='@{/seller/hashtag/{storeId}(storeId=${store.storeId})}'|">
                                 해쉬태그
                             </button>
+                            <button class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#edit-image-modal"
+                                    style="font-size: 1.1rem; color: #ffffff">
+                                <!--                                    th:onclick="|location.href='@{/seller/store/editImage/{storeId}(storeId=${store.storeId})}'|">-->
+                                대표 이미지
+                            </button>
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
                                     th:onclick="|location.href='@{/seller/store/edit/{storeId}(storeId=${store.storeId})}'|">
                                 정보 수정
@@ -60,6 +57,42 @@
                         </div>
                     </th:block>
                 </th:block>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="edit-image-modal" data-bs-keyboard="false" tabindex="-1"
+                 aria-labelledby="edit-image-modal-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form id="main-image-form" enctype="multipart/form-data">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-dark fw-bold" id="edit-image-modal-label">대표 이미지 등록</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <div class="container">
+                                            <img id="main-image" style="width: 100%"
+                                                 th:src="*{uploadImgUrl}" alt="대표 이미지">
+                                        </div>
+                                        <div>
+                                            <input th:field="*{file}" class="form-control" type="file"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        style="font-size: 1.1rem">닫기
+                                </button>
+                                <button type="button" class="btn btn-info" id="store-image-btn"
+                                        style="font-size: 1.1rem; color: #ffffff">완료
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
         <hr class="my-2">
@@ -149,10 +182,10 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <th:block th:if="${session.loginMember ne null}">
-                    <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
+                <div class="float-end">
+                    <th:block th:if="${session.loginMember ne null}">
+                        <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
-                        <div class="float-end">
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
                                     th:onclick="|location.href='@{/seller/menu/edit/{storeId}(storeId=${store.storeId})}'|">
                                 메뉴 수정
@@ -161,9 +194,9 @@
                                     th:onclick="|location.href='@{/seller/menu/add/{storeId}(storeId=${store.storeId})}'|">
                                 메뉴 등록
                             </button>
-                        </div>
+                        </th:block>
                     </th:block>
-                </th:block>
+                </div>
             </div>
         </div>
         <hr class="my-2">
@@ -201,7 +234,8 @@
                             <div class="menu-hashtag col-8 row row-cols-md-3 row-cols-2 ">
                                 <th:block th:each="hashtag: ${menu.hashtagOfMenuDTOList}">
                                     <div class="my-auto text-center col text-nowrap"
-                                         th:text="${hashtag.hashtagName}">해쉬태그</div>
+                                         th:text="${hashtag.hashtagName}">해쉬태그
+                                    </div>
                                 </th:block>
                             </div>
                         </div>
@@ -209,10 +243,12 @@
                 </th:block>
             </div>
         </div>
-        <hr class="my-2 mt-5">
+        <hr class="my-5">
         <div class="row review">
-            <h3><strong>리뷰</strong></h3>
-            <div class="col">
+            <div class="col-6">
+                <h2 class="text-dark"><strong>리뷰</strong></h2>
+            </div>
+            <div class="col-6">
                 <button class="btn btn-orange float-end" style="font-size: 1.1rem; color: #ffffff"
                         th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">
                     리뷰 등록
@@ -226,12 +262,14 @@
                 <input th:if="${session.loginMember == null}" value=""
                        id="member-role-null" type="hidden" class="member-role">
             </div>
-            <h4>평균 평점</h4>
-            <h4 th:text="${ratingAverage}">평균 평점</h4>
-            <div class="wrap-star">
-                <span class='star-rating'>
-                    <span th:style="${'width:' + (ratingAverage * 20) + '%'}"></span>
-                </span>
+            <h4 class="text-dark">평균 평점</h4>
+            <div class="d-flex my-auto">
+                <h3 class="my-auto text-dark" th:text="${ratingAverage}">평균 평점</h3>
+                <div class="wrap-star">
+                    <span class="star-rating">
+                        <span th:style="${'width:' + (ratingAverage * 20) + '%'}"></span>
+                    </span>
+                </div>
             </div>
             <table class="table table-striped">
                 <thead>

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -52,9 +53,17 @@ public class StoreApiController {
     public Long save(@Validated StoreDTO.Add dto,
                      @RequestParam(value = "categoryId") List<Long> categoryId) throws IOException {
 
-        List<Category> categoryList = categoryId.stream()
-                .map(categoryService::findById)
-                .collect(Collectors.toList());
+        List<Long> collect = categoryId.stream()
+                                        .filter(Objects::nonNull)
+                                        .collect(Collectors.toList());
+
+        for (Long lon :collect){
+            log.info("lon={}", lon);
+        }
+
+        List<Category> categoryList = collect.stream()
+                                              .map(categoryService::findById)
+                                              .collect(Collectors.toList());
 
         return storeService.save(dto, categoryList);
     }

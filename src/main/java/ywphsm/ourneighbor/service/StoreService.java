@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.dto.category.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -86,6 +87,14 @@ public class StoreService {
 
         Store findStore = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
+
+        List<CategoryOfStoreDTO> categoryList = dto.getCategoryList();
+
+        log.info("categoryList={}", categoryList);
+
+        for (CategoryOfStoreDTO categoryOfStoreDTO : categoryList) {
+            log.info("categoryDTO={}", categoryOfStoreDTO.getCategoryName());
+        }
 
         // 먼저 카테고리를 업데이트
         List<CategoryOfStore> categoryOfStoreList = findStore.getCategoryOfStoreList();

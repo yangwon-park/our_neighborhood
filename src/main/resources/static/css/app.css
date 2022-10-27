@@ -253,6 +253,7 @@ body {
     width: 100%;
     left: 0;
     top: 0;
+
 }
 
 #top .card .overlay {
@@ -302,12 +303,9 @@ body {
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
-
-
 #top .gallery-item:nth-of-type(1) .card {
     background-image: url('../images/port1.jpg');
 }
-
 
 /* 767 아래인 경우로만 동작 (스몰 디바이스 이하)*/
 @media screen and (max-width: 767px) {

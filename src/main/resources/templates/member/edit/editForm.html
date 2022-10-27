@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{../css/argon.css}">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<body>
+<!-- Navbar -->
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
+<section class="header">
+    <div class="header py-7 py-lg-8">
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
+    </div>
+</section>
+<!-- Page content -->
+<div class="container-fluid mt--8 pb-5">
+    <!-- Table -->
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card bg-secondary shadow border-0">
+
+                <div class="card-body px-lg-5 py-lg-5">
+                    <div class="text-center text-muted mb-4">
+                        <small>회원 수정</small>
+                    </div>
+                    <form th:object="${editForm}" id="member-edit-form" class="form-floating">
+                        <input th:field="*{memberId}" class="form-control" placeholder="회원 번호" type="hidden">
+                        <div class="form-group">
+                            <small>닉네임</small>
+                            <div class="">
+                                <input class="form-control" placeholder="닉네임" type="text" th:field="*{nickname}">
+                            </div>
+                            <div id="sign-up-nickname-valid" class="my-1 valid-custom"></div>
+                        </div>
+                        <div class="form-group">
+                            <small>이메일</small>
+                            <div>
+                                <input class="form-control" placeholder="이메일" type="text" th:field="*{email}">
+                            </div>
+                            <div id="sign-up-email-valid" class="my-1 valid-custom"></div>
+                        </div>
+                        <div class="form-group">
+                            <small>전화번호</small>
+                            <div class="mb-3 d-flex">
+                                <input th:field="*{phoneNumber}" class="form-control" type="text" readonly>
+                                <button type="button" class="text-center btn btn-orange ms-3"
+                                        style="height: 3rem"
+                                        th:onclick="|location.href='@{/user/member_edit/phoneNumber}'|">전화번호 수정
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <button class="w-100 btn btn-secondary btn-lg"
+                                    th:onclick="|location.href='@{/user/member_edit/password}'|"
+                                    type="button">비밀번호 변경</button>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-orange mt-4" id="member-edit">회원정보 수정</button>
+                        </div>
+                    </form>
+                    <br>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-orange mt-4" id="member-delete">회원탈퇴</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/member.js}"></script>
+
+</html>

@@ -4,11 +4,14 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class EditForm {
 
-    private Long id;
+    @NotNull
+    private Long memberId;
 
     @NotBlank
     private String nickname;
@@ -16,5 +19,7 @@ public class EditForm {
     @Email
     @NotBlank
     private String email;
+
+    private String phoneNumber;
 
 }

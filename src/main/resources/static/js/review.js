@@ -111,6 +111,7 @@ var main = {
 
     save: function () {
         const reviewForm = document.getElementById("review-add-form");
+        const storeId = document.getElementById("storeId");
 
         let formData = new FormData(reviewForm);
 
@@ -133,7 +134,7 @@ var main = {
             data: formData
         }).then((resp) => {
             alert('리뷰가 등록됐습니다.')
-            window.location.reload()
+            window.location.href = "/store/" + storeId;
             console.log(resp)
         }).catch((error) => {
             console.log(error)

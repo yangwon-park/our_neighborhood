@@ -23,6 +23,7 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -194,33 +195,24 @@ public class StoreService {
     // 참고
     // https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
     public List<Store> getTop5ByCategories(String categoryId, double lat, double lon) {
-
-        double dist = 1.5;
-
-        Location northEast = Distance.calculatePoint(lat, lon, dist, Direction.NORTHEAST.getAngle());
-        Location southWest = Distance.calculatePoint(lat, lon, dist, Direction.SOUTHWEST.getAngle());
-
-        double nex = northEast.getLat();
-        double ney = northEast.getLon();
-        double swx = southWest.getLat();
-        double swy = southWest.getLon();
-
-        // Native Query
-        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)'", nex, ney, swx, swy);
-
-        return (List<Store>) em.createNativeQuery(
-                        "select * " +
-                                "from store as s " +
-                                "join category_of_store as cs on cs.store_id = s.store_id " +
-                                "where mbrcontains(" +
-                                "ST_LineStringFromText(" + pointFormat + "), " +
-                                "POINT(s.lat, s.lon)) " +
-                                "and cs.category_id = :categoryId",
-                        Store.class)
-                .setParameter("categoryId", Long.parseLong(categoryId))
-                .setMaxResults(5)
-                .getResultList();
+        return storeRepository.getTop5ByCategories(categoryId, lat, lon);
     }
+
+   public List<String> getTop5ImageByCategories(String categoryId, double lat, double lon) {
+       List<Store> top5 = storeRepository.getTop5ByCategories(categoryId, lat, lon);
+
+       List<String> top5UrlList = new ArrayList<>();
+
+       for (Store store : top5) {
+           if (store.getFile() != null) {
+               String url = store.getFile().getUploadImageUrl();
+
+               top5UrlList.add(url);
+           }
+       }
+
+       return top5UrlList;
+   }
 
 
     //매장주인이 맞는지 체크

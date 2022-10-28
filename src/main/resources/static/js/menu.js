@@ -170,7 +170,7 @@ var main = {
             url: "/seller/menu",
             data: formData
         }).then((resp) => {
-            alert('메뉴가 등록됐습니다.')
+            alert("메뉴가 등록됐습니다.")
             window.location.reload()
             console.log(resp)
         }).catch((error) => {

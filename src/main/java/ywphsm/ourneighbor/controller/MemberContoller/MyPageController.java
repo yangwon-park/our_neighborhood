@@ -50,4 +50,17 @@ public class MyPageController {
         model.addAttribute("count", count);
         return "member/myLike";
     }
+
+    @GetMapping("/seller/sellerPage")
+    public String sellerPage(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+                             Model model) {
+        Member byId = memberService.findById(member.getId());
+        List<StoreDTO.Detail> collect = byId.getMemberOfStoreList().stream()
+                .map(memberOfStore -> new StoreDTO.Detail(memberOfStore.getStore()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("storeDto", collect);
+
+        return "member/sellerPage";
+    }
 }

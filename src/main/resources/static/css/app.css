@@ -36,6 +36,7 @@
 --breakpoint-md: 768px;
 --breakpoint-lg: 992px;
 --breakpoint-xl: 1200px;
+--bs-font-sans-serif: "s-core";
 --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 accent-color: #F01D04;
 }

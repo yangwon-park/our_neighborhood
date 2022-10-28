@@ -3,7 +3,6 @@
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
-
     <style>
 
     </style>
@@ -31,7 +30,7 @@
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent pb-5">
                         <div class="text-muted text-center mt-2 mb-4">
-                            <span class="mb-2">소셜 미디어로 로그인</span>
+                            <span class="mb-2 text-dark fw-bold">소셜 미디어로 로그인</span>
                         </div>
                         <div class="text-muted text-center mx-1">
                             <!-- 카카오 로그인 -->
@@ -50,7 +49,7 @@
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="text-center text-muted mb-4">
-                            <small>Log in</small>
+                            <span class="mb-2 text-dark fw-bold">우리 동네 계정으로 로그인</span>
                         </div>
                         <form role="form" th:action="@{/loginSecurity}" th:object="${loginForm}" method="post">
                             <div class="form-group">
@@ -85,17 +84,25 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-main-color mt-4">로그인</button>
+                                <button type="submit" class="btn btn-main-color my-4 w-100">로그인</button>
                             </div>
                         </form>
                         <br>
-                        <div class="float-end">
-                            <!-- 회원가입 -->
-                            <a class="p-2 text-muted" href="/sign_up">회원가입</a>
-                            <!-- 아이디 찾기 -->
-                            <a class="p-2 text-muted" href="/findUserId">아이디 찾기</a>
-                            <!-- 비밀번호 찾기 -->
-                            <a class="p-2 text-muted" href="/findPassword">비밀번호 찾기</a>
+                        <div class="row">
+                            <div class="col-6 ">
+                                <span class="float-start">
+                                    <!-- 회원가입 -->
+                                    <a class="p-2 text-dark" href="/sign_up">회원가입</a>
+                                </span>
+                            </div>
+                            <div class="col-6 ">
+                                <span class="float-end">
+                                    <!-- 아이디 찾기 -->
+                                    <a class="p-2 text-dark" href="/findUserId">아이디 찾기</a>
+                                    <!-- 비밀번호 찾기 -->
+                                    <a class="p-2 text-dark" href="/findPassword">비밀번호 찾기</a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

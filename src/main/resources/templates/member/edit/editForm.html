@@ -52,7 +52,7 @@
                             <small>전화번호</small>
                             <div class="mb-3 d-flex">
                                 <input th:field="*{phoneNumber}" class="form-control" type="text" readonly>
-                                <button type="button" class="text-center btn btn-orange ms-3"
+                                <button type="button" class="text-center btn btn-main-color ms-3"
                                         style="height: 3rem"
                                         th:onclick="|location.href='@{/user/member_edit/phoneNumber}'|">전화번호 수정
                                 </button>
@@ -64,12 +64,12 @@
                                     type="button">비밀번호 변경</button>
                         </div>
                         <div class="text-center">
-                            <button type="button" class="btn btn-orange mt-4" id="member-edit">회원정보 수정</button>
+                            <button type="button" class="btn btn-main-color mt-4" id="member-edit">회원정보 수정</button>
                         </div>
                     </form>
                     <br>
                     <div class="text-center">
-                        <button type="button" class="btn btn-orange mt-4" id="member-delete">회원탈퇴</button>
+                        <button type="button" class="btn btn-main-color mt-4" id="member-delete">회원탈퇴</button>
                     </div>
                 </div>
             </div>

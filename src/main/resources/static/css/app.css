@@ -172,14 +172,8 @@ input[type=radio] {
     font-weight: bolder;
 }
 
-.orange {
+.main-color {
     color: #F01D04;
-}
-
-.hr-orange {
-    height: 1rem;
-    background: #F01D04;
-    border: 0;
 }
 
 .btn:hover,
@@ -210,36 +204,36 @@ input[type=radio] {
 }
 
 
-.btn-orange {
+.btn-main-color {
     color: #fff;
     border-color: #F01D04;
     background-color: #F01D04;
     box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
 }
 
-.btn-orange:hover {
+.btn-main-color:hover {
     color: #fff;
     border-color: #F01D04;
     background-color: #F01D04;
 }
 
-.btn-orange:focus {
+.btn-main-color:focus {
     box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08), 0 0 0 0 rgba(94, 114, 228, .5);
 }
 
-.btn-orange:disabled {
+.btn-main-color:disabled {
     color: #fff;
     border-color: #F01D04;
     background-color: #F01D04;
 }
 
-.btn-orange:not(:disabled):not(.disabled):active {
+.btn-main-color:not(:disabled):not(.disabled):active {
     color: #fff;
     border-color: #F01D04;
     background-color: #EBE40D;
 }
 
-.btn-orange:not(:disabled):not(.disabled):active:focus {
+.btn-main-color:not(:disabled):not(.disabled):active:focus {
     box-shadow: none, 0 0 0 0 rgba(94, 114, 228, .5);
 }
 
@@ -513,6 +507,44 @@ input[type=radio] {
     margin-left: 0.75rem;
 }
 
+#review-add-form fieldset{
+    display: inline-block;
+    direction: rtl;
+    border:0;
+}
+#review-add-form fieldset legend{
+    text-align: right;
+}
+#review-add-form input[type=radio]{
+    display: none;
+}
+#review-add-form fieldset label{
+    font-size: 3em;
+    color: transparent;
+    text-shadow: 0 0 0 #f0f0f0;
+}
+#review-add-form fieldset label:hover{
+    text-shadow: 0 0 0 rgba(240, 29, 4, 0.99);
+}
+
+#review-add-form fieldset label:hover ~ label{
+    text-shadow: 0 0 0 rgba(240, 29, 4, 0.99);
+}
+
+#review-add-form fieldset input[type=radio]:checked ~ label{
+    text-shadow: 0 0 0 rgba(240, 29, 4, 0.99);
+}
+
+#reviewContents {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: solid 1.5px #D3D3D3;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+}
 
 .OPEN {
     background: #F01D04;
@@ -564,7 +596,7 @@ input[type=radio] {
     display: inline-block;
     height: 39px;
     overflow: hidden;
-    background: url(/images/star/star.png) no-repeat;
+    background: url("/images/star/star.png") no-repeat;
 }
 
 .star-rating span {

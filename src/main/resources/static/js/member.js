@@ -10,6 +10,8 @@ var main = {
         const memberEditBtn = document.getElementById('member-edit');
         const passwordEditBtn = document.getElementById('password-edit');
         const memberDeleteBtn = document.getElementById('member-delete');
+        const findUserIdBtn = document.getElementById('find-userId');
+        const findPasswordBtn = document.getElementById('find-password');
 
         if (signUpSaveBtn !== null) {
             signUpSaveBtn.addEventListener('click', () => {
@@ -49,6 +51,20 @@ var main = {
         if (memberDeleteBtn !== null) {
             memberDeleteBtn.addEventListener('click', () => {
                 _this.delete();
+                // _this.save();
+            });
+        }
+
+        if (findUserIdBtn !== null) {
+            findUserIdBtn.addEventListener('click', () => {
+                _this.findUserId();
+                // _this.save();
+            });
+        }
+
+        if (findPasswordBtn !== null) {
+            findPasswordBtn.addEventListener('click', () => {
+                _this.findPassword();
                 // _this.save();
             });
         }
@@ -110,6 +126,8 @@ var main = {
             passwordCheckValidation = false;
         }
 
+        const signUpForm = document.getElementById("sign-up-add-form");
+        let formData = new FormData(signUpForm);
 
         if (userId.value !== '' && username.value !== ''
             && nickname.value !== '' && passwordCheckValidation === true
@@ -123,7 +141,8 @@ var main = {
                     nickname: nickname.value,
                     email: email.value,
                     phoneNumber: phoneNumber.value,
-                    certifiedNumber: certifiedNumber.value
+                    certifiedNumber: certifiedNumber.value,
+                    userId: userId.value
                 }
             }).then((resp) => {
                 let check = resp.data;
@@ -132,7 +151,13 @@ var main = {
                     this.save();
                 } else {
                     alert(check);
-                    window.location.reload();
+                    axios({
+                        method: "get",
+                        url: "/sign_up",
+                        data: formData
+                    }).catch((e) => {
+                        console.error(e);
+                    });
                 }
             }).catch((e) => {
                 console.error(e);
@@ -368,6 +393,96 @@ var main = {
         }).catch((error) => {
             console.log(error);
         })
+    },
+
+    findUserId: function () {
+
+        const email = document.getElementById("email");
+
+        const emailValid = document.getElementById('find-userId-email-valid');
+
+        email.classList.remove("valid-custom");
+
+        validation.removeValidation(emailValid);
+
+        let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        let emailValidation = emailRegExp.test(email.value);
+
+        if (emailValidation) {
+            axios({
+                method: "post",
+                url: "/findUserId",
+                params: {
+                    email: email.value
+                }
+            }).then((resp) => {
+                let check = resp.data;
+                if (check === '성공') {
+                    alert("이메일로 아이디가 발송됐습니다.");
+                    window.location.href = "/login";
+                } else {
+                    alert(check);
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        if (!emailValidation) {
+            email.classList.add("valid-custom");
+            validation.addValidation(emailValid, "올바른 이메일 형식이 아닙니다.");
+        }
+
+    },
+
+    findPassword: function () {
+
+        const email = document.getElementById("email");
+        const userId = document.getElementById("userId");
+
+        const emailValid = document.getElementById('find-password-email-valid');
+        const userIdValid = document.getElementById('find-password-userId-valid');
+
+        email.classList.remove("valid-custom");
+        userId.classList.remove("valid-custom");
+
+        validation.removeValidation(emailValid);
+        validation.removeValidation(userIdValid);
+
+        let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        let emailValidation = emailRegExp.test(email.value);
+
+        if (emailValidation && userId.value !== '') {
+            axios({
+                method: "post",
+                url: "/findPassword",
+                params: {
+                    email: email.value,
+                    userId: userId.value
+                }
+            }).then((resp) => {
+                let check = resp.data;
+                if (check === '성공') {
+                    alert("이메일로 비밀번호가 발송됐습니다.");
+                    window.location.href = "/login";
+                } else {
+                    alert(check);
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        if (!emailValidation) {
+            email.classList.add("valid-custom");
+            validation.addValidation(emailValid, "올바른 이메일 형식이 아닙니다.");
+        }
+
+        if (userId.value === '') {
+            userId.classList.add("valid-custom");
+            validation.addValidation(userIdValid, "닉네임을 입력해주세요.");
+        }
+
     },
 
 };

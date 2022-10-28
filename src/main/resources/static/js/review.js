@@ -111,7 +111,7 @@ var main = {
 
     save: function () {
         const reviewForm = document.getElementById("review-add-form");
-        const storeId = document.getElementById("storeId");
+        const storeId = document.getElementById("storeId").value;
 
         let formData = new FormData(reviewForm);
 

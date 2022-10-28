@@ -42,7 +42,7 @@ public class MemberApiController {
 
     @GetMapping("/member/check")
     public String check(String nickname, String email,
-                        String phoneNumber, String certifiedNumber,
+                        String phoneNumber, String certifiedNumber, String userId,
                         @SessionAttribute(name = SessionConst.PHONE_CERTIFIED, required = false)
                             PhoneCertifiedForm certifiedForm) {
         if (certifiedForm == null) {
@@ -64,6 +64,10 @@ public class MemberApiController {
 
         if (memberService.findByEmail(email) != null) {
             return "이미 있는 이메일 입니다";
+        }
+
+        if (memberService.userIdCheck(userId) != null) {
+            return "이미 있는 아이디 입니다";
         }
         return "성공";
     }
@@ -158,5 +162,17 @@ public class MemberApiController {
 
         memberService.withdrawal(memberId);
         return "redirect:/logout";
+    }
+
+    @PostMapping("/findUserId")
+    public String findUserId(String email) {
+
+        return memberService.sendEmailByUserId(email);
+    }
+
+    @PostMapping("/findPassword")
+    public String findPassword(String email, String userId) {
+
+        return memberService.sendEmailByPassword(email, userId);
     }
 }

@@ -3,15 +3,12 @@
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
-
     <style>
 
     </style>
 </head>
 <link rel="stylesheet" th:href="@{../css/argon.css}">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <body class="bg-default">
-
 <!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
@@ -92,7 +89,7 @@
                             <div class="">
                                 <input class="form-control" placeholder="전화번호 예)01012341234" type="text" th:field="*{phoneNumber}">
                                 <div id="sign-up-phoneNumber-valid" class="my-1 valid-custom"></div>
-                                <button type="button" class="text-center btn btn-orange ms-3"
+                                <button type="button" class="text-center btn btn-main-color ms-3"
                                         style="height: 3rem" id="send-SMS">인증번호 받기</button>
                             </div>
                         </div>
@@ -104,7 +101,7 @@
                         </div>
 
                         <div class="text-center">
-                            <button type="button" class="btn btn-orange mt-4" id="sign-up-save">회원가입</button>
+                            <button type="button" class="btn btn-main-color mt-4" id="sign-up-save">회원가입</button>
                         </div>
                     </form>
                 </div>

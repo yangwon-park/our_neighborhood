@@ -8,7 +8,6 @@
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <body class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
@@ -50,7 +49,7 @@
                             <td th:text="${hashtag.count}" class="text-center">누적 횟수</td>
                             <td class="text-right" style="width: 30%">
                                 <button th:id="|hashtag-delete-btn${hashtag.hashtagId}|"
-                                        class="btn btn-orange text-center hashtag-delete-btn" style="color: #ffffff">
+                                        class="btn btn-main-color text-center hashtag-delete-btn" style="color: #ffffff">
                                     삭제</button>
                             </td>
                             <td style="display: none">

@@ -8,7 +8,6 @@
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <body class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <section class="header">
@@ -106,7 +105,7 @@
                 </span>
                 </div>
                 <div class="col-12 my-1">
-                    <i class="fa-solid fa-map-location-dot orange fa-sm"></i>
+                    <i class="fa-solid fa-map-location-dot main-color fa-sm"></i>
                     <span>주소</span>
                     <span th:text="*{roadAddr}"></span>
                 </div>
@@ -115,13 +114,13 @@
                     <span th:text="*{numberAddr}"></span>
                 </div>
                 <div class="col-12 my-1">
-                    <i class="fa-solid fa-square-phone orange fa-sm"></i>
+                    <i class="fa-solid fa-square-phone main-color fa-sm"></i>
                     <span>전화 번호</span>
                     <a th:href="@{tel:{phoneNumber}(phoneNumeber=*{phoneNumber})}"
                        th:text="*{phoneNumber}" style="color: #000000">전화번호</a>
                 </div>
                 <div class="col-12 d-flex align-items-center my-1">
-                    <i class="fa-solid fa-calendar orange me-1 fa-sm"></i>
+                    <i class="fa-solid fa-calendar main-color me-1 fa-sm"></i>
                     <span th:each="day : *{offDays}" class="me-2">
                     <th:block th:text="${day}"></th:block>
                 </span>
@@ -129,14 +128,14 @@
                     <span th:if="${#lists.isEmpty(store.offDays)}">휴무일 없음</span>
                 </div>
                 <div class="col-12 my-1">
-                    <i class="fa-solid fa-clock orange fa-sm"></i>
+                    <i class="fa-solid fa-clock main-color fa-sm"></i>
                     <span>영업 시간</span>
                     <span th:text="*{#temporals.format(openingTime, 'a hh:mm')}"></span>
                     ~
                     <span th:text="*{#temporals.format(closingTime, 'a hh:mm')}"></span>
                 </div>
                 <div class="col-12 my-1">
-                    <i class="fa-solid fa-clock orange fa-sm"></i>
+                    <i class="fa-solid fa-clock main-color fa-sm"></i>
                     <span>휴식 시간</span>
                     <th:block th:if="*{breakStart ne null}">
                         <th:block th:if="*{breakStart ne breakEnd}">
@@ -150,7 +149,7 @@
                     </th:block>
                 </div>
                 <div class="col-12 my-1">
-                    <i class="fa-solid fa-square-parking orange fa-sm"></i>
+                    <i class="fa-solid fa-square-parking main-color fa-sm"></i>
                     <span>주차</span>
                     <th:block th:if="*{park ne null}">
                     <span class="ms-2 me-3 fw-bold" th:text="*{park.description}"
@@ -248,7 +247,7 @@
                 <h2 class="text-dark"><strong>리뷰</strong></h2>
             </div>
             <div class="col-6">
-                <button class="btn btn-orange float-end" style="font-size: 1.1rem; color: #ffffff"
+                <button class="btn btn-main-color float-end" style="font-size: 1.1rem; color: #ffffff"
                         th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">
                     리뷰 등록
                 </button>
@@ -303,7 +302,7 @@
                 <tbody id="reviewBody">
                 </tbody>
             </table>
-            <button type="button" class="btn btn-orange mt-4" id="review-more">더보기</button>
+            <button type="button" class="btn btn-main-color mt-4" id="review-more">더보기</button>
         </div>
     </div>
 </section>

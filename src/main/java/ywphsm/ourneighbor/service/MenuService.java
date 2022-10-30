@@ -15,6 +15,7 @@ import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
+import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.hashtag.hashtagofmenu.HashtagOfMenuRepository;
@@ -165,8 +166,8 @@ public class MenuService {
         return menuRepository.existsByNameAndStore(name, store);
     }
 
-    public List<Menu> findByStoreIdCaseByOrderByType(Long storeId) {
-        return menuRepository.findByStoreIdCaseByOrderByType(storeId);
+    public List<Menu> findByStoreIdWithoutTypeMenuCaseByOrderByType(Long storeId) {
+        return menuRepository.findByStoreIdWithoutTypeMenuCaseByOrderByType(storeId);
     }
 
     // json을 hashtagNameList로 변환해주는 로직
@@ -243,5 +244,9 @@ public class MenuService {
                 hashtagOfMenuRepository.deleteByHashtag(hashtagRepository.findByName(prevName));
             }
         }
+    }
+
+    public List<String> findMenuImg(Long storeId) {
+        return menuRepository.findMenuImg(storeId);
     }
 }

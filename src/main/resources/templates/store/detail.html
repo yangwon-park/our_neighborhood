@@ -24,7 +24,7 @@
     <div class="container px-0" th:object="${store}">
         <div class="row store-head">
             <div class="col-6 d-flex">
-                <h1 class="my-auto" style="font-size: 2.0rem" th:text="*{name}">가게명</h1>
+                <h1 class="my-auto h1 text-dark fw-bold" th:text="*{name}">가게명</h1>
                 <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
                       th:classappend="*{status}"></span>
                 <div class="hidden" id="storeId" th:text="*{storeId}"></div>
@@ -179,7 +179,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-12" style="height: 50px">
                 <div class="float-end">
                     <th:block th:if="${session.loginMember ne null}">
                         <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
@@ -197,8 +197,58 @@
                 </div>
             </div>
         </div>
-        <hr class="my-2">
+        <hr class="mt-2 mb-5">
         <div class="menu-list">
+            <div class="col-12">
+                <div class="menu-title my-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="my-auto h1 text-dark fw-bold">메뉴</p>
+                        </div>
+                        <div class="col-6">
+                            <div class="float-end" th:if="${!menuImgList.isEmpty()}">
+                                <button class="btn btn-main-color"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#menu-modal">메뉴판으로 보기
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="menu-modal" data-bs-keyboard="false" tabindex="-1"
+                             aria-labelledby="edit-image-modal-label" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div id="carouselExampleControls" class="carousel slide"
+                                             data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                <th:block th:each="img, stat: ${menuImgList}">
+                                                    <div th:if="${stat.index == 0}" class="carousel-item active">
+                                                        <img th:src="${img}" class="d-block w-100" alt="메뉴판">
+                                                    </div>
+                                                    <div th:if="${stat.index > 0}" class="carousel-item">
+                                                        <img th:src="${img}" class="d-block w-100" alt="메뉴판">
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                            <button class="carousel-control-prev" type="button"
+                                                    data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                    data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row menu-sub" th:each="t: ${menuTypes}">
                 <th:block th:each="menu, stat : ${menuList}">
                     <th:block th:if="${#strings.equals(t.name(), menu.type)}"
@@ -207,7 +257,7 @@
                         <div class="col-12" th:if="${isDuplicated == false}">
                             <div class="menu-title my-3">
                                 <div class="col-12">
-                                    <p class="my-auto h1" style="font-size: 1.8rem" th:text="${t.description}">메뉴</p>
+                                    <p class="h3" style="font-size: 1.8rem" th:text="${t.description}">메뉴</p>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +294,7 @@
         <hr class="my-5">
         <div class="row review">
             <div class="col-6">
-                <h2 class="text-dark"><strong>리뷰</strong></h2>
+                <p class="my-auto h1 text-dark fw-bold">리뷰</p>
             </div>
             <div class="col-6">
                 <button class="btn btn-main-color float-end" style="font-size: 1.1rem; color: #ffffff"

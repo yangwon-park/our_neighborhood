@@ -191,20 +191,6 @@ legend {
     display: none !important;
 }
 
-h1,
-.h1 {
-    font-family: inherit;
-    font-weight: 600;
-    line-height: 1.5;
-    margin-bottom: .5rem;
-    color: #32325d;
-}
-
-h1,
-.h1 {
-    font-size: 1.625rem;
-}
-
 small,
 .small {
     font-size: 80%;
@@ -851,7 +837,7 @@ button.bg-default:focus {
     margin-bottom: 1.5rem !important;
 }
 
-.mt--8 {
+.mt-8 {
     margin-top: -8rem !important;
 }
 

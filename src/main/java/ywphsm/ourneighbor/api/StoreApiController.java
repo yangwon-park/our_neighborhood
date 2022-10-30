@@ -39,10 +39,12 @@ public class StoreApiController {
 
         List<List<String>> categoryImageList = new ArrayList<>();
 
+        double dist = 3;
+
         if (lat != null && lon != null) {
             for (CategoryDTO.Simple simple : rootCategoryList) {
                 categoryImageList.add(storeService.getTop5ImageByCategories(
-                        (simple.getCategoryId().toString()), Double.parseDouble(lat), Double.parseDouble(lon)));
+                        (simple.getCategoryId().toString()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
             }
         }
 
@@ -73,7 +75,7 @@ public class StoreApiController {
     }
 
     @PostMapping("/seller/store/editImage/{storeId}")
-    public Long saveImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
+    public Long saveMainImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                             HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -89,7 +91,7 @@ public class StoreApiController {
     }
 
     @PutMapping("/seller/store/editImage/{storeId}")
-    public Long updateImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
+    public Long updateMainImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                             HttpServletRequest request, HttpServletResponse response) throws IOException {
 

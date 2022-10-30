@@ -20,11 +20,6 @@ import java.util.List;
 @RequestMapping("/user")
 public class ReviewController {
 
-    private final ReviewService reviewService;
-
-    private final StoreService storeService;
-
-
     @GetMapping("/store/{storeId}/createReview")
     public String createReview(@PathVariable Long storeId,
                                @ModelAttribute(name = "reviewDTO") ReviewDTO.Add reviewDTO,
@@ -36,15 +31,4 @@ public class ReviewController {
         return "review/createReview";
     }
 
-    @GetMapping("/member_edit/review")
-    public String MyReview(@SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member,
-                           Model model) {
-
-        List<ReviewMemberDTO> content = reviewService.myReviewList(member.getId());
-        long count = reviewService.myReviewCount(member.getId());
-
-        model.addAttribute("review", content);
-        model.addAttribute("count", count);
-        return "member/myReview";
-    }
 }

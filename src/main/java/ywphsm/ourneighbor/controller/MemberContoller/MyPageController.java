@@ -5,11 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.service.MemberService;
+import ywphsm.ourneighbor.service.ReviewService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class MyPageController {
 
     private final MemberService memberService;
+    private final ReviewService reviewService;
 
     @GetMapping("/user/myPage")
     public String myPage(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
@@ -62,5 +65,20 @@ public class MyPageController {
         model.addAttribute("storeDto", collect);
 
         return "member/sellerPage";
+    }
+
+    @GetMapping("/member_edit/review")
+    public String MyReview(@SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member,
+                           Model model) {
+
+        List<ReviewMemberDTO> content = reviewService.myReviewList(member.getId());
+        int count = 0;
+        if (!content.isEmpty()) {
+            count = content.size();
+        }
+
+        model.addAttribute("review", content);
+        model.addAttribute("count", count);
+        return "member/myReview";
     }
 }

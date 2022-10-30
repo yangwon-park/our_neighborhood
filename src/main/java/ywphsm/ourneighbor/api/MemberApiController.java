@@ -106,7 +106,7 @@ public class MemberApiController {
     }
 
     @PutMapping("/member/edit/phoneNumber")
-    public String save(String phoneNumber, String certifiedNumber,
+    public String updatePhoneNumber(String phoneNumber, String certifiedNumber,
                      @SessionAttribute(name = SessionConst.PHONE_CERTIFIED, required = false) PhoneCertifiedForm certifiedForm,
                      @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
@@ -123,8 +123,8 @@ public class MemberApiController {
     }
 
     @PutMapping("/member/edit")
-    public String update(EditForm editForm) {
-        Member member = memberService.findById(editForm.getMemberId());
+    public String update(EditForm editForm,
+                         @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
         if (memberService.doubleCheck(editForm.getNickname()) != null &&
                 !member.getNickname().equals(editForm.getNickname())) {
@@ -135,12 +135,12 @@ public class MemberApiController {
             return "이미 존재하는 이메일 입니다";
         }
 
-        memberService.updateMember(editForm.getMemberId(), editForm.getNickname(), editForm.getEmail());
+        memberService.updateMember(member.getId(), editForm.getNickname(), editForm.getEmail());
         return "성공";
     }
 
     @PutMapping("/member/edit/password")
-    public String update(PasswordEditForm editForm,
+    public String updatePassword(PasswordEditForm editForm,
                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
         if (!memberService.passwordCheck(member.getPassword(), editForm.getBeforePassword())) {

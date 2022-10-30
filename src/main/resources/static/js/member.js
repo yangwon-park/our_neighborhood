@@ -329,7 +329,6 @@ var main = {
 
         const email = document.getElementById("email");
         const nickname = document.getElementById("nickname");
-        const memberId = document.getElementById("memberId");
 
         const emailValid = document.getElementById('sign-up-email-valid');
         const nicknameValid = document.getElementById('sign-up-nickname-valid');
@@ -349,8 +348,7 @@ var main = {
                 url: "/member/edit",
                 params: {
                     nickname: nickname.value,
-                    email: email.value,
-                    memberId: memberId.value
+                    email: email.value
                 }
             }).then((resp) => {
                 let check = resp.data;

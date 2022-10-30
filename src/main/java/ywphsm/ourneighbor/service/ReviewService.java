@@ -95,10 +95,6 @@ public class ReviewService {
         return reviewMemberDTOS;
     }
 
-    public long myReviewCount(Long memberId) {
-        return reviewRepository.myReviewCount(memberId);
-    }
-
     public double ratingAverage(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
 

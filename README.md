@@ -12,21 +12,22 @@
     - SpringDataJPA (2.6.5)
     - Spring Security (2.6.5)
     - Spring Validation (2.6.5)
-    - Thymeleaf (2.6.5)
+    - Spring Oauth2
+    - AwsSpring Cloud (2.4.2)
     - QueryDSL (5.0.0)
+    - Thymeleaf (2.6.5)
     - MySQL Driver (8.0.28)
     - H2 Database (1.4.200)
     - Lombok (1.18.22)
-    - gson (2.8.7)
-- DB - H2 (Local), My SQL
+    - Jsonsimple (1.1.1)
+    - p6spy (1.8.1)
+- DB - H2 (Local), MariaDB (10.6.12)
 - Front
-  - HTML5, CSS (Bootstrap - 5.2.0)
+  - HTML5, CSS (Bootstrap - 5.2.2)
   - axios(0.27.2)
 
 - View Template - Thymeleaf
 - CVS - Git (Github, SourceTree)
-- ETC
-  - p6spy (1.5.8) - jpa 쿼리 파라미터 확인 용 라이브러리
 
 
  

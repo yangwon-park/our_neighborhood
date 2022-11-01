@@ -88,7 +88,7 @@ var main = {
                 data: formData
             }).then((resp) => {
                 alert("매장 등록이 완료됐습니다.");
-                window.location.href = "/";
+                window.location.href = "/store/" + resp.data;
             }).catch((error) => {
                 console.error(error);
             });

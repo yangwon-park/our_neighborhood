@@ -62,10 +62,14 @@ body {
 }
 
 input[type=radio] {
-    accent-color: #F01D04;
-    width: 1.25rem;
-    height: 1.25rem;
-    vertical-align: middle;
+    accent-color: #F01D04; !important;
+    width: 1.25rem; !important;
+    height: 1.25rem; !important;
+    vertical-align: middle; !important;
+}
+
+.header-margin {
+    height: 1vh;
 }
 
 .map-wrap {
@@ -73,6 +77,10 @@ input[type=radio] {
     height: 100%;
     position: relative;
     overflow: hidden;
+}
+
+.bg-secondary {
+    background-color: #f7fafc !important;
 }
 
 .radius-border {

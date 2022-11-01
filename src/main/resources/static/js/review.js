@@ -50,8 +50,24 @@ var main = {
                     _this.updateMainImage();
                 })
             }
-
         }
+
+        const zoomDiv = document.getElementById("modal-content");
+
+        function zoom(event) {
+            event.preventDefault();
+
+            scale += event.deltaY * -0.01;
+
+            // Restrict scale
+            scale = Math.min(Math.max(.125, scale), 4);
+
+            // Apply scale transform
+            zoomDiv.style.transform = `scale(${scale})`;
+        }
+
+        let scale = 1;
+        zoomDiv.onwheel = zoom;
     },
 
     check: function () {

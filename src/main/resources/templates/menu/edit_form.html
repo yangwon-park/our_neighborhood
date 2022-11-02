@@ -94,21 +94,6 @@
                                         </div>
                                         <div>
                                             <div class="mb-2">
-                                                <span>메뉴 특징</span>
-                                            </div>
-                                            <div class="form-group d-flex text-nowrap">
-                                                <div th:each="feat, i : ${menuFeats}"
-                                                     th:with="check = ${menu.feature.name()}">
-                                                    <input type="radio" th:id="|feature${i.index+1}|" name="feature"
-                                                           th:checked="${#strings.equals(feat.name(), check)}"
-                                                           th:value="${feat.name()}"/>
-                                                    <label th:text="${feat.description}"
-                                                           class="form-check-label fw-bold"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="mb-2">
                                                 <span>메뉴 타입</span>
                                             </div>
                                             <div class="form-group d-flex text-nowrap">
@@ -118,6 +103,21 @@
                                                            th:checked="${#strings.equals(t.name(), check)}"
                                                            th:value="${t.name()}"/>
                                                     <label th:text="${t.description}"
+                                                           class="form-check-label fw-bold"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="mb-2">
+                                                <span>메뉴 특징</span>
+                                            </div>
+                                            <div class="form-group d-flex text-nowrap">
+                                                <div th:each="feat, i : ${menuFeats}"
+                                                     th:with="check = ${menu.feature.name()}">
+                                                    <input type="radio" th:id="|feature${i.index+1}|" name="feature"
+                                                           th:checked="${#strings.equals(feat.name(), check)}"
+                                                           th:value="${feat.name()}"/>
+                                                    <label th:text="${feat.description}"
                                                            class="form-check-label fw-bold"></label>
                                                 </div>
                                             </div>

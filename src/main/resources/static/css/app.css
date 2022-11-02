@@ -191,7 +191,7 @@ input[type=radio] {
 }
 
 .main-color {
-    color: #F01D04;
+    color: #F01D04 !important;
 }
 
 .btn:hover,

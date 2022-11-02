@@ -25,32 +25,32 @@
                 </th:block>
                 <th:block th:if="${session.loginMember ne null}">
                     <li class="nav-item">
-                        <a href="/logout" class="nav-link">
+                        <a href="/logout" class="nav-link nav-font">
                             로그아웃
                         </a>
                     </li>
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <li class="nav-item">
-                            <a th:href="@{/admin/mypage/{memberId}(memberId=${session.loginMember.getId()})}" class="nav-link">
+                            <a th:href="@{/admin/mypage/{memberId}(memberId=${session.loginMember.getId()})}" class="nav-link nav-font">
                                 운영자 페이지
                             </a>
                         </li>
                     </th:block>
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')}">
                         <li class="nav-item">
-                            <a href="/seller/sellerPage" class="nav-link">
+                            <a href="/seller/sellerPage" class="nav-link nav-font">
                                 매장 관리
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/user/myPage" class="nav-link">
+                            <a href="/user/myPage" class="nav-link nav-font">
                                 마이 페이지
                             </a>
                         </li>
                     </th:block>
                     <th:block th:if="${#strings.equals(session.loginMember.getRole(), 'USER')}">
                         <li class="nav-item">
-                            <a href="/user/myPage" class="nav-link">
+                            <a href="/user/myPage" class="nav-link nav-font">
                                 마이 페이지
                             </a>
                         </li>

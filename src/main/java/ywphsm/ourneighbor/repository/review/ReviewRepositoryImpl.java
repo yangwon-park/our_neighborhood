@@ -71,24 +71,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .orderBy(QReview.review.createdDate.desc())
                 .fetch();
 
-        //리뷰 총개수 구하는 쿼리
-//        long count = queryFactory
-//                .selectFrom(QReview.review)
-//                .leftJoin(QReview.review.member, QMember.member)
-//                .where(memberIdEq(memberId))
-//                .fetch().size();
-
-    }
-
-    @Override
-    public long myReviewCount(Long memberId) {
-        //리뷰 총개수 구하는 쿼리
-        return queryFactory
-                .selectFrom(QReview.review)
-                .leftJoin(QReview.review.member, QMember.member)
-                .where(memberIdEq(memberId))
-                .fetch().size();
-
     }
 
     private BooleanExpression storeIdEq(Long storeId) {

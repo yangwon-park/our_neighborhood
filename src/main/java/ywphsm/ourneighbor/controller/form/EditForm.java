@@ -10,9 +10,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class EditForm {
 
-    @NotNull
-    private Long memberId;
-
     @NotBlank
     private String nickname;
 

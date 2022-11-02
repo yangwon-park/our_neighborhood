@@ -241,7 +241,7 @@ var main = {
         const likeStatus = document.getElementById("like-btn").value;
 
         axios({
-            method: "get",
+            method: "put",
             url: "/user/like",
             params: {
                 likeStatus: likeStatus,

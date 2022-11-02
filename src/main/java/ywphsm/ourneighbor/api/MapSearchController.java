@@ -64,7 +64,6 @@ public class MapSearchController {
     public ResultClass<?> getTop5StoresByCategories(@RequestParam String categoryId,
                                             @CookieValue(value = "lat", required = false) String myLat,
                                             @CookieValue(value = "lon", required = false) String myLon) {
-
         double dist = 3;
 
         List<Store> findStores = storeService.getTop5ByCategories(categoryId, dist,

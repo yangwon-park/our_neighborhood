@@ -59,7 +59,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
     @Override
     public List<Store> getTop5ByCategories(String categoryId, double dist, double lat, double lon) {
-
         Location northEast = Distance.calculatePoint(lat, lon, dist, Direction.NORTHEAST.getAngle());
         Location southWest = Distance.calculatePoint(lat, lon, dist, Direction.SOUTHWEST.getAngle());
 

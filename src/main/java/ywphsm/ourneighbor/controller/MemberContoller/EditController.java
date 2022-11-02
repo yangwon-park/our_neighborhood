@@ -16,7 +16,6 @@ public class EditController {
     public String memberEdit(@ModelAttribute(name = "editForm") EditForm editForm,
                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
-        editForm.setMemberId(member.getId());
         editForm.setNickname(member.getNickname());
         editForm.setEmail(member.getEmail());
         editForm.setPhoneNumber(member.getPhoneNumber());

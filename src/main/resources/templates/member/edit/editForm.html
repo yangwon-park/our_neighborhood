@@ -29,11 +29,10 @@
             <div class="card bg-secondary shadow border-0">
 
                 <div class="card-body px-lg-5 py-lg-5">
-                    <div class="text-center text-muted mb-4">
-                        <small>회원 수정</small>
+                    <div class="card-header bg-transparent pb-5">
+                        <div class="text-muted text-center mt-2 mb-4 fs-2">회원 수정</div>
                     </div>
                     <form th:object="${editForm}" id="member-edit-form" class="form-floating">
-                        <input th:field="*{memberId}" class="form-control" placeholder="회원 번호" type="hidden">
                         <div class="form-group">
                             <small>닉네임</small>
                             <div class="">

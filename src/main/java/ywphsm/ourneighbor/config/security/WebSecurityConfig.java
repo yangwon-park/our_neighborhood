@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final MemberDetailsService memberDetailService;
     private final CustomOAuthUserService customOAuthUserService;
     private final CustomAuthSuccessHandler customAuthSuccessHandler;
+    private final CustomAuthFailHandler customAuthFailHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -78,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/loginSecurity")
                 .successHandler(customAuthSuccessHandler)
+                .failureHandler(customAuthFailHandler)
 
                 //logout
                 .and()

@@ -14,10 +14,13 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
+import ywphsm.ourneighbor.domain.store.distance.Direction;
+import ywphsm.ourneighbor.domain.store.distance.Distance;
+import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
-
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,8 @@ import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
 @Service
 @Transactional(readOnly = true) // 데이터 변경 X
 public class StoreService {
+
+    private final EntityManager em;
 
     private final StoreRepository storeRepository;
 
@@ -66,6 +71,18 @@ public class StoreService {
         memberOfStoreRepository.save(memberOfStore);
 
         return store.getId();
+    }
+
+    @Transactional
+    public Long saveMainImage(Long storeId, MultipartFile file) throws IOException {
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
+
+        UploadFile newUploadFile = awsS3FileStore.storeFile(file);
+
+        newUploadFile.addStore(store);
+
+        return storeId;
     }
 
 
@@ -117,6 +134,54 @@ public class StoreService {
         findStore.update(dto.toEntity());
 
         return storeId;
+    }
+
+
+    // 메인 이미지 업데이트
+    @Transactional
+    public Long updateMainImage(Long storeId, MultipartFile file) throws IOException {
+
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
+
+        UploadFile uploadFile = awsS3FileStore.storeFile(file);
+
+        if (store.getFile() != null) {
+            UploadFile prevFile = store.getFile();
+
+            prevFile.updateUploadedFileName(
+                    uploadFile.getStoredFileName(), uploadFile.getUploadedFileName(), uploadFile.getUploadImageUrl()
+            );
+        }
+
+        return storeId;
+    }
+
+    //찜 상태 업데이트
+    @Transactional
+    public void updateLike(boolean likeStatus, Long memberId, Long storeId) {
+        Member member = memberService.findById(memberId);
+        Store store = findById(storeId);
+
+        List<MemberOfStore> collect = member.getMemberOfStoreList().stream()
+                .filter(memberOfStore -> memberOfStore.getStore().getId().equals(storeId))
+                .collect(Collectors.toList());
+
+        if (likeStatus) {
+            if (!collect.isEmpty()) {
+                collect.get(0).updateStoreLike(true);
+            } else {
+                MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, store);
+                memberOfStore.updateStoreLike(true);
+                memberOfStoreRepository.save(memberOfStore);
+            }
+        } else {
+            MemberOfStore memberOfStore = collect.get(0);
+            memberOfStore.updateStoreLike(false);
+            if (!memberOfStore.isMyStore()) {
+                memberOfStoreRepository.delete(memberOfStore);
+            }
+        }
     }
 
     @Transactional
@@ -227,7 +292,6 @@ public class StoreService {
 
     public List<String> getTop5ImageByCategories(String categoryId, double dist, double lat, double lon) {
         List<Store> top5 = storeRepository.getTop5ByCategories(categoryId, dist, lat, lon);
-
         List<String> top5UrlList = new ArrayList<>();
 
         for (Store store : top5) {
@@ -268,5 +332,4 @@ public class StoreService {
         return collect.stream().map(categoryService::findById)
                 .collect(Collectors.toList());
     }
-
 }

@@ -157,6 +157,7 @@ var main = {
 
     save: function () {
         const menuForm = document.getElementById("menu-add-form");
+
         const formData = new FormData(menuForm);
 
         this.createDefaultImg(formData);

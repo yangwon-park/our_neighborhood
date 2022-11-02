@@ -19,6 +19,7 @@ import ywphsm.ourneighbor.service.email.EmailService;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -158,20 +159,58 @@ public class MemberService {
     }
 
     //아이디 찾기
-    public String findUserId(String receiverEmail) {
+    public String sendEmailByUserId(String email) {
 
-        String userId = memberRepository.findByEmail(receiverEmail).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 이메일입니다. receiverEmail = " + receiverEmail)).getUserId();
-
-        if (userId != null) {
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(receiverEmail);   //보낼 이메일주소 추가
-            mailMessage.setSubject("아이디 찾기 Our neighborhood");  //제목
-            mailMessage.setText("회원님의 아이디는 " + userId + "입니다.");
-            emailService.sendEmail(mailMessage);
+        Member member = memberRepository.findByEmail(email).orElse(null);
+        if (member == null) {
+            return "없는 이메일 입니다.";
+        }
+        if (member.getUserId() == null) {
+            return "해당 계정은 아이디가 존재하지 않습니다";
         }
 
-        return userId;
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);   //보낼 이메일주소 추가
+        mailMessage.setSubject("아이디 찾기 Our neighborhood");  //제목
+        mailMessage.setText("회원님의 아이디는 " + member.getUserId() + "입니다.");
+        emailService.sendEmail(mailMessage);
+        log.info("아이디 찾기 이메일 발송 완료 uesrId={}", member.getUserId());
+
+        return "성공";
+    }
+
+    //비밀번호 찾기
+    @Transactional
+    public String sendEmailByPassword(String email, String userId) {
+
+        Random rand = new Random();
+        String temporaryPassword = "";
+        for (int i = 0; i < 6; i++) {
+            String ran = Integer.toString(rand.nextInt(10));
+            temporaryPassword += ran;
+        }
+
+        Member member = memberRepository.findByEmail(email).orElse(null);
+        if (member == null) {
+            return "없는 이메일 입니다.";
+        }
+        if (!member.getUserId().equals(userId)) {
+            return "해당 계정의 아이디와 일치하지 않습니다";
+        }
+
+        //임시 비밀번호로 변경
+        member.updatePassword(encodedPassword(temporaryPassword));
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);   //보낼 이메일주소 추가
+        mailMessage.setSubject("비밀번호 찾기 Our neighborhood");  //제목
+        mailMessage.setText("임시 비밀번호를 발급했습니다.");
+        mailMessage.setText("임시 비밀번호는 " + temporaryPassword + "입니다.");
+        mailMessage.setText("로그인후 마이페이지에서 비밀번호를 변경해 주세요.");
+        emailService.sendEmail(mailMessage);
+        log.info("비밀번호 찾기 이메일 발송 완료 임시비밀번호={}", temporaryPassword);
+
+        return "성공";
     }
 
     //회원탈퇴

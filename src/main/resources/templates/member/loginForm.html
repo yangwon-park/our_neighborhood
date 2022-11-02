@@ -52,9 +52,8 @@
                         </div>
                         <form role="form" th:action="@{/loginSecurity}" th:object="${loginForm}" method="post">
                             <div class="form-group">
-                                <div th:if="${#fields.hasGlobalErrors()}">
-                                    <p class="field-error" th:each="err : ${#fields.globalErrors()}"
-                                       th:text="${err}">전체 오류 메시지</p>
+                                <div th:if="${error}">
+                                    <p class="valid-custom" th:text="${exception}">오류 메시지</p>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -62,11 +61,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                     </div>
-                                    <input class="form-control" placeholder="ID" type="text" id="userId"
-                                           th:field="*{userId}"
-                                           th:errorclass="field-error">
-                                    <div class="field-error" th:errors="*{userId}">
-                                    </div>
+                                    <input class="form-control" placeholder="ID" type="text" th:field="*{userId}">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -75,11 +70,7 @@
                                         <span class="input-group-text"><i
                                                 class="ni ni-lock-circle-open"></i></span>
                                     </div>
-                                    <input class="form-control" placeholder="Password" type="password"
-                                           id="password"
-                                           th:field="*{password}"
-                                           th:errorclass="field-error">
-                                    <div class="field-error" th:errors="*{password}"></div>
+                                    <input class="form-control" placeholder="Password" type="password" th:field="*{password}">
                                 </div>
                             </div>
                             <div class="text-center">

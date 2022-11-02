@@ -185,62 +185,6 @@ public class StoreService {
     }
 
     @Transactional
-    public Long saveMainImage(Long storeId, MultipartFile file) throws IOException {
-        Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
-
-        UploadFile newUploadFile = awsS3FileStore.storeFile(file);
-
-        newUploadFile.addStore(store);
-
-        return storeId;
-    }
-
-
-    // 메인 이미지 업데이트
-    @Transactional
-    public Long updateMainImage(Long storeId, MultipartFile file) throws IOException {
-
-        Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
-
-        UploadFile uploadFile = awsS3FileStore.storeFile(file);
-
-        if (store.getFile() != null) {
-            UploadFile prevFile = store.getFile();
-
-            prevFile.updateUploadedFileName(
-                    uploadFile.getStoredFileName(), uploadFile.getUploadedFileName(), uploadFile.getUploadImageUrl()
-            );
-        }
-
-        return storeId;
-    }
-
-    //찜 상태 업데이트
-    @Transactional
-    public void updateLike(boolean likeStatus, Long memberId, Long storeId) {
-        Member member = memberService.findById(memberId);
-        Store store = findById(storeId);
-
-        if (likeStatus) {
-            MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, store);
-            memberOfStore.updateStoreLike(true);
-            memberOfStoreRepository.save(memberOfStore);
-        } else {
-            List<MemberOfStore> collect = member.getMemberOfStoreList().stream()
-                    .filter(memberOfStore -> memberOfStore.getStore().getId().equals(storeId))
-                    .collect(Collectors.toList());
-
-            MemberOfStore memberOfStore = collect.get(0);
-            memberOfStore.updateStoreLike(false);
-            if (!memberOfStore.isMyStore()) {
-                memberOfStoreRepository.delete(memberOfStore);
-            }
-        }
-    }
-
-    @Transactional
     public Long delete(Long storeId) {
 
         Store store = storeRepository.findById(storeId).orElseThrow(

@@ -64,8 +64,10 @@ public class MapSearchController {
     public ResultClass<?> getTop5StoresByCategories(@RequestParam String categoryId,
                                             @CookieValue(value = "lat", required = false) String myLat,
                                             @CookieValue(value = "lon", required = false) String myLon) {
+        double dist = 3;
 
-        List<Store> findStores = storeService.getTop5ByCategories(categoryId, Double.parseDouble(myLat), Double.parseDouble(myLon));
+        List<Store> findStores = storeService.getTop5ByCategories(categoryId, dist,
+                Double.parseDouble(myLat), Double.parseDouble(myLon));
 
         List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
@@ -73,7 +75,7 @@ public class MapSearchController {
         calculateHowFarToTheTarget(myLat, myLon, dto);
 
         List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
-                -> simpleSearchStoreDTO.getDistance() <= 1.5).collect(Collectors.toList());
+                -> simpleSearchStoreDTO.getDistance() <= dist).collect(Collectors.toList());
 
         return new ResultClass<>(result.size(), result);
     }

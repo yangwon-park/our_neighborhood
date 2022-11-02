@@ -2,22 +2,18 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.EditForm;
 import ywphsm.ourneighbor.controller.form.PasswordEditForm;
 import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
-import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Random;
 
 @Slf4j

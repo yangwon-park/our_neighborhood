@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 @Getter
 public enum Role {
+
     USER("ROLE_USER", "손님"),
     SELLER("ROLE_SELLER", "판매자"),
     ADMIN("ROLE_ADMIN", "관리자");
@@ -32,5 +33,4 @@ public enum Role {
     public static Role of(final String keyword) {
         return Role.valueOf(code.get(keyword));
     }
-
 }

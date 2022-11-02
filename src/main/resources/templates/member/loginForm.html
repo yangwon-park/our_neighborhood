@@ -3,55 +3,52 @@
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
-
     <style>
 
     </style>
 </head>
 <link rel="stylesheet" th:href="@{../css/argon.css}">
 <body class="bg-default">
-
 <!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
 <section class="header">
-    <div class="header py-7 py-lg-8">
-        <div class="separator separator-bottom separator-skew zindex-100">
-            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg">
-                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-            </svg>
-        </div>
+    <div class="header py-5">
+
     </div>
 </section>
 <!-- loginForm -->
 <section class="main">
     <div class="container mt--8 pb-5">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-6">
                 <div class="card bg-secondary shadow border-0">
-                    <div class="card-header bg-transparent pb-5">
-                        <div class="text-muted text-center mt-2 mb-4">
-                            <small>Api 로그인</small>
+                    <div class="row card-header bg-transparent pb-5">
+                        <div class="text-center mt-2 mb-4">
+                            <span class="mb-2 text-dark fw-bold">소셜 미디어로 로그인</span>
                         </div>
-                        <div class="text-muted text-center mx-1">
+                        <div class="text-center my-1">
                             <!-- 카카오 로그인 -->
                             <a href="/oauth2/authorization/kakao">
-                                <img th:src="@{/images/login/kakao_login.png}" style="width: 10rem; height:3rem"/>
+                                <img th:src="@{/images/login/kakao_login.png}" style="width: 55%; height:3rem"/>
                             </a>
+                        </div>
+                        <div class="text-center my-1">
                             <!-- 네이버 로그인 -->
                             <a href="/oauth2/authorization/naver">
-                                <img th:src="@{/images/login/naver_login.png}" style="width: 10rem; height:3rem"/>
+                                <img th:src="@{/images/login/naver_login.png}" style="width: 55%; height:3rem"/>
                             </a>
+                        </div>
+                        <div class="text-center my-1">
                             <!-- 구글 로그인 -->
                             <a href="/oauth2/authorization/google">
-                                <img th:src="@{/images/login/google_login.png}" style="width: 10rem; height:3.5rem"/>
+                                <img th:src="@{/images/login/google_login.png}" style="width: 56%; height:3.3rem"/>
                             </a>
                         </div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="text-center text-muted mb-4">
-                            <small>Log in</small>
+                            <span class="mb-2 text-dark fw-bold">우리 동네 계정으로 로그인</span>
                         </div>
                         <form role="form" th:action="@{/loginSecurity}" th:object="${loginForm}" method="post">
                             <div class="form-group">
@@ -77,17 +74,25 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-orange mt-4">로그인</button>
+                                <button type="submit" class="btn btn-main-color my-4 w-100">로그인</button>
                             </div>
                         </form>
                         <br>
-                        <div class="float-end">
-                            <!-- 회원가입 -->
-                            <a class="p-2 text-muted" href="/sign_up">회원가입</a>
-                            <!-- 아이디 찾기 -->
-                            <a class="p-2 text-muted" href="/findUserId">아이디 찾기</a>
-                            <!-- 비밀번호 찾기 -->
-                            <a class="p-2 text-muted" href="/findPassword">비밀번호 찾기</a>
+                        <div class="row">
+                            <div class="col-6 ">
+                                <span class="float-start">
+                                    <!-- 회원가입 -->
+                                    <a class="p-2 text-dark" href="/sign_up">회원가입</a>
+                                </span>
+                            </div>
+                            <div class="col-6 no-wrap">
+                                <span class="float-end">
+                                    <!-- 아이디 찾기 -->
+                                    <a class="p-2 text-dark" href="/findUserId">아이디 찾기</a>
+                                    <!-- 비밀번호 찾기 -->
+                                    <a class="p-2 text-dark" href="/findPassword">비밀번호 찾기</a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -97,9 +102,8 @@
 </section>
 
 </body>
-<footer th:replace="layout/footer :: common_footer">
-    템플릿 푸터
-    <script th:replace="layout/footer :: common_js(~{::script})"></script>
-</footer>
+<!--<footer th:replace="layout/footer :: common_footer">-->
+<!--</footer>-->
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
 
 </html>

@@ -13,6 +13,5 @@ public interface StoreRepositoryCustom {
 
     List<Store> searchByCategory(Long categoryId);
 
-    List<Store> getTop5ByCategories(String categoryId, double lat, double lon);
-
+    List<Store> getTop5ByCategories(String categoryId, double dist, double lat, double lon);
 }

@@ -88,7 +88,9 @@ public class StoreController {
 
         List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdTop9(storeId);
 
-        List<Menu> menuList = menuService.findByStoreIdCaseByOrderByType(storeId);
+        List<Menu> menuList = menuService.findByStoreIdWithoutTypeMenuCaseByOrderByType(storeId);
+
+        List<String> menuImgList = menuService.findMenuImg(storeId);
 
         List<MenuDTO.Detail> menuDTOList = menuList.stream()
                 .map(MenuDTO.Detail::of).collect(Collectors.toList());
@@ -115,8 +117,11 @@ public class StoreController {
             model.addAttribute("storeRole", storeRole);
         }
 
+        log.info("menuImgList={}", menuImgList);
+
         model.addAttribute("store", storeDTO);
         model.addAttribute("menuList", menuDTOList);
+        model.addAttribute("menuImgList", menuImgList);
         model.addAttribute("categoryList", categorySimpleDTOList);
         model.addAttribute("hashtagList", hashtagGroupDTO);
 

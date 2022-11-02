@@ -9,18 +9,31 @@
 </style>
 <body id="main-body" class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
-
 <!--    div class="overlay"는 상위 section id="top"의 위치, 크기와 동일 => position을 relative로 설정-->
+<section class="main-title" style="height: 70vh">
+    <div class="container-xxl align-self-center" style="height: 100%">
+        <div class="row align-items-center mt-3" style="height: 100%">
+            <div>
+                <div class="text-left text-dark mt-5 mb-4">
+                    <h1 class="display-5 fw-bold">가장 리얼한<br>핫플레이스 찾기<br>우리동네</h1>
+                </div>
+                <div>
+                    <p>주변 이웃들의 리얼한 리뷰, 평점!<br>핫플레이스를 우리동네가 찾아드려요.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="main-divider"></div>
 <section id="top" class="position-relative">
     <div class="section-content overlay d-flex justify-content-center align-items-center">
         <div class="container-xxl">
             <div class="row align-items-center mt-3">
-                <div class="gallery-header text-center mt-5">
-                    <h1 class="display-4 orange">주변 인기 스팟 검색</h1>
-                    <div class="divider"></div>
-                </div>
                 <div class="col-md-9 welcome">
                     <div class="row gallery-body">
+                        <div class="section-title mb-2">
+                            <p class="h4 main-color">주변 인기 스팟 검색</p>
+                        </div>
                         <th:block th:each="root, i: ${rootCategoryList}">
                             <div class="col-md-6 col-sm-6 mb-4 gallery-item">
                                 <div class="card card-body category-div border-0 p-0">
@@ -29,7 +42,7 @@
                                          style="background-size: cover; background-position: center;
                                                 background-repeat: no-repeat"
                                          th:id="|cate-img${i.index+1}|">
-                                        <h2 th:text="${root.name}" class="gallery-title">카테고리 이름</h2>
+                                        <h2 th:text="${root.name}" class="gallery-title fw-bold">카테고리 이름</h2>
                                     </div>
                                     <input id="index-category" class="index-category" name="categoryId"
                                            type="hidden" th:value="${root.categoryId}">
@@ -58,7 +71,8 @@
                         <div class="letsgo-card-form">
                             <form>
                                 <p class="mb-3">
-                                    <button class="btn btn-orange w-100" type="button" onclick=location.href="map">이동
+                                    <button class="btn btn-main-color w-100" type="button" onclick=location.href="map">
+                                        이동
                                     </button>
                                 </p>
                             </form>
@@ -76,6 +90,9 @@
             <div class="row align-items-center">
                 <div class="col-md-6 weather-first">
                     <div class="row px-md-3">
+                        <div class="section-title mb-2">
+                            <p class="h4 main-color">날씨에 어울리는 핫플레이스 추천</p>
+                        </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
                                 <div id="sky-status"
@@ -124,70 +141,11 @@
     </div>
 </section>
 <div class="main-divider"></div>
-<section id="intro">
-    <div class="section-content">
-        <div class="container intro">
-            <div class="row align-items-center">
-                <div class="col-md-6 intro-first">
-                    <div class="row px-md-3">
-                        <div class="col-6">
-                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
-                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
-                                    <h3 class="fw-light">
-                                        <a href="#" class="link-light text-decoration-none">Link 1</a>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
-                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
-                                    <h3 class="fw-light">
-                                        <a href="#" class="link-light text-decoration-none">Link 2</a>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
-                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
-                                    <h3 class="fw-light">
-                                        <a href="#" class="link-light text-decoration-none">Link 3</a>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card card-body my-3 position-relative rounded-3 shadow-lg intro-first-card">
-                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100 shadow-lg">
-                                    <h3 class="fw-light">
-                                        <a href="#" class="link-light text-decoration-none">Link 4</a>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 intro-second">
-                    <h5 class="fw-light">Greetings!</h5>
-                    <h1 class="mb-4">Introduce Our Website.</h1>
-                    <div class="intro-text">
-                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab debitis dolor ea
-                            eveniet illum incidunt itaque magnam odio voluptates, voluptatum.</p>
-                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cupiditate
-                            eligendi et facere illum incidunt inventore magnam quam quod vitae.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<div class="main-divider"></div>
 <section id="services">
     <div class="section-content">
         <div class="container services">
             <div class="services-header text-center mb-5">
-                <h1 class="display-5">Our Amazing Services</h1>
+                <h1 class="display-5">랜덤으로 추천</h1>
                 <div class="divider"></div>
                 <p class="lead text-secondary">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias blanditiis doloremque esse in iure
@@ -283,23 +241,6 @@
                             </p>
                             <a href="#" class="btn btn-primary">View More...</a>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<div class="main-divider"></div>
-<section id="slogan">
-    <div class="section-content d-flex align-items-center h-100">
-        <div class="container slogan">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card card-body slogan-card">
-                        <h1 class="mb-3 mb-3">Our Slogan</h1>
-                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus eius
-                            excepturi labore laborum minus modi qui quisquam quo sed, voluptates.</p>
-                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias, quae!</p>
                     </div>
                 </div>
             </div>

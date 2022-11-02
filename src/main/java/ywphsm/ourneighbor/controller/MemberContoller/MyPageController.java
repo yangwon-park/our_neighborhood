@@ -66,7 +66,6 @@ public class MyPageController {
 
         return "member/sellerPage";
     }
-
     @GetMapping("/member_edit/review")
     public String MyReview(@SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member,
                            Model model) {

@@ -66,6 +66,7 @@ class MemberServiceTest {
 
         queryFactory = new JPAQueryFactory(em);
     }
+    
     @Test
     @DisplayName("회원 가입 -> 수정 -> 삭제")
     void join_update_delete() throws Exception {
@@ -225,6 +226,7 @@ class MemberServiceTest {
 
         result = resultActions_findPassword.andReturn().getResponse().getContentAsString();
         assertThat(result).isEqualTo("성공");
+        assertThat(findMember.getNickname()).isEqualTo(dto.getNickname());
     }
 
     @Test

@@ -13,26 +13,21 @@
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
 <section class="header">
-    <div class="header py-7 py-lg-8">
-        <div class="separator separator-bottom separator-skew zindex-100">
-            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg">
-                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-            </svg>
-        </div>
+    <div class="header py-5">
+
     </div>
 </section>
 <!--addForm-->
-<section class="main">
+<section class="store-add">
     <div class="container-fluid mt--8 pb-5">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
-                    <div class="card-header bg-transparent pb-5">
+                    <div class="card-header bg-transparent pb-3">
                         <div class="text-muted text-center mt-2 mb-4 fs-2">매장 등록</div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form id="store-add-form" class="form-floating" th:object="${store}">
+                        <form th:object="${store}" id="store-add-form" class="form-floating">
                             <div class="form-group">
                                 <input th:field="*{memberId}" class="form-control"
                                        placeholder="회원 번호" type="hidden">
@@ -48,7 +43,7 @@
                                     <input th:field="*{zipcode}" class="form-control zipcode"
                                            placeholder="우편 번호" type="text" readonly>
                                     <button type="button" onclick="openPostcode()"
-                                            class="text-center btn btn-orange ms-3"
+                                            class="text-center btn btn-main-color ms-3"
                                             style="height: 3rem">우편 번호 찾기
                                     </button>
                                 </div>
@@ -190,7 +185,7 @@
                             </div>
                             <div class="text-center">
                                 <button id="store-save" type="button"
-                                        class="btn btn-orange mt-4 float-end">매장 등록
+                                        class="btn btn-main-color mt-4 float-end">매장 등록
                                 </button>
                             </div>
                         </form>

@@ -226,7 +226,6 @@ class MemberServiceTest {
 
         result = resultActions_findPassword.andReturn().getResponse().getContentAsString();
         assertThat(result).isEqualTo("성공");
-        assertThat(findMember.getNickname()).isEqualTo(dto.getNickname());
     }
 
     @Test

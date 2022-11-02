@@ -617,39 +617,31 @@ small,
 /*    padding-left: 0;*/
 /*}*/
 
-/*.navbar-collapse {*/
-/*    flex-basis: 100%;*/
-/*    flex-grow: 1;*/
-/*    align-items: center;*/
-/*}*/
+.navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+}
 
-/*.navbar-toggler {*/
-/*    font-size: 1.25rem;*/
-/*    line-height: 1;*/
-/*    padding: .25rem .75rem;*/
-/*    border: 1px solid transparent;*/
-/*    border-radius: .375rem;*/
-/*    background-color: transparent;*/
-/*}*/
+.navbar-toggler {
+    font-size: 1.25rem;
+    line-height: 1;
+    padding: .25rem .75rem;
+    border: 1px solid transparent;
+    border-radius: .375rem;
+    background-color: transparent;
+}
 
-/*.navbar-toggler:hover,*/
-/*.navbar-toggler:focus {*/
-/*    text-decoration: none;*/
-/*}*/
+.navbar-toggler:hover,
+.navbar-toggler:focus {
+    text-decoration: none;
+}
 
-/*.navbar-toggler:not(:disabled):not(.disabled) {*/
-/*    cursor: pointer;*/
-/*}*/
+.navbar-toggler:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
 
-/*.navbar-toggler-icon {*/
-/*    display: inline-block;*/
-/*    width: 1.5em;*/
-/*    height: 1.5em;*/
-/*    content: '';*/
-/*    vertical-align: middle;*/
-/*    background: no-repeat center center;*/
-/*    background-size: 100% 100%;*/
-/*}*/
+
 
 @media (max-width: 767.98px) {
     .navbar-expand-md > .container {
@@ -711,7 +703,8 @@ small,
 }
 
 .navbar-dark .navbar-toggler-icon {
-    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox=\'0 0 30 30\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath stroke=\'rgba(255, 255, 255, 0.95)\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-miterlimit=\'10\' d=\'M4 7h22M4 15h22M4 23h22\'/%3E%3C/svg%3E');
+    background-image: url('images/icon/white_hamburger.png');
+    /*background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox=\'0 0 30 30\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath stroke=\'rgba(255, 255, 255, 0.95)\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-miterlimit=\'10\' d=\'M4 7h22M4 15h22M4 23h22\'/%3E%3C/svg%3E');*/
 }
 
 .card {

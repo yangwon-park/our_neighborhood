@@ -68,6 +68,16 @@ input[type=radio] {
     vertical-align: middle; !important;
 }
 
+.navbar-icon {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    content: '';
+    vertical-align: middle;
+    background-size: cover;
+    background: url('../images/icon/white_hamburger.png') no-repeat center center;
+}
+
 .header-margin {
     height: 1vh;
 }
@@ -181,7 +191,7 @@ input[type=radio] {
 }
 
 .main-color {
-    color: #F01D04;
+    color: #F01D04 !important;
 }
 
 .btn:hover,

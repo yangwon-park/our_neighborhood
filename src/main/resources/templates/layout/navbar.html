@@ -2,14 +2,14 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <nav th:fragment="common_navbar" class="navbar navbar-expand-lg py-3 shadow-lg sticky-top">
     <div class="container-fluid ms-3 me-3">
-        <a href="/" class="navbar-brand align-middle">
-            <img src="/images/main/logo_white.jpg" alt="Logo" width="50px" height="24px">
+        <a href="/" class="navbar-brand align-middle fw-bold" style="color: #ffffff;">
+            우리동네
         </a>
         <!-- 화면 작아지면 햄버거 버튼으로 변경      -->
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <div class="navbar-icon"></div>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -25,32 +25,32 @@
                 </th:block>
                 <th:block th:if="${session.loginMember ne null}">
                     <li class="nav-item">
-                        <a href="/logout" class="nav-link">
+                        <a href="/logout" class="nav-link nav-font">
                             로그아웃
                         </a>
                     </li>
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <li class="nav-item">
-                            <a th:href="@{/admin/mypage/{memberId}(memberId=${session.loginMember.getId()})}" class="nav-link">
+                            <a th:href="@{/admin/mypage/{memberId}(memberId=${session.loginMember.getId()})}" class="nav-link nav-font">
                                 운영자 페이지
                             </a>
                         </li>
                     </th:block>
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')}">
                         <li class="nav-item">
-                            <a href="/seller/sellerPage" class="nav-link">
+                            <a href="/seller/sellerPage" class="nav-link nav-font">
                                 매장 관리
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/user/myPage" class="nav-link">
+                            <a href="/user/myPage" class="nav-link nav-font">
                                 마이 페이지
                             </a>
                         </li>
                     </th:block>
                     <th:block th:if="${#strings.equals(session.loginMember.getRole(), 'USER')}">
                         <li class="nav-item">
-                            <a href="/user/myPage" class="nav-link">
+                            <a href="/user/myPage" class="nav-link nav-font">
                                 마이 페이지
                             </a>
                         </li>

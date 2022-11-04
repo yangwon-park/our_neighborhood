@@ -258,7 +258,10 @@ var main = {
 
 
     saveMainImage: function () {
-        const storeId = document.getElementById("storeId").innerText
+        const storeId = document.getElementById("storeId")
+
+        console.log("storeId={}", storeId.value)
+
         const form = document.getElementById("main-image-form");
 
         const formData = new FormData(form);
@@ -269,7 +272,7 @@ var main = {
                 "Access-Control-Allow_Origin": "*"
             },
             method: "post",
-            url: "/seller/store/editImage/" + storeId,
+            url: "/seller/store/editImage/" + storeId.value,
             data: formData
         }).then((resp) => {
             alert("메인 이미지가 등록됐습니다.");

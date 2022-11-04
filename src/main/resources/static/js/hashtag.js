@@ -43,7 +43,7 @@ var main = {
             })
 
             // Chainable event listeners
-            tagify.on('input', onInput);
+            tagify.on("input", onInput);
 
             var mockAjax = (function mockAjax(){
                 var timeout;

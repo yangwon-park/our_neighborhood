@@ -4,68 +4,60 @@ var main = {
     init: async function () {
         var _this = this;
 
-        const signUpSaveBtn = document.getElementById('sign-up-save');
-        const sendSMSBtn = document.getElementById('send-SMS');
-        const phoneNumberEditBtn = document.getElementById('phoneNumber-edit');
-        const memberEditBtn = document.getElementById('member-edit');
-        const passwordEditBtn = document.getElementById('password-edit');
-        const memberDeleteBtn = document.getElementById('member-delete');
-        const findUserIdBtn = document.getElementById('find-userId');
-        const findPasswordBtn = document.getElementById('find-password');
+        const signUpSaveBtn = document.getElementById("sign-up-save");
+        const sendSMSBtn = document.getElementById("send-SMS");
+        const phoneNumberEditBtn = document.getElementById("phoneNumber-edit");
+        const memberEditBtn = document.getElementById("member-edit");
+        const passwordEditBtn = document.getElementById("password-edit");
+        const memberDeleteBtn = document.getElementById("member-delete");
+        const findUserIdBtn = document.getElementById("find-userId");
+        const findPasswordBtn = document.getElementById("find-password");
 
         if (signUpSaveBtn !== null) {
-            signUpSaveBtn.addEventListener('click', () => {
+            signUpSaveBtn.addEventListener("click", () => {
                 _this.check();
-                // _this.save();
             });
         }
 
         if (sendSMSBtn !== null) {
-            sendSMSBtn.addEventListener('click', () => {
+            sendSMSBtn.addEventListener("click", () => {
                 _this.sendSMS();
-                // _this.save();
             });
         }
 
         if (phoneNumberEditBtn !== null) {
-            phoneNumberEditBtn.addEventListener('click', () => {
+            phoneNumberEditBtn.addEventListener("click", () => {
                 _this.editPhoneNumber();
-                // _this.save();
             });
         }
 
         if (memberEditBtn !== null) {
-            memberEditBtn.addEventListener('click', () => {
+            memberEditBtn.addEventListener("click", () => {
                 _this.update();
-                // _this.save();
             });
         }
 
         if (passwordEditBtn !== null) {
-            passwordEditBtn.addEventListener('click', () => {
+            passwordEditBtn.addEventListener("click", () => {
                 _this.editPassword();
-                // _this.save();
             });
         }
 
         if (memberDeleteBtn !== null) {
-            memberDeleteBtn.addEventListener('click', () => {
+            memberDeleteBtn.addEventListener("click", () => {
                 _this.delete();
-                // _this.save();
             });
         }
 
         if (findUserIdBtn !== null) {
-            findUserIdBtn.addEventListener('click', () => {
+            findUserIdBtn.addEventListener("click", () => {
                 _this.findUserId();
-                // _this.save();
             });
         }
 
         if (findPasswordBtn !== null) {
-            findPasswordBtn.addEventListener('click', () => {
+            findPasswordBtn.addEventListener("click", () => {
                 _this.findPassword();
-                // _this.save();
             });
         }
     },
@@ -122,6 +114,7 @@ var main = {
         let certifiedNumberRegExp = /[0-9]{5}$/;
         let certifiedNumberValidation = certifiedNumberRegExp.test(certifiedNumber.value);
         let passwordCheckValidation = true;
+
         if (password.value !== passwordCheck.value) {
             passwordCheckValidation = false;
         }
@@ -129,8 +122,8 @@ var main = {
         const signUpForm = document.getElementById("sign-up-add-form");
         let formData = new FormData(signUpForm);
 
-        if (userId.value !== '' && username.value !== ''
-            && nickname.value !== '' && passwordCheckValidation === true
+        if (userId.value !== "" && username.value !== ""
+            && nickname.value !== "" && passwordCheckValidation === true
         && emailValidation && birthDateValidation && passwordCheckValidation
         && passwordValidation && phoneNumberValidation && certifiedNumberValidation) {
 
@@ -147,13 +140,13 @@ var main = {
             }).then((resp) => {
                 let check = resp.data;
 
-                if (check === '성공') {
+                if (check === "성공") {
                     this.save();
                 } else {
                     alert(check);
                     axios({
                         method: "get",
-                        url: "/sign_up",
+                        url: "/sign-up",
                         data: formData
                     }).catch((e) => {
                         console.error(e);
@@ -194,17 +187,17 @@ var main = {
             validation.addValidation(passwordCheckValid, "비밀번호가 일치하지 않습니다.");
         }
 
-        if (userId.value === '') {
+        if (userId.value === "") {
             userId.classList.add("valid-custom");
             validation.addValidation(userIdValid, "아이디를 입력해주세요.");
         }
 
-        if (username.value === '') {
+        if (username.value === "") {
             username.classList.add("valid-custom");
             validation.addValidation(usernameValid, "이름을 입력해주세요.");
         }
 
-        if (nickname.value === '') {
+        if (nickname.value === "") {
             nickname.classList.add("valid-custom");
             validation.addValidation(nicknameValid, "닉네임을 입력해주세요.");
         }
@@ -214,13 +207,13 @@ var main = {
     sendSMS: function () {
         const phoneNumber = document.getElementById("phoneNumber");
 
-        if (phoneNumber.value === '') {
-            alert('전화번호를 입력해주세요.')
+        if (phoneNumber.value === "") {
+            alert("전화번호를 입력해주세요.")
             window.location.reload()
         }else {
             axios({
                 method: "get",
-                url: "/member/sendSMS",
+                url: "/member/send-sms",
                 params: {
                     phoneNumber: phoneNumber.value
                 }
@@ -242,20 +235,12 @@ var main = {
 
         let formData = new FormData(signUpForm);
 
-        for (let k of formData.keys()) {
-            console.log(k);
-        }
-
-        for (let v of formData.values()) {
-            console.log(v);
-        }
-
         axios({
             method: "post",
             url: "/member/add",
             data: formData
         }).then((resp) => {
-            alert('회원가입이 완료됐습니다.')
+            alert("회원가입이 완료됐습니다.")
             window.location.href = "/login";
             console.log(resp)
         }).catch((error) => {
@@ -267,20 +252,20 @@ var main = {
         const phoneNumber = document.getElementById("phoneNumber");
         const certifiedNumber = document.getElementById("certifiedNumber");
 
-        if (phoneNumber.value === '') {
-            alert('전화번호를 입력해주세요.')
+        if (phoneNumber.value === "") {
+            alert("전화번호를 입력해주세요.")
             window.location.reload()
         }else {
             axios({
                 method: "put",
-                url: "/member/edit/phoneNumber",
+                url: "/member/edit/phone-number",
                 params: {
                     phoneNumber: phoneNumber.value,
                     certifiedNumber: certifiedNumber.value
                 }
             }).then((resp) => {
                 let check = resp.data;
-                if (check === '성공') {
+                if (check === "성공") {
                     alert("전화번호가 수정됐습니다.");
                     window.location.href = "/logout";
                 } else {
@@ -313,7 +298,7 @@ var main = {
                 }
             }).then((resp) => {
                 let check = resp.data;
-                if (check === '성공') {
+                if (check === "성공") {
                     alert("비밀번호가 수정됐습니다.");
                     window.location.href = "/logout";
                 } else {
@@ -342,7 +327,7 @@ var main = {
         let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
         let emailValidation = emailRegExp.test(email.value);
 
-        if (nickname.value !== '' && emailValidation ) {
+        if (nickname.value !== "" && emailValidation ) {
             axios({
                 method: "put",
                 url: "/member/edit",
@@ -352,7 +337,8 @@ var main = {
                 }
             }).then((resp) => {
                 let check = resp.data;
-                if (check === '성공') {
+
+                if (check === "성공") {
                     alert("회원정보가 수정됐습니다.");
                     window.location.href = "/logout";
                 } else {
@@ -386,7 +372,7 @@ var main = {
                 memberId: memberId.value
             }
         }).then((resp) => {
-            alert(' 회원 탈퇴가 완료됐습니다.');
+            alert("회원 탈퇴가 완료됐습니다.");
             window.location.href = "/logout";
         }).catch((error) => {
             console.log(error);
@@ -409,13 +395,14 @@ var main = {
         if (emailValidation) {
             axios({
                 method: "post",
-                url: "/findUserId",
+                url: "/find-userid",
                 params: {
                     email: email.value
                 }
             }).then((resp) => {
                 let check = resp.data;
-                if (check === '성공') {
+
+                if (check === "성공") {
                     alert("이메일로 아이디가 발송됐습니다.");
                     window.location.href = "/login";
                 } else {
@@ -453,14 +440,14 @@ var main = {
         if (emailValidation && userId.value !== '') {
             axios({
                 method: "post",
-                url: "/findPassword",
+                url: "/find-password",
                 params: {
                     email: email.value,
                     userId: userId.value
                 }
             }).then((resp) => {
                 let check = resp.data;
-                if (check === '성공') {
+                if (check === "성공") {
                     alert("이메일로 비밀번호가 발송됐습니다.");
                     window.location.href = "/login";
                 } else {
@@ -476,7 +463,7 @@ var main = {
             validation.addValidation(emailValid, "올바른 이메일 형식이 아닙니다.");
         }
 
-        if (userId.value === '') {
+        if (userId.value === "") {
             userId.classList.add("valid-custom");
             validation.addValidation(userIdValid, "닉네임을 입력해주세요.");
         }

@@ -25,7 +25,7 @@ public class MemberApiController {
 
     private final StoreService storeService;
 
-    @PutMapping("/admin/update_role/{memberId}")
+    @PutMapping("/admin/update-role/{memberId}")
     public Long updateRole(@PathVariable Long memberId, @RequestBody String role) {
         return memberService.updateRole(memberId, role);
     }
@@ -68,7 +68,7 @@ public class MemberApiController {
         return "성공";
     }
 
-    @GetMapping("/member/sendSMS")
+    @GetMapping("/member/send-sms")
     public boolean sendSMS(@RequestParam String phoneNumber, HttpServletRequest request) {
 
         if (memberService.findByPhoneNumber(phoneNumber) != null) {
@@ -101,7 +101,7 @@ public class MemberApiController {
         return memberService.save(dto);
     }
 
-    @PutMapping("/member/edit/phoneNumber")
+    @PutMapping("/member/edit/phone-number")
     public String updatePhoneNumber(String phoneNumber, String certifiedNumber,
                      @SessionAttribute(name = SessionConst.PHONE_CERTIFIED, required = false) PhoneCertifiedForm certifiedForm,
                      @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
@@ -160,13 +160,13 @@ public class MemberApiController {
         return "redirect:/logout";
     }
 
-    @PostMapping("/findUserId")
+    @PostMapping("/find-userid")
     public String findUserId(String email) {
 
         return memberService.sendEmailByUserId(email);
     }
 
-    @PostMapping("/findPassword")
+    @PostMapping("/find-password")
     public String findPassword(String email, String userId) {
 
         return memberService.sendEmailByPassword(email, userId);

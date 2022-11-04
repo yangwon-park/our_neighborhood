@@ -4,21 +4,20 @@ var main = {
     init: async function () {
         var _this = this;
 
-        const menuSaveBtn = document.getElementById('menu-save');
-        const menuUpdateBtnList = document.querySelectorAll('.menu-edit');
-        const menuDeleteBtnList = document.querySelectorAll('.menu-delete');
-        const menuEditImageCheckList = document.querySelectorAll('.menu-edit-image');
+        const menuSaveBtn = document.getElementById("menu-save");
+        const menuUpdateBtnList = document.querySelectorAll(".menu-edit");
+        const menuDeleteBtnList = document.querySelectorAll(".menu-delete");
+        const menuEditImageCheckList = document.querySelectorAll(".menu-edit-image");
 
         if (menuSaveBtn !== null) {
-            menuSaveBtn.addEventListener('click', () => {
+            menuSaveBtn.addEventListener("click", () => {
                 _this.check();
-                // _this.save();
             });
         }
 
         if (menuUpdateBtnList !== null) {
             menuUpdateBtnList.forEach((btn) => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener("click", () => {
                     _this.update(btn.id);
                 });
             });
@@ -26,7 +25,7 @@ var main = {
 
         if (menuDeleteBtnList !== null) {
             menuDeleteBtnList.forEach((btn) => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener("click", () => {
                     _this.delete(btn.id);
                 });
             });
@@ -34,7 +33,7 @@ var main = {
 
         if (menuEditImageCheckList !== null) {
             menuEditImageCheckList.forEach((el) => {
-                el.addEventListener('change', function () {
+                el.addEventListener("change", function () {
                     _this.imgActive(el.id);
                 });
             });
@@ -218,7 +217,7 @@ var main = {
                 menuId: menuId
             }
         }).then((resp) => {
-            alert('메뉴 삭제가 완료됐습니다.');
+            alert("메뉴 삭제가 완료됐습니다.");
             window.location.reload();
         }).catch((error) => {
             console.log(error);

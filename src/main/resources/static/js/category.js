@@ -3,15 +3,14 @@ import validation from "./validation.js";
 var main = {
     init: function () {
         let _this = this;
-        let categorySaveBtn = document.getElementById('category-add')
-        let categoryDeleteBtn = document.getElementById('category-delete');
+        let categorySaveBtn = document.getElementById("category-add");
+        let categoryDeleteBtn = document.getElementById("category-delete");
 
-        categorySaveBtn.addEventListener('click', () => {
+        categorySaveBtn.addEventListener("click", () => {
             _this.check();
-            // _this.save();
         });
 
-        categoryDeleteBtn.addEventListener('click', () => {
+        categoryDeleteBtn.addEventListener("click", () => {
             _this.deleteCategory();
         })
     },
@@ -20,20 +19,20 @@ var main = {
         const parentId = document.getElementById("category-select").options
             [document.getElementById("category-select").selectedIndex].value;
 
-        let name = document.getElementById('name').value;
-        let selectValid = document.getElementById('category-select-valid');
-        let nameValid = document.getElementById('category-name-valid');
-        const selectedCategory = document.getElementById('category-select')
+        let name = document.getElementById("name").value;
+        let selectValid = document.getElementById("category-select-valid");
+        let nameValid = document.getElementById("category-name-valid");
+        const selectedCategory = document.getElementById("category-select")
 
-        selectedCategory.classList.remove('input-error-border');
+        selectedCategory.classList.remove("input-error-border");
 
         validation.removeValidation(selectValid);
         validation.removeValidation(nameValid);
 
-        if (parentId !== '' && name !== '') {
+        if (parentId !== "" && name !== "") {
             axios({
                 method: "get",
-                url: "/categoryCheck",
+                url: "/category-check",
                 params: {
                     parentId: parentId,
                     name: name
@@ -51,13 +50,13 @@ var main = {
             });
         }
 
-        if (parentId === '') {
-            selectedCategory.classList.add('input-error-border');
+        if (parentId === "") {
+            selectedCategory.classList.add("input-error-border");
 
             validation.addValidation(selectValid, "상위 카테고리를 선택해주세요");
         }
 
-        if (name === '') {
+        if (name === "") {
             document.getElementById("name").classList.add("valid-custom");
 
             validation.addValidation(nameValid, "카테고리명을 입력해주세요.");
@@ -84,7 +83,7 @@ var main = {
             url: "/admin/category",
             data: JSON.stringify(data),
         }).then((resp) => {
-            alert('카테고리가 등록됐습니다.');
+            alert("카테고리가 등록됐습니다.");
             window.location.reload();
         }).catch((error) => {
             console.log(error)
@@ -95,12 +94,10 @@ var main = {
         const categoryId = document.getElementById("category-select").options
             [document.getElementById("category-select").selectedIndex].value;
 
-        console.log(categoryId);
+        let selectValid = document.getElementById("category-select-valid");
 
-        let selectValid = document.getElementById('category-select-valid');
-
-        if (categoryId === '') {
-            document.getElementById('category-select').classList.add('input-error-border');
+        if (categoryId === "") {
+            document.getElementById("category-select").classList.add("input-error-border");
             validation.addValidation(selectValid, "삭제할 카테고리를 선택해주세요.");
         } else {
             validation.removeValidation(selectValid);

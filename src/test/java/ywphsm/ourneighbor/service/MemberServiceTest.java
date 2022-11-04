@@ -205,7 +205,7 @@ class MemberServiceTest {
                 .andExpect(status().isOk());
 
         //아이디 찾기
-        url = "http://localhost:" + port + "/findUserId";
+        url = "http://localhost:" + port + "/find-userid";
 
         ResultActions resultActions_findUserId = mvc.perform(post(url)
                         .param("email", "test@1234.com"))
@@ -216,7 +216,7 @@ class MemberServiceTest {
         assertThat(result).isEqualTo("성공");
 
         //비밀번호 찾기
-        url = "http://localhost:" + port + "/findPassword";
+        url = "http://localhost:" + port + "/find-password";
 
         ResultActions resultActions_findPassword = mvc.perform(post(url)
                         .param("email", "test@1234.com")
@@ -261,7 +261,7 @@ class MemberServiceTest {
 
         assertThat(findMember.getRole()).isEqualTo(Role.ADMIN);
 
-        String url = "http://localhost:" + port + "/admin/update_role/" + findMember.getId();
+        String url = "http://localhost:" + port + "/admin/update-role/" + findMember.getId();
 
         mvc.perform(put(url)
                 .contentType(MediaType.APPLICATION_JSON)

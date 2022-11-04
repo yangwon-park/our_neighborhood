@@ -31,7 +31,7 @@ public class StoreApiController {
     private final StoreService storeService;
     private final CategoryService categoryService;
 
-    @GetMapping("/getImages")
+    @GetMapping("/get-images")
     public List<List<String>> getImages(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
                                         @CookieValue(value = "lon", required = false, defaultValue = "") String lon) {
 
@@ -74,7 +74,7 @@ public class StoreApiController {
         return storeService.update(storeId, dto, categoryIdList);
     }
 
-    @PostMapping("/seller/store/editImage/{storeId}")
+    @PostMapping("/seller/store/edit-image/{storeId}")
     public Long saveMainImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                             HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -90,7 +90,7 @@ public class StoreApiController {
         return storeService.saveMainImage(storeId, file);
     }
 
-    @PutMapping("/seller/store/editImage/{storeId}")
+    @PutMapping("/seller/store/edit-image/{storeId}")
     public Long updateMainImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                             HttpServletRequest request, HttpServletResponse response) throws IOException {

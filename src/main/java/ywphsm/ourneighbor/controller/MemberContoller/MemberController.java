@@ -22,16 +22,16 @@ public class MemberController {
                         Model model) {
 
         if (member != null) {
-            return "redirect:/user/myPage";
+            return "redirect:/user/my_page";
         }
 
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
-        return "member/loginForm";
+        return "member/login_form";
     }
 
-    @GetMapping("/sign_up")
+    @GetMapping("/sign-up")
     public String signUp(@ModelAttribute(value = "dto") MemberDTO.Add dto) {
-        return "member/signUpForm";
+        return "member/sign_up_form";
     }
 }

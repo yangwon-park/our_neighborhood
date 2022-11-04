@@ -88,13 +88,13 @@ var main = {
         }
 
         for (const el in els) {
-            if (els[el].value === '') {
+            if (els[el].value === "") {
                 els[el].classList.add("valid-custom");
                 validation.addValidation(valids[el + "Valid"], "위의 값들은 필수입니다.");
             }
         }
 
-        if (mainCateVal === '') {
+        if (mainCateVal === "") {
             this.categoryLayerEl.main.classList.add("input-error-border");
             validation.addValidation(cateValid, "대분류는 필수입니다.");
         }
@@ -111,7 +111,7 @@ var main = {
             url: "/seller/store/" + storeIdVal,
             data: formData
         }).then((resp) => {
-            alert('매장 정보 수정이 완료됐습니다.');
+            alert("매장 정보 수정이 완료됐습니다.");
             window.location.href = "/store/" + storeIdVal;
         }).catch((error) => {
             console.error(error);
@@ -119,11 +119,11 @@ var main = {
     },
 
     delete: function () {
-        const storeIdVal = document.getElementById("storeId").value;
+        const storeId = document.getElementById("storeId");
 
         axios({
             method: "delete",
-            url: "/admin/store/" + storeIdVal
+            url: "/admin/store/" + storeId.value
         }).then((resp) => {
             alert("매장 삭제가 완료됐습니다.");
             window.location.href = "/";
@@ -139,7 +139,7 @@ var main = {
     getCategories: function () {
         axios({
             method: "get",
-            url: "/categoriesHier",
+            url: "/categories-hier",
         }).then((resp) => {
             let rootChildren = resp.data.children;
             this.getMainCategories(rootChildren);

@@ -14,7 +14,7 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 @RequestMapping("/user")
 public class ReviewController {
 
-    @GetMapping("/store/{storeId}/createReview")
+    @GetMapping("/store/{storeId}/create-review")
     public String createReview(@PathVariable Long storeId,
                                @ModelAttribute(name = "reviewDTO") ReviewDTO.Add reviewDTO,
                                @SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member) {
@@ -22,7 +22,7 @@ public class ReviewController {
         reviewDTO.setStoreId(storeId);
         reviewDTO.setMemberId(member.getId());
 
-        return "create_review";
+        return "review/create_review";
     }
 
 }

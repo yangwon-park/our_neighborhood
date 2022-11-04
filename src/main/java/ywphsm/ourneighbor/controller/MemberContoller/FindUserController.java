@@ -14,13 +14,13 @@ public class FindUserController {
 
     private final MemberService memberService;
 
-    @GetMapping("/findUserId")
+    @GetMapping("/find-userId")
     public String findId(@ModelAttribute(name = "findUserIdForm") FindUserIdForm findUserIdForm) {
-        return "find_userId";
+        return "member/find_userid";
     }
 
-    @GetMapping("/findPassword")
+    @GetMapping("/find-password")
     public String findPassword(@ModelAttribute(name = "findPasswordForm") FindPasswordForm findPasswordForm) {
-        return "find_password";
+        return "member/find_password";
     }
 }

@@ -46,7 +46,7 @@ var main = {
     setCateImages: function () {
         axios({
             method: "get",
-            url: "/getImages"
+            url: "/get-images"
         }).then((resp) => {
             const restaurantImages = resp.data[0];
             const cafeImages = resp.data[1];

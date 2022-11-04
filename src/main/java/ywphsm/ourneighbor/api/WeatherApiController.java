@@ -65,8 +65,6 @@ public class WeatherApiController {
                 "&" + URLEncoder.encode("nx", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(nx, StandardCharsets.UTF_8) +
                 "&" + URLEncoder.encode("ny", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(ny, StandardCharsets.UTF_8);
 
-        log.info("result={}", result);
-
         HashMap<String, Object> foreCast = getData(url, result);
 
         JSONObject jsonObject = new JSONObject();

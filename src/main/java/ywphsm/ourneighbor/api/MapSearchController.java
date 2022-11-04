@@ -25,7 +25,7 @@ public class MapSearchController {
     // 메뉴 리스트는 불러오지 않음
     // 단순 조회이므로 fetch 조인으로 최적화
     // map.html에서 가게 이름을 검색하는 경우 수행됨
-    @GetMapping("/searchByKeyword")
+    @GetMapping("/search-by-keyword")
     public ResultClass<?> searchByKeyword(@RequestParam String keyword,
                                           @CookieValue(value = "lat", required = false) String myLat,
                                           @CookieValue(value = "lon", required = false) String myLon) {
@@ -40,7 +40,7 @@ public class MapSearchController {
         return new ResultClass<>(result.size(), result);
     }
 
-    @GetMapping("/searchByCategory")
+    @GetMapping("/search-by-category")
     public ResultClass<?> searchByCategory(@RequestParam String categoryId,
                                            @RequestParam double dist,
                                            @CookieValue(value = "lat", required = false) String myLat,
@@ -60,7 +60,7 @@ public class MapSearchController {
         return new ResultClass<>(result.size(), result);
     }
 
-    @GetMapping("/getTop5Categories")
+    @GetMapping("/get-top5-categories")
     public ResultClass<?> getTop5StoresByCategories(@RequestParam String categoryId,
                                             @CookieValue(value = "lat", required = false) String myLat,
                                             @CookieValue(value = "lon", required = false) String myLon) {

@@ -31,7 +31,7 @@ public class MyPageController {
         Member byId = memberService.findById(member.getId());
         MemberDTO.Detail detail = new MemberDTO.Detail(byId);
         model.addAttribute("memberDetail", detail);
-        return "member-my_page";
+        return "member/my_page";
     }
 
     @GetMapping("/user/my-like")

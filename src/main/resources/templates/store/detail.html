@@ -25,13 +25,13 @@
         <div class="row store-head">
             <div class="col-6 d-flex">
                 <h1 class="my-auto h1 text-dark fw-bold" th:text="*{name}">가게명</h1>
-                <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
-                      th:classappend="*{status}"></span>
+                <p class="badge ms-3 me-3 my-auto" style="font-size: 1.3rem" th:text="*{status}"
+                      th:classappend="*{status}"></p>
 <!--                <div class="hidden" id="storeId" th:text="*{storeId}"></div>-->
                 <th:block th:if="${session.loginMember ne null}">
                     <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
                     <button id="like-btn" th:text="${likeStatus} ? '찜 취소' : '찜 하기'"
-                            type="button" class="btn btn-info like" th:value="${!likeStatus}">
+                            type="button" class="btn btn-main-color like" style="font-size: 1.1rem; color: #ffffff" th:value="${!likeStatus}">
                     </button>
                 </th:block>
             </div>

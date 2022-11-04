@@ -339,10 +339,10 @@ var main = {
                 '        </div>' +
                 '    </div>' +
                 '    <div class="row d-flex mb-2">' +
-                '        <div class="col">' +
+                '        <div class="col-6">' +
                 '           <a style="color: #146c43; font-size: 0.85rem; text-decoration: none" href="tel:' + data.phoneNumber + '">' + data.phoneNumber + '</a>' +
                 '        </div>' +
-                '        <div class="col">' +
+                '        <div class="col-6">' +
                 '            <p class="card-text text-end main-color fw-bold">' + data.distance + 'km</p>' +
                 '        </div>' +
                 '    </div>' +

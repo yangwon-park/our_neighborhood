@@ -161,7 +161,7 @@
                         <span class="ms-2 me-3 fw-bold" th:text="*{park.description}"
                             th:classappend="|park-*{park.name()}|"></span>
                     </th:block>
-                    <th:block th:if="*{!parkDetail.isEmpty()}">
+                    <th:block th:if="*{parkDetail ne null}">
                         <span class="ms-3 fw-bold" th:text="|(*{parkDetail})|"></span>
                     </th:block>
                 </div>
@@ -203,7 +203,7 @@
                 </div>
             </div>
         </div>
-        <th:block th:if="${!menuList.isEmpty() && !menuImgList.isEmpty()}">
+        <th:block th:if="${!menuList.isEmpty() or !menuImgList.isEmpty()}">
             <hr class="mt-2 mb-5">
             <div class="menu-list">
                 <div class="col-12">

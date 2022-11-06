@@ -2,7 +2,7 @@ import validation from "./validation.js";
 
 var main = {
     init: async function () {
-        var _this = this;
+        let _this = this;
 
         const reviewSaveBtn = document.getElementById("review-save");
         const reviewDeleteBtnList = document.querySelectorAll(".review-delete");

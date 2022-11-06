@@ -12,8 +12,6 @@ import ywphsm.ourneighbor.service.MemberService;
 @Controller
 public class FindUserController {
 
-    private final MemberService memberService;
-
     @GetMapping("/find-userId")
     public String findId(@ModelAttribute(name = "findUserIdForm") FindUserIdForm findUserIdForm) {
         return "member/find_userid";

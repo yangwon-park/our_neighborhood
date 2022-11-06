@@ -115,18 +115,9 @@ public class MemberService {
         member.updatePassword(encodedPassword);
     }
 
-    //비밀번호 찾기 수정 변경 감지(비밀번호 찾기)
-    @Transactional
-    public void updatePassword(String userId, String encodedPassword) {
-        Member member = findByUserId(userId);
-        member.updatePassword(encodedPassword);
-
-    }
-
     //비밀번호 찾기시 있는 아이디인지 확인
     public Member userIdCheck(String userId) {
-        return memberRepository.findByUserId(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + userId));
+        return memberRepository.findByUserId(userId).orElse(null);
     }
 
     //휴대폰에 인증번호 발송
@@ -154,8 +145,7 @@ public class MemberService {
 
     //휴대폰번호 중복검사
     public Member findByPhoneNumber(String phoneNumber) {
-        return memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 전화번호입니다. phoneNumber = " + phoneNumber));
+        return memberRepository.findByPhoneNumber(phoneNumber).orElse(null);
     }
 
     //아이디 찾기

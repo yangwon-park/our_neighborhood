@@ -50,8 +50,24 @@ var main = {
                     _this.updateMainImage();
                 })
             }
-
         }
+
+        const zoomDiv = document.getElementById("modal-content");
+
+        function zoom(event) {
+            event.preventDefault();
+
+            scale += event.deltaY * -0.01;
+
+            // Restrict scale
+            scale = Math.min(Math.max(.125, scale), 4);
+
+            // Apply scale transform
+            zoomDiv.style.transform = `scale(${scale})`;
+        }
+
+        let scale = 1;
+        zoomDiv.onwheel = zoom;
     },
 
     check: function () {
@@ -115,13 +131,6 @@ var main = {
 
         let formData = new FormData(reviewForm);
 
-        for (let k of formData.keys()) {
-            console.log(k);
-        }
-        for (let v of formData.values()) {
-            console.log(v);
-        }
-
         this.createDefaultImg(formData);
 
         axios({
@@ -133,7 +142,7 @@ var main = {
             url: "/user/review",
             data: formData
         }).then((resp) => {
-            alert('리뷰가 등록됐습니다.')
+            alert("리뷰가 등록됐습니다.")
             window.location.href = "/store/" + storeId;
             console.log(resp)
         }).catch((error) => {
@@ -143,10 +152,7 @@ var main = {
 
     delete: function (btnId) {
         const reviewId = btnId.substring(17);
-        const storeId = document.getElementById('storeId').value;
-
-        console.log("reviewId", reviewId);
-        console.log("storeId", storeId);
+        const storeId = document.getElementById("storeId").value;
 
         axios({
             method: "delete",
@@ -230,13 +236,9 @@ var main = {
     },
 
     likeUpdate: function () {
-
         const storeId = document.getElementById("storeId").value;
         const memberId = document.getElementById("memberId").value;
         const likeStatus = document.getElementById("like-btn").value;
-        console.log(storeId)
-        console.log(memberId)
-        console.log(likeStatus)
 
         axios({
             method: "put",

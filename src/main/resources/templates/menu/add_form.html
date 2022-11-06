@@ -3,7 +3,6 @@
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
-
     <style>
 
     </style>
@@ -49,7 +48,7 @@
                                 <div class="mb-3">
                                     <input th:field="*{price}" class="form-control"
                                            placeholder="가격" type="text"/>
-                                    <div id="menu-price-valid" class="my-1 valid-custom">
+                                    <div id="menu-price-valid" class="mb-4 valid-custom">
                                     </div>
                                 </div>
                             </div>
@@ -57,27 +56,28 @@
                                 <div class="mb-2">
                                     <span>메뉴 타입</span>
                                 </div>
-                                <div class="form-group d-flex">
+                                <div class="form-group d-flex mb-0">
                                     <div th:each="t : ${menuTypes}">
                                         <input type="radio" th:field="*{type}" th:value="${t.name}"/>
                                         <label th:for="${#ids.prev('type')}" th:text="${t.description}"
                                                class="form-check-label fw-bold"></label>
                                     </div>
                                 </div>
+                                <div id="menu-type-valid" class="mb-4 valid-custom">
                             </div>
-                            <div id="menu-type-valid" class="my-1 valid-custom">
                             </div>
                             <div class="">
                                 <div class="mb-2">
                                     <span>메뉴 특징</span>
                                 </div>
-                                <div class="form-group d-flex">
+                                <div class="form-group d-flex mb-0">
                                     <div th:each="feat : ${menuFeats}">
                                         <input type="radio" th:field="*{feature}" th:value="${feat.name}"/>
                                         <label th:for="${#ids.prev('feature')}" th:text="${feat.description}"
                                                class="form-check-label fw-bold"></label>
                                     </div>
                                 </div>
+                                <div id="menu-feature-valid" class="my-1 valid-custom">
                             </div>
                             <div class="form-group">
                                 <span class="mb-2">해쉬태그 추가</span>
@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="button" class="btn btn-orange mt-4" id="menu-save">메뉴 등록
+                                <button type="button" class="btn btn-main-color mt-4" id="menu-save">메뉴 등록
                                 </button>
                             </div>
                         </form>

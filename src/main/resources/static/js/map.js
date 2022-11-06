@@ -109,8 +109,8 @@ var main = {
         })
             .then((resp) => {
                 if (resp.data.count < 1) {
-                    alert("검색 결과가 없습니다.");
-                    // window.location.href = 'http://localhost:8080/map';
+                    alert("검색 결과가 없습니다. 다른 조건으로 검색해보시겠어요?");
+                    return;
                 }
 
                 for (let i = 0; i < resp.data.data.length; i++) {
@@ -162,8 +162,8 @@ var main = {
         })
             .then((res) => {
                 if (res.data.count < 1) {
-                    alert("검색 결과가 없습니다.");
-                    // window.location.href = 'http://localhost:8080/map';
+                    alert("검색 결과가 없습니다. 다른 조건으로 검색해보시겠어요?");
+                    return;
                 }
 
                 for (let i = 0; i < res.data.data.length; i++) {
@@ -194,7 +194,6 @@ var main = {
                 if (res.data.count < 1) {
                     sessionStorage.clear();
                     alert("검색 결과가 없습니다. 다른 조건으로 검색해보시겠어요?");
-
                     return;
                 }
 
@@ -331,7 +330,7 @@ var main = {
                 '    </div>' +
                 '    <div class="row d-flex">' +
                 '        <div class="col">' +
-                '            <p class="card-text" style="font-size: 0.85rem">' + data.address.roadAddr + ' ' + data.address.detail + '</p>' +
+                '            <p class="card-text" style="font-size: 0.85rem">' + data.address.roadAddr + '<br>' + data.address.detail + '</p>' +
                 '        </div>' +
                 '    </div>' +
                 '    <div class="row d-flex mb-2" style="font-size: 0.78rem; color: #6c757d">' +
@@ -344,7 +343,7 @@ var main = {
                 '           <a style="color: #146c43; font-size: 0.85rem; text-decoration: none" href="tel:' + data.phoneNumber + '">' + data.phoneNumber + '</a>' +
                 '        </div>' +
                 '        <div class="col">' +
-                '            <p class="card-text text-end">' + data.distance + 'km</p>' +
+                '            <p class="card-text text-end main-color fw-bold">' + data.distance + 'km</p>' +
                 '        </div>' +
                 '    </div>' +
                 '</div>')

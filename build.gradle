@@ -99,7 +99,6 @@ dependencies {
 	// p6spy
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
-
 	//이메일인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
@@ -125,7 +124,6 @@ dependencies {
 	//테스트에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-
 }
 
 //tasks.named('test') {

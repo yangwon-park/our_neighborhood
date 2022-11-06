@@ -115,18 +115,9 @@ public class MemberService {
         member.updatePassword(encodedPassword);
     }
 
-    //비밀번호 찾기 수정 변경 감지(비밀번호 찾기)
-    @Transactional
-    public void updatePassword(String userId, String encodedPassword) {
-        Member member = findByUserId(userId);
-        member.updatePassword(encodedPassword);
-
-    }
-
     //비밀번호 찾기시 있는 아이디인지 확인
     public Member userIdCheck(String userId) {
-        return memberRepository.findByUserId(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + userId));
+        return memberRepository.findByUserId(userId).orElse(null);
     }
 
     //휴대폰에 인증번호 발송
@@ -154,8 +145,7 @@ public class MemberService {
 
     //휴대폰번호 중복검사
     public Member findByPhoneNumber(String phoneNumber) {
-        return memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 전화번호입니다. phoneNumber = " + phoneNumber));
+        return memberRepository.findByPhoneNumber(phoneNumber).orElse(null);
     }
 
     //아이디 찾기
@@ -219,16 +209,15 @@ public class MemberService {
         memberRepository.findById(id).ifPresent(memberRepository::delete);
     }
 
-    public Long updateRole(Long memberId, String role) {
-        Member findMember = memberRepository.findById(memberId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
-
-
-        Role findRole = Role.of(role);
-
-        findMember.updateRole(findRole);
-
-        return memberId;
+    @Transactional
+    public String updateRole(String userId, Role role) {
+        try {
+            Member findMember = findByUserId(userId);
+            findMember.updateRole(role);
+        } catch (IllegalArgumentException e) {
+            return "존재하지 않는 아이디 입니다";
+        }
+        return "성공";
     }
 
     //찜 상태 확인 - detail에 뿌리기 위함

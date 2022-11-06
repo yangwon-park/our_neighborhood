@@ -9,6 +9,8 @@ var main = {
         const storeSaveBtn = document.getElementById("store-save");
         const storeUpdateBtn = document.getElementById("store-update");
         const storeDeleteBtn = document.getElementById("store-delete");
+        const storeOwnerAddBtn = document.getElementById("store-owner-add");
+        const storeOwnerDeleteBtn = document.querySelectorAll(".store-owner-delete");
 
         if (storeSaveBtn !== null) {
             storeSaveBtn.addEventListener("click", () => {
@@ -26,6 +28,20 @@ var main = {
             storeDeleteBtn.addEventListener("click", () => {
                 _this.delete();
             });
+        }
+
+        if (storeOwnerAddBtn !== null) {
+            storeOwnerAddBtn.addEventListener("click", () => {
+                _this.addStoreOwner();
+            });
+        }
+
+        if (storeOwnerDeleteBtn !== null) {
+            storeOwnerDeleteBtn.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    _this.deleteStoreOwner(btn.id);
+                })
+            })
         }
     },
 
@@ -51,14 +67,9 @@ var main = {
             closingTimeValid: document.getElementById("store-closingTime-valid")
         }
 
-
         const cateValid = document.getElementById("store-category-valid");
         const mainCateVal = document.getElementById("main-cate").options
-                            [document.getElementById("main-cate").selectedIndex].value;
-        const midCateVal = document.getElementById("mid-cate").options
-                            [document.getElementById("mid-cate").selectedIndex].value;
-        const subCateVal = document.getElementById("sub-cate").options
-                            [document.getElementById("sub-cate").selectedIndex].value;
+            [document.getElementById("main-cate").selectedIndex].value;
         const storeForm = document.getElementById('store-add-form');
 
         const formData = new FormData(storeForm);
@@ -74,13 +85,11 @@ var main = {
         validation.removeValidation(cateValid);
 
         this.categoryLayerEl.main.classList.remove("input-error-border");
-        this.categoryLayerEl.mid.classList.remove("input-error-border");
-        this.categoryLayerEl.sub.classList.remove("input-error-border");
 
         if (els["name"].value !== '' && els["zipcode"].value !== ''
             && els["roadAddr"].value !== '' && els["numberAddr"].value !== ''
             && els["openingTime"].value !== '' && els["closingTime"].value !== ''
-            && mainCateVal !== '' && midCateVal !== '' && subCateVal !== '') {
+            && mainCateVal !== '') {
 
             axios({
                 method: "post",
@@ -101,24 +110,15 @@ var main = {
             }
         }
 
-        if (subCateVal === '') {
-            this.categoryLayerEl.sub.classList.add("input-error-border");
-            validation.addValidation(cateValid, "소분류를 선택해주세요.");
-        }
-        if (midCateVal === '') {
-            this.categoryLayerEl.mid.classList.add("input-error-border");
-            validation.addValidation(cateValid, "중분류를 선택해주세요.");
-        }
-
         if (mainCateVal === '') {
             this.categoryLayerEl.main.classList.add("input-error-border");
-            validation.addValidation(cateValid, "대분류를 선택해주세요.");
+            validation.addValidation(cateValid, "대분류는 필수입니다.");
         }
     },
 
     update: function () {
-        const storeForm = document.getElementById('store-edit-form');
-        const storeIdVal = document.getElementById('storeId').value;
+        const storeForm = document.getElementById("store-edit-form");
+        const storeIdVal = document.getElementById("storeId").value;
 
         const formData = new FormData(storeForm);
 
@@ -238,10 +238,78 @@ var main = {
         categoryEl.appendChild(option);
     },
 
+
     categoryLayerEl: {
         main: document.getElementById("main-cate"),
         mid: document.getElementById("mid-cate"),
         sub: document.getElementById("sub-cate")
+    },
+
+    addStoreOwner: function () {
+
+        const userId = document.getElementById("userId");
+        const storeId = document.getElementById("storeId");
+
+        console.log("userId", userId.value);
+
+        const userIdValid = document.getElementById('store-owner-add-userId-valid');
+
+        userId.classList.remove("valid-custom");
+
+        validation.removeValidation(userIdValid);
+
+        if (userId.value !== '') {
+            axios({
+                method: "post",
+                url: "/admin/storeOwner/add",
+                params: {
+                    userId: userId.value,
+                    storeId: storeId.value
+                }
+            }).then((resp) => {
+                let check = resp.data;
+                if (check === '성공') {
+                    alert("가게 관리자가 추가 되었습니다");
+                    window.location.reload();
+                } else {
+                    alert(check);
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        if (userId.value === '') {
+            userId.classList.add("valid-custom");
+            validation.addValidation(userIdValid, "닉네임을 입력해주세요.");
+        }
+    },
+
+    deleteStoreOwner: function (btnId) {
+        const memberId = btnId.substring(22);
+        const storeId = document.getElementById("storeId");
+
+        console.log('storeId = ', memberId)
+        console.log('userId = ', storeId.value)
+
+        axios({
+            method: "delete",
+            url: "/admin/storeOwner/delete",
+            params: {
+                memberId: memberId,
+                storeId: storeId.value
+            }
+        }).then((resp) => {
+            let check = resp.data;
+            if (check === '성공') {
+                alert('가게 관리자 삭제가 완료됐습니다.');
+                window.location.reload();
+            } else {
+                alert(check);
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
     },
 };
 

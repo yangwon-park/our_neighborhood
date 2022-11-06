@@ -24,10 +24,6 @@ public class CategoryOfStore {
     private Store store;
 
 
-    // 연관 관계 편의 메소드를 위해 setter 열어둠
-    public void updateCategory(Category category) {
-        this.category = category;
-    }
 
 
     /*
@@ -39,6 +35,12 @@ public class CategoryOfStore {
     }
 
 
+    // update 메소드
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
+    
+    
     /*
         === 연관 관계 편의 메소드 ===
     */

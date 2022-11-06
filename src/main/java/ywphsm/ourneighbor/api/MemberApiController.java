@@ -2,23 +2,26 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.EditForm;
 import ywphsm.ourneighbor.controller.form.PasswordEditForm;
 import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
-import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
+import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+
+import static ywphsm.ourneighbor.domain.store.distance.Distance.calculateHowFarToTheTarget;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,11 +31,6 @@ public class MemberApiController {
     private final MemberService memberService;
 
     private final StoreService storeService;
-
-    @PutMapping("/admin/update_role/{memberId}")
-    public Long updateRole(@PathVariable Long memberId, @RequestBody String role) {
-        return memberService.updateRole(memberId, role);
-    }
 
     @PutMapping("/user/like")
     public void likeAdd(boolean likeStatus, Long memberId, Long storeId) {
@@ -174,5 +172,10 @@ public class MemberApiController {
     public String findPassword(String email, String userId) {
 
         return memberService.sendEmailByPassword(email, userId);
+    }
+
+    @PutMapping("/admin/memberRole/edit")
+    public String memberRoleEdit(String userId, Role role) {
+        return memberService.updateRole(userId, role);
     }
 }

@@ -56,9 +56,6 @@ public class HashtagOfStore {
     public static void linkHashtagAndStore(Hashtag hashtag, Store store) {
         HashtagOfStore hashtagOfStore = new HashtagOfStore(hashtag, store);
 
-        log.info("hashtagOfStore={}", hashtagOfStore.getHashtag());
-        log.info("hashtagOfStore={}", hashtagOfStore.getStore());
-
         hashtag.getHashtagOfStoreList().add(hashtagOfStore);
         store.getHashtagOfStoreList().add(hashtagOfStore);
     }

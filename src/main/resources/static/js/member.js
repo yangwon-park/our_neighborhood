@@ -12,60 +12,59 @@ var main = {
         const memberDeleteBtn = document.getElementById('member-delete');
         const findUserIdBtn = document.getElementById('find-userId');
         const findPasswordBtn = document.getElementById('find-password');
+        const memberRoleEditBtn = document.getElementById('member-role-edit');
 
         if (signUpSaveBtn !== null) {
             signUpSaveBtn.addEventListener('click', () => {
                 _this.check();
-                // _this.save();
             });
         }
 
         if (sendSMSBtn !== null) {
             sendSMSBtn.addEventListener('click', () => {
                 _this.sendSMS();
-                // _this.save();
             });
         }
 
         if (phoneNumberEditBtn !== null) {
             phoneNumberEditBtn.addEventListener('click', () => {
                 _this.editPhoneNumber();
-                // _this.save();
             });
         }
 
         if (memberEditBtn !== null) {
             memberEditBtn.addEventListener('click', () => {
                 _this.update();
-                // _this.save();
             });
         }
 
         if (passwordEditBtn !== null) {
             passwordEditBtn.addEventListener('click', () => {
                 _this.editPassword();
-                // _this.save();
             });
         }
 
         if (memberDeleteBtn !== null) {
             memberDeleteBtn.addEventListener('click', () => {
                 _this.delete();
-                // _this.save();
             });
         }
 
         if (findUserIdBtn !== null) {
             findUserIdBtn.addEventListener('click', () => {
                 _this.findUserId();
-                // _this.save();
             });
         }
 
         if (findPasswordBtn !== null) {
             findPasswordBtn.addEventListener('click', () => {
                 _this.findPassword();
-                // _this.save();
+            });
+        }
+
+        if (memberRoleEditBtn !== null) {
+            memberRoleEditBtn.addEventListener('click', () => {
+                _this.memberRoleEdit();
             });
         }
     },
@@ -478,10 +477,62 @@ var main = {
 
         if (userId.value === '') {
             userId.classList.add("valid-custom");
-            validation.addValidation(userIdValid, "닉네임을 입력해주세요.");
+            validation.addValidation(userIdValid, "아이디를 입력해주세요.");
         }
 
     },
+
+    memberRoleEdit: function () {
+
+        const userId = document.getElementById("userId");
+        const role = document.getElementById("role").options
+            [document.getElementById("role").selectedIndex].value;
+
+        console.log("userId", userId.value);
+        console.log("role", role);
+
+        const userIdValid = document.getElementById('member-role-edit-userId-valid');
+        const roleValid = document.getElementById('member-role-edit-role-valid');
+
+        userId.classList.remove("valid-custom");
+        // role.classList.remove("valid-custom");
+
+        validation.removeValidation(userIdValid);
+        validation.removeValidation(roleValid);
+
+        if (userId.value !== '' && role !== '') {
+            axios({
+                method: "put",
+                url: "/admin/memberRole/edit",
+                params: {
+                    userId: userId.value,
+                    role: role
+                }
+            }).then((resp) => {
+                let check = resp.data;
+                if (check === '성공') {
+                    alert("권한이 성공적으로 변경되었습니다");
+                    window.location.reload();
+                } else {
+                    alert(check);
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        if (role.value === '') {
+            role.classList.add("valid-custom");
+            validation.addValidation(roleValid, "권한을 정해주세요.");
+        }
+
+        if (userId.value === '') {
+            userId.classList.add("valid-custom");
+            validation.addValidation(userIdValid, "아이디를 입력해주세요.");
+        }
+
+    },
+
 
 };
 

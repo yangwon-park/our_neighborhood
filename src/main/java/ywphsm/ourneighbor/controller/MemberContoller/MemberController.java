@@ -2,14 +2,15 @@ package ywphsm.ourneighbor.controller.MemberContoller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.controller.form.LoginForm;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.service.login.SessionConst;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class MemberController {
@@ -34,4 +35,10 @@ public class MemberController {
     public String signUp(@ModelAttribute(value = "dto") MemberDTO.Add dto) {
         return "member/signUpForm";
     }
+
+    @GetMapping("/admin/memberRole/edit")
+    public String memberRoleEdit() {
+        return "member/edit/member_role_edit";
+    }
+
 }

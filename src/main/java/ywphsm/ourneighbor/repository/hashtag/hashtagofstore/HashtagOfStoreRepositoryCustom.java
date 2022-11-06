@@ -1,7 +1,6 @@
 package ywphsm.ourneighbor.repository.hashtag.hashtagofstore;
 
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
-import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 
 import java.util.List;
 

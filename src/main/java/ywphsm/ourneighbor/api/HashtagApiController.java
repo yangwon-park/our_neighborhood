@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.service.HashtagOfMenuService;
@@ -31,6 +32,11 @@ public class HashtagApiController {
     public ResultClass<?> findHashtagsByMenuId(@RequestParam Long menuId) {
         List<HashtagDTO> hashtags = hashtagOfMenuService.findHashtagsByMenuId(menuId);
         return new ResultClass<>(hashtags);
+    }
+
+    @PostMapping("/seller/hashtag/{storeId}")
+    public Long saveHashtag(@PathVariable Long storeId, HashtagDTO dto) {
+        return hashtagService.save(dto).getId();
     }
 
     @DeleteMapping("/seller/hashtag/{hashtagId}")

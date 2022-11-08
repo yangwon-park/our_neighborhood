@@ -204,7 +204,7 @@ var main = {
             url: "/seller/menu/" + storeIdVal,
             data: formData
         }).then((resp) => {
-            alert('메뉴 정보 수정이 완료됐습니다.');
+            alert("메뉴 정보 수정이 완료됐습니다.");
             window.location.reload();
             mask.closeMask();
         }).catch((error) => {
@@ -216,8 +216,8 @@ var main = {
     delete: function (btnId) {
         mask.loadingWithMask();
         const id = btnId.substring(15);
-        const storeId = document.getElementById('storeId').value;
-        const menuId = document.getElementById('menuId' + id).value;
+        const storeId = document.getElementById("storeId").value;
+        const menuId = document.getElementById("menuId" + id).value;
 
         console.log(menuId);
 

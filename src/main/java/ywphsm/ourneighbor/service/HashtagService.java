@@ -2,12 +2,17 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +58,4 @@ public class HashtagService {
     public Hashtag findByName(String name) {
         return hashtagRepository.findByName(name);
     }
-
-//    public HashtagDTO findHashtag
 }

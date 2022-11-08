@@ -53,6 +53,7 @@ var main = {
         }
 
         const zoomDiv = document.getElementById("modal-content");
+        let scale = 1;
 
         function zoom(event) {
             event.preventDefault();
@@ -66,8 +67,9 @@ var main = {
             zoomDiv.style.transform = `scale(${scale})`;
         }
 
-        let scale = 1;
-        zoomDiv.onwheel = zoom;
+        if (zoomDiv !== null) {
+            zoomDiv.onwheel = zoom;
+        }
 
         mask.closeMask();
     },

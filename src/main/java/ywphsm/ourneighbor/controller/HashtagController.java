@@ -24,6 +24,8 @@ public class HashtagController {
                 hashtagOfStoreService.findAllHashtagAndCountByStoreId(storeId);
 
         model.addAttribute("hashtagList", hashtagList);
+        model.addAttribute("storeId", storeId);
+
         return "hashtag/list";
     }
 }

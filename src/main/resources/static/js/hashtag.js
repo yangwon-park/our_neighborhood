@@ -22,6 +22,14 @@ var main = {
                 this.createHashtagInput(el.id.substring(7))
             });
         }
+
+        const hashtagBtn = document.getElementById("hashtag-modal-save");
+
+        if (hashtagBtn !== null) {
+            hashtagBtn.addEventListener("click", () => {
+                this.saveHashtag();
+            });
+        }
     },
 
     createHashtagInput: function (menuId) {
@@ -96,7 +104,6 @@ var main = {
     },
 
     getAllHashtags: function () {
-        
         // 초기화
         this.allHashtags = [];
 
@@ -112,6 +119,19 @@ var main = {
         })
     },
 
+    saveHashtag: function () {
+        const storeId = document.getElementById("storeId").value;
+        const hashtagForm = document.getElementById("hashtag-form");
+        const formData = new FormData(hashtagForm);
+
+        axios({
+            method: "post",
+            url: "/seller/hashtag/" + storeId,
+            data: formData
+        }).then((resp) => {
+            console.log(resp.data);
+        })
+    },
 
     delete: function (btnId) {
         const hashtagId = btnId.substring(18);

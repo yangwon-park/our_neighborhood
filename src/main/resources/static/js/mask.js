@@ -13,6 +13,7 @@ var main = {
         mask.id = "mask";
 
         let loadingImg = document.createElement("img");
+        loadingImg.id = "spinner";
         loadingImg.src = path;
 
         mask.append(loadingImg);

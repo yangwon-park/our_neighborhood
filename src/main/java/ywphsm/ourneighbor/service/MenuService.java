@@ -60,19 +60,16 @@ public class MenuService {
         newUploadFile.addMenu(menu);
         linkedStore.addMenu(menu);
 
-        Long savedMenuId = menuRepository.save(menu).getId();
+        Menu savedMenu = menuRepository.save(menu);
 
         // 해쉬태그 저장 로직
         if (!dto.getHashtag().isEmpty()) {
-            Menu savedMenu = menuRepository.findById(savedMenuId).orElseThrow(
-                    () -> new IllegalArgumentException("해당 메뉴가 없습니다. id = " + savedMenuId));
-
             List<String> hashtagNameList = getHashtagNameList(dto.getHashtag());
 
             saveHashtagLinkedMenu(savedMenu, hashtagNameList);
         }
 
-        return savedMenuId;
+        return savedMenu.getId();
     }
 
 

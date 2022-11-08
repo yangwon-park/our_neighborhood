@@ -36,7 +36,7 @@ public class HashtagApiController {
     }
 
     @PostMapping("/seller/hashtag/{storeId}")
-    public Long saveHashtag(@PathVariable Long storeId, HashtagDTO dto) throws ParseException {
+    public Long saveHashtag(@PathVariable Long storeId, HashtagDTO dto) {
         return hashtagService.simpleSaveLinkedStore(storeId, dto);
     }
 

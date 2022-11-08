@@ -37,7 +37,7 @@ public class HashtagService {
     }
 
     @Transactional
-    public Long simpleSaveLinkedStore(Long storeId, HashtagDTO dto) throws ParseException {
+    public Long simpleSaveLinkedStore(Long storeId, HashtagDTO dto) {
         Store findStore = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 매장이 없습니다. storeId = " + storeId));
 

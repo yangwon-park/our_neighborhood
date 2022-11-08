@@ -129,7 +129,13 @@ var main = {
             url: "/seller/hashtag/" + storeId,
             data: formData
         }).then((resp) => {
-            console.log(resp.data);
+            if (resp.data === -1) {
+                alert("존재하는 카테고리입니다.");
+                window.location.reload();
+            } else {
+                alert("카테고리 등록이 성공했습니다.");
+                window.location.reload();
+            }
         })
     },
 

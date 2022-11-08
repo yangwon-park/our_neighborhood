@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
@@ -35,8 +36,8 @@ public class HashtagApiController {
     }
 
     @PostMapping("/seller/hashtag/{storeId}")
-    public Long saveHashtag(@PathVariable Long storeId, HashtagDTO dto) {
-        return hashtagService.save(dto).getId();
+    public Long saveHashtag(@PathVariable Long storeId, HashtagDTO dto) throws ParseException {
+        return hashtagService.simpleSaveLinkedStore(storeId, dto);
     }
 
     @DeleteMapping("/seller/hashtag/{hashtagId}")

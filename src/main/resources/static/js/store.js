@@ -1,9 +1,11 @@
 import validation from "./validation.js";
+import mask from "./mask.js";
 
 var main = {
     init: function () {
-        var _this = this;
+        let _this = this;
 
+        mask.loadingWithMask();
         _this.getCategories();
 
         const storeSaveBtn = document.getElementById("store-save");
@@ -27,9 +29,12 @@ var main = {
                 _this.delete();
             });
         }
+
+        mask.closeMask();
     },
 
     save: function () {
+        mask.loadingWithMask();
 
         // input 태그
         const els = {
@@ -82,8 +87,11 @@ var main = {
             }).then((resp) => {
                 alert("매장 등록이 완료됐습니다.");
                 window.location.href = "/store/" + resp.data;
+                mask.closeMask();
             }).catch((error) => {
+                alert("매장 등록에 실패했습니다.");
                 console.error(error);
+                mask.closeMask();
             });
         }
 
@@ -101,6 +109,8 @@ var main = {
     },
 
     update: function () {
+        mask.loadingWithMask();
+
         const storeForm = document.getElementById("store-edit-form");
         const storeIdVal = document.getElementById("storeId").value;
 
@@ -113,12 +123,16 @@ var main = {
         }).then((resp) => {
             alert("매장 정보 수정이 완료됐습니다.");
             window.location.href = "/store/" + storeIdVal;
+            mask.closeMask();
         }).catch((error) => {
+            alert("매장 수정에 실패했습니다.");
             console.error(error);
+            mask.closeMask();
         })
     },
 
     delete: function () {
+        mask.loadingWithMask();
         const storeId = document.getElementById("storeId");
 
         axios({
@@ -127,6 +141,7 @@ var main = {
         }).then((resp) => {
             alert("매장 삭제가 완료됐습니다.");
             window.location.href = "/";
+            mask.closeMask();
         }).catch((error) => {
             console.error(error);
         })

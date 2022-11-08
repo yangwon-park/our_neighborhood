@@ -1,4 +1,4 @@
-import mask from './mask.js';
+import mask from "./mask.js";
 
 var main = {
     setCookie: function (key, value, exp) {
@@ -29,6 +29,7 @@ var main = {
     init: async function () {
         let _this = this;
 
+        mask.loadingWithMask();
         await _this.findCoords();
     },
 

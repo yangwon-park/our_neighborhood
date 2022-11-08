@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
+import ywphsm.ourneighbor.domain.hashtag.HashtagUtil;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
-import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.hashtag.hashtagofmenu.HashtagOfMenuRepository;
@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.linkHashtagAndMenu;
+import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,37 +51,25 @@ public class MenuService {
     // 메뉴 등록
     @Transactional
     public Long save(MenuDTO.Add dto) throws IOException, ParseException {
-
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + dto.getStoreId()));
 
         UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
 
         Menu menu = dto.toEntity(linkedStore);
-
         newUploadFile.addMenu(menu);
-
         linkedStore.addMenu(menu);
 
-        Long savedMenuId = menuRepository.save(menu).getId();
+        Menu savedMenu = menuRepository.save(menu);
 
-        String hashtagJson = dto.getHashtag();
+        // 해쉬태그 저장 로직
+        if (!dto.getHashtag().isEmpty()) {
+            List<String> hashtagNameList = getHashtagNameList(dto.getHashtag());
 
-        log.info("hashtagJson={}", hashtagJson);
-
-        if (hashtagJson != null) {
-            // 해쉬태그 저장 로직
-            if (!hashtagJson.isEmpty()) {
-                log.info("hashtagJson={}", hashtagJson);
-                Menu savedMenu = menuRepository.findById(savedMenuId).orElseThrow(
-                        () -> new IllegalArgumentException("해당 메뉴가 없습니다. id = " + savedMenuId));
-
-                List<String> hashtagNameList = getHashtagNameList(hashtagJson);
-
-                saveHashtag(savedMenu, hashtagNameList);
-            }
+            saveHashtagLinkedMenu(savedMenu, hashtagNameList);
         }
-        return savedMenuId;
+
+        return savedMenu.getId();
     }
 
 
@@ -118,9 +107,9 @@ public class MenuService {
 
                 // 기존 해쉬태그가 없는 경우 => 그냥 처음 저장하는 과정과 동일
                 if (previousHashtagName.size() == 0) {
-                    saveHashtag(menu, newHashtagNameList);
+                    saveHashtagLinkedMenu(menu, newHashtagNameList);
                 } else {
-                    updateAndDeleteHashtag(menu, previousHashtagName, newHashtagNameList);
+                    updateAndDeleteHashtagLinkedMenu(menu, previousHashtagName, newHashtagNameList);
                 }
             }
         }
@@ -149,8 +138,6 @@ public class MenuService {
         Menu menu = menuRepository.findById(menuId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + menuId));
 
-        log.info("menu={}", menu);
-
         menuRepository.delete(menu);
 
         return menuId;
@@ -170,25 +157,8 @@ public class MenuService {
         return menuRepository.findByStoreIdWithoutTypeMenuCaseByOrderByType(storeId);
     }
 
-    // json을 hashtagNameList로 변환해주는 로직
-    private static List<String> getHashtagNameList(String hashtagJson) throws ParseException {
-        JSONParser parser = new JSONParser();
-        JSONArray array = (JSONArray) parser.parse(hashtagJson);
-
-        List<String> hashtagNameList = new ArrayList<>();
-
-        for (Object object : array) {
-            JSONObject jsonObject = (JSONObject) object;
-            String value = jsonObject.get("value").toString();
-
-            hashtagNameList.add(value);
-        }
-
-        return hashtagNameList;
-    }
-
     // hashtag save 로직
-    private void saveHashtag(Menu menu, List<String> hashtagNameList) {
+    private void saveHashtagLinkedMenu(Menu menu, List<String> hashtagNameList) {
         for (String name : hashtagNameList) {
             HashtagDTO hashtagDTO = HashtagDTO.builder()
                     .name(name)
@@ -198,10 +168,10 @@ public class MenuService {
 
             Hashtag newHashtag;
 
-            if (duplicateCheck) {
-                newHashtag = hashtagRepository.findByName(name);
-            } else {
+            if (!duplicateCheck) {
                 newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
+            } else {
+                newHashtag = hashtagRepository.findByName(name);
             }
 
             linkHashtagAndMenu(newHashtag, menu);
@@ -209,7 +179,7 @@ public class MenuService {
     }
 
     // 해쉬태그 update, delete 로직
-    private void updateAndDeleteHashtag(Menu menu, List<String> previousHashtagName, List<String> newHashtagNameList) {
+    private void updateAndDeleteHashtagLinkedMenu(Menu menu, List<String> previousHashtagName, List<String> newHashtagNameList) {
         for (String name : newHashtagNameList) {
             boolean duplicateHashtagCheck = hashtagRepository.existsByName(name);
 

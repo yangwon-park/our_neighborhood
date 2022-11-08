@@ -51,13 +51,10 @@ public class HashtagOfMenu {
     // save구문을 따로 만들지 않고 Store 쪽 연관 관계에서 CascadeType.PERSIST로 종속 관계를 부여하여
     // 좀 더 간결하게 로직을 처리했음
     public static void linkHashtagAndMenu(Hashtag hashtag, Menu menu) {
-        HashtagOfMenu hashtagOfStore = new HashtagOfMenu(hashtag, menu);
+        HashtagOfMenu hashtagOfMenu = new HashtagOfMenu(hashtag, menu);
 
-        log.info("hashtagOfStore={}", hashtagOfStore.getHashtag());
-        log.info("hashtagOfStore={}", hashtagOfStore.getMenu());
-
-        hashtag.getHashtagOfMenuList().add(hashtagOfStore);
-        menu.getHashtagOfMenuList().add(hashtagOfStore);
+        hashtag.getHashtagOfMenuList().add(hashtagOfMenu);
+        menu.getHashtagOfMenuList().add(hashtagOfMenu);
     }
 
     public void updateHashtag(Hashtag hashtag) {

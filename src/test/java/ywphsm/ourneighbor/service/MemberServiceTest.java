@@ -140,7 +140,7 @@ class MemberServiceTest {
                 findMember.getPassword(), "updatePW!2")).isTrue();
 
         //회원수정(전화번호)
-        url = "http://localhost:" + port + "/member/edit/phoneNumber";
+        url = "http://localhost:" + port + "/member/edit/phone-number";
 
         PhoneCertifiedForm certifiedForm = new PhoneCertifiedForm();
         certifiedForm.setPhoneNumber("01012341234");

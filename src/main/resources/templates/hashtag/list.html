@@ -8,17 +8,13 @@
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
-<body class="bg-default">
+<body id="main-body" class="bg-default">
+<!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
 <section class="header">
-    <div class="header py-7 py-lg-8">
-        <div class="separator separator-bottom separator-skew zindex-100">
-            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg">
-                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-            </svg>
-        </div>
+    <div class="header py-5">
+
     </div>
 </section>
 <!--addForm-->
@@ -29,8 +25,16 @@
         <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6">
                 <div class="card bg-secondary shadow border-0">
-                    <div class="card-header bg-transparent">
-                        <div class="text-muted text-center mt-2 mb-4 fs-2">해쉬태그 관리</div>
+                    <div class="text-center mt-3">
+                        <span class="h3 text-dark fw-bold">해쉬태그 관리</span>
+                    </div>
+                    <div class="text-center mb-2">
+                        <button type="button" class="btn btn-info mt-4" id="hashtag-save"
+                                data-bs-toggle="modal" data-bs-target="#edit-hashtag-modal"
+                                style="float: right; font-size: 1.1rem; color: #fff">
+                            등록
+                        </button>
+                        <input type="hidden" id="storeId" th:value="${storeId}">
                     </div>
                     <table class="table">
                         <thead>
@@ -44,16 +48,16 @@
                         <tbody>
                         <tr th:each="hashtag, i: ${hashtagList}" style="height: 1rem">
                             <th scope="row" th:text="${i.index+1}"
-                                class="text-start align-items-center">번호</th>
+                                class="text-start align-items-center">번호
+                            </th>
                             <td th:text="${hashtag.hashtagName}" class="text-center">해쉬태그 이름</td>
                             <td th:text="${hashtag.count}" class="text-center">누적 횟수</td>
                             <td class="text-right" style="width: 30%">
                                 <button th:id="|hashtag-delete-btn${hashtag.hashtagId}|"
-                                        class="btn btn-main-color text-center hashtag-delete-btn" style="color: #ffffff">
-                                    삭제</button>
-                            </td>
-                            <td style="display: none">
-                                <input th:id="storeId" th:value="${hashtag.storeId}">
+                                        class="btn btn-main-color text-center hashtag-delete-btn"
+                                        style="color: #ffffff">
+                                    삭제
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -63,6 +67,37 @@
         </div>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="edit-hashtag-modal" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="edit-hashtag-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="hashtag-form">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark fw-bold" id="edit-hashtag-modal-label">해쉬태그 직접 등록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <span class="mb-2">해쉬태그 추가</span>
+                        <div class="mb-3">
+                            <input id="hashtag" name="name" style="width: 100%">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            style="font-size: 1.1rem">닫기
+                    </button>
+                    <button type="button" class="btn btn-info" id="hashtag-modal-save"
+                            style="font-size: 1.1rem; color: #ffffff">완료
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <footer th:replace="layout/footer :: common_footer">
 
 </footer>

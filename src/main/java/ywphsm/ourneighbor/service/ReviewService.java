@@ -2,6 +2,10 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -9,12 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.Review;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
+import ywphsm.ourneighbor.domain.hashtag.Hashtag;
+import ywphsm.ourneighbor.domain.hashtag.HashtagUtil;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
+import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.review.ReviewRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
@@ -22,6 +31,10 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.linkHashtagAndMenu;
+import static ywphsm.ourneighbor.domain.hashtag.HashtagOfStore.linkHashtagAndStore;
+import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,25 +48,33 @@ public class ReviewService {
 
     private final MemberRepository memberRepository;
 
+    private final HashtagRepository hashtagRepository;
+
     private final AwsS3FileStore awsS3FileStore;
 
     private final FileStore fileStore;
 
     @Transactional
-    public Long save(ReviewDTO.Add reviewAddDTO) throws IOException {
-        Store linkedStore = storeRepository.findById(reviewAddDTO.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
-        Member linkedMember = memberRepository.findById(reviewAddDTO.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
+    public Long save(ReviewDTO.Add dto, String hashtag) throws IOException, ParseException {
+        Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
+        Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
 
 //        UploadFile newUploadFile = fileStore.storeFile(reviewAddDTO.getFile());
-        UploadFile newUploadFile = awsS3FileStore.storeFile(reviewAddDTO.getFile());
-        log.info("fileName={}", newUploadFile.getStoredFileName());
-        log.info("fileName={}", newUploadFile.getUploadedFileName());
+        UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
 
-        Review review = reviewAddDTO.toEntity(linkedStore, linkedMember);
+        Review review = dto.toEntity(linkedStore, linkedMember);
         newUploadFile.addReview(review);
         linkedStore.addReview(review);
         linkedMember.addReview(review);
-        log.info("save_직전");
+
+        if (!hashtag.isEmpty()) {
+            Store findStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
+                    () -> new IllegalArgumentException("해당 매장이 없습니다. storeId = " + dto.getStoreId()));
+
+            List<String> hashtagNameList = getHashtagNameList(hashtag);
+
+            saveHashtagLinkedStore(findStore, hashtagNameList);
+        }
 
         return reviewRepository.save(review).getId();
     }
@@ -63,8 +84,6 @@ public class ReviewService {
         Review review = findOne(reviewId);
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
         store.reviewDelete(review.getRating());
-
-        log.info("review={}", review);
 
         reviewRepository.delete(review);
 
@@ -84,15 +103,11 @@ public class ReviewService {
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, storeId);
         log.info("reviewMemberDTO={}", reviewMemberDTOS);
 
-
         return reviewMemberDTOS;
     }
 
     public List<ReviewMemberDTO> myReviewList(Long memberId) {
-        List<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.myReview(memberId);
-        log.info("reviewMemberDTO={}", reviewMemberDTOS);
-
-        return reviewMemberDTOS;
+        return reviewRepository.myReview(memberId);
     }
 
     public double ratingAverage(Long storeId) {
@@ -107,8 +122,25 @@ public class ReviewService {
         double average = ratingTotal / count;
 
         return Math.round(average * 10) / 10.0;
-
     }
 
+    private void saveHashtagLinkedStore(Store store, List<String> hashtagNameList) {
+        for (String name : hashtagNameList) {
+            HashtagDTO hashtagDTO = HashtagDTO.builder()
+                    .name(name)
+                    .build();
 
+            boolean duplicateCheck = hashtagRepository.existsByName(name);
+
+            Hashtag newHashtag;
+
+            if (!duplicateCheck) {
+                newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
+            } else {
+                newHashtag = hashtagRepository.findByName(name);
+            }
+
+            linkHashtagAndStore(newHashtag, store);
+        }
+    }
 }

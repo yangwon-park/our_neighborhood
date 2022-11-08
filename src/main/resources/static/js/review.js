@@ -1,8 +1,11 @@
 import validation from "./validation.js";
+import mask from "./mask.js";
 
 var main = {
     init: async function () {
         let _this = this;
+
+        mask.loadingWithMask();
 
         const reviewSaveBtn = document.getElementById("review-save");
         const reviewDeleteBtnList = document.querySelectorAll(".review-delete");
@@ -50,6 +53,7 @@ var main = {
         }
 
         const zoomDiv = document.getElementById("modal-content");
+        let scale = 1;
 
         function zoom(event) {
             event.preventDefault();
@@ -63,8 +67,11 @@ var main = {
             zoomDiv.style.transform = `scale(${scale})`;
         }
 
-        let scale = 1;
-        zoomDiv.onwheel = zoom;
+        if (zoomDiv !== null) {
+            zoomDiv.onwheel = zoom;
+        }
+
+        mask.closeMask();
     },
 
     check: function () {
@@ -124,6 +131,8 @@ var main = {
     },
 
     save: function () {
+        mask.loadingWithMask();
+
         const reviewForm = document.getElementById("review-add-form");
         const storeId = document.getElementById("storeId").value;
 
@@ -140,10 +149,13 @@ var main = {
             url: "/user/review",
             data: formData
         }).then((resp) => {
-            alert("리뷰가 등록됐습니다.")
+            alert("리뷰가 등록됐습니다.");
             window.location.href = "/store/" + storeId;
+            mask.closeMask();
         }).catch((error) => {
+            alert("리뷰를 등록할 수 없습니다.");
             console.log(error)
+            mask.closeMask();
         });
     },
 

@@ -49,7 +49,6 @@ public class WeatherApiController {
 
         log.info("=== getForeCast Start ===");
 
-
         LocalDateTime targetDay = LocalDateTime.now().plusDays(-1);
         String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
         String base_date = targetDay.format(DateTimeFormatter.ofPattern("yyyyMMdd", Locale.KOREAN));
@@ -154,7 +153,6 @@ public class WeatherApiController {
 
         // 추후에 디테일한 현재 위치에 있는 관측소 기반으로 미세먼지 농도를 체크할 수 있게 변경 예정
         for (int i = 0; i < 1; i++) {
-
 //            String station = airJson.getJSONObject(i).getString("stationName");
             dto.setPm10Value(airJson.getJSONObject(i).getString("pm10Value"));
         }

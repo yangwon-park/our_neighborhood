@@ -280,7 +280,7 @@ var main = {
             }).then((resp) => {
                 let check = resp.data;
                 if (check === '성공') {
-                    alert("전화번호가 수정됐습니다.");
+                    alert("전화번호가 수정됐습니다, 다시 로그인해주세요.");
                     window.location.href = "/logout";
                 } else {
                     alert(check);
@@ -313,7 +313,7 @@ var main = {
             }).then((resp) => {
                 let check = resp.data;
                 if (check === '성공') {
-                    alert("비밀번호가 수정됐습니다.");
+                    alert("비밀번호가 수정됐습니다, 다시 로그인해주세요.");
                     window.location.href = "/logout";
                 } else {
                     alert(check);
@@ -352,7 +352,7 @@ var main = {
             }).then((resp) => {
                 let check = resp.data;
                 if (check === '성공') {
-                    alert("회원정보가 수정됐습니다.");
+                    alert("회원정보가 수정됐습니다, 다시 로그인해주세요.");
                     window.location.href = "/logout";
                 } else {
                     alert(check);

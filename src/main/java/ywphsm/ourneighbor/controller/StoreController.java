@@ -6,6 +6,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.*;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
@@ -152,8 +153,7 @@ public class StoreController {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
 
             if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
+                ScriptUtils.alertAndBackPage(response, "해당 가게의 권한이 없습니다.");
             }
         }
 

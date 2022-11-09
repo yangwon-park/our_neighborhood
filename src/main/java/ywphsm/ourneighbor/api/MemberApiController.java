@@ -33,9 +33,9 @@ public class MemberApiController {
     private final StoreService storeService;
 
     @PutMapping("/user/like")
-    public void likeAdd(boolean likeStatus, Long memberId, Long storeId) {
+    public String likeAdd(boolean likeStatus, Long memberId, Long storeId) {
         log.info("likeStatus={}", likeStatus);
-        storeService.updateLike(likeStatus, memberId, storeId);
+        return storeService.updateLike(likeStatus, memberId, storeId);
     }
 
     @GetMapping("/member/check")

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
@@ -66,8 +67,7 @@ public class StoreApiController {
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
             if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
+                ScriptUtils.alertAndBackPage(response, "해당 가게의 권한이 없습니다.");
             }
         }
 
@@ -82,8 +82,7 @@ public class StoreApiController {
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
             if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
+                ScriptUtils.alertAndBackPage(response, "해당 가게의 권한이 없습니다.");
             }
         }
 
@@ -98,8 +97,7 @@ public class StoreApiController {
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
             if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
+                ScriptUtils.alertAndBackPage(response, "해당 가게의 권한이 없습니다.");
             }
         }
 

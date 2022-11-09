@@ -160,7 +160,7 @@ public class StoreService {
 
     //찜 상태 업데이트
     @Transactional
-    public void updateLike(boolean likeStatus, Long memberId, Long storeId) {
+    public String updateLike(boolean likeStatus, Long memberId, Long storeId) {
         Member member = memberService.findById(memberId);
         Store store = findById(storeId);
 
@@ -171,18 +171,24 @@ public class StoreService {
         if (likeStatus) {
             if (!collect.isEmpty()) {
                 collect.get(0).updateStoreLike(true);
-            } else {
-                MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, store);
-                memberOfStore.updateStoreLike(true);
-                memberOfStoreRepository.save(memberOfStore);
+                return "가게가 찜 등록이 되었습니다.";
             }
-        } else {
-            MemberOfStore memberOfStore = collect.get(0);
-            memberOfStore.updateStoreLike(false);
-            if (!memberOfStore.isMyStore()) {
-                memberOfStoreRepository.delete(memberOfStore);
-            }
+
+            MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, store);
+            memberOfStore.updateStoreLike(true);
+            memberOfStoreRepository.save(memberOfStore);
+            return "가게가 찜 등록이 되었습니다.";
         }
+
+        MemberOfStore memberOfStore = collect.get(0);
+        if (!memberOfStore.isMyStore()) {
+            memberOfStoreRepository.delete(memberOfStore);
+            return "가게가 찜 등록이 취소되었습니다.";
+        }
+
+        memberOfStore.updateStoreLike(false);
+        return "가게가 찜 등록이 취소되었습니다.";
+
     }
 
     @Transactional

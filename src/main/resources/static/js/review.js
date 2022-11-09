@@ -7,14 +7,12 @@ var main = {
         const reviewSaveBtn = document.getElementById("review-save");
         const reviewDeleteBtnList = document.querySelectorAll(".review-delete");
         const reviewMoreBtn = document.getElementById("review-more");
-        const likeBtn = document.getElementById("like-btn");
         const storeImgBtn = document.getElementById("store-image-btn");
         const mainImg = document.getElementById("main-image");
 
         if (reviewSaveBtn !== null) {
             reviewSaveBtn.addEventListener('click', () => {
                 _this.check()
-                // _this.save()
             });
         }
 
@@ -29,14 +27,6 @@ var main = {
         if (reviewMoreBtn !== null) {
             reviewMoreBtn.addEventListener('click', () => {
                 _this.more()
-                // _this.save()
-            });
-        }
-
-        if (likeBtn !== null) {
-            likeBtn.addEventListener('click', () => {
-                _this.likeUpdate()
-                // _this.save()
             });
         }
 
@@ -68,6 +58,31 @@ var main = {
 
         let scale = 1;
         zoomDiv.onwheel = zoom;
+
+        //좋아요 버튼
+        let $likeBtn =$('.icon.heart');
+
+        $likeBtn.click(function(){
+            $likeBtn.toggleClass('active');
+
+            if($likeBtn.hasClass('active')){
+                _this.likeUpdate(true)
+                $(this).find('img').attr({
+                    'src': 'https://cdn-icons-png.flaticon.com/512/803/803087.png',
+                    alt:'찜하기 완료'
+                });
+
+
+            }else{
+                _this.likeUpdate(false)
+                $(this).find('i').removeClass('fas').addClass('far')
+                $(this).find('img').attr({
+                    'src': 'https://cdn-icons-png.flaticon.com/512/812/812327.png',
+                    alt:"찜하기"
+                })
+            }
+        })
+
     },
 
     check: function () {
@@ -235,27 +250,25 @@ var main = {
         });
     },
 
-    likeUpdate: function () {
+    likeUpdate: function (like) {
         const storeId = document.getElementById("storeId").value;
         const memberId = document.getElementById("memberId").value;
-        const likeStatus = document.getElementById("like-btn").value;
 
         axios({
             method: "put",
             url: "/user/like",
             params: {
-                likeStatus: likeStatus,
+                likeStatus: like,
                 memberId: memberId,
                 storeId: storeId
             }
         }).then((resp) => {
-            // alert('리뷰 삭제가 완료됐습니다.');
-            window.location.reload();
+            let check = resp.data;
+                // alert(check);
         }).catch((error) => {
             console.log(error);
         });
     },
-
 
     saveMainImage: function () {
         const storeId = document.getElementById("storeId").innerText

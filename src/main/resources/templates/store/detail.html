@@ -4,7 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
     <style>
-
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
@@ -30,9 +29,12 @@
 <!--                <div class="hidden" id="storeId" th:text="*{storeId}"></div>-->
                 <th:block th:if="${session.loginMember ne null}">
                     <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
-                    <button id="like-btn" th:text="${likeStatus} ? '찜 취소' : '찜 하기'"
-                            type="button" class="btn btn-info like" th:value="${!likeStatus}">
-                    </button>
+                    <div class="right_area">
+                        <a href="javascript:;" class="icon heart">
+                            <img th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png' : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
+                                 alt="찜하기">
+                        </a>
+                    </div>
                 </th:block>
             </div>
             <div class="col-6">
@@ -378,5 +380,6 @@
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/review.js}"></script>
+
 </body>
 </html>

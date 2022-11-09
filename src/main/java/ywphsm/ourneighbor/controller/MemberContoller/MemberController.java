@@ -12,7 +12,8 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 @Controller
-public class MemberController {
+public class
+MemberController {
 
     @GetMapping("/login")
     public String login(@ModelAttribute(name = "loginForm") LoginForm loginForm,

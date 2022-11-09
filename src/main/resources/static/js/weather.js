@@ -85,37 +85,7 @@ var main = {
             this.setCookie("pop", currentPop, 6);
             this.setCookie("pm10Value", pm10Value, 6);
 
-            const _skyStatus = document.getElementById("sky-status");
-            const _tmp = document.getElementById("tmp");
-            const _pop = document.getElementById("pop");
-            const _pm10Value = document.getElementById("pm-10-value");
-            const fontAwesome = document.createElement("i")
-
-            if (skyStatus === "SUNNY") {
-                fontAwesome.innerHTML = "<i class=\"fa-solid fa-sun orange fs-1\"></i>"
-            } else if (skyStatus === "CLOUDY") {
-                fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud-sun fs-1\"></i>"
-            } else if (skyStatus === "VERYCLOUDY") {
-                fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud fs-1\"></i>"
-            } else if (skyStatus === "RAINY") {
-                fontAwesome.innerHTML = "<i class=\"fa-solid fa-umbrella fs-1\"></i>"
-            } else if (skyStatus === "SNOWY") {
-                fontAwesome.innerHTML = "<i class=\"fa-regular fa-snowflake fs-1\"></i>"
-            }
-
-            if (pm10Value <= 30) {
-                _pm10Value.innerText = "좋음 (미세먼지 농도 : " + pm10Value + ")";
-            } else if (pm10Value <= 80) {
-                _pm10Value.innerText = "보통 (미세먼지 농도 : " + pm10Value + ")";
-            } else if (pm10Value <= 150) {
-                _pm10Value.innerText = "나쁨 (미세먼지 농도 : " + pm10Value + ")";
-            } else {
-                _pm10Value.innerText = "매우 나쁨 (미세먼지 농도 : " + pm10Value + ")";
-            }
-
-            _skyStatus.appendChild(fontAwesome);
-            _tmp.innerText = "현재 기온 : " + currentTmp + "℃";
-            _pop.innerText = "강수 확률 : " + currentPop + "%";
+            this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, pm10Value);
 
             mask.closeMask();
         }).catch((error) => {
@@ -131,6 +101,13 @@ var main = {
         let currentPop = this.getCookie("pop");
         let pm10Value = this.getCookie("pm10Value");
 
+        this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, pm10Value);
+
+        mask.closeMask();
+    },
+
+    setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, pm10Value) {
+        console.log("이놈 호출")
         const _skyStatus = document.getElementById("sky-status");
         const _tmp = document.getElementById("tmp");
         const _pop = document.getElementById("pop");
@@ -162,8 +139,6 @@ var main = {
         _skyStatus.appendChild(fontAwesome);
         _tmp.innerText = "현재 기온 : " + currentTmp + "℃";
         _pop.innerText = "강수 확률 : " + currentPop + "%";
-
-        mask.closeMask();
     },
 
     getCoords: function (options) {

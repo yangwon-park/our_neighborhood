@@ -237,7 +237,6 @@ var main = {
         categoryEl.appendChild(option);
     },
 
-
     categoryLayerEl: {
         main: document.getElementById("main-cate"),
         mid: document.getElementById("mid-cate"),

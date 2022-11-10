@@ -264,7 +264,7 @@ var main = {
             }
         }).then((resp) => {
             let check = resp.data;
-                // alert(check); 찜 alert 기능 테스트시 사용
+                // alert(check);
         }).catch((error) => {
             console.log(error);
         });

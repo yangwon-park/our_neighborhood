@@ -209,16 +209,15 @@ public class MemberService {
         memberRepository.findById(id).ifPresent(memberRepository::delete);
     }
 
-    public Long updateRole(Long memberId, String role) {
-        Member findMember = memberRepository.findById(memberId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
-
-
-        Role findRole = Role.of(role);
-
-        findMember.updateRole(findRole);
-
-        return memberId;
+    @Transactional
+    public String updateRole(String userId, Role role) {
+        try {
+            Member findMember = findByUserId(userId);
+            findMember.updateRole(role);
+        } catch (IllegalArgumentException e) {
+            return "존재하지 않는 아이디 입니다";
+        }
+        return "성공";
     }
 
     //찜 상태 확인 - detail에 뿌리기 위함

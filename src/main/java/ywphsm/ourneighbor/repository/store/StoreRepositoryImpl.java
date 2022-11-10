@@ -8,7 +8,6 @@ import org.springframework.util.StringUtils;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.domain.store.Store;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static ywphsm.ourneighbor.domain.category.QCategory.*;
@@ -18,8 +17,6 @@ import static ywphsm.ourneighbor.domain.store.QStore.*;
 @Slf4j
 @RequiredArgsConstructor
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
-
-    private final EntityManager em;
 
     private final JPAQueryFactory queryFactory;
 
@@ -51,7 +48,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .where(categoryOfStore.category.id.eq(categoryId), categoryOfStore.store.id.eq(store.id))
                 .fetch();
     }
-
     private BooleanExpression nameContains(String name) {
         if (!StringUtils.hasText(name)) {
             return null;

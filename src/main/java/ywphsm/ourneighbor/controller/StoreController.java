@@ -6,9 +6,12 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.*;
+import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
+import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -117,6 +120,8 @@ public class StoreController {
             model.addAttribute("storeRole", storeRole);
         }
 
+        log.info("menuImgList={}", menuImgList);
+
         model.addAttribute("store", storeDTO);
         model.addAttribute("menuList", menuDTOList);
         model.addAttribute("menuImgList", menuImgList);
@@ -148,8 +153,7 @@ public class StoreController {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
 
             if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
+                ScriptUtils.alertAndBackPage(response, "해당 가게의 권한이 없습니다.");
             }
         }
 
@@ -165,6 +169,24 @@ public class StoreController {
     public String getStoreList(Model model) {
         model.addAttribute("store", new StoreDTO.Detail());
         return "store/list_by_admin";
+    }
+
+    @GetMapping("/admin/storeOwner/edit/{storeId}")
+    public String storeOwnerEdit(@PathVariable Long storeId, Model model) {
+        List<MemberDTO.Detail> owners = storeService.findById(storeId).getMemberOfStoreList().stream()
+                .filter(MemberOfStore::isMyStore)
+                .map(memberOfStore -> new MemberDTO.Detail(memberOfStore.getMember()))
+                .collect(Collectors.toList());
+
+        int count = 0;
+        if (!owners.isEmpty()) {
+            count = owners.size();
+        }
+
+        model.addAttribute("owners", owners);
+        model.addAttribute("count", count);
+
+        return "store/store_owner_edit";
     }
 
 }

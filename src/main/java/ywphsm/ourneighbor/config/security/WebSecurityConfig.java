@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
+import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.service.email.security.MemberDetailsService;
 import ywphsm.ourneighbor.service.login.CustomOAuthUserService;
 
@@ -69,7 +70,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").hasAnyRole("USER", "SELLER", "ADMIN")
                 .antMatchers("/seller/**").hasAnyRole("SELLER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+                //권한 인증 실패시 핸들러
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(new CustomAccessDeniedHandler());
 //                .anyRequest().authenticated();
 
         http
@@ -95,6 +100,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        ScriptUtils.alert(response, "로그아웃되었습니다.");
                         response.sendRedirect("/");
                     }
                 })

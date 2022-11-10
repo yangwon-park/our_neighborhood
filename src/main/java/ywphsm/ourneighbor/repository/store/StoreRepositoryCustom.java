@@ -1,5 +1,6 @@
 package ywphsm.ourneighbor.repository.store;
 
+import org.locationtech.jts.io.ParseException;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
 import ywphsm.ourneighbor.domain.store.Store;
 
@@ -13,5 +14,5 @@ public interface StoreRepositoryCustom {
 
     List<Store> searchByCategory(Long categoryId);
 
-    List<Store> getTop5ByCategories(String categoryId, double dist, double lat, double lon);
+    List<Store> getTop5ByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException;
 }

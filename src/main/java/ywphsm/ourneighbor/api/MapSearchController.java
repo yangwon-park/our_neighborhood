@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,9 +62,9 @@ public class MapSearchController {
     }
 
     @GetMapping("/get-top5-categories")
-    public ResultClass<?> getTop5StoresByCategories(@RequestParam String categoryId,
+    public ResultClass<?> getTop5StoresByCategories(@RequestParam Long categoryId,
                                             @CookieValue(value = "lat", required = false) String myLat,
-                                            @CookieValue(value = "lon", required = false) String myLon) {
+                                            @CookieValue(value = "lon", required = false) String myLon) throws ParseException {
         double dist = 3;
 
         List<Store> findStores = storeService.getTop5ByCategories(categoryId, dist,

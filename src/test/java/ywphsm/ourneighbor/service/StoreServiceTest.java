@@ -35,6 +35,8 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.*;
+import ywphsm.ourneighbor.domain.store.distance.Direction;
+import ywphsm.ourneighbor.domain.store.distance.Location;
 
 import javax.persistence.EntityManager;
 import java.time.LocalTime;
@@ -50,6 +52,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
+import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
@@ -292,31 +295,10 @@ class StoreServiceTest {
         assertThat(point.getGeometryType()).isEqualTo("Point");
         assertThat(lineString.getGeometryType()).isEqualTo("LineString");
         assertThat(polygon.getGeometryType()).isEqualTo("Polygon");
-
-        List<Store> resultList = em.createQuery("" +
-                        "select s from Store s " +
-                        "join s.categoryOfStoreList cs " +
-                        "join fetch s.file " +
-                        "where mbrcontains(:lineString, point(s.lat, s.lon)) = true " +
-                        "and cs.category.id = :categoryId", Store.class)
-                .setParameter("categoryId", 4L)
-                .setParameter("lineString", lineString)
-                .setMaxResults(7)
-                .getResultList();
-
-        assertThat(resultList.size()).isEqualTo(7);
     }
 
     private Geometry wktToGeometry(String text) throws ParseException {
         return new WKTReader().read(text);
     }
 
-    private Geometry createCircle(double x, double y, double radius) {
-        GeometricShapeFactory factory = new GeometricShapeFactory();
-        factory.setNumPoints(32);
-        factory.setCentre(new Coordinate(x, y));
-        factory.setSize(radius * 2);
-
-        return factory.createCircle();
-    }
 }

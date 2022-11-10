@@ -63,11 +63,11 @@ public class MapSearchController {
 
     @GetMapping("/get-top5-categories")
     public ResultClass<?> getTop5StoresByCategories(@RequestParam Long categoryId,
-                                            @CookieValue(value = "lat", required = false) String myLat,
-                                            @CookieValue(value = "lon", required = false) String myLon) throws ParseException {
+                                                    @CookieValue(value = "lat", required = false) String myLat,
+                                                    @CookieValue(value = "lon", required = false) String myLon) throws ParseException {
         double dist = 3;
 
-        List<Store> findStores = storeService.getTop5ByCategories(categoryId, dist,
+        List<Store> findStores = storeService.getTopNByCategories(categoryId, dist,
                 Double.parseDouble(myLat), Double.parseDouble(myLon));
 
         List<SimpleSearchStoreDTO> dto = findStores.stream()

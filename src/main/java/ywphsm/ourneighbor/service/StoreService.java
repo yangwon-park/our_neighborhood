@@ -2,7 +2,11 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+import org.locationtech.jts.util.GeometricShapeFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,17 +19,18 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
-import ywphsm.ourneighbor.repository.category.CategoryRepository;
+import ywphsm.ourneighbor.domain.store.distance.Direction;
+import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
-import javax.persistence.EntityManager;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
+import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -221,26 +226,31 @@ public class StoreService {
         return storeRepository.searchByCategory(categoryId);
     }
 
-
     // 참고
     // https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
-    public List<Store> getTop5ByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
-        return storeRepository.getTop5ByCategories(categoryId, dist, lat, lon);
+    // https://www.baeldung.com/hibernate-spatial
+    public List<Store> getTopNByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
+        Geometry lineString = getLineString(lat, lon, dist);
+        return storeRepository.getTopNByCategories(lineString, categoryId);
     }
 
-    public List<String> getTop5ImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
-        List<Store> top5 = storeRepository.getTop5ByCategories(categoryId, dist, lat, lon);
-        List<String> top5UrlList = new ArrayList<>();
+    public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
+        Geometry lineString = getLineString(lat, lon, dist);
+        List<Store> topStoreList = storeRepository.getTopNByCategories(lineString, categoryId);;
+//        List<String> topUrlList = new ArrayList<>();
+//
+//        for (Store store : topStoreList) {
+//            if (store.getFile() != null) {
+//                String url = store.getFile().getUploadImageUrl();
+//
+//                topUrlList.add(url);
+//            }
+//        }
 
-        for (Store store : top5) {
-            if (store.getFile() != null) {
-                String url = store.getFile().getUploadImageUrl();
-
-                top5UrlList.add(url);
-            }
-        }
-
-        return top5UrlList;
+        return topStoreList.stream()
+                    .filter(store -> store.getFile() != null)
+                    .map(store -> store.getFile().getUploadImageUrl())
+                    .collect(Collectors.toList());
     }
 
 
@@ -269,5 +279,35 @@ public class StoreService {
 
         return collect.stream().map(categoryService::findById)
                 .collect(Collectors.toList());
+    }
+
+    // LineString 생성 메소드
+    private Geometry getLineString(double lat, double lon, double dist) throws ParseException {
+        Location northEast = calculatePoint(lat, lon, dist, Direction.NORTHEAST.getAngle());
+        Location southWest = calculatePoint(lat, lon, dist, Direction.SOUTHWEST.getAngle());
+
+        double nex = northEast.getLat();
+        double ney = northEast.getLon();
+        double swx = southWest.getLat();
+        double swy = southWest.getLon();
+
+        String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", nex, ney, swx, swy);
+
+        return wktToGeometry(lineStringFormat);
+    }
+
+    // WKT로 spatial type을 읽어드림
+    private Geometry wktToGeometry(String text) throws ParseException {
+        return new WKTReader().read(text);
+    }
+
+
+    private Geometry createCircle(double x, double y, double radius) {
+        GeometricShapeFactory factory = new GeometricShapeFactory();
+        factory.setNumPoints(32);
+        factory.setCentre(new Coordinate(x, y));
+        factory.setSize(radius * 2);
+
+        return factory.createCircle();
     }
 }

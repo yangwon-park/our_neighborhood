@@ -424,7 +424,7 @@ input[type=radio] {
 #services .divider {
     width: 10%;
     margin: 2rem auto;
-    border-top: 0.5rem solid rgb(255, 112 3);
+    border-top: 0.5rem solid rgb(255, 112, 3);
 }
 
 #services .services-col .card {
@@ -622,3 +622,40 @@ input[type=radio] {
     line-height: 0;
     vertical-align: top;
 }
+
+a{
+    text-decoration:none; color:inherit; cursor: pointer;
+}
+.right_area .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100vw * (45 / 1920));
+    height: calc(100vw * (45 / 1920));
+
+    border-radius: 50%;
+    border: solid 2px #eaeaea;
+    background-color: #fff;
+}
+
+.icon.heart img{
+    width: calc(100vw * (24 / 1920));
+    height: calc(100vw * (24 / 1920));
+}
+
+.icon.heart.fas{
+    color:red
+}
+.heart{
+    transform-origin: center;
+}
+.heart.active img{
+    animation: animateHeart .3s linear forwards;
+}
+
+@keyframes animateHeart{
+    0%{transform:scale(.2);}
+    40%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+

@@ -12,6 +12,7 @@ var main = {
         const memberDeleteBtn = document.getElementById("member-delete");
         const findUserIdBtn = document.getElementById("find-userId");
         const findPasswordBtn = document.getElementById("find-password");
+        const memberRoleEditBtn = document.getElementById('member-role-edit');
 
         if (signUpSaveBtn !== null) {
             signUpSaveBtn.addEventListener("click", () => {
@@ -58,6 +59,12 @@ var main = {
         if (findPasswordBtn !== null) {
             findPasswordBtn.addEventListener("click", () => {
                 _this.findPassword();
+            });
+        }
+
+        if (memberRoleEditBtn !== null) {
+            memberRoleEditBtn.addEventListener('click', () => {
+                _this.memberRoleEdit();
             });
         }
     },
@@ -266,7 +273,7 @@ var main = {
             }).then((resp) => {
                 let check = resp.data;
                 if (check === "성공") {
-                    alert("전화번호가 수정됐습니다.");
+                    alert("전화번호가 수정됐습니다, 다시 로그인해주세요.");
                     window.location.href = "/logout";
                 } else {
                     alert(check);
@@ -299,7 +306,7 @@ var main = {
             }).then((resp) => {
                 let check = resp.data;
                 if (check === "성공") {
-                    alert("비밀번호가 수정됐습니다.");
+                    alert("비밀번호가 수정됐습니다, 다시 로그인해주세요.");
                     window.location.href = "/logout";
                 } else {
                     alert(check);
@@ -339,7 +346,7 @@ var main = {
                 let check = resp.data;
 
                 if (check === "성공") {
-                    alert("회원정보가 수정됐습니다.");
+                    alert("회원정보가 수정됐습니다, 다시 로그인해주세요.");
                     window.location.href = "/logout";
                 } else {
                     alert(check);
@@ -465,10 +472,59 @@ var main = {
 
         if (userId.value === "") {
             userId.classList.add("valid-custom");
-            validation.addValidation(userIdValid, "닉네임을 입력해주세요.");
+            validation.addValidation(userIdValid, "아이디를 입력해주세요.");
         }
 
     },
+
+    memberRoleEdit: function () {
+
+        const userId = document.getElementById("userId");
+        const role = document.getElementById("role").options
+            [document.getElementById("role").selectedIndex].value;
+
+        const userIdValid = document.getElementById('member-role-edit-userId-valid');
+        const roleValid = document.getElementById('member-role-edit-role-valid');
+
+        userId.classList.remove("valid-custom");
+        // role.classList.remove("valid-custom");
+
+        validation.removeValidation(userIdValid);
+        validation.removeValidation(roleValid);
+
+        if (userId.value !== '' && role !== '') {
+            axios({
+                method: "put",
+                url: "/admin/member-role/edit",
+                params: {
+                    userId: userId.value,
+                    role: role
+                }
+            }).then((resp) => {
+                let check = resp.data;
+                if (check === '성공') {
+                    alert("권한이 성공적으로 변경되었습니다");
+                    window.location.reload();
+                } else {
+                    alert(check);
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        if (role.value === '') {
+            role.classList.add("valid-custom");
+            validation.addValidation(roleValid, "권한을 정해주세요.");
+        }
+
+        if (userId.value === '') {
+            userId.classList.add("valid-custom");
+            validation.addValidation(userIdValid, "아이디를 입력해주세요.");
+        }
+
+    },
+
 
 };
 

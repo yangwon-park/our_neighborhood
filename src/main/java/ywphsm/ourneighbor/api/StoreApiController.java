@@ -6,6 +6,7 @@ import org.locationtech.jts.io.ParseException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.service.CategoryService;
@@ -64,8 +65,7 @@ public class StoreApiController {
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
             if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
+                ScriptUtils.alertAndBackPage(response, "해당 가게의 권한이 없습니다.");
             }
         }
 
@@ -80,8 +80,7 @@ public class StoreApiController {
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
             if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
+                ScriptUtils.alertAndBackPage(response, "해당 가게의 권한이 없습니다.");
             }
         }
 
@@ -96,8 +95,7 @@ public class StoreApiController {
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
             if (!storeOwner) {
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer);
+                ScriptUtils.alertAndBackPage(response, "해당 가게의 권한이 없습니다.");
             }
         }
 
@@ -107,5 +105,15 @@ public class StoreApiController {
     @DeleteMapping("/admin/store/{storeId}")
     public Long delete(@PathVariable Long storeId) {
         return storeService.delete(storeId);
+    }
+
+    @PostMapping("/admin/storeOwner/add")
+    public String addStoreOwner(String userId, Long storeId) {
+        return storeService.addStoreOwner(userId, storeId);
+    }
+
+    @DeleteMapping("/admin/storeOwner/delete")
+    public String deleteStoreOwner(Long memberId, Long storeId) {
+        return storeService.deleteStoreOwner(memberId, storeId);
     }
 }

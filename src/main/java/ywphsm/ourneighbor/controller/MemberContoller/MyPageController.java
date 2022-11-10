@@ -59,6 +59,7 @@ public class MyPageController {
                          Model model) {
         Member byId = memberService.findById(member.getId());
         List<StoreDTO.Detail> collect = byId.getMemberOfStoreList().stream()
+                .filter(MemberOfStore::isMyStore)
                 .map(memberOfStore -> new StoreDTO.Detail(memberOfStore.getStore()))
                 .collect(Collectors.toList());
 
@@ -66,7 +67,7 @@ public class MyPageController {
 
         return "member/seller_page";
     }
-    @GetMapping("/member-edit/review")
+    @GetMapping("/user/member-edit/review")
     public String MyReview(@SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member,
                            Model model) {
 
@@ -79,5 +80,10 @@ public class MyPageController {
         model.addAttribute("review", content);
         model.addAttribute("count", count);
         return "member/my_review";
+    }
+
+    @GetMapping("/admin/admin-page")
+    public String adminPage() {
+        return "member/admin_page";
     }
 }

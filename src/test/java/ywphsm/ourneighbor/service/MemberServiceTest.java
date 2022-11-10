@@ -249,28 +249,6 @@ class MemberServiceTest {
         System.out.println("role.getKey() = " + role.getKey());
         System.out.println("role.getTitle() = " + role.getTitle());
     }
-
-    @Test
-    @WithMockUser(username = "admin", roles = "ADMIN")
-    @DisplayName("계정의 권한 업데이트")
-    void updateRole() throws Exception {
-        String userId = "ywonp94";
-        String role = "판매자";
-
-        Member findMember = memberService.findByUserId(userId);
-
-        assertThat(findMember.getRole()).isEqualTo(Role.ADMIN);
-
-        String url = "http://localhost:" + port + "/admin/update-role/" + findMember.getId();
-
-        mvc.perform(put(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(role))
-                .andDo(print())
-                .andExpect(status().isOk());
-
-        assertThat(findMember.getRole()).isEqualTo(Role.SELLER);
-    }
 }
 
 

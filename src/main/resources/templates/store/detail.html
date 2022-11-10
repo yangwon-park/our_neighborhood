@@ -24,8 +24,6 @@
                 <h1 class="my-auto h1 text-dark fw-bold" th:text="*{name}">가게명</h1>
                 <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
                       th:classappend="*{status}"></span>
-                <p class="badge ms-3 me-3 my-auto" style="font-size: 1.3rem" th:text="*{status}"
-                   th:classappend="*{status}"></p>
                 <th:block th:if="${session.loginMember ne null}">
                     <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
                     <div class="right_area">

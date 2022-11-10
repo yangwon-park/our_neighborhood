@@ -15,9 +15,6 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
-import ywphsm.ourneighbor.domain.store.distance.Direction;
-import ywphsm.ourneighbor.domain.store.distance.Distance;
-import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
@@ -36,11 +33,7 @@ import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
 @Transactional(readOnly = true) // 데이터 변경 X
 public class StoreService {
 
-    private final EntityManager em;
-
     private final StoreRepository storeRepository;
-
-    private final CategoryRepository categoryRepository;
 
     private final MemberOfStoreRepository memberOfStoreRepository;
 

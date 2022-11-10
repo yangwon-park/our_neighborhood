@@ -78,6 +78,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         return em.createQuery("" +
                         "select s from Store s " +
                         "join s.categoryOfStoreList cs " +
+                        "join fetch s.file " +
                         "where mbrcontains(:lineString, point(s.lat, s.lon)) = true " +
                         "and cs.category.id = :categoryId", Store.class)
                 .setParameter("categoryId", categoryId)

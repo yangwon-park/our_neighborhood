@@ -296,10 +296,11 @@ class StoreServiceTest {
         List<Store> resultList = em.createQuery("" +
                         "select s from Store s " +
                         "join s.categoryOfStoreList cs " +
-                        "where mbrcontains(:geometry3, point(s.lat, s.lon)) = true " +
+                        "join fetch s.file " +
+                        "where mbrcontains(:lineString, point(s.lat, s.lon)) = true " +
                         "and cs.category.id = :categoryId", Store.class)
                 .setParameter("categoryId", 4L)
-                .setParameter("geometry3", lineString)
+                .setParameter("lineString", lineString)
                 .setMaxResults(7)
                 .getResultList();
 

@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +31,7 @@ public class StoreApiController {
 
     @GetMapping("/get-images")
     public List<List<String>> getImages(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
-                                        @CookieValue(value = "lon", required = false, defaultValue = "") String lon) {
+                                        @CookieValue(value = "lon", required = false, defaultValue = "") String lon) throws ParseException {
 
         List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
 
@@ -41,7 +42,7 @@ public class StoreApiController {
         if (lat != null && lon != null) {
             for (CategoryDTO.Simple simple : rootCategoryList) {
                 categoryImageList.add(storeService.getTop5ImageByCategories(
-                        (simple.getCategoryId().toString()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
+                        (simple.getCategoryId()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
             }
         }
 

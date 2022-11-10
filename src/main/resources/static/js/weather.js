@@ -107,7 +107,6 @@ var main = {
     },
 
     setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, pm10Value) {
-        console.log("이놈 호출")
         const _skyStatus = document.getElementById("sky-status");
         const _tmp = document.getElementById("tmp");
         const _pop = document.getElementById("pop");

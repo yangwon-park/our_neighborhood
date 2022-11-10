@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -230,11 +231,11 @@ public class StoreService {
 
     // 참고
     // https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
-    public List<Store> getTop5ByCategories(String categoryId, double dist, double lat, double lon) {
+    public List<Store> getTop5ByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
         return storeRepository.getTop5ByCategories(categoryId, dist, lat, lon);
     }
 
-    public List<String> getTop5ImageByCategories(String categoryId, double dist, double lat, double lon) {
+    public List<String> getTop5ImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
         List<Store> top5 = storeRepository.getTop5ByCategories(categoryId, dist, lat, lon);
         List<String> top5UrlList = new ArrayList<>();
 

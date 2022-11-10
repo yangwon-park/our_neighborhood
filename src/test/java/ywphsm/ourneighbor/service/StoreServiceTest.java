@@ -6,6 +6,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+import org.locationtech.jts.util.GeometricShapeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +40,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -270,5 +276,46 @@ class StoreServiceTest {
 
         assertThatThrownBy(() -> storeService.findById(storeId))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void hibernate_spatial_test() throws ParseException {
+        String pointFormat = String.format("POINT(%f %f)", 35.1710366410643, 129.175759994618);
+        String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156);
+        String polygonFormat = String.format("POLYGON((%f %f, %f %f, %f %f))", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156, 35.182416023937336, 129.20790463400292);
+
+        Geometry point = wktToGeometry(pointFormat);
+        Geometry lineString = wktToGeometry(lineStringFormat);
+        // polygon : startPoint와 endPoint가 일치해야만 함
+        Geometry polygon = wktToGeometry(polygonFormat);
+
+        assertThat(point.getGeometryType()).isEqualTo("Point");
+        assertThat(lineString.getGeometryType()).isEqualTo("LineString");
+        assertThat(polygon.getGeometryType()).isEqualTo("Polygon");
+
+        List<Store> resultList = em.createQuery("" +
+                        "select s from Store s " +
+                        "join s.categoryOfStoreList cs " +
+                        "where mbrcontains(:geometry3, point(s.lat, s.lon)) = true " +
+                        "and cs.category.id = :categoryId", Store.class)
+                .setParameter("categoryId", 4L)
+                .setParameter("geometry3", lineString)
+                .setMaxResults(7)
+                .getResultList();
+
+        assertThat(resultList.size()).isEqualTo(7);
+    }
+
+    private Geometry wktToGeometry(String text) throws ParseException {
+        return new WKTReader().read(text);
+    }
+
+    private Geometry createCircle(double x, double y, double radius) {
+        GeometricShapeFactory factory = new GeometricShapeFactory();
+        factory.setNumPoints(32);
+        factory.setCentre(new Coordinate(x, y));
+        factory.setSize(radius * 2);
+
+        return factory.createCircle();
     }
 }

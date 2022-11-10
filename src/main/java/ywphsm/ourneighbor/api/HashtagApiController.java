@@ -2,8 +2,6 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.parser.ParseException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.service.HashtagOfMenuService;

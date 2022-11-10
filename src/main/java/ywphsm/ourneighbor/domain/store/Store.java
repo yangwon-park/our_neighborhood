@@ -64,12 +64,6 @@ public class Store extends BaseEntity {
 
     private String parkDetail;
 
-//    @Column(columnDefinition = "point")
-//    private Point location;
-//
-//    @Column(columnDefinition = "polygon")
-//    private LineString route;
-
 
     /*
         임베디드 타입

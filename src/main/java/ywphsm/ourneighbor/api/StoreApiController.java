@@ -41,7 +41,7 @@ public class StoreApiController {
 
         if (lat != null && lon != null) {
             for (CategoryDTO.Simple simple : rootCategoryList) {
-                categoryImageList.add(storeService.getTop5ImageByCategories(
+                categoryImageList.add(storeService.getTopNImageByCategories(
                         (simple.getCategoryId()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
             }
         }

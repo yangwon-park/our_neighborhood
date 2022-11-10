@@ -49,13 +49,17 @@ class ReviewRepositoryTest {
         List<String> off = new ArrayList<>();
         off.add("월");
         off.add("화");
+
         List<String> categoryId = new ArrayList<>();
+
         categoryId.add("4");
         categoryId.add("6");
         categoryId.add("13");
+
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.addAll("offDays", off);
         params.addAll("categoryId", categoryId);
+
         StoreDTO.Add dto = StoreDTO.Add.builder()
                 .name("aa22sdasa")
                 .zipcode("12345")
@@ -73,8 +77,8 @@ class ReviewRepositoryTest {
 
 //        new MockMultipartFile("필드명", storedFileName, contentType, 서버에 있는 파일 경로)
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
-//                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/785c984e-fab2-4422-9833-646d94b631ae.jpg"));
-                new FileInputStream("C:/Users/HOME/Desktop/JAVA/menu_file/5cf53790-54a5-4c5f-9709-0394d58cec94.png"));
+                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/785c984e-fab2-4422-9833-646d94b631ae.jpg"));
+//                new FileInputStream("C:/Users/HOME/Desktop/JAVA/menu_file/5cf53790-54a5-4c5f-9709-0394d58cec94.png"));
 //                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
         reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), file)
                 .toEntity(store, member));

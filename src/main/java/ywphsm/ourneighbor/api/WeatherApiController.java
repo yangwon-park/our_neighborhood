@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ywphsm.ourneighbor.api.dto.RainKind;
 import ywphsm.ourneighbor.api.dto.SkyStatus;
 import ywphsm.ourneighbor.api.dto.WeatherDTO;
 
@@ -44,7 +45,8 @@ public class WeatherApiController {
 
 
     // 단기 예보 조회
-    private WeatherDTO getForeCast(String serviceKey, String returnType, String numOfRows, String pageNo,
+    private WeatherDTO getForeCast(String serviceKey, String returnType,
+                                   String numOfRows, String pageNo,
                                    String nx, String ny, WeatherDTO dto) throws Exception {
 
         log.info("=== getForeCast Start ===");
@@ -94,12 +96,16 @@ public class WeatherApiController {
                     case "TMP":
                         dto.setTMP(fcstValue);
                         break;
+                    case "PCP":
+                        dto.setPCP(fcstValue);
+                        break;
                 }
             }
         }
 
         String pty = dto.getPTY();
         String sky = dto.getSKY();
+        String pcp = dto.getPCP();
 
         if (!pty.equals("0")) {
             if (pty.equals("3")) {
@@ -115,6 +121,17 @@ public class WeatherApiController {
             } else {
                 dto.setStatus(SkyStatus.VERYCLOUDY);
             }
+        }
+
+        if (pcp.equals("강수없음")) {
+            dto.setPCP("0");
+            dto.setRainKind(RainKind.NONE);
+        } else if (Integer.parseInt(pcp) <= 2.5) {
+            dto.setRainKind(RainKind.DRIZZLE);
+        } else if (Integer.parseInt(pcp) <= 7.6) {
+            dto.setRainKind(RainKind.RAIN);
+        } else {
+            dto.setRainKind(RainKind.DOWNPOUR);
         }
 
         log.info("=== getForeCast End ===");

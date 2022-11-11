@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
+import ywphsm.ourneighbor.service.RecommendPostService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.List;
@@ -22,6 +24,8 @@ import static ywphsm.ourneighbor.domain.store.distance.Distance.*;
 public class MapSearchController {
 
     private final StoreService storeService;
+
+    private final RecommendPostService recommendPostService;
 
     // 메뉴 리스트는 불러오지 않음
     // 단순 조회이므로 fetch 조인으로 최적화
@@ -81,16 +85,23 @@ public class MapSearchController {
         return new ResultClass<>(result.size(), result);
     }
 
+
+    @GetMapping("/get-recommend-post")
+    public RecommendPostDTO.Simple getRecommendPost(@CookieValue(value = "skyStatus", required = false) String skyStatus,
+                                             @CookieValue(value = "pm10Value", required = false) String pm10Value,
+                                             @CookieValue(value = "tmp", required = false) String tmp,
+                                             @CookieValue(value = "pop", required = false) String pcp) {
+
+        log.info("skyStatus={}", skyStatus);
+
+        return recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp);
+    }
+
     @GetMapping("/get-store-based-weather")
     public ResultClass<?> getStoreBasedOnWeather(@CookieValue(value = "skyStatus", required = false) String skyStatus,
                                                  @CookieValue(value = "pm10Value", required = false) String pm10Value,
                                                  @CookieValue(value = "tmp", required = false) String tmp,
                                                  @CookieValue(value = "pop", required = false) String pop) {
-        double dist = 3;
-
-//        SUNNY("맑음"), CLOUDY("구름 많음"), VERYCLOUDY("흐림"),
-//        RAINY("비"), SNOWY("눈");
-
 
 
         return null;

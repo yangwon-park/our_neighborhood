@@ -5,11 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ywphsm.ourneighbor.api.dto.RecommendKind;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Slf4j
 @Getter
@@ -22,26 +20,18 @@ public class RecommendPost extends BaseEntity {
     @Column(name = "recommend_post_id")
     private Long id;
 
-    private String skyStatus;
-
-    private String pm10Value;
-
-    private String tmp;
-
-    private String pop;
+    @Enumerated(EnumType.STRING)
+    private RecommendKind recommendKind;
 
     private String header;
 
     private String content;
 
     @Builder
-    public RecommendPost(Long id, String skyStatus, String pm10Value,
-                         String tmp, String pop, String header, String content) {
+    public RecommendPost(Long id, RecommendKind recommendKind,
+                         String header, String content) {
         this.id = id;
-        this.skyStatus = skyStatus;
-        this.pm10Value = pm10Value;
-        this.tmp = tmp;
-        this.pop = pop;
+        this.recommendKind = recommendKind;
         this.header = header;
         this.content = content;
     }

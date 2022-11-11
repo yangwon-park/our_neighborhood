@@ -42,36 +42,16 @@
                                     <textarea class="form-control" style="height: 100%" placeholder="50자 이하여야 합니다"
                                               id="content" th:field="*{content}" rows="5"></textarea>
                                 </div>
-                            </div>
                             <div class="form-group">
-                                <div class="">
-                                    <input th:field="*{tmp}" class="form-control"
-                                           placeholder="기준 온도" type="number">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="">
-                                    <input th:field="*{pop}" class="form-control"
-                                           placeholder="강수 확률" type="number">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <span class="text-muted mb-3">
-                                    미세먼지 농도 (30 이하: 좋음, 80 이하: 보통, 150 이하: 나쁨, 150 이상: 매우 나쁨)
+                                <span class="fw-bold mb-3">
+                                    추천 양식 종류
                                 </span>
-                                <div class="">
-                                    <input th:field="*{pm10Value}" class="form-control"
-                                           placeholder="미세먼지 농도" type="number">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <span class="fw-bold mb-3">기상 상태</span>
                                 <div class="form-group d-flex text-nowrap mt-3">
-                                    <div th:each="s : ${status}">
-                                        <input type="radio" th:field="*{skyStatus}"
-                                               th:value="${s.name()}"/>
-                                        <label th:text="${s.description}"
-                                               class="form-check-label fw-bold"></label>
+                                    <div th:each="r : ${recommendKinds}">
+                                        <input type="radio" th:field="*{recommendKind}"
+                                               th:value="${r.name()}"/>
+                                        <label th:text="${r.description}"
+                                               class="form-check-label"></label>
                                     </div>
                                 </div>
                             </div>

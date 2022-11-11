@@ -5,6 +5,7 @@ var main = {
         let _this = this;
 
         mask.loadingWithMask();
+
         await _this.findCoords();
         this.getCateImages();
     },
@@ -28,16 +29,25 @@ var main = {
             console.log("prevNX=", prevNx)
             console.log("prevNy=", prevNy)
             console.log("skyStatus=", skyStatus)
-            console.log("위치 정보 변경")
-            await this.setWeatherInfoWithAPI();
+            this.setWeatherInfoWithAPI();
         // 어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
         } else if (skyStatus === null) {
-            console.log("날씨 정보가 없네?")
-            await this.setWeatherInfoWithAPI();
+            this.setWeatherInfoWithAPI();
         } else {
-            console.log("쿠키에서 가져올게")
             this.setWeatherInfoWithCookies();
         }
+    },
+
+    getStoreBasedOnWeather: function () {
+        console.log("왜 이게 먼저 되노")
+        axios({
+            method: "get",
+            url: "/get-recommend-post"
+        }).then((resp) => {
+
+        }).catch((error) => {
+            console.error(error);
+        });
     },
 
     getCateImages: function () {
@@ -80,6 +90,7 @@ var main = {
     },
 
     setWeatherInfoWithAPI: function () {
+        console.log("API 호출 시작");
         axios({
             method: "get",
             url: "/weather",
@@ -87,35 +98,43 @@ var main = {
             let skyStatus = resp.data.status;
             let currentTmp = resp.data.tmp;
             let currentPop = resp.data.pop;
+            let currentPcp = resp.data.pcp;
             let pm10Value = resp.data.pm10Value;
 
             this.setCookie("skyStatus", skyStatus, 1);
             this.setCookie("tmp", currentTmp, 1);
             this.setCookie("pop", currentPop, 1);
+            this.setCookie("pcp", currentPcp, 1);
             this.setCookie("pm10Value", pm10Value, 1);
 
-            this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, pm10Value);
+            this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, currentPcp, pm10Value);
+
+            this.getStoreBasedOnWeather();
 
             mask.closeMask();
         }).catch((error) => {
             alert("현재 날씨 정보를 불러올 수 없습니다.");
             console.error(error);
             mask.closeMask();
-        })
+        });
     },
 
     setWeatherInfoWithCookies: function () {
         let skyStatus = this.getCookie("skyStatus");
         let currentTmp =  this.getCookie("tmp");
         let currentPop = this.getCookie("pop");
+        let currentPcp = this.getCookie("pcp");
         let pm10Value = this.getCookie("pm10Value");
 
-        this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, pm10Value);
+        this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, currentPcp, pm10Value);
 
         mask.closeMask();
     },
 
-    setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, pm10Value) {
+    setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, currentPcp, pm10Value) {
+
+        console.log(currentPcp);
+
         const _skyStatus = document.getElementById("sky-status");
         const _tmp = document.getElementById("tmp");
         const _pop = document.getElementById("pop");
@@ -135,18 +154,21 @@ var main = {
         }
 
         if (pm10Value <= 30) {
-            _pm10Value.innerText = "좋음 (미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.innerText = "좋음\n(미세먼지 농도 : " + pm10Value + ")";
         } else if (pm10Value <= 80) {
-            _pm10Value.innerText = "보통 (미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.innerText = "보통\n(미세먼지 농도 : " + pm10Value + ")";
         } else if (pm10Value <= 150) {
-            _pm10Value.innerText = "나쁨 (미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.innerText = "나쁨\n(미세먼지 농도 : " + pm10Value + ")";
         } else {
-            _pm10Value.innerText = "매우 나쁨 (미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.innerText = "매우 나쁨\n(미세먼지 농도 : " + pm10Value + ")";
         }
 
         _skyStatus.appendChild(fontAwesome);
+
         _tmp.innerText = "현재 기온 : " + currentTmp + "℃";
+
         _pop.innerText = "강수 확률 : " + currentPop + "%";
+        _pop.innerText += "\n(시간 당 강수량 : " + currentPcp + "mm)";
     },
 
     getCoords: function (options) {

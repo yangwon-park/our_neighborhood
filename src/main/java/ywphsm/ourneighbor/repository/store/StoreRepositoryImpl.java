@@ -10,6 +10,7 @@ import ywphsm.ourneighbor.domain.store.Store;
 
 import java.util.List;
 
+import static org.springframework.util.StringUtils.*;
 import static ywphsm.ourneighbor.domain.category.QCategory.*;
 import static ywphsm.ourneighbor.domain.category.QCategoryOfStore.*;
 import static ywphsm.ourneighbor.domain.store.QStore.*;
@@ -19,15 +20,6 @@ import static ywphsm.ourneighbor.domain.store.QStore.*;
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-
-    @Override
-    public List<Store> searchByName(StoreSearchCond cond) {
-        return queryFactory
-                .select(store)
-                .from(store)
-                .where(nameContains(cond.getKeyword()))
-                .fetch();
-    }
 
     @Override
     public List<Store> searchByKeyword(String keyword) {
@@ -49,7 +41,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .fetch();
     }
     private BooleanExpression nameContains(String name) {
-        if (!StringUtils.hasText(name)) {
+        if (!hasText(name)) {
             return null;
         }
 

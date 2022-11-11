@@ -1,3 +1,5 @@
+import mask from "./mask.js";
+
 var app = {
     init: function () {
 
@@ -15,6 +17,22 @@ var app = {
                 });
             });
         }
+
+
+        this.getStoreBasedOnWeather();
+    },
+
+
+
+    getStoreBasedOnWeather: function () {
+        axios({
+            method: "get",
+            url: "/get-store-based-weather"
+        }).then((resp) => {
+
+        }).catch((error) => {
+            console.error(error);
+        });
     },
 
 }

@@ -6,6 +6,7 @@ var main = {
 
         mask.loadingWithMask();
         await _this.findCoords();
+        this.getCateImages();
     },
 
     findCoords: async function () {
@@ -18,23 +19,31 @@ var main = {
 
         let currentNx = this.getCookie("nx");
         let currentNy = this.getCookie("ny");
+        let skyStatus = this.getCookie("skyStatus");
 
-        // 이전에 쿠키값과 현재 쿠키값이 다른 경우에만 API 호출 
-        // 즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우에만 API 재호출
+        // 이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
+        // 즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
         // => 메인 홈페이지 재방문시 로딩 속도 향상
         if (prevNx !== currentNx && prevNy !== currentNy) {
-            this.setWeatherInfoWithAPI();
+            console.log("prevNX=", prevNx)
+            console.log("prevNy=", prevNy)
+            console.log("skyStatus=", skyStatus)
+            console.log("위치 정보 변경")
+            await this.setWeatherInfoWithAPI();
+        // 어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
+        } else if (skyStatus === null) {
+            console.log("날씨 정보가 없네?")
+            await this.setWeatherInfoWithAPI();
         } else {
+            console.log("쿠키에서 가져올게")
             this.setWeatherInfoWithCookies();
         }
-
-        this.setCateImages();
     },
 
-    setCateImages: function () {
+    getCateImages: function () {
         axios({
             method: "get",
-            url: "/get-images"
+            url: "/get-cate-images"
         }).then((resp) => {
             const restaurantImages = resp.data[0];
             const cafeImages = resp.data[1];
@@ -80,10 +89,10 @@ var main = {
             let currentPop = resp.data.pop;
             let pm10Value = resp.data.pm10Value;
 
-            this.setCookie("skyStatus", skyStatus, 6);
-            this.setCookie("tmp", currentTmp, 6);
-            this.setCookie("pop", currentPop, 6);
-            this.setCookie("pm10Value", pm10Value, 6);
+            this.setCookie("skyStatus", skyStatus, 1);
+            this.setCookie("tmp", currentTmp, 1);
+            this.setCookie("pop", currentPop, 1);
+            this.setCookie("pm10Value", pm10Value, 1);
 
             this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, pm10Value);
 
@@ -154,7 +163,7 @@ var main = {
 
         let sidoName = data.result[0].region_1depth_name;
 
-        this.setCookie("sidoName", sidoName, 6);
+        this.setCookie("sidoName", sidoName, 1);
     },
 
     getRegionCode: function (lat, lon) {
@@ -182,16 +191,12 @@ var main = {
         let nx = coords["nx"];
         let ny = coords["ny"];
 
-        this.setCookie("nx", nx, 6);
-        this.setCookie("ny", ny, 6);
-        this.setCookie("lat", lat, 6);
-        this.setCookie("lon", lon, 6);
+        this.setCookie("nx", nx, 1);
+        this.setCookie("ny", ny, 1);
+        this.setCookie("lat", lat, 1);
+        this.setCookie("lon", lon, 1);
 
         await this.getSidoName(position);
-    },
-
-    error: function () {
-        alert('현재 위치 정보를 가져올 수 없습니다.');
     },
 
     params: {
@@ -282,7 +287,7 @@ var main = {
 
     setCookie: function (key, value, exp) {
         let date = new Date();
-        date.setDate(date.getDate() + (exp * 1000 * 60 * 60)); // 1000 * 60 * 60 = 1시간
+        date.setTime(date.getTime() + (exp * 1000 * 60 * 30)); // 1000 * 60 * 60 = 1시간, exp 1 => 1ms
         document.cookie = key + "=" + value + "; path=/; expires=" + date.toUTCString() + ";";
     },
 

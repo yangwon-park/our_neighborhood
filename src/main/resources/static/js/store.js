@@ -5,12 +5,14 @@ var main = {
     init: function () {
         let _this = this;
 
-        mask.loadingWithMask();
+        // mask.loadingWithMask();
         _this.getCategories();
 
         const storeSaveBtn = document.getElementById("store-save");
         const storeUpdateBtn = document.getElementById("store-update");
         const storeDeleteBtn = document.getElementById("store-delete");
+        const storeOwnerAddBtn = document.getElementById("store-owner-add");
+        const storeOwnerDeleteBtn = document.querySelectorAll(".store-owner-delete");
 
         if (storeSaveBtn !== null) {
             storeSaveBtn.addEventListener("click", () => {
@@ -30,7 +32,21 @@ var main = {
             });
         }
 
-        mask.closeMask();
+        if (storeOwnerAddBtn !== null) {
+            storeOwnerAddBtn.addEventListener("click", () => {
+                _this.addStoreOwner();
+            });
+        }
+
+        if (storeOwnerDeleteBtn !== null) {
+            storeOwnerDeleteBtn.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    _this.deleteStoreOwner(btn.id);
+                })
+            })
+        }
+
+        // mask.closeMask();
     },
 
     save: function () {
@@ -241,6 +257,73 @@ var main = {
         main: document.getElementById("main-cate"),
         mid: document.getElementById("mid-cate"),
         sub: document.getElementById("sub-cate")
+    },
+
+    addStoreOwner: function () {
+
+        const userId = document.getElementById("userId");
+        const storeId = document.getElementById("storeId");
+
+        console.log("userId", userId.value);
+
+        const userIdValid = document.getElementById('store-owner-add-userId-valid');
+
+        userId.classList.remove("valid-custom");
+
+        validation.removeValidation(userIdValid);
+
+        if (userId.value !== '') {
+            axios({
+                method: "post",
+                url: "/admin/storeOwner/add",
+                params: {
+                    userId: userId.value,
+                    storeId: storeId.value
+                }
+            }).then((resp) => {
+                let check = resp.data;
+                if (check === '성공') {
+                    alert("가게 관리자가 추가 되었습니다");
+                    window.location.reload();
+                } else {
+                    alert(check);
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        if (userId.value === '') {
+            userId.classList.add("valid-custom");
+            validation.addValidation(userIdValid, "닉네임을 입력해주세요.");
+        }
+    },
+
+    deleteStoreOwner: function (btnId) {
+        const memberId = btnId.substring(22);
+        const storeId = document.getElementById("storeId");
+
+        console.log('storeId = ', memberId)
+        console.log('userId = ', storeId.value)
+
+        axios({
+            method: "delete",
+            url: "/admin/storeOwner/delete",
+            params: {
+                memberId: memberId,
+                storeId: storeId.value
+            }
+        }).then((resp) => {
+            let check = resp.data;
+            if (check === '성공') {
+                alert('가게 관리자 삭제가 완료됐습니다.');
+                window.location.reload();
+            } else {
+                alert(check);
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
     },
 };
 

@@ -30,7 +30,7 @@ public class StoreApiController {
     private final StoreService storeService;
     private final CategoryService categoryService;
 
-    @GetMapping("/get-images")
+    @GetMapping("/get-cate-images")
     public List<List<String>> getImages(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
                                         @CookieValue(value = "lon", required = false, defaultValue = "") String lon) throws ParseException {
 

@@ -61,8 +61,8 @@ public class MapSearchController {
         return new ResultClass<>(result.size(), result);
     }
 
-    @GetMapping("/get-top5-categories")
-    public ResultClass<?> getTop5StoresByCategories(@RequestParam Long categoryId,
+    @GetMapping("/get-topN-categories")
+    public ResultClass<?> getTopNStoresByCategories(@RequestParam Long categoryId,
                                                     @CookieValue(value = "lat", required = false) String myLat,
                                                     @CookieValue(value = "lon", required = false) String myLon) throws ParseException {
         double dist = 3;
@@ -79,5 +79,14 @@ public class MapSearchController {
                 -> simpleSearchStoreDTO.getDistance() <= dist).collect(Collectors.toList());
 
         return new ResultClass<>(result.size(), result);
+    }
+
+    @GetMapping("/get-store-based-weather")
+    public ResultClass<?> getStoreBasedOnWeather(@CookieValue(value = "skyStatus", required = false) String skyStatus) {
+        double dist = 3;
+
+        log.info("skyStatus={}", skyStatus);
+
+        return null;
     }
 }

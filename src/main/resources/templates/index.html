@@ -32,7 +32,7 @@
                 <div class="col-md-9 welcome">
                     <div class="row gallery-body">
                         <div class="section-title mb-2">
-                            <p class="h4 main-color">주변 인기 스팟 검색</p>
+                            <p class="h4 main-color fw-bold">주변 인기 스팟 추천</p>
                         </div>
                         <th:block th:each="root, i: ${rootCategoryList}">
                             <div class="col-md-6 col-sm-6 mb-4 gallery-item">
@@ -56,7 +56,7 @@
                     <div class="card card-body search-card">
                         <div class="my-3">
                             <h4 class="search-div-title card-title
-                                       text-dark mb-3">인기 스팟 직접 검색</h4>
+                                       text-dark fw-bold mb-3">인기 스팟 직접 검색</h4>
                             <p class="card-text text-secondary">
                                 <th:block th:if="${session.loginMember eq null}">
                                     회원님이 원하시는 장소를 <br/>
@@ -91,7 +91,7 @@
                 <div class="col-md-6 weather-first">
                     <div class="row px-md-3">
                         <div class="section-title mb-2">
-                            <p class="h4 main-color">날씨에 어울리는 핫플레이스 추천</p>
+                            <p class="h4 main-color fw-bold">날씨에 어울리는 핫플레이스 추천</p>
                         </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">

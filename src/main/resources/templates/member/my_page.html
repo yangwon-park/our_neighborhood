@@ -8,16 +8,13 @@
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
-<body class="bg-default">
+<body id="main-body" class="bg-default">
+<!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
 <section class="header">
-    <div class="header py-7 py-lg-8">
-        <div class="separator separator-bottom separator-skew zindex-100">
-            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg">
-                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-            </svg>
-        </div>
+    <div class="header py-5">
+
     </div>
 </section>
 <section class="main">
@@ -29,7 +26,7 @@
             <div class="col-6">
                 <div class="float-end">
                     <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                            th:onclick="|location.href='@{/user/member_edit}'|">
+                            th:onclick="|location.href='@{/user/member-edit}'|">
                         회원정보 수정
                     </button>
                 </div>
@@ -82,13 +79,13 @@
         <div class="col-6">
             <div class="float-end">
                 <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                        th:onclick="|location.href='@{/user/member_edit/review}'|">
+                        th:onclick="|location.href='@{/user/member-edit/review}'|">
                     내가 쓴 리뷰 관리
                 </button>
             </div>
             <div class="float-end">
                 <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                        th:onclick="|location.href='@{/user/myLike}'|">
+                        th:onclick="|location.href='@{/user/my-like}'|">
                     내 찜 목록
                 </button>
             </div>

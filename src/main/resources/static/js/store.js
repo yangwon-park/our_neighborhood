@@ -1,9 +1,11 @@
 import validation from "./validation.js";
+import mask from "./mask.js";
 
 var main = {
     init: function () {
-        var _this = this;
+        let _this = this;
 
+        // mask.loadingWithMask();
         _this.getCategories();
 
         const storeSaveBtn = document.getElementById("store-save");
@@ -38,14 +40,17 @@ var main = {
 
         if (storeOwnerDeleteBtn !== null) {
             storeOwnerDeleteBtn.forEach((btn) => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener("click", () => {
                     _this.deleteStoreOwner(btn.id);
                 })
             })
         }
+
+        // mask.closeMask();
     },
 
     save: function () {
+        mask.loadingWithMask();
 
         // input 태그
         const els = {
@@ -70,7 +75,7 @@ var main = {
         const cateValid = document.getElementById("store-category-valid");
         const mainCateVal = document.getElementById("main-cate").options
             [document.getElementById("main-cate").selectedIndex].value;
-        const storeForm = document.getElementById('store-add-form');
+        const storeForm = document.getElementById("store-add-form");
 
         const formData = new FormData(storeForm);
 
@@ -86,10 +91,10 @@ var main = {
 
         this.categoryLayerEl.main.classList.remove("input-error-border");
 
-        if (els["name"].value !== '' && els["zipcode"].value !== ''
-            && els["roadAddr"].value !== '' && els["numberAddr"].value !== ''
-            && els["openingTime"].value !== '' && els["closingTime"].value !== ''
-            && mainCateVal !== '') {
+        if (els["name"].value !== "" && els["zipcode"].value !== ""
+            && els["roadAddr"].value !== "" && els["numberAddr"].value !== ""
+            && els["openingTime"].value !== "" && els["closingTime"].value !== ""
+            && mainCateVal !== "") {
 
             axios({
                 method: "post",
@@ -98,25 +103,30 @@ var main = {
             }).then((resp) => {
                 alert("매장 등록이 완료됐습니다.");
                 window.location.href = "/store/" + resp.data;
+                mask.closeMask();
             }).catch((error) => {
+                alert("매장 등록에 실패했습니다.");
                 console.error(error);
+                mask.closeMask();
             });
         }
 
         for (const el in els) {
-            if (els[el].value === '') {
+            if (els[el].value === "") {
                 els[el].classList.add("valid-custom");
                 validation.addValidation(valids[el + "Valid"], "위의 값들은 필수입니다.");
             }
         }
 
-        if (mainCateVal === '') {
+        if (mainCateVal === "") {
             this.categoryLayerEl.main.classList.add("input-error-border");
             validation.addValidation(cateValid, "대분류는 필수입니다.");
         }
     },
 
     update: function () {
+        mask.loadingWithMask();
+
         const storeForm = document.getElementById("store-edit-form");
         const storeIdVal = document.getElementById("storeId").value;
 
@@ -127,22 +137,27 @@ var main = {
             url: "/seller/store/" + storeIdVal,
             data: formData
         }).then((resp) => {
-            alert('매장 정보 수정이 완료됐습니다.');
+            alert("매장 정보 수정이 완료됐습니다.");
             window.location.href = "/store/" + storeIdVal;
+            mask.closeMask();
         }).catch((error) => {
+            alert("매장 수정에 실패했습니다.");
             console.error(error);
+            mask.closeMask();
         })
     },
 
     delete: function () {
-        const storeIdVal = document.getElementById("storeId").value;
+        mask.loadingWithMask();
+        const storeId = document.getElementById("storeId");
 
         axios({
             method: "delete",
-            url: "/admin/store/" + storeIdVal
+            url: "/admin/store/" + storeId.value
         }).then((resp) => {
             alert("매장 삭제가 완료됐습니다.");
             window.location.href = "/";
+            mask.closeMask();
         }).catch((error) => {
             console.error(error);
         })
@@ -155,7 +170,7 @@ var main = {
     getCategories: function () {
         axios({
             method: "get",
-            url: "/categoriesHier",
+            url: "/categories-hier",
         }).then((resp) => {
             let rootChildren = resp.data.children;
             this.getMainCategories(rootChildren);
@@ -238,7 +253,6 @@ var main = {
         categoryEl.appendChild(option);
     },
 
-
     categoryLayerEl: {
         main: document.getElementById("main-cate"),
         mid: document.getElementById("mid-cate"),
@@ -252,23 +266,23 @@ var main = {
 
         console.log("userId", userId.value);
 
-        const userIdValid = document.getElementById('store-owner-add-userId-valid');
+        const userIdValid = document.getElementById("store-owner-add-userId-valid");
 
         userId.classList.remove("valid-custom");
 
         validation.removeValidation(userIdValid);
 
-        if (userId.value !== '') {
+        if (userId.value !== "") {
             axios({
                 method: "post",
-                url: "/admin/storeOwner/add",
+                url: "/admin/store-owner/add",
                 params: {
                     userId: userId.value,
                     storeId: storeId.value
                 }
             }).then((resp) => {
                 let check = resp.data;
-                if (check === '성공') {
+                if (check === "성공") {
                     alert("가게 관리자가 추가 되었습니다");
                     window.location.reload();
                 } else {
@@ -279,7 +293,7 @@ var main = {
             })
         }
 
-        if (userId.value === '') {
+        if (userId.value === "") {
             userId.classList.add("valid-custom");
             validation.addValidation(userIdValid, "닉네임을 입력해주세요.");
         }
@@ -289,20 +303,20 @@ var main = {
         const memberId = btnId.substring(22);
         const storeId = document.getElementById("storeId");
 
-        console.log('storeId = ', memberId)
-        console.log('userId = ', storeId.value)
+        console.log("storeId = ", memberId)
+        console.log("userId = ", storeId.value)
 
         axios({
             method: "delete",
-            url: "/admin/storeOwner/delete",
+            url: "/admin/store-owner/delete",
             params: {
                 memberId: memberId,
                 storeId: storeId.value
             }
         }).then((resp) => {
             let check = resp.data;
-            if (check === '성공') {
-                alert('가게 관리자 삭제가 완료됐습니다.');
+            if (check === "성공") {
+                alert("가게 관리자 삭제가 완료됐습니다.");
                 window.location.reload();
             } else {
                 alert(check);

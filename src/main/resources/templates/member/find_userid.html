@@ -3,13 +3,12 @@
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
-
     <style>
 
     </style>
 </head>
 <link rel="stylesheet" th:href="@{../css/argon.css}">
-<body class="bg-default">
+<body id="main-body" class="bg-default">
 <!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
@@ -18,8 +17,8 @@
 
     </div>
 </section>
+<!-- Page content -->
 <section>
-    <!-- Page content -->
     <div class="container-fluid mt--8 pb-5">
         <!-- Table -->
         <div class="row justify-content-center">
@@ -27,26 +26,19 @@
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="text-center mt-2 mb-4">
-                            <span class="mb-2 text-dark fw-bold">비밀번호 찾기</span>
+                            <span class="h3 mb-2 text-dark fw-bold">아이디 찾기</span>
                         </div>
-                        <form th:object="${findPasswordForm}" id="find-password-form" class="form-floating">
+                        <form th:object="${findUserIdForm}" id="find-userId-form" class="form-floating">
                             <div class="form-group">
-                                <small>아이디</small>
-                                <div class="">
-                                    <input class="form-control" placeholder="아이디를 입력하세요." th:field="*{userId}">
-                                    <div id="find-password-userId-valid" class="my-1 valid-custom"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <small>이메일</small>
+                                <span class="fw-bold mb-2">가입 시 등록한 이메일을 입력해주세요.</span>
                                 <div class="">
                                     <input class="form-control" placeholder="이메일을 입력하세요." type="email"
                                            th:field="*{email}">
-                                    <div id="find-password-email-valid" class="my-1 valid-custom"></div>
+                                    <div id="find-userId-email-valid" class="my-1 valid-custom"></div>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="button" class="btn btn-main-color mt-4" id="find-password">비밀번호 찾기</button>
+                                <button type="button" class="btn btn-main-color mt-4" id="find-userId">아이디 찾기</button>
                             </div>
                         </form>
                     </div>
@@ -55,7 +47,6 @@
         </div>
     </div>
 </section>
-
 </body>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터

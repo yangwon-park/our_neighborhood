@@ -22,6 +22,14 @@ var main = {
                 this.createHashtagInput(el.id.substring(7))
             });
         }
+
+        const hashtagBtn = document.getElementById("hashtag-modal-save");
+
+        if (hashtagBtn !== null) {
+            hashtagBtn.addEventListener("click", () => {
+                this.saveHashtag();
+            });
+        }
     },
 
     createHashtagInput: function (menuId) {
@@ -43,7 +51,7 @@ var main = {
             })
 
             // Chainable event listeners
-            tagify.on('input', onInput);
+            tagify.on("input", onInput);
 
             var mockAjax = (function mockAjax(){
                 var timeout;
@@ -96,7 +104,6 @@ var main = {
     },
 
     getAllHashtags: function () {
-        
         // 초기화
         this.allHashtags = [];
 
@@ -112,6 +119,25 @@ var main = {
         })
     },
 
+    saveHashtag: function () {
+        const storeId = document.getElementById("storeId").value;
+        const hashtagForm = document.getElementById("hashtag-form");
+        const formData = new FormData(hashtagForm);
+
+        axios({
+            method: "post",
+            url: "/seller/hashtag/" + storeId,
+            data: formData
+        }).then((resp) => {
+            if (resp.data === -1) {
+                alert("존재하는 카테고리입니다.");
+                window.location.reload();
+            } else {
+                alert("카테고리 등록이 성공했습니다.");
+                window.location.reload();
+            }
+        })
+    },
 
     delete: function (btnId) {
         const hashtagId = btnId.substring(18);

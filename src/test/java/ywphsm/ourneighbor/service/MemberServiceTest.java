@@ -140,7 +140,7 @@ class MemberServiceTest {
                 findMember.getPassword(), "updatePW!2")).isTrue();
 
         //회원수정(전화번호)
-        url = "http://localhost:" + port + "/member/edit/phoneNumber";
+        url = "http://localhost:" + port + "/member/edit/phone-number";
 
         PhoneCertifiedForm certifiedForm = new PhoneCertifiedForm();
         certifiedForm.setPhoneNumber("01012341234");
@@ -205,7 +205,7 @@ class MemberServiceTest {
                 .andExpect(status().isOk());
 
         //아이디 찾기
-        url = "http://localhost:" + port + "/findUserId";
+        url = "http://localhost:" + port + "/find-userid";
 
         ResultActions resultActions_findUserId = mvc.perform(post(url)
                         .param("email", "test@1234.com"))
@@ -216,7 +216,7 @@ class MemberServiceTest {
         assertThat(result).isEqualTo("성공");
 
         //비밀번호 찾기
-        url = "http://localhost:" + port + "/findPassword";
+        url = "http://localhost:" + port + "/find-password";
 
         ResultActions resultActions_findPassword = mvc.perform(post(url)
                         .param("email", "test@1234.com")
@@ -248,28 +248,6 @@ class MemberServiceTest {
         Role role = Role.of(code);
         System.out.println("role.getKey() = " + role.getKey());
         System.out.println("role.getTitle() = " + role.getTitle());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", roles = "ADMIN")
-    @DisplayName("계정의 권한 업데이트")
-    void updateRole() throws Exception {
-        String userId = "ywonp94";
-        String role = "판매자";
-
-        Member findMember = memberService.findByUserId(userId);
-
-        assertThat(findMember.getRole()).isEqualTo(Role.ADMIN);
-
-        String url = "http://localhost:" + port + "/admin/update_role/" + findMember.getId();
-
-        mvc.perform(put(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(role))
-                .andDo(print())
-                .andExpect(status().isOk());
-
-        assertThat(findMember.getRole()).isEqualTo(Role.SELLER);
     }
 }
 

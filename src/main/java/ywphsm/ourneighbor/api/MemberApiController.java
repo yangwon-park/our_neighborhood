@@ -8,16 +8,16 @@ import ywphsm.ourneighbor.controller.form.PasswordEditForm;
 import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
+
 import ywphsm.ourneighbor.domain.member.Role;
-import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
+
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -70,7 +70,7 @@ public class MemberApiController {
         return "성공";
     }
 
-    @GetMapping("/member/sendSMS")
+    @GetMapping("/member/send-sms")
     public boolean sendSMS(@RequestParam String phoneNumber, HttpServletRequest request) {
 
         if (memberService.findByPhoneNumber(phoneNumber) != null) {
@@ -103,7 +103,7 @@ public class MemberApiController {
         return memberService.save(dto);
     }
 
-    @PutMapping("/member/edit/phoneNumber")
+    @PutMapping("/member/edit/phone-number")
     public String updatePhoneNumber(String phoneNumber, String certifiedNumber,
                      @SessionAttribute(name = SessionConst.PHONE_CERTIFIED, required = false) PhoneCertifiedForm certifiedForm,
                      @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
@@ -162,19 +162,19 @@ public class MemberApiController {
         return "redirect:/logout";
     }
 
-    @PostMapping("/findUserId")
+    @PostMapping("/find-userid")
     public String findUserId(String email) {
 
         return memberService.sendEmailByUserId(email);
     }
 
-    @PostMapping("/findPassword")
+    @PostMapping("/find-password")
     public String findPassword(String email, String userId) {
 
         return memberService.sendEmailByPassword(email, userId);
     }
 
-    @PutMapping("/admin/memberRole/edit")
+    @PutMapping("/admin/member-role/edit")
     public String memberRoleEdit(String userId, Role role) {
         return memberService.updateRole(userId, role);
     }

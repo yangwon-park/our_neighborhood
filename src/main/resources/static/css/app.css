@@ -42,7 +42,7 @@ accent-color: #F01D04;
 }
 
 html {
-    font-family: "s-core" !important;
+    font-family: "s-core", serif !important;
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
@@ -138,8 +138,8 @@ input[type=radio] {
 }
 
 #mask > img {
-    width: 2.0rem;
-    height: 2.0rem;
+    width: 5rem;
+    height: 5rem;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -424,7 +424,7 @@ input[type=radio] {
 #services .divider {
     width: 10%;
     margin: 2rem auto;
-    border-top: 0.5rem solid rgb(255, 112 3);
+    border-top: 0.5rem solid rgb(255, 112, 3);
 }
 
 #services .services-col .card {
@@ -574,7 +574,7 @@ input[type=radio] {
 
 .CLOSED {
     background: #6c757d;
-    color: #0b1526;
+    color: #ffffff;
 }
 
 
@@ -658,3 +658,4 @@ a{
     40%{transform:scale(1.2);}
     100%{transform:scale(1);}
 }
+

@@ -9,7 +9,7 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/user/member_edit")
+@RequestMapping("/user/member-edit")
 public class EditController {
 
     @GetMapping
@@ -20,17 +20,17 @@ public class EditController {
         editForm.setEmail(member.getEmail());
         editForm.setPhoneNumber(member.getPhoneNumber());
 
-        return "member/edit/editForm";
+        return "member/edit/edit_form";
     }
 
     @GetMapping("/password")
     public String passwordEdit(@ModelAttribute PasswordEditForm passwordEditForm) {
-        return "member/edit/passwordEditForm";
+        return "member/edit/password_edit_form";
     }
 
-    @GetMapping("/phoneNumber")
+    @GetMapping("/phone-number")
     public String edit_phoneNumber(@ModelAttribute(name = "form") PhoneNumberEditForm phoneNumberEditForm) {
-        return "member/edit/phoneEditForm";
+        return "member/edit/phone_edit_form";
     }
 
 }

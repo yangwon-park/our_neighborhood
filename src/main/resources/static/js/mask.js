@@ -1,11 +1,7 @@
 var main = {
-    init: function () {
-         let _this = this;
-
-        _this.loadingWithMask();
-    },
-
     loadingWithMask: function () {
+        console.log("spinner 호출");
+
         const path = "/images/main/loading.gif";
 
         let mainBody = document.getElementById("main-body");
@@ -13,6 +9,7 @@ var main = {
         mask.id = "mask";
 
         let loadingImg = document.createElement("img");
+        loadingImg.id = "spinner";
         loadingImg.src = path;
 
         mask.append(loadingImg);
@@ -26,7 +23,5 @@ var main = {
         mask.remove();
     },
 }
-
-main.init();
 
 export default main;

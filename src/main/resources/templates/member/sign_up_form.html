@@ -8,10 +8,9 @@
     </style>
 </head>
 <link rel="stylesheet" th:href="@{../css/argon.css}">
-<body class="bg-default">
+<body id="main-body" class="bg-default">
 <!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
-<!-- Header -->
 <!-- Header -->
 <section class="header">
     <div class="header py-5">
@@ -25,8 +24,8 @@
         <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6">
                 <div class="card bg-secondary shadow border-0">
-                    <div class="card-header bg-transparent pb-3">
-                        <div class="text-dark text-center fw-bold mt-2 mb-4">회원가입</div>
+                    <div class="text-center mt-2 mb-4">
+                        <span class="h3 mb-2 text-dark fw-bold">회원 가입</span>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <form th:object="${dto}" id="sign-up-add-form" class="form-floating">

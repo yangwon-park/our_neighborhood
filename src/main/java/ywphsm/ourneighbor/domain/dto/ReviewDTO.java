@@ -28,7 +28,6 @@ public class ReviewDTO {
         private Long storeId;
         private Long memberId;
 
-
         @Builder
         public Add(String content, Integer rating, Long storeId, Long memberId, MultipartFile file) {
             this.content = content;

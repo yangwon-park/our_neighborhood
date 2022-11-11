@@ -23,12 +23,12 @@ public class CategoryApiController {
         return new ResultClass<>(categories);
     }
 
-    @GetMapping("/categoriesHier")
+    @GetMapping("/categories-hier")
     public CategoryDTO.Detail findAllCategoriesHier() {
         return categoryService.findAllCategoriesHier().get(0);
     }
 
-    @GetMapping("/categoryCheck")
+    @GetMapping("/category-check")
     public ResponseEntity<Boolean> checkCategoryDuplicate(String name, Long parentId) {
         Category parent = categoryService.findById(parentId);
         return ResponseEntity.ok(categoryService.checkCategoryDuplicate(name, parent));

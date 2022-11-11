@@ -1,24 +1,25 @@
 import validation from "./validation.js";
+import mask from "./mask.js";
 
 var main = {
     init: async function () {
+        mask.loadingWithMask();
         var _this = this;
 
-        const menuSaveBtn = document.getElementById('menu-save');
-        const menuUpdateBtnList = document.querySelectorAll('.menu-edit');
-        const menuDeleteBtnList = document.querySelectorAll('.menu-delete');
-        const menuEditImageCheckList = document.querySelectorAll('.menu-edit-image');
+        const menuSaveBtn = document.getElementById("menu-save");
+        const menuUpdateBtnList = document.querySelectorAll(".menu-edit");
+        const menuDeleteBtnList = document.querySelectorAll(".menu-delete");
+        const menuEditImageCheckList = document.querySelectorAll(".menu-edit-image");
 
         if (menuSaveBtn !== null) {
-            menuSaveBtn.addEventListener('click', () => {
+            menuSaveBtn.addEventListener("click", () => {
                 _this.check();
-                // _this.save();
             });
         }
 
         if (menuUpdateBtnList !== null) {
             menuUpdateBtnList.forEach((btn) => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener("click", () => {
                     _this.update(btn.id);
                 });
             });
@@ -26,7 +27,7 @@ var main = {
 
         if (menuDeleteBtnList !== null) {
             menuDeleteBtnList.forEach((btn) => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener("click", () => {
                     _this.delete(btn.id);
                 });
             });
@@ -34,11 +35,13 @@ var main = {
 
         if (menuEditImageCheckList !== null) {
             menuEditImageCheckList.forEach((el) => {
-                el.addEventListener('change', function () {
+                el.addEventListener("change", function () {
                     _this.imgActive(el.id);
                 });
             });
         }
+
+        mask.closeMask();
     },
 
     // 이미지 업로드 여부 설정 함수
@@ -52,6 +55,8 @@ var main = {
     },
 
     check: function () {
+        mask.loadingWithMask();
+
         const name = document.getElementById("name");
         const price = document.getElementById("price");
         const type = document.getElementsByName("type");
@@ -173,13 +178,15 @@ var main = {
         }).then((resp) => {
             alert("메뉴가 등록됐습니다.")
             window.location.reload()
-            console.log(resp)
+            mask.closeMask();
         }).catch((error) => {
             console.log(error)
+            mask.closeMask();
         });
     },
 
     update: function (btnId) {
+        mask.loadingWithMask();
         const id = btnId.substring(13);
 
         const menuForm = document.getElementById("menu-edit-form" + id);
@@ -197,17 +204,20 @@ var main = {
             url: "/seller/menu/" + storeIdVal,
             data: formData
         }).then((resp) => {
-            alert('메뉴 정보 수정이 완료됐습니다.');
+            alert("메뉴 정보 수정이 완료됐습니다.");
             window.location.reload();
+            mask.closeMask();
         }).catch((error) => {
             console.log(error);
+            mask.closeMask();
         })
     },
 
     delete: function (btnId) {
+        mask.loadingWithMask();
         const id = btnId.substring(15);
-        const storeId = document.getElementById('storeId').value;
-        const menuId = document.getElementById('menuId' + id).value;
+        const storeId = document.getElementById("storeId").value;
+        const menuId = document.getElementById("menuId" + id).value;
 
         console.log(menuId);
 
@@ -218,10 +228,12 @@ var main = {
                 menuId: menuId
             }
         }).then((resp) => {
-            alert('메뉴 삭제가 완료됐습니다.');
+            alert("메뉴 삭제가 완료됐습니다.");
             window.location.reload();
+            mask.closeMask();
         }).catch((error) => {
             console.log(error);
+            mask.closeMask();
         })
     },
 

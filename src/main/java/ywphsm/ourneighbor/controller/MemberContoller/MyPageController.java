@@ -24,17 +24,17 @@ public class MyPageController {
     private final MemberService memberService;
     private final ReviewService reviewService;
 
-    @GetMapping("/user/myPage")
+    @GetMapping("/user/my-page")
     public String myPage(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                          Model model) {
 
         Member byId = memberService.findById(member.getId());
         MemberDTO.Detail detail = new MemberDTO.Detail(byId);
         model.addAttribute("memberDetail", detail);
-        return "member/myPage";
+        return "member/my_page";
     }
 
-    @GetMapping("/user/myLike")
+    @GetMapping("/user/my-like")
     public String myLike(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                          Model model) {
         Member findById = memberService.findById(member.getId());
@@ -51,10 +51,10 @@ public class MyPageController {
 
         model.addAttribute("like", likeList);
         model.addAttribute("count", count);
-        return "member/myLike";
+        return "member/my_like";
     }
 
-    @GetMapping("/seller/sellerPage")
+    @GetMapping("/seller/seller-page")
     public String sellerPage(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                          Model model) {
         Member byId = memberService.findById(member.getId());
@@ -65,9 +65,9 @@ public class MyPageController {
 
         model.addAttribute("storeDto", collect);
 
-        return "member/sellerPage";
+        return "member/seller_page";
     }
-    @GetMapping("/user/member_edit/review")
+    @GetMapping("/user/member-edit/review")
     public String MyReview(@SessionAttribute(value = SessionConst.LOGIN_MEMBER) Member member,
                            Model model) {
 
@@ -79,10 +79,10 @@ public class MyPageController {
 
         model.addAttribute("review", content);
         model.addAttribute("count", count);
-        return "member/myReview";
+        return "member/my_review";
     }
 
-    @GetMapping("/admin/adminPage")
+    @GetMapping("/admin/admin-page")
     public String adminPage() {
         return "member/admin_page";
     }

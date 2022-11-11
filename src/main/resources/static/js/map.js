@@ -102,7 +102,7 @@ var main = {
 
         axios({
             method: "get",
-            url: "/searchByKeyword",
+            url: "/search-by-keyword",
             params: {
                 keyword: keyword
             }
@@ -134,7 +134,7 @@ var main = {
 
     setSearchByCategoriesEvent: function (findCate, map) {
         for (const el of findCate) {
-            el.addEventListener('click', () => {
+            el.addEventListener("click", () => {
 
                 // input radio에서 selected된 값 가져옴
                 let radio = document.querySelector('input[name="dist"]:checked');
@@ -143,7 +143,7 @@ var main = {
                     alert("원하는 거리를 설정해주세요!!!");
                 }
 
-                let categoryId = el.getAttribute('data-value');
+                let categoryId = el.getAttribute("data-value");
                 let dist = radio.value;
 
                 this.searchByCategories(categoryId, dist, map);
@@ -154,7 +154,7 @@ var main = {
     searchByCategories: function (categoryId, dist, map) {
         axios({
             method: "get",
-            url: "/searchByCategory",
+            url: "/search-by-category",
             params: {
                 categoryId: categoryId,
                 dist: dist
@@ -178,14 +178,14 @@ var main = {
             })
             .catch((e) => {
                 console.error(e);
-                alert('왜 에러가 뜰까요??');
+                alert("왜 에러가 뜰까요??");
             });
     },
 
     getTop5Categories: function (categoryId, map) {
         axios({
             method: "get",
-            url: "/getTop5Categories",
+            url: "/get-top5-categories",
             params: {
                 categoryId: categoryId
             }
@@ -215,7 +215,7 @@ var main = {
     getCategories: async function () {
         await axios({
             method: "get",
-            url: "/categoriesHier",
+            url: "/categories-hier",
         }).then((resp) => {
             let rootChildren = resp.data.children;
             this.getMainCategories(rootChildren);
@@ -275,7 +275,7 @@ var main = {
     },
 
     closeInfoWindow: function () {
-        for (var i = 0; i < this.infoWindows.length; i++) {
+        for (let i = 0; i < this.infoWindows.length; i++) {
             this.infoWindows[i].close();
         }
     },
@@ -309,10 +309,10 @@ var main = {
         return marker;
     },
 
-    addInfoWindow: function (marker, data, infowindow, map) {
+    addInfoWindow: function (marker, data, infoWindow, map) {
         return () => {
             this.closeInfoWindow();
-            infowindow.setContent(
+            infoWindow.setContent(
                 '<div class="container text-nowrap">' +
                 '    <div class="row mt-2">' +
                 '        <div class="col m-auto d-inline">' +
@@ -339,25 +339,25 @@ var main = {
                 '        </div>' +
                 '    </div>' +
                 '    <div class="row d-flex mb-2">' +
-                '        <div class="col">' +
+                '        <div class="col-6">' +
                 '           <a style="color: #146c43; font-size: 0.85rem; text-decoration: none" href="tel:' + data.phoneNumber + '">' + data.phoneNumber + '</a>' +
                 '        </div>' +
-                '        <div class="col">' +
+                '        <div class="col-6">' +
                 '            <p class="card-text text-end main-color fw-bold">' + data.distance + 'km</p>' +
                 '        </div>' +
                 '    </div>' +
                 '</div>')
-            // infowindow.setPosition(marker.getPosition());
+            // infoWindow.setPosition(marker.getPosition());
 
             // 마커를 주면, 마커에 인포윈도우가 열림
-            infowindow.open(map, marker);
+            infoWindow.open(map, marker);
         }
     },
 
     removeMarker: function () {
         this.closeInfoWindow();
 
-        for (var i = 0; i < this.markers.length; i++) {
+        for (let i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
         }
 

@@ -33,6 +33,11 @@ public class HashtagApiController {
         return new ResultClass<>(hashtags);
     }
 
+    @PostMapping("/seller/hashtag/{storeId}")
+    public Long saveHashtag(@PathVariable Long storeId, HashtagDTO dto) {
+        return hashtagService.simpleSaveLinkedStore(storeId, dto);
+    }
+
     @DeleteMapping("/seller/hashtag/{hashtagId}")
     public Long deleteHashtagOfStore(@PathVariable Long hashtagId, @RequestParam Long storeId) {
         return hashtagOfStoreService.deleteHashtagOfStore(hashtagId, storeId);

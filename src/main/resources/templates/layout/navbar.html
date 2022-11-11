@@ -31,26 +31,26 @@
                     </li>
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <li class="nav-item">
-                            <a th:href="@{/admin/adminPage}" class="nav-link nav-font">
+                            <a th:href="@{/admin/admin-page}" class="nav-link nav-font">
                                 운영자 페이지
                             </a>
                         </li>
                     </th:block>
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')}">
                         <li class="nav-item">
-                            <a href="/seller/sellerPage" class="nav-link nav-font">
+                            <a href="/seller/seller-page" class="nav-link nav-font">
                                 매장 관리
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/user/myPage" class="nav-link nav-font">
+                            <a href="/user/my-page" class="nav-link nav-font">
                                 마이 페이지
                             </a>
                         </li>
                     </th:block>
                     <th:block th:if="${#strings.equals(session.loginMember.getRole(), 'USER')}">
                         <li class="nav-item">
-                            <a href="/user/myPage" class="nav-link nav-font">
+                            <a href="/user/my-page" class="nav-link nav-font">
                                 마이 페이지
                             </a>
                         </li>

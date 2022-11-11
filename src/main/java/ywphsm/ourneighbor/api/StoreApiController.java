@@ -2,11 +2,11 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.config.ScriptUtils;
-import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.service.CategoryService;
@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,9 +30,9 @@ public class StoreApiController {
     private final StoreService storeService;
     private final CategoryService categoryService;
 
-    @GetMapping("/getImages")
+    @GetMapping("/get-images")
     public List<List<String>> getImages(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
-                                        @CookieValue(value = "lon", required = false, defaultValue = "") String lon) {
+                                        @CookieValue(value = "lon", required = false, defaultValue = "") String lon) throws ParseException {
 
         List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
 
@@ -44,8 +42,8 @@ public class StoreApiController {
 
         if (lat != null && lon != null) {
             for (CategoryDTO.Simple simple : rootCategoryList) {
-                categoryImageList.add(storeService.getTop5ImageByCategories(
-                        (simple.getCategoryId().toString()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
+                categoryImageList.add(storeService.getTopNImageByCategories(
+                        (simple.getCategoryId()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
             }
         }
 
@@ -74,7 +72,7 @@ public class StoreApiController {
         return storeService.update(storeId, dto, categoryIdList);
     }
 
-    @PostMapping("/seller/store/editImage/{storeId}")
+    @PostMapping("/seller/store/edit-image/{storeId}")
     public Long saveMainImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                             HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -89,7 +87,7 @@ public class StoreApiController {
         return storeService.saveMainImage(storeId, file);
     }
 
-    @PutMapping("/seller/store/editImage/{storeId}")
+    @PutMapping("/seller/store/edit-image/{storeId}")
     public Long updateMainImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                             HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -109,13 +107,12 @@ public class StoreApiController {
         return storeService.delete(storeId);
     }
 
-    @PostMapping("/admin/storeOwner/add")
+    @PostMapping("/admin/store-owner/add")
     public String addStoreOwner(String userId, Long storeId) {
-
         return storeService.addStoreOwner(userId, storeId);
     }
 
-    @DeleteMapping("/admin/storeOwner/delete")
+    @DeleteMapping("/admin/store-owner/delete")
     public String deleteStoreOwner(Long memberId, Long storeId) {
         return storeService.deleteStoreOwner(memberId, storeId);
     }

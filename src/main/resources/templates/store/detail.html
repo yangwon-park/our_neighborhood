@@ -4,19 +4,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>우리 동네</title>
     <style>
+
     </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
-<body class="bg-default">
+<body id="main-body" class="bg-default">
+<!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
 <section class="header">
-    <div class="header py-7 py-lg-8">
-        <div class="separator separator-bottom separator-skew zindex-100">
-            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg">
-                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-            </svg>
-        </div>
+    <div class="header py-5">
+
     </div>
 </section>
 <section class="main">
@@ -26,18 +24,17 @@
                 <h1 class="my-auto h1 text-dark fw-bold" th:text="*{name}">가게명</h1>
                 <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
                       th:classappend="*{status}"></span>
-<!--                <div class="hidden" id="storeId" th:text="*{storeId}"></div>-->
                 <th:block th:if="${session.loginMember ne null}">
                     <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
                     <div class="right_area">
                         <a href="javascript:;" class="icon heart">
                             <img th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png' : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
-                                 alt="찜하기">
+                                 alt="찜하기" id="like-img">
                         </a>
                     </div>
                 </th:block>
             </div>
-            <div class="col-6">
+            <div class="col-4">
                 <th:block th:if="${session.loginMember ne null}">
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
@@ -49,7 +46,6 @@
                             <button class="btn btn-info" data-bs-toggle="modal"
                                     data-bs-target="#edit-image-modal"
                                     style="font-size: 1.1rem; color: #ffffff">
-                                <!--                                    th:onclick="|location.href='@{/seller/store/editImage/{storeId}(storeId=${store.storeId})}'|">-->
                                 대표 이미지
                             </button>
                             <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
@@ -165,8 +161,8 @@
                     <i class="fa-solid fa-square-parking main-color fa-sm"></i>
                     <span>주차</span>
                     <th:block th:if="*{park ne null}">
-                    <span class="ms-2 me-3 fw-bold" th:text="*{park.description}"
-                          th:classappend="|park-*{park.name()}|"></span>
+                        <span class="ms-2 me-3 fw-bold" th:text="*{park.description}"
+                            th:classappend="|park-*{park.name()}|"></span>
                     </th:block>
                     <th:block th:if="*{parkDetail ne null}">
                         <span class="ms-3 fw-bold" th:text="|(*{parkDetail})|"></span>
@@ -210,7 +206,7 @@
                 </div>
             </div>
         </div>
-        <th:block th:if="${!menuList.isEmpty()}">
+        <th:block th:if="${!menuList.isEmpty() or !menuImgList.isEmpty()}">
             <hr class="mt-2 mb-5">
             <div class="menu-list">
                 <div class="col-12">
@@ -234,7 +230,8 @@
                                     <div id="modal-content" class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title text-dark fw-bold">메뉴판</h5>
-                                            <button type="button" id="btn-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" id="btn-close" class="btn-close"
+                                                    data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div id="carouselExampleControls" class="carousel slide"
@@ -280,9 +277,8 @@
                                 </div>
                             </div>
                             <div class="px-0 col-lg-6 col-sm-12 d-flex border border-secondary">
-                                <div class="menu-detail border-end border-secondary col-4">
+                                <div class="menu-detail col-5 border-end border-secondary">
                                     <div class="menu-detail-img mb-2">
-                                        <!--                                    <img th:src="|/menu/${menu.storedFileName}|" width="100%" alt="메뉴 사진">-->
                                         <img th:src="${menu.uploadImgUrl}" width="100%" height="222px" alt="메뉴 사진">
                                     </div>
                                     <div class="menu-detail-info d-grid">
@@ -297,7 +293,7 @@
                                            th:text="|${menu.price}원|"></p>
                                     </div>
                                 </div>
-                                <div class="menu-hashtag col-8 row row-cols-md-3 row-cols-2 ">
+                                <div class="menu-hashtag col-7 row row-cols-md-3 row-cols-2">
                                     <th:block th:each="hashtag: ${menu.hashtagOfMenuDTOList}">
                                         <div class="my-auto text-center col text-nowrap"
                                              th:text="${hashtag.hashtagName}">해쉬태그
@@ -317,7 +313,7 @@
             </div>
             <div class="col-6">
                 <button class="btn btn-main-color float-end" style="font-size: 1.1rem; color: #ffffff"
-                        th:onclick="|location.href='@{/user/store/{storeId}/createReview(storeId=${store.storeId})}'|">
+                        th:onclick="|location.href='@{/user/store/{storeId}/create-review(storeId=${store.storeId})}'|">
                     리뷰 등록
                 </button>
             </div>
@@ -331,7 +327,7 @@
             </div>
             <h4 class="text-dark">평균 평점</h4>
             <div class="d-flex my-auto">
-                <h3 class="my-auto text-dark" th:text="${ratingAverage}">평균 평점</h3>
+                <h3 class="my-auto text-dark me-2" th:text="${ratingAverage}">평균 평점</h3>
                 <div class="wrap-star">
                     <span class="star-rating">
                         <span th:style="${'width:' + (ratingAverage * 20) + '%'}"></span>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{/css/argon.css}">
+<body id="main-body" class="bg-default">
+<!-- Navbar -->
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
+<section class="header">
+    <div class="header py-5">
+
+    </div>
+</section>
+<section class="main">
+    <div class="container px-0">
+        <button class="btn btn-orange float-end" style="font-size: 1.1rem; color: #ffffff"
+                th:onclick="|location.href='@{/seller/store/add}'|">상점 추가
+        </button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>가게명</th>
+            <th>대표 사진</th>
+            <th>OPEN/CLOSE</th>
+        </tr>
+        </thead>
+        <tr th:each="store : ${storeDto}">
+            <td th:text="${store.name}"
+                th:onclick="|location.href='@{/store/{storeId}(storeId=${store.storeId})}'|"></td>
+            <td>
+                <img th:src="${store.uploadImgUrl}" width="180" height="180" alt="대표 사진">
+            </td>
+            <td>
+        <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{store.status}"
+              th:classappend="*{store.status}"></span>
+            </td>
+        </tr>
+    </table>
+</section>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+</body>
+</html>

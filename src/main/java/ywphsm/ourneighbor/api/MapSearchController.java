@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +26,7 @@ public class MapSearchController {
     // 메뉴 리스트는 불러오지 않음
     // 단순 조회이므로 fetch 조인으로 최적화
     // map.html에서 가게 이름을 검색하는 경우 수행됨
-    @GetMapping("/searchByKeyword")
+    @GetMapping("/search-by-keyword")
     public ResultClass<?> searchByKeyword(@RequestParam String keyword,
                                           @CookieValue(value = "lat", required = false) String myLat,
                                           @CookieValue(value = "lon", required = false) String myLon) {
@@ -40,7 +41,7 @@ public class MapSearchController {
         return new ResultClass<>(result.size(), result);
     }
 
-    @GetMapping("/searchByCategory")
+    @GetMapping("/search-by-category")
     public ResultClass<?> searchByCategory(@RequestParam String categoryId,
                                            @RequestParam double dist,
                                            @CookieValue(value = "lat", required = false) String myLat,
@@ -60,13 +61,13 @@ public class MapSearchController {
         return new ResultClass<>(result.size(), result);
     }
 
-    @GetMapping("/getTop5Categories")
-    public ResultClass<?> getTop5StoresByCategories(@RequestParam String categoryId,
-                                            @CookieValue(value = "lat", required = false) String myLat,
-                                            @CookieValue(value = "lon", required = false) String myLon) {
+    @GetMapping("/get-top5-categories")
+    public ResultClass<?> getTop5StoresByCategories(@RequestParam Long categoryId,
+                                                    @CookieValue(value = "lat", required = false) String myLat,
+                                                    @CookieValue(value = "lon", required = false) String myLon) throws ParseException {
         double dist = 3;
 
-        List<Store> findStores = storeService.getTop5ByCategories(categoryId, dist,
+        List<Store> findStores = storeService.getTopNByCategories(categoryId, dist,
                 Double.parseDouble(myLat), Double.parseDouble(myLon));
 
         List<SimpleSearchStoreDTO> dto = findStores.stream()

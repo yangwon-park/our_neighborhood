@@ -2,7 +2,8 @@ package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import ywphsm.ourneighbor.config.AuditingConfig;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
@@ -63,6 +64,7 @@ public class Store extends BaseEntity {
 
     private String parkDetail;
 
+
     /*
         임베디드 타입
      */
@@ -71,7 +73,6 @@ public class Store extends BaseEntity {
 
     @Embedded
     private BusinessTime businessTime;
-
 
     /*
         JPA 연관 관계 매핑

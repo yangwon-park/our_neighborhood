@@ -10,6 +10,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
+import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.email.security.MemberDetailsImpl;
 import ywphsm.ourneighbor.service.login.SessionConst;
@@ -51,6 +52,7 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
          */
         if (savedRequest != null) {
             uri = savedRequest.getRedirectUrl();
+            ScriptUtils.alert(response, "로그인후 이용할 수 있습니다.");
         } else if (prevPage != null && !prevPage.equals("")) {
             // 회원가입 - 로그인으로 넘어온 경우 "/"로 redirect
             if (prevPage.contains("/sign_up")) {

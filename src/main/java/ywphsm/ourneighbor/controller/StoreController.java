@@ -120,8 +120,6 @@ public class StoreController {
             model.addAttribute("storeRole", storeRole);
         }
 
-        log.info("menuImgList={}", menuImgList);
-
         model.addAttribute("store", storeDTO);
         model.addAttribute("menuList", menuDTOList);
         model.addAttribute("menuImgList", menuImgList);

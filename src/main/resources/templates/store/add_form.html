@@ -24,13 +24,14 @@
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent pb-3">
-                        <div class="text-muted text-center mt-2 mb-4 fs-2">매장 등록</div>
+                        <div class="text-center mt-2 mb-4 fs-2">
+                            매장 등록
+                        </div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <form th:object="${store}" id="store-add-form" class="form-floating">
                             <div class="form-group">
-                                <input th:field="*{memberId}" class="form-control"
-                                       placeholder="회원 번호" type="hidden">
+                                <input th:field="*{memberId}" class="form-control" type="hidden">
                                 <div class="">
                                     <input th:field="*{name}" class="form-control"
                                            placeholder="매장 이름을 입력해주세요." type="text">
@@ -39,7 +40,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="d-flex">
+                                <div class="d-flex mb-3">
                                     <input th:field="*{zipcode}" class="form-control zipcode"
                                            placeholder="우편 번호" type="text" readonly>
                                     <button type="button" onclick="openPostcode()"
@@ -101,11 +102,21 @@
                                            placeholder="매장 공지" type="text">
                                 </div>
                             </div>
-                            <div class="form-group d-flex text-nowrap">
-                                <div th:each="p : ${parkAva}" class="mb-3">
-                                    <input type="radio" th:field="*{park}" th:value="${p.name()}"/>
-                                    <label th:text="${p.description}">
-                                        class="form-check-label fw-bold"></label>
+                            <div class="form-group">
+                                <div class="mb-3">
+                                    <input th:field="*{homePage}" class="form-control"
+                                           placeholder="홈페이지" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="fw-bold mb-3">주차 지원 여부</span>
+                                <div class="form-group d-flex text-nowrap mt-3">
+                                    <div th:each="p : ${parkAva}">
+                                        <input type="radio" th:field="*{park}"
+                                               th:value="${p.name()}"/>
+                                        <label th:text="${p.description}"
+                                               class="form-check-label fw-bold"></label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -116,33 +127,37 @@
                             </div>
                             <div class="form-group d-flex">
                                 <div class="me-3">
-                                    <label for="openingTime" class="m-auto fw-light px-2"
-                                           style="font-size: 1rem">영업
-                                        시작</label>
+                                    <label for="openingTime" class="fw-bold px-2"
+                                           style="font-size: 1rem">영업 시작</label>
                                     <input th:field="*{openingTime}" class="form-control" type="time">
                                     <div id="store-openingTime-valid" class="my-1 valid-custom">
                                     </div>
                                 </div>
-                                <div class="ms-3">
-                                    <label for="closingTime" class="m-auto fw-light px-2"
-                                           style="font-size: 1rem">영업
-                                        종료</label>
-                                    <input th:field="*{closingTime}" class="form-control"
-                                           type="time">
+                                <div class="mx-3">
+                                    <label for="closingTime" class="fw-bold px-2"
+                                           style="font-size: 1rem">영업 종료</label>
+                                    <input th:field="*{closingTime}" class="form-control" type="time">
                                     <div id="store-closingTime-valid" class="my-1 valid-custom">
                                     </div>
+                                </div>
+                                <div class="ms-3">
+                                    <label for="lastOrder" class="fw-bold px-2"
+                                           style="font-size: 1rem">
+                                        라스트 오더</label>
+                                    <input th:field="*{lastOrder}"
+                                           class="form-control input-time" type="time">
                                 </div>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="me-3" style="width: 100%">
-                                    <label for="breakStart" class="m-auto fw-light px-2"
+                                    <label for="breakStart" class="fw-bold px-2"
                                            style="font-size: 1rem">
                                         휴식 시작 (없으면 비워두세요)</label>
                                     <input th:field="*{breakStart}"
                                            class="form-control input-time" type="time">
                                 </div>
                                 <div class="ms-3" style="width: 100%">
-                                    <label for="breakEnd" class="m-auto fw-light px-2"
+                                    <label for="breakEnd" class="fw-bold px-2"
                                            style="font-size: 1rem">
                                         휴식 종료 (없으면 비워두세요)</label>
                                     <input th:field="*{breakEnd}"
@@ -169,17 +184,15 @@
                             </div>
                             <div class="form-group">
                                 <div class="flex-wrap mb-2">
-                                    <h5 style="display: inline">휴무일 선택</h5>
+                                    <h5 style="display: inline" class="fx-bold">휴무일 선택</h5>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <div th:each="day : ${offDays}"
                                          class="custom-control custom-checkbox mb-3 me-3">
                                         <input class="custom-control-input" type="checkbox"
-                                               th:field="${store.offDays}"
-                                               th:value="${day.value}">
+                                               th:field="${store.offDays}" th:value="${day.value}">
                                         <label class="custom-control-label"
-                                               th:for="${#ids.prev('offDays')}"
-                                               th:text="${day.key}">일</label>
+                                               th:for="${#ids.prev('offDays')}" th:text="${day.key}">일</label>
                                     </div>
                                 </div>
                             </div>

@@ -50,6 +50,8 @@ public class Store extends BaseEntity {
 
     private int ratingTotal;
 
+    private String homePage;
+
 //    @OneToMany(mappedBy = "store")
 //    private List<DaysOfStore> daysOfStore;
 
@@ -113,7 +115,7 @@ public class Store extends BaseEntity {
     public Store(Long id, String name, Double lat, Double lon,
                  String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address,
-                 ParkAvailable park, String parkDetail,
+                 ParkAvailable park, String parkDetail, String homePage,
                  List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,
                  List<HashtagOfStore> hashtagOfStoreList) {
         this.id = id;
@@ -128,6 +130,7 @@ public class Store extends BaseEntity {
         this.status = status;
         this.address = address;
         this.park = park;
+        this.homePage = homePage;
         this.parkDetail = parkDetail;
         this.menuList = menuList;
         this.categoryOfStoreList = categoryOfStoreList;
@@ -166,6 +169,7 @@ public class Store extends BaseEntity {
         this.intro = store.getIntro();
         this.park = store.getPark();
         this.parkDetail = store.getParkDetail();
+        this.homePage = store.getHomePage();
         this.offDays = store.getOffDays();
         this.address = store.getAddress();
     }

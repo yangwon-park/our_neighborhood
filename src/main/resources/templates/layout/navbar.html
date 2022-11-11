@@ -31,7 +31,7 @@
                     </li>
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
                         <li class="nav-item">
-                            <a th:href="@{/admin/mypage/{memberId}(memberId=${session.loginMember.getId()})}" class="nav-link nav-font">
+                            <a th:href="@{/admin/admin-page}" class="nav-link nav-font">
                                 운영자 페이지
                             </a>
                         </li>

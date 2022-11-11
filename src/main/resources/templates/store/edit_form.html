@@ -18,56 +18,50 @@
     </div>
 </section>
 <!-- editForm -->
-<section class="main">
+<section class="store-edit">
     <div class="container-fluid mt--8 pb-5">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
-                    <div class="card-header bg-transparent pb-5">
-                        <div class="text-muted text-center mt-2 mb-4 fs-2">
+                    <div class="card-header bg-transparent pb-3">
+                        <div class="text-center mt-2 mb-4 fs-2">
                             매장 정보 수정
                         </div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form id="store-edit-form" class="form-floating" th:object="${store}">
+                        <form th:object="${store}" id="store-edit-form" class="form-floating">
                             <div class="form-group">
-                                <div class="mb-3">
-                                    <input th:field="*{storeId}" th:errorclass="input-error" class="form-control"
-                                           type="hidden">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <input th:field="*{name}" th:errorclass="input-error" class="form-control"
+                                <input th:field="*{storeId}" class="form-control" type="hidden">
+                                <div class="">
+                                    <input th:field="*{name}" class="form-control"
                                            placeholder="매장 이름을 입력해주세요." type="text">
-                                    <div class="input-error" th:errors="*{name}"></div>
                                 </div>
-                            </div>
-                            <div class="form-group d-flex">
-                                <div class="mb-3">
-                                    <input th:field="*{zipcode}" class="form-control"
-                                           placeholder="우편 번호" type="text"
-                                           readonly>
-                                </div>
-                                <button type="button" onclick="openPostcode()" class="text-center btn btn-main-color ms-3"
-                                        style="height: 3rem">우편 번호 찾기
-                                </button>
                             </div>
                             <div class="form-group">
-                                <div class="mb-3">
+                                <div class="d-flex mb-3">
+                                    <input th:field="*{zipcode}" class="form-control zipcode"
+                                           placeholder="우편 번호" type="text" readonly>
+                                    <button type="button" onclick="openPostcode()"
+                                            class="text-center btn btn-main-color ms-3"
+                                            style="height: 3rem">우편 번호 찾기
+                                    </button>
+                                </div>
+                                <div id="store-zipcode-valid" class="my-1 valid-custom">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="">
                                     <input th:field="*{roadAddr}" class="form-control"
-                                           placeholder="도로명 주소" type="text"
-                                           readonly>
+                                           placeholder="도로명 주소" type="text" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="mb-3">
-                                    <input  th:field="*{numberAddr}" class="form-control"
-                                           placeholder="지번 주소"
-                                           type="text">
+                                <div class="">
+                                    <input th:field="*{numberAddr}" class="form-control"
+                                           placeholder="지번 주소" type="text">
                                 </div>
+                                <span id="guide" style="color: #999 ;display: none"></span>
                             </div>
-                            <span id="guide" style="color: #999 ;display: none"></span>
                             <div class="form-group">
                                 <div class="mb-3">
                                     <input th:field="*{detail}" class="form-control" placeholder="상세 주소"
@@ -86,28 +80,37 @@
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{phoneNumber}" class="form-control" placeholder="매장 전화 번호"
-                                           type="text">
+                                    <input th:field="*{phoneNumber}" class="form-control"
+                                           placeholder="매장 전화 번호" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{intro}" class="form-control" placeholder="매장 소개" type="text">
+                                    <input th:field="*{intro}" class="form-control"
+                                           placeholder="매장 소개" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{notice}" class="form-control" placeholder="매장 공지" type="text">
+                                    <input th:field="*{notice}" class="form-control"
+                                           placeholder="매장 공지" type="text">
                                 </div>
                             </div>
-                            <div class="form-group d-flex text-nowrap">
-<!--                                     th:with="check = *{park.name()}"-->
-                                <div th:each="p : ${parkAva}">
-<!--                                           th:checked="${#strings.equals(p.name(), check)}"-->
-                                    <input type="radio" th:field="*{park}"
-                                           th:value="${p.name()}"/>
-                                    <label th:text="${p.description}">
-                                        class="form-check-label fw-bold"></label>
+                            <div class="form-group">
+                                <div class="mb-3">
+                                    <input th:field="*{homePage}" class="form-control"
+                                           placeholder="홈페이지" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="fw-bold">주차 지원 여부</span>
+                                <div class="form-group d-flex text-nowrap mt-3">
+                                    <div th:each="p : ${parkAva}">
+                                        <input type="radio" th:field="*{park}"
+                                               th:value="${p.name()}"/>
+                                        <label th:text="${p.description}"
+                                               class="form-check-label fw-bold"></label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -118,50 +121,62 @@
                             </div>
                             <div class="form-group d-flex">
                                 <div class="me-3">
-                                    <label for="openingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업
-                                        시작</label>
-                                    <input th:field="*{openingTime}" th:errorclass="input-error" class="form-control"
-                                           type="time">
-                                    <div class="input-error" th:errors="*{openingTime}"></div>
+                                    <label for="openingTime" class="fw-bold px-2"
+                                           style="font-size: 1rem">영업 시작</label>
+                                    <input th:field="*{openingTime}" class="form-control" type="time">
+                                    <div id="store-openingTime-valid" class="my-1 valid-custom">
+                                    </div>
+                                </div>
+                                <div class="mx-3">
+                                    <label for="closingTime" class="fw-bold px-2"
+                                           style="font-size: 1rem">영업 종료</label>
+                                    <input th:field="*{closingTime}" class="form-control" type="time">
+                                    <div id="store-closingTime-valid" class="my-1 valid-custom">
+                                    </div>
                                 </div>
                                 <div class="ms-3">
-                                    <label for="closingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업
-                                        종료</label>
-                                    <input th:field="*{closingTime}" th:errorclass="input-error" class="form-control"
-                                           type="time">
-                                    <div class="input-error" th:errors="*{closingTime}"></div>
+                                    <label for="lastOrder" class="fw-bold px-2"
+                                           style="font-size: 1rem">
+                                        라스트 오더</label>
+                                    <input th:field="*{lastOrder}"
+                                           class="form-control input-time" type="time">
                                 </div>
                             </div>
                             <div class="form-group d-flex">
                                 <div class="me-3" style="width: 100%">
-                                    <label for="breakStart" class="m-auto fw-light px-2" style="font-size: 1rem">
+                                    <label for="breakStart" class="fw-bold px-2"
+                                           style="font-size: 1rem">
                                         휴식 시작 (없으면 비워두세요)</label>
-                                    <input th:field="*{breakStart}" th:errorclass="input-error"
+                                    <input th:field="*{breakStart}"
                                            class="form-control input-time" type="time">
                                 </div>
                                 <div class="ms-3" style="width: 100%">
-                                    <label for="breakEnd" class="m-auto fw-light px-2" style="font-size: 1rem">
+                                    <label for="breakEnd" class="fw-bold px-2"
+                                           style="font-size: 1rem">
                                         휴식 종료 (없으면 비워두세요)</label>
-                                    <input th:field="*{breakEnd}" th:errorclass="input-error"
+                                    <input th:field="*{breakEnd}"
                                            class="form-control input-time" type="time">
                                 </div>
                             </div>
-                            <div class="form-group d-flex">
-                                <div class="input-group input-group-alternative">
-                                    <select id="main-cate" name="categoryId" class="form-select">
+                            <div class="form-group">
+                                <div class="mb-3 d-flex">
+                                    <select id="main-cate" name="categoryId"
+                                            class="form-select me-1">
                                         <option value="">대분류 선택</option>
                                     </select>
-                                    <select id="mid-cate" name="categoryId" class="form-select">
+                                    <select id="mid-cate" name="categoryId"
+                                            class="form-select me-1">
                                         <option value="">중분류 선택</option>
                                     </select>
-                                    <select id="sub-cate" name="categoryId" class="form-select">
+                                    <select id="sub-cate" name="categoryId"
+                                            class="form-select">
                                         <option value="">소분류 선택</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="flex-wrap mb-2">
-                                    <h5 style="display: inline">휴무일 선택</h5>
+                                    <h5 style="display: inline" class="fx-bold">휴무일 선택</h5>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <div th:each="day : ${offDays}"
@@ -193,9 +208,6 @@
 </footer>
 <script th:src="@{/js/postcode.js}"></script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
-<script>
-
-</script>
 <script type="module" th:src="@{/js/store.js}"></script>
 </body>
 </html>

@@ -18,7 +18,6 @@ var app = {
             });
         }
 
-
         this.getStoreBasedOnWeather();
     },
 

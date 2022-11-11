@@ -82,10 +82,16 @@ public class MapSearchController {
     }
 
     @GetMapping("/get-store-based-weather")
-    public ResultClass<?> getStoreBasedOnWeather(@CookieValue(value = "skyStatus", required = false) String skyStatus) {
+    public ResultClass<?> getStoreBasedOnWeather(@CookieValue(value = "skyStatus", required = false) String skyStatus,
+                                                 @CookieValue(value = "pm10Value", required = false) String pm10Value,
+                                                 @CookieValue(value = "tmp", required = false) String tmp,
+                                                 @CookieValue(value = "pop", required = false) String pop) {
         double dist = 3;
 
-        log.info("skyStatus={}", skyStatus);
+//        SUNNY("맑음"), CLOUDY("구름 많음"), VERYCLOUDY("흐림"),
+//        RAINY("비"), SNOWY("눈");
+
+
 
         return null;
     }

@@ -85,6 +85,6 @@ public class RecommendPostService {
             return RecommendKind.NORMAL;
         }
 
-        return null;
+        return RecommendKind.NORMAL;
     }
 }

@@ -69,7 +69,7 @@ public class MapSearchController {
     public ResultClass<?> getTopNStoresByCategories(@RequestParam Long categoryId,
                                                     @CookieValue(value = "lat", required = false) String myLat,
                                                     @CookieValue(value = "lon", required = false) String myLon) throws ParseException {
-        double dist = 3;
+        double dist = 1.5;
 
         List<Store> findStores = storeService.getTopNByCategories(categoryId, dist,
                 Double.parseDouble(myLat), Double.parseDouble(myLon));
@@ -77,12 +77,10 @@ public class MapSearchController {
         List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
+        // DTO에 거리값을 세팅해줌
         calculateHowFarToTheTarget(myLat, myLon, dto);
 
-        List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
-                -> simpleSearchStoreDTO.getDistance() <= dist).collect(Collectors.toList());
-
-        return new ResultClass<>(result.size(), result);
+        return new ResultClass<>(dto.size(), dto);
     }
 
 

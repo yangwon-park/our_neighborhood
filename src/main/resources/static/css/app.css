@@ -57,7 +57,8 @@ body {
     line-height: 1.5;
     margin: 0;
     text-align: left;
-    background-color: #f8f9fe;
+    /*background-color: #f8f9fe;*/
+    background-color: #ffffff;
 }
 
 input[type=radio] {
@@ -75,6 +76,10 @@ input[type=radio] {
     vertical-align: middle;
     background-size: cover;
     background: url('../images/icon/white_hamburger.png') no-repeat center center;
+}
+
+.header {
+    position: relative;
 }
 
 .header-margin {
@@ -226,6 +231,7 @@ input[type=radio] {
     border-color: #F01D04;
     background-color: #F01D04;
     box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+    font-size: 1.1rem;
 }
 
 .btn-main-color:hover {
@@ -377,6 +383,11 @@ input[type=radio] {
 
 #weather .weather-first-card .overlay a:hover {
     color: #fafa6f;
+}
+
+.weather-second {
+    border: 1px solid #F01D04 !important;
+    border-radius: 0.375rem;
 }
 
 #intro .intro-first-card {
@@ -658,3 +669,21 @@ a{
     100%{transform:scale(1);}
 }
 
+.list-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 768px) {
+    .list-container {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .list-container {
+        width: 940px;
+    }
+}

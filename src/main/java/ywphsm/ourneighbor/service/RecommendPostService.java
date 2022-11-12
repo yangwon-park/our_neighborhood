@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -9,10 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.api.dto.RecommendKind;
 import ywphsm.ourneighbor.domain.RecommendPost;
 import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
+import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
+import ywphsm.ourneighbor.domain.hashtag.Hashtag;
+import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.recommendpost.RecommendPostRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.getHashtagNameList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,11 +29,37 @@ public class RecommendPostService {
 
     private final RecommendPostRepository recommendPostRepository;
 
-    @Transactional
-    public Long save(RecommendPostDTO.Add dto) {
-        RecommendPost recommendPost = dto.toEntity();
+    private final HashtagRepository hashtagRepository;
 
-        return recommendPostRepository.save(recommendPost).getId();
+    @Transactional
+    public Long save(RecommendPostDTO.Add dto) throws ParseException {
+        RecommendPost entity = dto.toEntity();
+
+        if (!dto.getHashtag().isEmpty()) {
+            List<String> hashtagNameList = getHashtagNameList(dto.getHashtag());
+
+            for (String name : hashtagNameList) {
+                boolean duplicateCheck = hashtagRepository.existsByName(name);
+
+                Hashtag newHashtag;
+
+                if (!duplicateCheck) {
+                    HashtagDTO hashtagDTO = HashtagDTO.builder()
+                            .name(name)
+                            .build();
+
+                    newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
+                } else {
+                    newHashtag = hashtagRepository.findByName(name);
+                }
+
+                entity.addHashtag(newHashtag);
+            }
+        }
+
+        log.info("entity={}", entity.getHashtagList().get(0));
+
+        return recommendPostRepository.save(entity).getId();
     }
 
     public RecommendPostDTO.Simple getRecommendPost(String skyStatus, String pm10Value,

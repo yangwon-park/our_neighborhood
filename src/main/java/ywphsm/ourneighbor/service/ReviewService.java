@@ -126,15 +126,15 @@ public class ReviewService {
 
     private void saveHashtagLinkedStore(Store store, List<String> hashtagNameList) {
         for (String name : hashtagNameList) {
-            HashtagDTO hashtagDTO = HashtagDTO.builder()
-                    .name(name)
-                    .build();
-
             boolean duplicateCheck = hashtagRepository.existsByName(name);
 
             Hashtag newHashtag;
 
             if (!duplicateCheck) {
+                HashtagDTO hashtagDTO = HashtagDTO.builder()
+                        .name(name)
+                        .build();
+
                 newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
             } else {
                 newHashtag = hashtagRepository.findByName(name);

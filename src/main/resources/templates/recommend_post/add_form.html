@@ -42,26 +42,34 @@
                                     <textarea class="form-control" style="height: 100%" placeholder="50자 이하여야 합니다"
                                               id="content" th:field="*{content}" rows="5"></textarea>
                                 </div>
-                                <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <span class="fw-bold mb-3">
                                     추천 양식 종류
                                 </span>
-                                    <div class="form-group d-flex text-nowrap mt-3">
-                                        <div class="row">
-                                            <div class="col-3" th:each="r : ${recommendKinds}">
-                                                <input type="radio" th:field="*{recommendKind}"
-                                                       th:value="${r.name()}"/>
-                                                <label th:text="${r.description}"
-                                                       class="form-check-label"></label>
-                                            </div>
-                                        </div>
+                            </div>
+                            <div class="form-group d-flex text-nowrap mt-3">
+                                <div class="row">
+                                    <div class="col-3" th:each="r : ${recommendKinds}">
+                                        <input type="radio" th:field="*{recommendKind}"
+                                               th:value="${r.name()}"/>
+                                        <label th:text="${r.description}"
+                                               class="form-check-label"></label>
                                     </div>
                                 </div>
-                                <div class="text-center">
-                                    <button id="recommend-post-save" type="button"
-                                            class="btn btn-main-color mt-4 float-end">양식 등록
-                                    </button>
+                            </div>
+                            <div class="form-group">
+                                <span class="mb-2">해쉬태그 추가</span>
+                                <div class="mb-3">
+                                    <input id="hashtag" class="tagify--outside"
+                                           name="hashtag" type="hidden" style="width: 100%">
                                 </div>
+                            </div>
+                            <div class="text-center">
+                                <button id="recommend-post-save" type="button"
+                                        class="btn btn-main-color mt-4 float-end">양식 등록
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -76,5 +84,6 @@
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/recommend_post.js}"></script>
+<script type="module" th:src="@{/js/hashtag.js}"></script>
 
 </html>

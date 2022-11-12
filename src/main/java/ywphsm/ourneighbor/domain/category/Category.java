@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.domain.category;
 
 import lombok.*;
+import ywphsm.ourneighbor.domain.RecommendPost;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -44,20 +45,22 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
-
-    /*
-        생성자
-     */
     @Builder
-    public Category(Long id, String name, Long depth, List<CategoryOfStore> categoryOfStoreList, Category parent, List<Category> children) {
+    public Category(Long id, String name, Long depth,
+                    Category parent, List<Category> children,
+                    List<CategoryOfStore> categoryOfStoreList) {
         this.id = id;
         this.name = name;
         this.depth = depth;
-        this.categoryOfStoreList = categoryOfStoreList;
         this.parent = parent;
         this.children = children;
+        this.categoryOfStoreList = categoryOfStoreList;
     }
 
+    /*
+            생성자
+         */
+    @Builder
     public Category(String name, Long depth, Category parent) {
         this.name = name;
         this.depth = depth;

@@ -8,6 +8,7 @@ import ywphsm.ourneighbor.domain.RecommendPost;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
 public class RecommendPostDTO {
 
@@ -24,11 +25,16 @@ public class RecommendPostDTO {
         @NotNull
         private RecommendKind recommendKind;
 
+        @NotNull
+        private String hashtag;
+
         @Builder
-        public Add(String header, String content ,RecommendKind recommendKind) {
+        public Add(String header, String content,
+                   RecommendKind recommendKind, String hashtag) {
             this.header = header;
             this.content = content;
             this.recommendKind = recommendKind;
+            this.hashtag = hashtag;
         }
 
         public RecommendPost toEntity() {
@@ -36,6 +42,7 @@ public class RecommendPostDTO {
                     .header(header)
                     .content(content)
                     .recommendKind(recommendKind)
+                    .hashtagList(new ArrayList<>())
                     .build();
         }
 

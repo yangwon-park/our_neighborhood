@@ -166,7 +166,7 @@ public class StoreController {
     @GetMapping("/admin/store/list")
     public String getStoreList(Model model) {
         model.addAttribute("store", new StoreDTO.Detail());
-        return "store/list_by_admin";
+        return "list";
     }
 
     @GetMapping("/admin/storeOwner/edit/{storeId}")
@@ -187,4 +187,8 @@ public class StoreController {
         return "store/store_owner_edit";
     }
 
+    @GetMapping("/recommend/store/list")
+    public String recommendStoreList() {
+        return "store/list";
+    }
 }

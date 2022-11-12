@@ -105,7 +105,7 @@ public class WeatherApiController {
 
         String pty = dto.getPTY();
         String sky = dto.getSKY();
-        String pcp = dto.getPCP();
+        String pcp = dto.getPCP().replace("m", "");
 
         if (!pty.equals("0")) {
             if (pty.equals("3")) {
@@ -124,11 +124,11 @@ public class WeatherApiController {
         }
 
         if (pcp.equals("강수없음")) {
-            dto.setPCP("0");
+            dto.setPCP("0mm");
             dto.setRainKind(RainKind.NONE);
-        } else if (Integer.parseInt(pcp) <= 2.5) {
+        } else if (Double.parseDouble(pcp) <= 2.5) {
             dto.setRainKind(RainKind.DRIZZLE);
-        } else if (Integer.parseInt(pcp) <= 7.6) {
+        } else if (Double.parseDouble(pcp) <= 7.6) {
             dto.setRainKind(RainKind.RAIN);
         } else {
             dto.setRainKind(RainKind.DOWNPOUR);

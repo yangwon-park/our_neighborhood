@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
@@ -15,7 +16,8 @@ public class RecommendApiController {
     private final RecommendPostService recommendPostService;
 
     @PostMapping("/admin/recommend-post")
-    public Long saveRecommendPost(RecommendPostDTO.Add dto) {
+    public Long saveRecommendPost(RecommendPostDTO.Add dto) throws ParseException {
+        log.info("dto={}", dto);
         return recommendPostService.save(dto);
     }
 }

@@ -38,12 +38,12 @@ var main = {
     getStoreBasedOnWeather: function () {
         const recommendPostHeader = document.getElementById("recommend-post-header");
         const recommendPostContent = document.getElementById("recommend-post-content");
+        const weatherBtn = document.getElementById("weather-btn");
 
         axios({
             method: "get",
             url: "/get-recommend-post"
         }).then((resp) => {
-            console.log(resp.data.header);
             recommendPostHeader.innerText = resp.data.header;
             recommendPostContent.firstElementChild.innerText = resp.data.content;
         }).catch((error) => {
@@ -167,7 +167,7 @@ var main = {
         _tmp.innerText = "현재 기온 : " + currentTmp + "℃";
 
         _pop.innerText = "강수 확률 : " + currentPop + "%";
-        _pop.innerText += "\n(시간 당 강수량 : " + currentPcp + "mm)";
+        _pop.innerText += "\n(시간 당 강수량 : " + currentPcp + ")";
     },
 
     getCoords: function (options) {

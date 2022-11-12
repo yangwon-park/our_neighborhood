@@ -56,8 +56,10 @@ public class MapSearchController {
         List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
-        // 리팩토링 : dto에 거리값 set 해주면 해결 (별도의 List 사용할 필요없음)
-        calculateHowFarToTheTarget(myLat, myLon, dto);
+        if (!myLat.isEmpty() && !myLon.isEmpty()) {
+            // 리팩토링 : dto에 거리값 set 해주면 해결 (별도의 List 사용할 필요없음)
+            calculateHowFarToTheTarget(myLat, myLon, dto);
+        }
 
         List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
                 -> simpleSearchStoreDTO.getDistance() <= dist / 1000).collect(Collectors.toList());
@@ -69,7 +71,7 @@ public class MapSearchController {
     public ResultClass<?> getTopNStoresByCategories(@RequestParam Long categoryId,
                                                     @CookieValue(value = "lat", required = false) String myLat,
                                                     @CookieValue(value = "lon", required = false) String myLon) throws ParseException {
-        double dist = 3;
+        double dist = 1.5;
 
         List<Store> findStores = storeService.getTopNByCategories(categoryId, dist,
                 Double.parseDouble(myLat), Double.parseDouble(myLon));
@@ -77,12 +79,10 @@ public class MapSearchController {
         List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
+        // DTO에 거리값을 세팅해줌
         calculateHowFarToTheTarget(myLat, myLon, dto);
 
-        List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
-                -> simpleSearchStoreDTO.getDistance() <= dist).collect(Collectors.toList());
-
-        return new ResultClass<>(result.size(), result);
+        return new ResultClass<>(dto.size(), dto);
     }
 
 
@@ -92,7 +92,7 @@ public class MapSearchController {
                                              @CookieValue(value = "tmp", required = false) String tmp,
                                              @CookieValue(value = "pcp", required = false) String pcp) {
 
-        return recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp);
+        return recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp.replace("m", ""));
     }
 
     @GetMapping("/get-store-based-weather")

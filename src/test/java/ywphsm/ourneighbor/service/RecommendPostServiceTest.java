@@ -3,10 +3,14 @@ package ywphsm.ourneighbor.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.api.dto.RecommendKind;
 import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
+import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -18,6 +22,9 @@ class RecommendPostServiceTest {
 
     @Autowired
     RecommendPostService recommendPostService;
+
+    @Autowired
+    StoreService storeService;
 
     @Test
     void 맑고_미세먼지_없는_날() {
@@ -101,6 +108,8 @@ class RecommendPostServiceTest {
         RecommendPostDTO.Simple result =
                 recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp);
 
+        System.out.println("result = " + result);
+
         assertThat(result.getRecommendKind()).isEqualTo(RecommendKind.NORMAL);
     }
 
@@ -115,5 +124,31 @@ class RecommendPostServiceTest {
                 recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp);
 
         assertThat(result.getRecommendKind()).isEqualTo(RecommendKind.NORMAL);
+    }
+
+    @Test
+    void 날씨_기반으로_얻은_해쉬태그로_매장_조회() {
+        String skyStatus = "CLOUDY";
+        String pm10Value = "30";
+        String tmp = "15";
+        String pcp = "0.6";
+
+        RecommendPostDTO.Simple result =
+                recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp);
+
+        assertThat(result.getRecommendKind()).isEqualTo(RecommendKind.NORMAL);
+
+        List<Long> hashtagIdList = result.getHashtagIdList();
+        Slice<SimpleSearchStoreDTO> dto = storeService.searchByHashtag(hashtagIdList, 0);
+
+        List<SimpleSearchStoreDTO> content = dto.getContent();
+
+        boolean check = false;
+
+        for (SimpleSearchStoreDTO d : content) {
+            check = d.getName().equals("칸다소바");
+        }
+
+        assertThat(check).isTrue();
     }
 }

@@ -5,9 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ywphsm.ourneighbor.api.dto.RecommendKind;
 import ywphsm.ourneighbor.domain.RecommendPost;
+import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecommendPostDTO {
 
@@ -24,11 +28,16 @@ public class RecommendPostDTO {
         @NotNull
         private RecommendKind recommendKind;
 
+        @NotNull
+        private String hashtag;
+
         @Builder
-        public Add(String header, String content ,RecommendKind recommendKind) {
+        public Add(String header, String content,
+                   RecommendKind recommendKind, String hashtag) {
             this.header = header;
             this.content = content;
             this.recommendKind = recommendKind;
+            this.hashtag = hashtag;
         }
 
         public RecommendPost toEntity() {
@@ -36,6 +45,7 @@ public class RecommendPostDTO {
                     .header(header)
                     .content(content)
                     .recommendKind(recommendKind)
+                    .hashtagList(new ArrayList<>())
                     .build();
         }
 
@@ -58,11 +68,14 @@ public class RecommendPostDTO {
 
         private RecommendKind recommendKind;
 
+        private List<Long> hashtagIdList;
+
         @Builder
-        public Simple(String header, String content, RecommendKind recommendKind) {
+        public Simple(String header, String content, RecommendKind recommendKind, List<Long> hashtagIdList) {
             this.header = header;
             this.content = content;
             this.recommendKind = recommendKind;
+            this.hashtagIdList = hashtagIdList;
         }
 
         public RecommendPost toEntity() {
@@ -70,6 +83,7 @@ public class RecommendPostDTO {
                     .header(header)
                     .content(content)
                     .recommendKind(recommendKind)
+                    .hashtagList(new ArrayList<>())
                     .build();
         }
 
@@ -78,6 +92,7 @@ public class RecommendPostDTO {
                     .header(entity.getHeader())
                     .content(entity.getContent())
                     .recommendKind(entity.getRecommendKind())
+                    .hashtagIdList(entity.getHashtagList().stream().map(Hashtag::getId).collect(Collectors.toList()))
                     .build();
         }
     }

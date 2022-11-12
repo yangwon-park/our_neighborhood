@@ -401,5 +401,6 @@ public class StoreDTO {
                     .address(new Address(roadAddr, numberAddr, zipcode, detail))
                     .build();
         }
+
     }
 }

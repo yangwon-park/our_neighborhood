@@ -7,6 +7,8 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 import org.locationtech.jts.util.GeometricShapeFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,8 @@ import ywphsm.ourneighbor.domain.store.distance.Direction;
 import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
+import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -259,6 +263,10 @@ public class StoreService {
                     .collect(Collectors.toList());
     }
 
+    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        return storeRepository.searchByHashtag(hashtagIdList, pageRequest);
+    }
 
     //매장주인이 맞는지 체크
     public boolean OwnerCheck(Member member, Long storeId) {

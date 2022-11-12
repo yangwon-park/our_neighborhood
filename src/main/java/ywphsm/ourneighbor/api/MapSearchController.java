@@ -56,8 +56,10 @@ public class MapSearchController {
         List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
-        // 리팩토링 : dto에 거리값 set 해주면 해결 (별도의 List 사용할 필요없음)
-        calculateHowFarToTheTarget(myLat, myLon, dto);
+        if (!myLat.isEmpty() && !myLon.isEmpty()) {
+            // 리팩토링 : dto에 거리값 set 해주면 해결 (별도의 List 사용할 필요없음)
+            calculateHowFarToTheTarget(myLat, myLon, dto);
+        }
 
         List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
                 -> simpleSearchStoreDTO.getDistance() <= dist / 1000).collect(Collectors.toList());

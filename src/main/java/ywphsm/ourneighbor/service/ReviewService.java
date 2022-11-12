@@ -100,10 +100,7 @@ public class ReviewService {
 
     public Slice<ReviewMemberDTO> pagingReview(Long storeId, int page) {
         PageRequest pageRequest = PageRequest.of(page, 5);
-        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, storeId);
-        log.info("reviewMemberDTO={}", reviewMemberDTOS);
-
-        return reviewMemberDTOS;
+        return reviewRepository.reviewPage(pageRequest, storeId);
     }
 
     public List<ReviewMemberDTO> myReviewList(Long memberId) {

@@ -26,9 +26,6 @@ var main = {
         // 즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
         // => 메인 홈페이지 재방문시 로딩 속도 향상
         if (prevNx !== currentNx && prevNy !== currentNy) {
-            console.log("prevNX=", prevNx)
-            console.log("prevNy=", prevNy)
-            console.log("skyStatus=", skyStatus)
             this.setWeatherInfoWithAPI();
         // 어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
         } else if (skyStatus === null) {
@@ -39,12 +36,16 @@ var main = {
     },
 
     getStoreBasedOnWeather: function () {
-        console.log("왜 이게 먼저 되노")
+        const recommendPostHeader = document.getElementById("recommend-post-header");
+        const recommendPostContent = document.getElementById("recommend-post-content");
+
         axios({
             method: "get",
             url: "/get-recommend-post"
         }).then((resp) => {
-
+            console.log(resp.data.header);
+            recommendPostHeader.innerText = resp.data.header;
+            recommendPostContent.firstElementChild.innerText = resp.data.content;
         }).catch((error) => {
             console.error(error);
         });
@@ -90,7 +91,6 @@ var main = {
     },
 
     setWeatherInfoWithAPI: function () {
-        console.log("API 호출 시작");
         axios({
             method: "get",
             url: "/weather",
@@ -128,13 +128,12 @@ var main = {
 
         this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, currentPcp, pm10Value);
 
+        this.getStoreBasedOnWeather();
+
         mask.closeMask();
     },
 
     setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, currentPcp, pm10Value) {
-
-        console.log(currentPcp);
-
         const _skyStatus = document.getElementById("sky-status");
         const _tmp = document.getElementById("tmp");
         const _pop = document.getElementById("pop");

@@ -56,15 +56,15 @@
                     <div class="card card-body search-card">
                         <div class="my-3">
                             <h4 class="search-div-title card-title
-                                       text-dark fw-bold mb-3">인기 스팟 직접 검색</h4>
+                                       text-dark fw-bold mb-3">인기 스팟 검색</h4>
                             <p class="card-text text-secondary">
                                 <th:block th:if="${session.loginMember eq null}">
                                     회원님이 원하시는 장소를 <br/>
-                                    필터에 맞게 보여드려요!
+                                    조건에 맞게 보여드려요!
                                 </th:block>
                                 <th:block th:if="${session.loginMember ne null}">
                                     <span th:type="${session.loginMember.getUsername()}"></span>님이 원하시는 장소를 <br/>
-                                    필터에 맞게 보여드려요!
+                                    조건에 맞게 보여드려요!
                                 </th:block>
                             </p>
                         </div>
@@ -91,7 +91,7 @@
                 <div class="col-md-6 weather-first">
                     <div class="row px-md-3">
                         <div class="section-title mb-2">
-                            <p class="h4 main-color fw-bold">날씨에 어울리는 핫플레이스 추천</p>
+                            <p class="h4 main-color fw-bold">날씨에 어울리는 스팟 추천</p>
                         </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
@@ -128,12 +128,14 @@
                     </div>
                 </div>
                 <div class="col-md-6 weather-second">
-                    <h1 id="recommend-post-header" class="mb-4 fw-bold text-dark">날씨에 어울리는 장소 추천</h1>
+                    <h1 id="recommend-post-header" class="mb-4 fw-bold text-dark"></h1>
                     <div id="recommend-post-content" class="weather-text">
-                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab debitis dolor ea
-                            eveniet illum incidunt itaque magnam odio voluptates, voluptatum.</p>
-                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cupiditate
-                            eligendi et facere illum incidunt inventore magnam quam quod vitae.</p>
+                        <p class="lead"></p>
+                        <p class="lead">
+                            <button class="btn btn-main-color w-100" type="button" onclick=location.href="map">
+                                이동
+                            </button>
+                        </p>
                     </div>
                 </div>
             </div>

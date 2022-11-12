@@ -92,7 +92,7 @@ public class MapSearchController {
                                              @CookieValue(value = "tmp", required = false) String tmp,
                                              @CookieValue(value = "pcp", required = false) String pcp) {
 
-        return recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp);
+        return recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp.replace("m", ""));
     }
 
     @GetMapping("/get-store-based-weather")

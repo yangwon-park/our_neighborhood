@@ -191,7 +191,7 @@ var main = {
     },
 
     error: function () {
-        alert('현재 위치 정보를 가져올 수 없습니다.');
+        alert("현재 위치 정보를 가져올 수 없습니다.");
     },
 
     params: {
@@ -233,8 +233,8 @@ var main = {
         var rs = {};
 
         if (code === "toXY") {
-            rs['lat'] = v1;
-            rs['lon'] = v2;
+            rs["lat"] = v1;
+            rs["lon"] = v2;
 
             var ra = Math.tan(Math.PI * 0.25 + (v1) * DEGRAD * 0.5);
             ra = re * sf / Math.pow(ra, sn);
@@ -246,11 +246,11 @@ var main = {
 
             theta *= sn;
 
-            rs['nx'] = Math.floor(ra * Math.sin(theta) + this.params.XO + 0.5);
-            rs['ny'] = Math.floor(ro - ra * Math.cos(theta) + this.params.YO + 0.5);
+            rs["nx"] = Math.floor(ra * Math.sin(theta) + this.params.XO + 0.5);
+            rs["ny"] = Math.floor(ro - ra * Math.cos(theta) + this.params.YO + 0.5);
         } else {
-            rs['nx'] = v1;
-            rs['ny'] = v2;
+            rs["nx"] = v1;
+            rs["ny"] = v2;
 
             var xn = v1 - this.params.XO;
             var yn = ro - v2 + this.params.YO;
@@ -273,8 +273,8 @@ var main = {
 
             var alon = theta / sn + olon;
 
-            rs['lat'] = alat * RADDEG;
-            rs['lon'] = alon * RADDEG;
+            rs["lat"] = alat * RADDEG;
+            rs["lon"] = alon * RADDEG;
         }
 
         return rs;
@@ -290,10 +290,10 @@ var main = {
         let cookieValue = null;
 
         if (document.cookie) {
-            let array = document.cookie.split((encodeURI(name) + '='));
+            let array = document.cookie.split((encodeURI(name) + "="));
 
             if (array.length >= 2) {
-                let arraySub = array[1].split(';');
+                let arraySub = array[1].split(";");
                 cookieValue = encodeURI(arraySub[0]);
             }
         }

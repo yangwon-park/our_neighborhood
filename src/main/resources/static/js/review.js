@@ -224,7 +224,6 @@ var main = {
             }
             for (let contentElement of data.content) {
                 addListHtml += "<tr>";
-                addListHtml += "<td>" + contentElement.reviewId + "</td>";
                 switch (contentElement.rating) {
                     case 1:
                         addListHtml += "<td>★☆☆☆☆</td>";
@@ -245,7 +244,7 @@ var main = {
                 addListHtml += "<td>" + contentElement.content + "</td>";
                 addListHtml += "<td>" + contentElement.username + "</td>";
                 addListHtml += "<td>" + contentElement.createDate.substring(0, 10) + "</td>";
-                addListHtml += '<td><img src="/menu/' + contentElement.storedFileName + '" width="180" height="180" alt="리뷰 사진"></td>';
+                addListHtml += '<td><img src="' + contentElement.uploadImgUrl + '" width="180" height="180" alt="리뷰 사진"></td>';
                 if (loginMember !== null) {
                     if (loginMember === "ADMIN") {
                         addListHtml += '<td><button id="review-delete-btn' + contentElement.reviewId + '" type="button" class="btn btn-dark mt-4 review-delete"> 삭제 </button></td>';
@@ -253,8 +252,19 @@ var main = {
                 }
                 addListHtml += "</tr>";
             }
+            // console.log("more = ", addListHtml);
+            $("#more_list tr:last").after(addListHtml);
 
-            $("#reviewBody").append(addListHtml);
+            const reviewDeleteBtnList = document.querySelectorAll(".review-delete");
+
+            if (reviewDeleteBtnList !== null) {
+                reviewDeleteBtnList.forEach((btn) => {
+                    btn.addEventListener("click", () => {
+                        this.delete(btn.id);
+                    })
+                })
+            }
+
 
         }).catch((e) => {
             console.error(e);
@@ -275,7 +285,7 @@ var main = {
             }
         }).then((resp) => {
             let check = resp.data;
-                alert(check);
+            // alert(check);
         }).catch((error) => {
             console.log(error);
         });

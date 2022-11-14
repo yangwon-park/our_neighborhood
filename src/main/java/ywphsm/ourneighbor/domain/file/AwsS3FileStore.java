@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,20 @@ public class AwsS3FileStore {
 
     @Value("${cloud.aws.s3.dir}")
     private String dir;
+
+    public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
+
+        // 생성될 때 마다 새로운 리스트를 생성해줘야 함
+        List<UploadFile> storeFileResult = new ArrayList<>();
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            if (!multipartFile.isEmpty()) {
+                storeFileResult.add(storeFile(multipartFile));
+            }
+        }
+
+        return storeFileResult;
+    }
 
     public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
         if (multipartFile.isEmpty()) {

@@ -2,9 +2,6 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -18,10 +15,7 @@ import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
-import ywphsm.ourneighbor.domain.hashtag.HashtagUtil;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.domain.member.MemberOfStore;
-import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
@@ -32,7 +26,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.linkHashtagAndMenu;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfStore.linkHashtagAndStore;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
 
@@ -59,13 +52,16 @@ public class ReviewService {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
         Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
 
-//        UploadFile newUploadFile = fileStore.storeFile(reviewAddDTO.getFile());
-        UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
+        List<UploadFile> newUploadFiles = fileStore.storeFiles(dto.getFile());
+//        List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
 
         Review review = dto.toEntity(linkedStore, linkedMember);
-        newUploadFile.addReview(review);
         linkedStore.addReview(review);
         linkedMember.addReview(review);
+        for (UploadFile newUploadFile : newUploadFiles) {
+            newUploadFile.addReview(review);
+        }
+
 
         if (!hashtag.isEmpty()) {
             Store findStore = storeRepository.findById(dto.getStoreId()).orElseThrow(

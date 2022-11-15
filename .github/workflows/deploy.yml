@@ -24,15 +24,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-          
-        
-        # [1]
-      - name: Set yaml file 
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ${{ env.RESOURCE_PATH }} 
-        env:
-          override.value: ${{ secrets.YML_PATH }} 
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew

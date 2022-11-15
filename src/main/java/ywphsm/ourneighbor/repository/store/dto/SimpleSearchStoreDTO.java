@@ -41,7 +41,10 @@ public class SimpleSearchStoreDTO {
         status = store.getStatus();
         address = store.getAddress();
         average = store.getRatingTotal();
-        uploadImgUrl = store.getFile().getUploadImageUrl();
+
+        if (store.getFile() != null) {
+            uploadImgUrl = store.getFile().getUploadImageUrl();
+        }
     }
 
     public SimpleSearchStoreDTO(Long storeId, String name,

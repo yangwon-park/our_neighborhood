@@ -22,19 +22,21 @@
         <div class="row store-head">
             <div class="col-6 d-flex">
                 <h1 class="my-auto h1 text-dark fw-bold me-3" th:text="*{name}">가게명</h1>
-                <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
+                <span class="badge my-auto" style="font-size: 1.3rem" th:text="*{status}"
                       th:classappend="*{status}"></span>
                 <th:block th:if="${session.loginMember ne null}">
                     <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
-                    <div class="right-area">
+                    <span class="ms-3 my-auto">
                         <a href="javascript:;" class="icon heart">
-                            <img th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png' : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
+                            <img style="width: 2vh; height: 2vh"
+                                 th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png'
+                                                       : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
                                  alt="찜하기">
                         </a>
-                    </div>
+                    </span>
                 </th:block>
             </div>
-            <div class="col-4">
+            <div class="col-6">
                 <th:block th:if="${session.loginMember ne null}">
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
@@ -52,11 +54,13 @@
                                     th:onclick="|location.href='@{/seller/store/edit/{storeId}(storeId=${store.storeId})}'|">
                                 정보 수정
                             </button>
-                            <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                                    th:onclick="|location.href='@{/admin/storeOwner/edit/{storeId}(storeId=${store.storeId})}'|"
-                                    th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
-                                관리자 수정
-                            </button>
+                            <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
+                                <button class="btn btn-dark" style="font-size: 1.1rem; color: #ffffff"
+                                        th:onclick="|location.href='@{/admin/store-owner/edit/{storeId}(storeId=${store.storeId})}'|"
+                                        th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
+                                    관리자 수정
+                                </button>
+                            </th:block>
                         </div>
                     </th:block>
                 </th:block>
@@ -103,7 +107,7 @@
         <div class="row store-info d-flex" style="font-size: 1rem">
             <div class="col-7">
                 <div class="row mt-1 mb-2">
-                    <div class="col-4">
+                    <div class="col-8">
                         <span class="ms-4">
                                 <th:block th:each="cate, i : ${categoryList}">
                                     <th:block>
@@ -119,7 +123,7 @@
                 </div>
                 <div class="row my-1">
                     <div class="col-3">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-map-location-dot main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">주소</span>
@@ -138,7 +142,7 @@
                 </div>
                 <div class="row my-1">
                     <div class="col-3">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-square-phone main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">전화 번호</span>
@@ -150,7 +154,7 @@
                 </div>
                 <div class="row my-1">
                     <div class="col-3 d-flex align-items-center">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-calendar main-color me-1 fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">휴무일</span>
@@ -168,7 +172,7 @@
                 </div>
                 <div class="row my-1">
                     <div class="col-3">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-clock main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">영업 시간</span>
@@ -181,7 +185,7 @@
                 </div>
                 <div class="row my-1">
                     <div class="col-3">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-clock main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">라스트 오더</span>
@@ -192,7 +196,7 @@
                 </div>
                 <div class="row my-1">
                     <div class="col-3">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-clock main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">휴식 시간</span>
@@ -212,7 +216,7 @@
                 </div>
                 <div class="row">
                     <div class="col-3">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-square-parking main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">주차</span>
@@ -229,7 +233,7 @@
                 </div>
                 <div class="row">
                     <div class="col-3">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-shop main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">매장 소개</span>
@@ -240,7 +244,7 @@
                 </div>
                 <div class="row">
                     <div class="col-3">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-link main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold ms-1">홈페이지</span>
@@ -253,7 +257,7 @@
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <span >
+                        <span>
                             <i class="fa-solid fa-check main-color fa-sm"></i>
                         </span>
                         <span class="text-dark fw-bold me-3">공지</span>

@@ -169,7 +169,7 @@ public class StoreController {
         return "list";
     }
 
-    @GetMapping("/admin/storeOwner/edit/{storeId}")
+    @GetMapping("/admin/store-owner/edit/{storeId}")
     public String storeOwnerEdit(@PathVariable Long storeId, Model model) {
         List<MemberDTO.Detail> owners = storeService.findById(storeId).getMemberOfStoreList().stream()
                 .filter(MemberOfStore::isMyStore)

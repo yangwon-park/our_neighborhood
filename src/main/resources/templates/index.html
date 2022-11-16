@@ -32,7 +32,7 @@
                 <div class="col-md-9 welcome">
                     <div class="row gallery-body">
                         <div class="section-title mb-2">
-                            <p class="h4 main-color fw-bold">주변 인기 스팟 추천</p>
+                            <p class="h3 main-color fw-bold">주변 인기 스팟 추천</p>
                         </div>
                         <th:block th:each="root, i: ${rootCategoryList}">
                             <div class="col-md-6 col-sm-6 mb-4 gallery-item">
@@ -91,7 +91,7 @@
                 <div class="col-md-8 weather-first">
                     <div class="row px-md-3">
                         <div class="section-title mb-2">
-                            <p class="h4 main-color fw-bold">날씨에 어울리는 스팟 추천</p>
+                            <p class="h3 main-color fw-bold">날씨에 어울리는 스팟 추천</p>
                         </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
@@ -103,39 +103,47 @@
                         </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
-                                <div id="tmp"
-                                     class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
-
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+                                    <div id="tmp">
+                                        <div id="tmp-title" class="weather-title"></div>
+                                        <div id="tmp-content" class="weather-content text-nowrap"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
-                                <div id="pop"
-                                     class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
-
+                                <div class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
+                                    <div id="pop">
+                                        <div id="pop-title" class="weather-title"></div>
+                                        <div id="pop-content" class="weather-content text-nowrap"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="card card-body my-3 position-relative rounded-3 weather-first-card border-0">
-                                <div id="pm-10-value"
-                                     class="overlay d-flex justify-content-center align-items-center position-absolute h-100 w-100">
-
+                            <div class="card card-body my-3 rounded-3 weather-first-card border-0">
+                                <div class="overlay d-flex justify-content-center align-items-center position-relative h-100 w-100">
+                                    <div id="pm-10-value">
+                                        <div id="pm-title" class="weather-title"></div>
+                                        <div id="pm-content" class="weather-content text-nowrap"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 weather-second">
-                    <h3 id="recommend-post-header" class="mt-4 mb-4 fw-bold text-dark"></h3>
-                    <div id="recommend-post-content" class="weather-text">
-                        <p class=""></p>
-                        <p class="">
-                            <button id="weather-btn" class="btn btn-main-color w-100" type="button">
-                                이동
-                            </button>
-                        </p>
+                <div class="col-md-4">
+                    <div class="weather-second mx-auto p-3">
+                        <h3 id="recommend-post-header" class="mt-4 mb-4 fw-bold text-dark"></h3>
+                        <div id="recommend-post-content" class="weather-text">
+                            <p class=""></p>
+                            <p class="">
+                                <button id="weather-btn" class="btn btn-main-color w-100" type="button">
+                                    이동
+                                </button>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

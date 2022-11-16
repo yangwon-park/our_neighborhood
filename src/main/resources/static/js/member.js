@@ -1,4 +1,5 @@
 import validation from "./validation.js";
+import mask from "./mask.js";
 
 var main = {
     init: async function () {
@@ -387,9 +388,7 @@ var main = {
     },
 
     findUserId: function () {
-
         const email = document.getElementById("email");
-
         const emailValid = document.getElementById('find-userId-email-valid');
 
         email.classList.remove("valid-custom");
@@ -400,6 +399,8 @@ var main = {
         let emailValidation = emailRegExp.test(email.value);
 
         if (emailValidation) {
+            mask.loadingWithMask();
+
             axios({
                 method: "post",
                 url: "/find-userid",
@@ -412,11 +413,14 @@ var main = {
                 if (check === "성공") {
                     alert("이메일로 아이디가 발송됐습니다.");
                     window.location.href = "/login";
+                    mask.closeMask();
                 } else {
                     alert(check);
+                    mask.closeMask();
                 }
             }).catch((error) => {
                 console.log(error);
+                mask.closeMask();
             })
         }
 
@@ -424,16 +428,14 @@ var main = {
             email.classList.add("valid-custom");
             validation.addValidation(emailValid, "올바른 이메일 형식이 아닙니다.");
         }
-
     },
 
     findPassword: function () {
-
         const email = document.getElementById("email");
         const userId = document.getElementById("userId");
 
-        const emailValid = document.getElementById('find-password-email-valid');
-        const userIdValid = document.getElementById('find-password-userId-valid');
+        const emailValid = document.getElementById("find-password-email-valid");
+        const userIdValid = document.getElementById("find-password-userId-valid");
 
         email.classList.remove("valid-custom");
         userId.classList.remove("valid-custom");
@@ -444,7 +446,9 @@ var main = {
         let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
         let emailValidation = emailRegExp.test(email.value);
 
-        if (emailValidation && userId.value !== '') {
+        if (emailValidation && userId.value !== "") {
+            mask.loadingWithMask();
+
             axios({
                 method: "post",
                 url: "/find-password",
@@ -457,11 +461,14 @@ var main = {
                 if (check === "성공") {
                     alert("이메일로 비밀번호가 발송됐습니다.");
                     window.location.href = "/login";
+                    mask.closeMask();
                 } else {
                     alert(check);
+                    mask.closeMask();
                 }
             }).catch((error) => {
                 console.log(error);
+                mask.closeMask();
             })
         }
 
@@ -474,7 +481,6 @@ var main = {
             userId.classList.add("valid-custom");
             validation.addValidation(userIdValid, "아이디를 입력해주세요.");
         }
-
     },
 
     memberRoleEdit: function () {

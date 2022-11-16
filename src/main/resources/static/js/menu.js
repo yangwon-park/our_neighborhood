@@ -3,7 +3,6 @@ import mask from "./mask.js";
 
 var main = {
     init: async function () {
-        mask.loadingWithMask();
         var _this = this;
 
         const menuSaveBtn = document.getElementById("menu-save");
@@ -55,8 +54,6 @@ var main = {
     },
 
     check: function () {
-        mask.loadingWithMask();
-
         const name = document.getElementById("name");
         const price = document.getElementById("price");
         const type = document.getElementsByName("type");
@@ -161,6 +158,7 @@ var main = {
     },
 
     save: function () {
+        mask.loadingWithMask();
         const menuForm = document.getElementById("menu-add-form");
 
         const formData = new FormData(menuForm);

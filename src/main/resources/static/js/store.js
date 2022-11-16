@@ -50,8 +50,6 @@ var main = {
     },
 
     save: function () {
-        mask.loadingWithMask();
-
         // input 태그
         const els = {
             name: document.getElementById("name"),
@@ -91,10 +89,12 @@ var main = {
 
         this.categoryLayerEl.main.classList.remove("input-error-border");
 
-        if (els["name"].value !== '' && els["zipcode"].value !== ''
-            && els["roadAddr"].value !== '' && els["numberAddr"].value !== ''
-            && els["openingTime"].value !== '' && els["closingTime"].value !== ''
-            && mainCateVal !== '') {
+        if (els["name"].value !== "" && els["zipcode"].value !== ""
+            && els["roadAddr"].value !== "" && els["numberAddr"].value !== ""
+            && els["openingTime"].value !== "" && els["closingTime"].value !== ""
+            && mainCateVal !== "") {
+
+            mask.loadingWithMask();
 
             axios({
                 method: "post",

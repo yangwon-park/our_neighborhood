@@ -138,36 +138,48 @@ var main = {
         const _tmp = document.getElementById("tmp");
         const _pop = document.getElementById("pop");
         const _pm10Value = document.getElementById("pm-10-value");
-        const fontAwesome = document.createElement("i")
 
         if (skyStatus === "SUNNY") {
-            fontAwesome.innerHTML = "<i class=\"fa-solid fa-sun orange fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/sunny.png)"
         } else if (skyStatus === "CLOUDY") {
-            fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud-sun fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/cloudy.png)"
         } else if (skyStatus === "VERYCLOUDY") {
-            fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/very_cloudy.png)"
         } else if (skyStatus === "RAINY") {
-            fontAwesome.innerHTML = "<i class=\"fa-solid fa-umbrella fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/rainy.png)"
         } else if (skyStatus === "SNOWY") {
-            fontAwesome.innerHTML = "<i class=\"fa-regular fa-snowflake fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/snowy.png)"
         }
+
+        _skyStatus.style.backgroundSize = "contain";
+        _skyStatus.style.backgroundRepeat = "no-repeat";
+        _skyStatus.style.backgroundPosition = "center";
+
+        _pm10Value.firstElementChild;
+        _pm10Value.lastElementChild;
 
         if (pm10Value <= 30) {
-            _pm10Value.innerText = "좋음\n(미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.firstElementChild.innerText = "미세먼지 수준";
+            _pm10Value.lastElementChild.innerText = "좋음 (농도 : " + pm10Value + ")";
+            _pm10Value.lastElementChild.style.color = "green";
         } else if (pm10Value <= 80) {
-            _pm10Value.innerText = "보통\n(미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.firstElementChild.innerText = "미세먼지 수준";
+            _pm10Value.lastElementChild.innerText = "보통 (농도 : " + pm10Value + ")";
         } else if (pm10Value <= 150) {
-            _pm10Value.innerText = "나쁨\n(미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.firstElementChild.innerText = "미세먼지 수준";
+            _pm10Value.lastElementChild.innerText = "나쁨 (농도 : " + pm10Value + ")";
+            _pm10Value.lastElementChild.style.color = "#F01D04";
         } else {
-            _pm10Value.innerText = "매우 나쁨\n(미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.firstElementChild.innerText = "미세먼지 수준";
+            _pm10Value.lastElementChild.innerText = "매우 나쁨 (농도 : " + pm10Value + ")";
+            _pm10Value.lastElementChild.style.color = "#F01D04";
         }
 
-        _skyStatus.appendChild(fontAwesome);
+        _tmp.firstElementChild.innerText = "현재 기온";
+        _tmp.lastElementChild.innerText = currentTmp + "°";
 
-        _tmp.innerText = "현재 기온 : " + currentTmp + "℃";
-
-        _pop.innerText = "강수 확률 : " + currentPop + "%";
-        _pop.innerText += "\n(시간 당 강수량 : " + currentPcp + ")";
+        _pop.firstElementChild.innerText = "시간당 강수량";
+        _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
     },
 
     getCoords: function (options) {

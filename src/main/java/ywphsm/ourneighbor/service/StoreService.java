@@ -2,6 +2,13 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
+import org.geolatte.geom.builder.DSL.*;
+import org.geolatte.geom.*;
+import org.geolatte.geom.codec.Wkt;
+import org.geolatte.geom.cga.Circle;
+import org.geolatte.geom.crs.CoordinateReferenceSystems;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
@@ -22,7 +29,6 @@ import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
-import ywphsm.ourneighbor.domain.store.distance.Direction;
 import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
@@ -33,7 +39,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static org.geolatte.geom.builder.DSL.g;
+import static org.geolatte.geom.builder.DSL.point;
+import static org.geolatte.geom.crs.CoordinateReferenceSystems.*;
 import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
+import static ywphsm.ourneighbor.domain.store.distance.Direction.*;
 import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
 @Slf4j
@@ -54,10 +64,13 @@ public class StoreService {
 
     // 매장 등록
     @Transactional
-    public Long save(StoreDTO.Add dto, List<Long> categoryIdList) {
+    public Long save(StoreDTO.Add dto, List<Long> categoryIdList) throws ParseException {
 
         Store store = dto.toEntity();
         Member member = memberService.findById(dto.getMemberId());
+
+        Point<G2D> point = point(WGS84, g(dto.getLat(), dto.getLon()));
+        store.addPoint(point);
 
         MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, storeRepository.save(store));
         memberOfStore.updateMyStore(true);
@@ -217,7 +230,7 @@ public class StoreService {
     }
 
     // 전체 매장 조회
-    public List<Store> findStores() {
+    public List<Store> findAllStores() {
         return storeRepository.findAll();
     }
 
@@ -236,7 +249,7 @@ public class StoreService {
         return storeRepository.searchByCategory(categoryId);
     }
 
-    // 참고
+    // Hibernate Spatial 참고
     // https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
     // https://www.baeldung.com/hibernate-spatial
     public List<Store> getTopNByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
@@ -247,15 +260,6 @@ public class StoreService {
     public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
         Geometry lineString = getLineString(lat, lon, dist);
         List<Store> topStoreList = storeRepository.getTopNByCategories(lineString, categoryId);
-//        List<String> topUrlList = new ArrayList<>();
-//
-//        for (Store store : topStoreList) {
-//            if (store.getFile() != null) {
-//                String url = store.getFile().getUploadImageUrl();
-//
-//                topUrlList.add(url);
-//            }
-//        }
 
         return topStoreList.stream()
                     .filter(store -> store.getFile() != null)
@@ -263,10 +267,31 @@ public class StoreService {
                     .collect(Collectors.toList());
     }
 
-    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page) {
+    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat, double lon) throws ParseException {
+        double dist = 3;
+
+        Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
+        Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
+        Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
+        Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
+
+        double nex = northEast.getLon();
+        double ney = northEast.getLat();
+
+        double nwx = northWest.getLon();
+        double nwy = northWest.getLat();
+
+        double swx = southWest.getLon();
+        double swy = southWest.getLat();
+
+        double sex = southEast.getLon();
+        double sey = southEast.getLat();
+
         PageRequest pageRequest = PageRequest.of(page, 10);
-        return storeRepository.searchByHashtag(hashtagIdList, pageRequest);
+        return storeRepository.searchByHashtag(hashtagIdList, nex, ney, nwx, nwy, swx, swy, sex, sey, pageRequest);
     }
+
+
 
     //매장주인이 맞는지 체크
     public boolean OwnerCheck(Member member, Long storeId) {
@@ -297,8 +322,8 @@ public class StoreService {
 
     // LineString 생성 메소드
     private Geometry getLineString(double lat, double lon, double dist) throws ParseException {
-        Location northEast = calculatePoint(lat, lon, dist, Direction.NORTHEAST.getAngle());
-        Location southWest = calculatePoint(lat, lon, dist, Direction.SOUTHWEST.getAngle());
+        Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
+        Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
 
         double nex = northEast.getLat();
         double ney = northEast.getLon();
@@ -310,21 +335,6 @@ public class StoreService {
         return wktToGeometry(lineStringFormat);
     }
 
-    // WKT로 spatial type을 읽어드림
-    private Geometry wktToGeometry(String text) throws ParseException {
-        return new WKTReader().read(text);
-    }
-
-
-    private Geometry createCircle(double x, double y, double radius) {
-        GeometricShapeFactory factory = new GeometricShapeFactory();
-        factory.setNumPoints(32);
-        factory.setCentre(new Coordinate(x, y));
-        factory.setSize(radius * 2);
-
-        return factory.createCircle();
-    }
-
     @Transactional
     public String addStoreOwner(String userId, Long storeId) {
         try {
@@ -332,6 +342,7 @@ public class StoreService {
             if (findMember.getRole() == Role.USER) {
                 return "가게를 관리할 권한이 없는 아이디입니다";
             }
+
             Store findStore = findById(storeId);
             List<MemberOfStore> DuplicateCheck = findStore.getMemberOfStoreList().stream()
                     .filter(memberOfStore -> memberOfStore.getMember().equals(findMember))
@@ -391,5 +402,20 @@ public class StoreService {
         } catch (IllegalArgumentException e) {
             return "존재하지 않는 아이디 입니다";
         }
+    }
+
+
+    // WKT로 spatial type을 읽어드림
+    private Geometry wktToGeometry(String text) throws ParseException {
+        return new WKTReader().read(text);
+    }
+
+    private Geometry createCircle(double x, double y, double radius) {
+        GeometricShapeFactory factory = new GeometricShapeFactory();
+        factory.setNumPoints(32);
+        factory.setCentre(new Coordinate(x, y));
+        factory.setSize(radius * 2);
+
+        return factory.createCircle();
     }
 }

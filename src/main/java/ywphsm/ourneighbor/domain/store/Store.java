@@ -2,8 +2,8 @@ package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
@@ -41,6 +41,13 @@ public class Store extends BaseEntity {
     private Double lat;                // 위도
 
     private Double lon;                // 경도
+
+    @Column(columnDefinition = "Point")
+    private Point<G2D> point;
+
+    public void addPoint(Point<G2D> point) {
+        this.point = point;
+    }
 
     private String phoneNumber;
 
@@ -113,7 +120,7 @@ public class Store extends BaseEntity {
      */
     @Builder
     public Store(Long id, String name, Double lat, Double lon,
-                 String phoneNumber, BusinessTime businessTime, String notice, String intro,
+                 Point point, String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address,
                  ParkAvailable park, String parkDetail, String homePage,
                  List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,
@@ -122,6 +129,7 @@ public class Store extends BaseEntity {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
+        this.point = point;
         this.phoneNumber = phoneNumber;
         this.businessTime = businessTime;
         this.notice = notice;

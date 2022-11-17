@@ -23,49 +23,8 @@
 </section>
 <section class="store-list">
     <div class="list-container">
-        <ul class="store-list list-group">
-            <li class="list-group-item border border-0" style="height: 10%; background-color: #f8f9fe">
-                <div class="">
-                    <figure class="store-item d-flex mb-0">
-                        <div class="thumbnail me-2">
-                            <img style="width: 20vh; height: 20vh"
-                                 src="https://neighbor-build.s3.ap-northeast-2.amazonaws.com/images/0263ad0d-fbf4-49e3-b17d-2a4c47df20fe.PNG">
-                        </div>
-                        <figcaption class="w-100">
-                            <div class="w-100 h-100">
-                                <div class="store-item-header" style="height: 75%;">
-                                    <div>
-                                        <div class="d-flex justify-content-between ">
-                                            <div class="fs-2">
-                                        <span class="store-item-title ">
-                                              <a href="#">번호. 가게 이름</a>
-                                        </span>
-                                                <strong>
-                                                    <span class="main-color">별점</span>
-                                                </strong>
-                                            </div>
-                                            <div class="right-area my-auto">
-                                                <a href="javascript:;" class="icon heart">
-                                                    <img src="https://cdn-icons-png.flaticon.com/512/803/803087.png"
-                                                         style="height: 3vh; width: 3vh"
-                                                         alt="찜하기">
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <p class="text-secondary fs-5">주소</p>
-                                    </div>
-                                </div>
-                                <div style="height: 25%">
-                                    <div class="d-flex find-way float-end my-auto pb-2">
-                                        <div class="fs-4 my-auto me-2 h-100">거리</div>
-                                        <button class="btn btn-main-color">길찾기</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </figcaption>
-                    </figure>
-                </div>
-            </li>
+        <ul id="store-list" class="store-list list-group">
+
         </ul>
     </div>
 </section>
@@ -73,5 +32,6 @@
     템플릿 푸터
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/recommend_post.js}"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.service;
 
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Slice;
@@ -10,6 +11,7 @@ import ywphsm.ourneighbor.api.dto.RecommendKind;
 import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -127,7 +129,7 @@ class RecommendPostServiceTest {
     }
 
     @Test
-    void 날씨_기반으로_얻은_해쉬태그로_매장_조회() {
+    void 날씨_기반으로_얻은_해쉬태그로_매장_조회() throws ParseException {
         String skyStatus = "CLOUDY";
         String pm10Value = "30";
         String tmp = "15";
@@ -139,16 +141,31 @@ class RecommendPostServiceTest {
         assertThat(result.getRecommendKind()).isEqualTo(RecommendKind.NORMAL);
 
         List<Long> hashtagIdList = result.getHashtagIdList();
-        Slice<SimpleSearchStoreDTO> dto = storeService.searchByHashtag(hashtagIdList, 0);
+//        Slice<SimpleSearchStoreDTO> dto = storeService.searchByHashtag(hashtagIdList, 0);
+//
+//        List<SimpleSearchStoreDTO> content = dto.getContent();
+//
+//        boolean check = false;
+//
+//        for (SimpleSearchStoreDTO d : content) {
+//            check = d.getName().equals("칸다소바");
+//        }
+//
+//        assertThat(check).isTrue();
+    }
 
-        List<SimpleSearchStoreDTO> content = dto.getContent();
+    @Test
+    void 나누기() {
+        String hashtagIdList = "5005,5007,5009,5010";
 
-        boolean check = false;
+        List<Long> result = new ArrayList<>();
 
-        for (SimpleSearchStoreDTO d : content) {
-            check = d.getName().equals("칸다소바");
+        String[] split = hashtagIdList.split(",");
+
+        for (String s : split) {
+            result.add(Long.parseLong(s));
         }
 
-        assertThat(check).isTrue();
+        System.out.println("result = " + result);
     }
 }

@@ -52,7 +52,7 @@ public class StoreApiController {
 
     @PostMapping("/seller/store")
     public Long save(@Validated StoreDTO.Add dto,
-                     @RequestParam(value = "categoryId") List<Long> categoryIdList) throws IOException {
+                     @RequestParam(value = "categoryId") List<Long> categoryIdList) throws IOException, ParseException {
         return storeService.save(dto, categoryIdList);
     }
 

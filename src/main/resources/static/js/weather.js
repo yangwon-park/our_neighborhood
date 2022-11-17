@@ -2,6 +2,7 @@ import mask from "./mask.js";
 
 var main = {
     init: async function () {
+        sessionStorage.clear();
         let _this = this;
 
         mask.loadingWithMask();
@@ -46,6 +47,12 @@ var main = {
         }).then((resp) => {
             recommendPostHeader.innerText = resp.data.header;
             recommendPostContent.firstElementChild.innerText = resp.data.content;
+
+            weatherBtn.addEventListener("click", () => {
+                sessionStorage.setItem("hashtagIdList", resp.data.hashtagIdList);
+                window.location = "/recommend/store/list";
+            });
+
         }).catch((error) => {
             console.error(error);
         });
@@ -154,9 +161,6 @@ var main = {
         _skyStatus.style.backgroundSize = "contain";
         _skyStatus.style.backgroundRepeat = "no-repeat";
         _skyStatus.style.backgroundPosition = "center";
-
-        _pm10Value.firstElementChild;
-        _pm10Value.lastElementChild;
 
         if (pm10Value <= 30) {
             _pm10Value.firstElementChild.innerText = "미세먼지 수준";

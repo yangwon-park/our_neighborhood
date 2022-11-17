@@ -71,7 +71,7 @@ public class MapSearchController {
     public ResultClass<?> getTopNStoresByCategories(@RequestParam Long categoryId,
                                                     @CookieValue(value = "lat", required = false) String myLat,
                                                     @CookieValue(value = "lon", required = false) String myLon) throws ParseException {
-        double dist = 1.5;
+        double dist = 3;
 
         List<Store> findStores = storeService.getTopNByCategories(categoryId, dist,
                 Double.parseDouble(myLat), Double.parseDouble(myLon));

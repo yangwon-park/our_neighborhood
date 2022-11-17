@@ -119,6 +119,14 @@ class StoreServiceTest {
         for (Menu menu : list) {
             System.out.println("menu = " + menu);
         }
+
+        List<Store> aalist = storeService.findAllStores();
+        for (Store store : aalist) {
+            System.out.println("store.getLat() = " + store.getLat());
+            System.out.println("store.getLon() = " + store.getLon());
+            System.out.println("store.getPoint() = " + store.getPoint());
+        }
+
     }
 
     @Test

@@ -3,15 +3,18 @@ let main = {
 
         let recommendSaveBtn = document.getElementById("recommend-post-save");
 
-        recommendSaveBtn.addEventListener("click", () => {
-            this.saveRecommendPost();
-        });
+        if (recommendSaveBtn != null) {
+            recommendSaveBtn.addEventListener("click", () => {
+                this.saveRecommendPost();
+            });
+        }
+
+        this.getRecommendPost();
     },
 
     saveRecommendPost: function () {
         const form = document.getElementById("recommend-post-add-form");
-
-        let formData = new FormData(form);
+        const formData = new FormData(form);
 
         axios({
             method: "post",
@@ -23,7 +26,24 @@ let main = {
         }).catch((error) => {
            console.log(error)
         });
-    }
+    },
+
+    getRecommendPost: function () {
+        console.log(sessionStorage.getItem("hashtagIdList"));
+
+        let hashtagIdList = sessionStorage.getItem("hashtagIdList");
+
+        axios({
+            method: "get",
+            url: "/recommend-post",
+            params: {
+                hashtagIdList: hashtagIdList
+            }
+        }).then((resp) => {
+        }).catch((error) => {
+
+        });
+    },
 }
 
 main.init();

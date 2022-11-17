@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ywphsm.ourneighbor.domain.store.distance.Distance.calculateHowFarToTheTarget;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -30,13 +32,15 @@ public class RecommendApiController {
     public Slice<SimpleSearchStoreDTO> getRecommendPost(String hashtagIdList,
                                                         @CookieValue(value = "lat", required = false) String myLat,
                                                         @CookieValue(value = "lon", required = false) String myLon) throws org.locationtech.jts.io.ParseException {
-        List<Long> result = Arrays.stream(hashtagIdList.split(","))
+        List<Long> hashtagList = Arrays.stream(hashtagIdList.split(","))
                                     .map(Long::parseLong)
                                     .collect(Collectors.toList());
 
-        log.info("result = {}", storeService.searchByHashtag(result, 0, Double.parseDouble(myLat), Double.parseDouble(myLon)).getContent());
+        Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(hashtagList, 0, Double.parseDouble(myLat), Double.parseDouble(myLon));
 
-        return storeService.searchByHashtag(result, 0, Double.parseDouble(myLat), Double.parseDouble(myLon));
+        calculateHowFarToTheTarget(myLat, myLon, result.getContent());
+
+        return result;
     }
 
     @PostMapping("/admin/recommend-post")

@@ -163,8 +163,6 @@ let main = {
 
                 i++;
             }
-
-
         }).catch((error) => {
             console.log(error);
         });

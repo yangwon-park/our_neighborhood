@@ -7,7 +7,10 @@ import java.util.List;
 public class Distance {
 
 
-    // 현재 위치 -> 검색한 장소까지의 거리값 세팅을 위한 메소드
+    /*
+        현재 위치 -> 검색한 장소까지의 거리값 세팅을 위한 메소드
+        DTO에 거리값을 세팅해줌
+     */
     public static void calculateHowFarToTheTarget(String myLat, String myLon,
                                                    List<SimpleSearchStoreDTO> findDTO) {
         findDTO.forEach(dto -> {
@@ -22,8 +25,8 @@ public class Distance {
 
     public static double calculateDistByHaversine(double lat1, double lon1, double lat2, double lon2) {
         double distance;
-        double radius = 6371;             // 지구 반지름
-        double toRadian = Math.PI / 180;  // pi * 1 라디안 = 180도
+        double radius = 6371;                   // 지구 반지름
+        double toRadian = Math.PI / 180;        // pi * 1 라디안 = 180도
 
         double deltaLatitude = Math.abs(lat1 - lat2) * toRadian;
         double deltaLongitude = Math.abs(lon1 - lon2) * toRadian;
@@ -54,9 +57,6 @@ public class Distance {
                 cos(radianLat), cos(distanceRadius) - sin(radianLat) * sin(lat));
 
         lon = normalizeLongitude(lon);
-
-
-
 
         return new Location(toDegree(lat), toDegree(lon));
     }

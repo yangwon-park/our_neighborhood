@@ -1,4 +1,5 @@
 package ywphsm.ourneighbor.api;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -27,15 +28,15 @@ import java.util.Locale;
 public class WeatherApiController {
 
     @GetMapping("/weather")
-    public WeatherDTO getWeather(@CookieValue(value="nx", required = false, defaultValue = "") String nx,
-                                 @CookieValue(value="ny", required = false, defaultValue = "") String ny,
-                                 @CookieValue(value="sidoName", required = false, defaultValue = "") String sidoName) throws Exception{
+    public WeatherDTO getWeather(@CookieValue(value = "nx", required = false, defaultValue = "") String nx,
+                                 @CookieValue(value = "ny", required = false, defaultValue = "") String ny,
+                                 @CookieValue(value = "sidoName", required = false, defaultValue = "") String sidoName) throws Exception {
 
         WeatherDTO dto = new WeatherDTO();
 
         String serviceKey = "LBYxEXESOBgpdqLOhf1sRtyCQdCdagCnzNxOIFp45%2FwsK%2BjAY6%2FkK9YbmQLnGr7cbD%2FPEihLyT0u1txhmFyEmg%3D%3D";
         String returnType = "JSON";
-        String numOfRows = "290";     // 오늘 하루 시간대별 모든 날씨 예보의 row 수
+        String numOfRows = "290";       // 오늘 하루 시간대별 모든 날씨 예보의 row 수
         String pageNo = "1";
 
         WeatherDTO foreCast = getForeCast(serviceKey, returnType, numOfRows, pageNo, nx, ny, dto);
@@ -48,7 +49,6 @@ public class WeatherApiController {
     private WeatherDTO getForeCast(String serviceKey, String returnType,
                                    String numOfRows, String pageNo,
                                    String nx, String ny, WeatherDTO dto) throws Exception {
-
         log.info("=== getForeCast Start ===");
 
         LocalDateTime targetDay = LocalDateTime.now().plusDays(-1);
@@ -56,7 +56,9 @@ public class WeatherApiController {
         String base_date = targetDay.format(DateTimeFormatter.ofPattern("yyyyMMdd", Locale.KOREAN));
         String base_time = "2300";
 
-        // URL
+        /*
+            API 호출 URL
+         */
         String result = url + "?" + URLEncoder.encode("serviceKey", StandardCharsets.UTF_8) + "=" + serviceKey +
                 "&" + URLEncoder.encode("dataType", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(returnType, StandardCharsets.UTF_8) +
                 "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(numOfRows, StandardCharsets.UTF_8) +
@@ -80,8 +82,10 @@ public class WeatherApiController {
             String category = foreJson.getJSONObject(i).getString("category");
             String fcstValue = foreJson.getJSONObject(i).getString("fcstValue");
 
-            // 예보를 내린 시간이 현재의 시간과 같은 경우
-            // 즉, 현재 시간의 기상 예보를 받아옴
+            /*
+                예보를 내린 시간이 현재의 시간과 같은 경우
+                즉, 현재 시간의 기상 예보를 받아옴
+             */
             if (fcstTime.equals(now)) {
                 switch (category) {
                     case "POP":
@@ -138,15 +142,19 @@ public class WeatherApiController {
         return dto;
     }
 
-    // 시도별 실시간 측정 정보 조회
+    /*
+        시도별 실시간 측정 미세먼지 정보 조회
+     */
     private WeatherDTO getAirPollution(String serviceKey, String returnType, String numOfRows, String pageNo,
                                        String sidoName, WeatherDTO dto) throws Exception {
 
         log.info("=== getAirPollution Start ===");
 
-        // API 파라미터 sidoName 조건에 맞는 시도 명으로 변환하는 로직
-        // 8도의 이름은 아래와 같이 줄여서 받고, 나머지 지역명은 앞의 2글자로 받음
-        // ex) 경상북도 => 경북
+        /*
+            API 파라미터 sidoName 조건에 맞는 시도 명으로 변환하는 로직
+            8도의 이름은 아래와 같이 줄여서 받고, 나머지 지역명은 앞의 2글자로 받음
+            ex) 경상북도 => 경북
+         */
         if (sidoName.length() == 4) {
             sidoName = String.valueOf(sidoName.charAt(0)).concat(String.valueOf(sidoName.charAt(2)));
         } else {
@@ -155,7 +163,9 @@ public class WeatherApiController {
 
         String url = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty";
 
-        // URL
+        /*
+            API 호출 URL
+         */
         String result = url + "?" + URLEncoder.encode("serviceKey", StandardCharsets.UTF_8) + "=" + serviceKey +
                 "&" + URLEncoder.encode("returnType", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(returnType, StandardCharsets.UTF_8) +
                 "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(numOfRows, StandardCharsets.UTF_8) +
@@ -168,9 +178,7 @@ public class WeatherApiController {
         jsonObject.put("airPollution", airPollution);
         JSONArray airJson = jsonObject.getJSONObject("airPollution").getJSONObject("response").getJSONObject("body").getJSONArray("items");
 
-        // 추후에 디테일한 현재 위치에 있는 관측소 기반으로 미세먼지 농도를 체크할 수 있게 변경 예정
         for (int i = 0; i < 1; i++) {
-//            String station = airJson.getJSONObject(i).getString("stationName");
             dto.setPm10Value(airJson.getJSONObject(i).getString("pm10Value"));
         }
 
@@ -179,8 +187,10 @@ public class WeatherApiController {
         return dto;
     }
 
-    // 최종 URL로 OPEN API에 통신 후
-    // 결과를 HashMap으로 반환해주는 메소드
+    /*
+        최종 URL로 OPEN API에 통신 후
+        결과를 HashMap으로 반환해주는 메소드
+     */
     private HashMap<String, Object> getData(String url, String result) throws Exception {
 
         URL apiUrl = new URL(result);
@@ -195,7 +205,7 @@ public class WeatherApiController {
             conn = (HttpURLConnection) apiUrl.openConnection();
             conn.setConnectTimeout(50000);
             conn.setReadTimeout(50000);
-            conn.setDoOutput(true);     // 서버에 데이터를 보낼 수 있는지에 대한 여부를 설정 (default: false)
+            conn.setDoOutput(true);                 // 서버에 데이터를 보낼 수 있는지에 대한 여부를 설정 (default: false)
 
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-type", "application/json");

@@ -23,7 +23,7 @@ public class MemberDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Role role = member.getRole();
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(ROLE_PREFIX + role.toString());
-        Collection<GrantedAuthority> authorities = new ArrayList<>(); //List인 이유 : 여러개의 권한을 가질 수 있다
+        Collection<GrantedAuthority> authorities = new ArrayList<>();       // List인 이유 : 여러개의 권한을 가질 수 있다
         authorities.add(authority);
 
         return authorities;
@@ -39,25 +39,33 @@ public class MemberDetailsImpl implements UserDetails {
         return member.getUserId();
     }
 
-    //계정이 만료되지 않았는지 리턴 (true: 만료안됨)
+    /*
+        계정이 만료되지 않았는지 리턴 (true: 만료안됨)
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    //계정이 잠겨있는지 않았는지 리턴. (true:잠기지 않음)
+    /*
+        계정이 잠겨있는지 않았는지 리턴. (true:잠기지 않음)
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    //비밀번호가 마료되지 않았는지 리턴한다. (true:만료안됨)
+    /*
+        비밀번호가 마료되지 않았는지 리턴한다. (true:만료 안 됨)
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    //계정이 활성화(사용가능)인지 리턴 (true:활성화)
+    /*
+        계정이 활성화(사용가능)인지 리턴 (true:활성화)
+     */
     @Override
     public boolean isEnabled() {
         return true;

@@ -1,7 +1,6 @@
 package ywphsm.ourneighbor.repository.store;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,16 +8,13 @@ import com.querydsl.spatial.GeometryExpressions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.*;
-import org.geolatte.geom.cga.Circle;
-import org.geolatte.geom.codec.Wkt;
-import org.geolatte.geom.crs.CoordinateReferenceSystems;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import ywphsm.ourneighbor.domain.file.QUploadFile;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
-import java.util.Iterator;
 import java.util.List;
 
 import static org.geolatte.geom.builder.DSL.*;
@@ -52,14 +48,16 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .from(store)
                 .innerJoin(store.categoryOfStoreList, categoryOfStore)
                 .innerJoin(categoryOfStore.category, category)
+                .innerJoin(store.file, QUploadFile.uploadFile)
+                .fetchJoin()
                 .where(categoryOfStore.category.id.eq(categoryId), categoryOfStore.store.id.eq(store.id))
                 .fetch();
     }
 
-//  Projections 참고
-//  https://wildeveloperetrain.tistory.com/94
-//  geolatte 참고
-//  https://github.com/GeoLatte/geolatte-geom  
+    //  Projections 참고
+    //  https://wildeveloperetrain.tistory.com/94
+    //  geolatte 참고
+    //  https://github.com/GeoLatte/geolatte-geom
     @Override
     public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList,
                                                        double nex, double ney,
@@ -96,6 +94,28 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         return new SliceImpl<>(list, pageable, hasNext);
     }
 
+
+    @Override
+    public List<Store> getStoresByStContains(double nex, double ney, double nwx, double nwy, double swx, double swy, double sex, double sey) {
+        return queryFactory
+                .select(store)
+                .from(store)
+                .leftJoin(store.file, QUploadFile.uploadFile)
+                .fetchJoin()
+                .where(pointContains(nex, ney, nwx, nwy, swx, swy, sex, sey), store.id.lt(20000000))
+                .fetch();
+    }
+
+    @Override
+    public List<Store> findAllStores() {
+        return queryFactory
+                .select(store)
+                .from(store)
+                .leftJoin(store.file, QUploadFile.uploadFile)
+                .fetchJoin()
+                .fetch();
+    }
+
     private BooleanExpression pointContains(double nex, double ney,
                                             double nwx, double nwy,
                                             double swx, double swy,
@@ -103,9 +123,12 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
         Polygon<G2D> polygon = polygon(WGS84, ring(g(ney, nex), g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
 
+//        return GeometryExpressions
+//                .asGeometry(polygon)
+//                .contains(store.point);
         return GeometryExpressions
-                .asGeometry(polygon)
-                .contains(store.point);
+                .asGeometry(store.point)
+                .within(polygon);
     }
 
     private BooleanExpression keywordContains(String keyword) {

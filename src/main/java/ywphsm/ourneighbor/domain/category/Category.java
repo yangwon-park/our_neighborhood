@@ -23,11 +23,8 @@ public class Category {
     private Long depth;
 
     /*
-        JPA 연관 관계
-     */
-
-    /*
-        계층형 구조 => 셀프로 양방향 연관 관계를 걸어줌
+        카테고리 계층형 구조로 표현
+            => 셀프로 양방향 연관 관계를 걸어줌
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -41,7 +38,6 @@ public class Category {
     @OneToMany(mappedBy = "parent")
     private List<Category> children = new ArrayList<>();
 
-    // store (N:N)
     @OneToMany(mappedBy = "category")
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
@@ -58,14 +54,15 @@ public class Category {
     }
 
     /*
-            생성자
-         */
+        생성자
+     */
     @Builder
     public Category(String name, Long depth, Category parent) {
         this.name = name;
         this.depth = depth;
         this.parent = parent;
     }
+
 
     /*
         === 연관 관계 편의 메소드 ===

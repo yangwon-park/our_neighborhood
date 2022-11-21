@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
-import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
-import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import ywphsm.ourneighbor.domain.member.Member;
@@ -19,7 +17,6 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -28,27 +25,6 @@ import java.util.List;
 public class StoreApiController {
 
     private final StoreService storeService;
-    private final CategoryService categoryService;
-
-    @GetMapping("/get-cate-images")
-    public List<List<String>> getImages(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
-                                        @CookieValue(value = "lon", required = false, defaultValue = "") String lon) throws ParseException {
-
-        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
-
-        List<List<String>> categoryImageList = new ArrayList<>();
-
-        double dist = 3;
-
-        if (lat != null && lon != null) {
-            for (CategoryDTO.Simple simple : rootCategoryList) {
-                categoryImageList.add(storeService.getTopNImageByCategories(
-                        (simple.getCategoryId()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
-            }
-        }
-
-        return categoryImageList;
-    }
 
     @PostMapping("/seller/store")
     public Long save(@Validated StoreDTO.Add dto,

@@ -9,6 +9,7 @@ import org.geolatte.geom.*;
 import org.geolatte.geom.codec.Wkt;
 import org.geolatte.geom.cga.Circle;
 import org.geolatte.geom.crs.CoordinateReferenceSystems;
+import org.geolatte.geom.jts.JTS;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
@@ -39,8 +40,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.geolatte.geom.builder.DSL.g;
-import static org.geolatte.geom.builder.DSL.point;
+import static org.geolatte.geom.builder.DSL.*;
+import static org.geolatte.geom.builder.DSL.ring;
 import static org.geolatte.geom.crs.CoordinateReferenceSystems.*;
 import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
 import static ywphsm.ourneighbor.domain.store.distance.Direction.*;
@@ -231,7 +232,7 @@ public class StoreService {
 
     // 전체 매장 조회
     public List<Store> findAllStores() {
-        return storeRepository.findAll();
+        return storeRepository.findAllStoresLt11000000();
     }
 
     // 검색어 포함 매장명 조회
@@ -255,6 +256,64 @@ public class StoreService {
     public List<Store> getTopNByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
         Geometry lineString = getLineString(lat, lon, dist);
         return storeRepository.getTopNByCategories(lineString, categoryId);
+    }
+
+    public List<Store> getStoresByMbrContains(double dist, double lat, double lon) throws ParseException {
+        Geometry lineString = getLineString(lat, lon, dist);
+        return storeRepository.getStoresByMbrContains(lineString);
+    }
+
+    public List<Store> getStoresBySTContains(double dist, double lat, double lon) throws ParseException {
+//        Geometry polygon = getPolygon(lat, lon, dist);
+
+        Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
+        Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
+        Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
+        Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
+
+        double nex = northEast.getLon();
+        double ney = northEast.getLat();
+
+        double nwx = northWest.getLon();
+        double nwy = northWest.getLat();
+
+        double swx = southWest.getLon();
+        double swy = southWest.getLat();
+
+        double sex = southEast.getLon();
+        double sey = southEast.getLat();
+
+        Polygon<G2D> polygon = polygon(WGS84, ring(g(ney, nex), g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
+
+        return storeRepository.getStoresBySTContains(polygon);
+    }
+    public List<Store> getStoresBySTContainsWithCircle(double dist, double lat, double lon) throws ParseException {
+        Geometry circle = createCircle(lat, lon, dist);
+        return storeRepository.getStoresBySTContainsWithCircle(JTS.from(circle));
+    }
+
+
+    public List<Store> getStoresByStContains(double lat, double lon){
+        double dist = 3;
+
+        Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
+        Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
+        Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
+        Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
+
+        double nex = northEast.getLon();
+        double ney = northEast.getLat();
+
+        double nwx = northWest.getLon();
+        double nwy = northWest.getLat();
+
+        double swx = southWest.getLon();
+        double swy = southWest.getLat();
+
+        double sex = southEast.getLon();
+        double sey = southEast.getLat();
+
+        return storeRepository.getStoresByStContains(nex, ney, nwx, nwy, swx, swy, sex, sey);
     }
 
     public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
@@ -290,6 +349,9 @@ public class StoreService {
         PageRequest pageRequest = PageRequest.of(page, 10);
         return storeRepository.searchByHashtag(hashtagIdList, nex, ney, nwx, nwy, swx, swy, sex, sey, pageRequest);
     }
+
+
+
 
 
 
@@ -333,6 +395,32 @@ public class StoreService {
         String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", nex, ney, swx, swy);
 
         return wktToGeometry(lineStringFormat);
+    }
+
+    // Polygon 생성 메소드
+    private Geometry getPolygon(double lat, double lon, double dist) throws ParseException {
+        Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
+        Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
+        Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
+        Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
+
+        double nex = northEast.getLon();
+        double ney = northEast.getLat();
+
+        double nwx = northWest.getLon();
+        double nwy = northWest.getLat();
+
+        double swx = southWest.getLon();
+        double swy = southWest.getLat();
+
+        double sex = southEast.getLon();
+        double sey = southEast.getLat();
+
+        String polygonFormat = String.format("POLYGON((%f %f, %f %f, %f %f, %f %f, %f %f))",
+                ney, nex, nwy, nwx, swy, swx, sey, sex, ney, nex);
+
+
+        return wktToGeometry(polygonFormat);
     }
 
     @Transactional

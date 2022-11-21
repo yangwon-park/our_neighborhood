@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface StoreRepositoryCustom {
 
+    List<Store> findAllStores();
+
     List<Store> searchByKeyword(String keyword);
 
     List<Store> searchByCategory(Long categoryId);
@@ -17,4 +19,7 @@ public interface StoreRepositoryCustom {
     Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, double nex, double ney,
                                                 double nwx, double nwy, double swx, double swy,
                                                 double sex, double sey, Pageable pageable) throws ParseException;
+
+    List<Store> getStoresByStContains(double nex, double ney, double nwx, double nwy,
+                                                     double swx, double swy, double sex, double sey);
 }

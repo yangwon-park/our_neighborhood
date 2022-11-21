@@ -28,6 +28,13 @@ public class CategoryApiController {
         return categoryService.findAllCategoriesHier().get(0);
     }
 
+    @GetMapping("/categories-hier-edit")
+    public Long findCategoryParentId(Long categoryId) {
+        Category category = categoryService.findById(categoryId);
+        log.info("parentId={}", category.getParent().getId());
+        return category.getParent().getId();
+    }
+
     @GetMapping("/category-check")
     public ResponseEntity<Boolean> checkCategoryDuplicate(String name, Long parentId) {
         Category parent = categoryService.findById(parentId);

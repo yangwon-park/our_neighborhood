@@ -160,7 +160,13 @@ public class StoreController {
         Store findStore = storeService.findById(storeId);
         StoreDTO.Update store = new StoreDTO.Update(findStore);
 
+        List<CategorySimpleDTO> categorySimpleDTOList = store.getCategoryList().stream()
+                .map(categoryOfStoreDTO ->
+                        categoryService.findById(categoryOfStoreDTO.getCategoryId()))
+                .map(CategorySimpleDTO::of).collect(Collectors.toList());
+
         model.addAttribute("store", store);
+        model.addAttribute("categoryList", categorySimpleDTOList);
 
         return "store/edit_form";
     }

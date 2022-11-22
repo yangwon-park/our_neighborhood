@@ -47,7 +47,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(memberDetailService).passwordEncoder(passwordEncoder());
     }
 
-    // 날씨 API 값 쿠키 저장 시, 방화벽 설정에서 잡혀서 defaultHttpFireWall로 변경
+    /*
+        날씨 API 값 쿠키 저장 시, 방화벽 설정에서 잡혀서 defaultHttpFireWall로 변경
+     */
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.httpFirewall(defaultHttpFireWall());
@@ -66,27 +68,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-//                .antMatchers("/profile").permitAll()
                 .antMatchers("/user/**").hasAnyRole("USER", "SELLER", "ADMIN")
                 .antMatchers("/seller/**").hasAnyRole("SELLER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
-                //권한 인증 실패시 핸들러
-                .and()
+                .and()      //권한 인증 실패시 핸들러
                 .exceptionHandling()
                 .accessDeniedHandler(new CustomAccessDeniedHandler());
-//                .anyRequest().authenticated();
 
         http
                 .formLogin()
-                .usernameParameter("userId")    //default값 username
+                .usernameParameter("userId")            //default값 username
                 .passwordParameter("password")
                 .loginPage("/login")
                 .loginProcessingUrl("/loginSecurity")
                 .successHandler(customAuthSuccessHandler)
                 .failureHandler(customAuthFailHandler)
 
-                //logout
+                /*
+                    logout
+                 */
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -105,7 +106,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 .deleteCookies("remember-me")
 
-                //OAuth 로그인
+                /*
+                    OAuth 로그인
+                 */
                 .and()
                 .oauth2Login()
                 .loginPage("/login")
@@ -114,7 +117,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //중복 로그인
         http.sessionManagement()
-                .maximumSessions(1) //세션 최대 허용 수
-                .maxSessionsPreventsLogin(false); // false이면 중복 로그인하면 이전 로그인이 풀린다.
+                .maximumSessions(1)                 // 세션 최대 허용 수
+                .maxSessionsPreventsLogin(false);   // false이면 중복 로그인하면 이전 로그인이 풀린다.
     }
 }

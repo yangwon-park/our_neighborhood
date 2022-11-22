@@ -93,22 +93,25 @@ public class StoreController {
 
         List<Menu> menuList = menuService.findByStoreIdWithoutTypeMenuCaseByOrderByType(storeId);
 
+        /*
+            메뉴판 조회
+         */
         List<String> menuImgList = menuService.findMenuImg(storeId);
 
         List<MenuDTO.Detail> menuDTOList = menuList.stream()
                 .map(MenuDTO.Detail::of).collect(Collectors.toList());
 
-        //review paging
+        // review paging
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
         List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
 
         double ratingAverage = reviewService.ratingAverage(storeId);
 
-        //찜, 스토어 수정 권한
+        // 찜, 스토어 수정 권한
         if (member != null) {
-            //찜
+            // 찜
             boolean likeStatus = memberService.likeStatus(member.getId(), storeId);
-            //스토어 수정 권한
+            // 스토어 수정 권한
             boolean storeRole = false;
             if (member.getRole().equals(Role.SELLER)) {
                 boolean storeOwner = storeService.OwnerCheck(member, storeId);
@@ -126,7 +129,7 @@ public class StoreController {
         model.addAttribute("categoryList", categorySimpleDTOList);
         model.addAttribute("hashtagList", hashtagGroupDTO);
 
-        //review
+        // review
         model.addAttribute("review", content);
         model.addAttribute("ratingAverage", ratingAverage);
 

@@ -3,16 +3,20 @@ package ywphsm.ourneighbor.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.io.ParseException;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
+import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
+import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.RecommendPostService;
 import ywphsm.ourneighbor.service.StoreService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +25,11 @@ import static ywphsm.ourneighbor.domain.store.distance.Distance.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class MapSearchController {
+public class SearchController {
 
     private final StoreService storeService;
 
-    private final RecommendPostService recommendPostService;
+    private final CategoryService categoryService;
 
     // 메뉴 리스트는 불러오지 않음
     // 단순 조회이므로 fetch 조인으로 최적화
@@ -57,7 +61,6 @@ public class MapSearchController {
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
         if (!myLat.isEmpty() && !myLon.isEmpty()) {
-            // 리팩토링 : dto에 거리값 set 해주면 해결 (별도의 List 사용할 필요없음)
             calculateHowFarToTheTarget(myLat, myLon, dto);
         }
 
@@ -85,23 +88,38 @@ public class MapSearchController {
         return new ResultClass<>(dto.size(), dto);
     }
 
+    @GetMapping("/get-cate-images")
+    public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
+                                                              @CookieValue(value = "lon", required = false, defaultValue = "") String lon) throws ParseException {
 
-    @GetMapping("/get-recommend-post")
-    public RecommendPostDTO.Simple getRecommendPost(@CookieValue(value = "skyStatus", required = false) String skyStatus,
-                                             @CookieValue(value = "pm10Value", required = false) String pm10Value,
-                                             @CookieValue(value = "tmp", required = false) String tmp,
-                                             @CookieValue(value = "pcp", required = false) String pcp) {
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
 
-        return recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp.replace("m", ""));
+        List<List<String>> categoryImageList = new ArrayList<>();
+
+        double dist = 3;
+
+        if (lat != null && lon != null) {
+            for (CategoryDTO.Simple simple : rootCategoryList) {
+                categoryImageList.add(storeService.getTopNImageByCategories(
+                        (simple.getCategoryId()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
+            }
+        }
+
+        return categoryImageList;
     }
 
-    @GetMapping("/get-store-based-weather")
-    public ResultClass<?> getStoreBasedOnWeather(@CookieValue(value = "skyStatus", required = false) String skyStatus,
-                                                 @CookieValue(value = "pm10Value", required = false) String pm10Value,
-                                                 @CookieValue(value = "tmp", required = false) String tmp,
-                                                 @CookieValue(value = "pop", required = false) String pop) {
+    @GetMapping("/recommend-post")
+    public Slice<SimpleSearchStoreDTO> getRecommendStoreByHashtag(String hashtagIdList,
+                                                                  @CookieValue(value = "lat", required = false) String myLat,
+                                                                  @CookieValue(value = "lon", required = false) String myLon) throws org.locationtech.jts.io.ParseException {
+        List<Long> hashtagList = Arrays.stream(hashtagIdList.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
 
+        Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(hashtagList, 0, Double.parseDouble(myLat), Double.parseDouble(myLon));
 
-        return null;
+        calculateHowFarToTheTarget(myLat, myLon, result.getContent());
+
+        return result;
     }
 }

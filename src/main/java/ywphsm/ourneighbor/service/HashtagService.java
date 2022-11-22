@@ -50,7 +50,6 @@ public class HashtagService {
 
         } else {
             newHashtag = hashtagRepository.findByName(dto.getName());
-
         }
 
         linkHashtagAndStore(newHashtag, findStore);

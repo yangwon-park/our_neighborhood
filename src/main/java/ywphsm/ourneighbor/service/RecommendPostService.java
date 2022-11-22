@@ -88,6 +88,8 @@ public class RecommendPostService {
         }
     }
 
+
+
     private static RecommendKind getRecommendKind(String skyStatus, String pm10Value, String tmp, String pcp) {
         double rainCriteria = 7.6;
         int pm10ValueBadCriteria = 80;

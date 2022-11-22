@@ -1,7 +1,7 @@
 package ywphsm.ourneighbor.repository.store;
 
 import org.geolatte.geom.G2D;
-import org.locationtech.jts.geom.Geometry;
+import org.geolatte.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,26 +19,26 @@ public interface StoreRepository extends JpaRepository<Store, Long>, StoreReposi
             "join fetch s.file " +
             "where mbrcontains(:lineString, point(s.lat, s.lon)) = true " +
             "and cs.category.id = :categoryId")
-    List<Store> getTopNByCategories(@Param("lineString") Geometry lineString, @Param("categoryId") Long categoryId) throws ParseException;
+    List<Store> getTopNByCategories(@Param("lineString") Geometry<G2D> lineString, @Param("categoryId") Long categoryId) throws ParseException;
 
 
     @Query("select s from Store s " +
             "left outer join fetch s.file " +
-            "where s.id < 20000000")
-    List<Store> findAllStoresLt11000000();
+            "where s.id < :range")
+    List<Store> findAllStoresLt(@Param("range") Long range);
 
     @Query("select s from Store s " +
             "left outer join fetch s.file " +
             "where mbrcontains(:lineString, s.point) = true and s.id < 20000000")
-    List<Store> getStoresByMbrContains(@Param("lineString") Geometry lineString) throws ParseException;
+    List<Store> getStoresByMbrContains(@Param("lineString") Geometry<G2D> lineString) throws ParseException;
 
     @Query("select s from Store s " +
             "left outer join fetch s.file " +
             "where st_contains(:polygon, s.point) = true and s.id < 20000000")
-    List<Store> getStoresBySTContains(@Param("polygon") org.geolatte.geom.Geometry<G2D> polygon) throws ParseException;
+    List<Store> getStoresBySTContains(@Param("polygon") Geometry<G2D> polygon) throws ParseException;
 
     @Query("select s from Store s " +
             "left outer join fetch s.file " +
-            "where st_contains(:circle, s.point) = true and s.id < 10000000")
-    List<Store> getStoresBySTContainsWithCircle(@Param("circle") org.geolatte.geom.Geometry<?> circle) throws ParseException;
+            "where st_contains(:circle, s.point) = true and s.id < 20000000")
+    List<Store> getStoresBySTContainsWithCircle(@Param("circle") Geometry<?> circle) throws ParseException;
 }

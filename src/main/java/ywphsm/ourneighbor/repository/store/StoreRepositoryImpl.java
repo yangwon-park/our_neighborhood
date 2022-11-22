@@ -60,10 +60,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     //  https://github.com/GeoLatte/geolatte-geom
     @Override
     public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList,
-                                                       double nex, double ney,
-                                                       double nwx, double nwy,
-                                                       double swx, double swy,
-                                                       double sex, double sey,
+                                                       Geometry<G2D> polygon,
                                                        Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
@@ -79,7 +76,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .innerJoin(store.hashtagOfStoreList, hashtagOfStore)
                 .innerJoin(hashtagOfStore.hashtag, hashtag)
                 .where(builder)
-                .where(pointContains(nex, ney, nwx, nwy, swx, swy, sex, sey))
+                .where(pointContains(polygon))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -96,13 +93,13 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
 
     @Override
-    public List<Store> getStoresByStContains(double nex, double ney, double nwx, double nwy, double swx, double swy, double sex, double sey) {
+    public List<Store> getStoresByStContains(Geometry<G2D> polygon) {
         return queryFactory
                 .select(store)
                 .from(store)
                 .leftJoin(store.file, QUploadFile.uploadFile)
                 .fetchJoin()
-                .where(pointContains(nex, ney, nwx, nwy, swx, swy, sex, sey), store.id.lt(20000000))
+                .where(pointContains(polygon), store.id.lt(20000000))
                 .fetch();
     }
 
@@ -116,19 +113,10 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .fetch();
     }
 
-    private BooleanExpression pointContains(double nex, double ney,
-                                            double nwx, double nwy,
-                                            double swx, double swy,
-                                            double sex, double sey) {
-
-        Polygon<G2D> polygon = polygon(WGS84, ring(g(ney, nex), g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
-
-//        return GeometryExpressions
-//                .asGeometry(polygon)
-//                .contains(store.point);
+    private BooleanExpression pointContains(Geometry<G2D> polygon) {
         return GeometryExpressions
-                .asGeometry(store.point)
-                .within(polygon);
+                .asGeometry(polygon)
+                .contains(store.point);
     }
 
     private BooleanExpression keywordContains(String keyword) {

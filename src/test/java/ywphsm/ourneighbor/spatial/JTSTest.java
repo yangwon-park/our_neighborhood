@@ -42,7 +42,9 @@ class JTSTest {
         String myLon = "129.1845632";
         double dist = 3000;
 
-        List<Store> allStores = storeService.findAllStores();
+        Long range = 10000000L;
+
+        List<Store> allStores = storeService.findAllStores(range);
 
 //        List<SimpleSearchStoreDTO> dto = allStores.stream().map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 //
@@ -85,7 +87,7 @@ class JTSTest {
 
     @Test
     @DisplayName("ST_Contains QueryDSL")
-    void st_contains_querydsl() {
+    void st_contains_querydsl() throws ParseException {
         double myLat = 35.1633408;
         double myLon = 129.1845632;
 

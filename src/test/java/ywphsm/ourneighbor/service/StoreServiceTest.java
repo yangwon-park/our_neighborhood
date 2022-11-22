@@ -110,7 +110,7 @@ class StoreServiceTest {
             System.out.println("menu = " + menu);
         }
 
-        List<Store> aalist = storeService.findAllStores();
+        List<Store> aalist = storeService.findAllStores(1000000L);
         System.out.println("aalist.size() = " + aalist.size());
         for (Store store : aalist) {
             System.out.println("store.getLat() = " + store.getLat());

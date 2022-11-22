@@ -6,14 +6,9 @@ import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
 import org.geolatte.geom.builder.DSL.*;
 import org.geolatte.geom.*;
-import org.geolatte.geom.codec.Wkt;
-import org.geolatte.geom.cga.Circle;
-import org.geolatte.geom.crs.CoordinateReferenceSystems;
 import org.geolatte.geom.jts.JTS;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
 import org.locationtech.jts.util.GeometricShapeFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -231,8 +226,8 @@ public class StoreService {
     }
 
     // 전체 매장 조회
-    public List<Store> findAllStores() {
-        return storeRepository.findAllStoresLt11000000();
+    public List<Store> findAllStores(Long range) {
+        return storeRepository.findAllStoresLt(range);
     }
 
     // 검색어 포함 매장명 조회
@@ -254,70 +249,32 @@ public class StoreService {
     // https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
     // https://www.baeldung.com/hibernate-spatial
     public List<Store> getTopNByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
-        Geometry lineString = getLineString(lat, lon, dist);
-        return storeRepository.getTopNByCategories(lineString, categoryId);
+        return storeRepository.getTopNByCategories(getLineString(lat, lon, dist), categoryId);
     }
 
     public List<Store> getStoresByMbrContains(double dist, double lat, double lon) throws ParseException {
-        Geometry lineString = getLineString(lat, lon, dist);
-        return storeRepository.getStoresByMbrContains(lineString);
+        return storeRepository.getStoresByMbrContains(getLineString(lat, lon, dist));
     }
 
     public List<Store> getStoresBySTContains(double dist, double lat, double lon) throws ParseException {
-//        Geometry polygon = getPolygon(lat, lon, dist);
 
-        Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
-        Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
-        Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
-        Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
-
-        double nex = northEast.getLon();
-        double ney = northEast.getLat();
-
-        double nwx = northWest.getLon();
-        double nwy = northWest.getLat();
-
-        double swx = southWest.getLon();
-        double swy = southWest.getLat();
-
-        double sex = southEast.getLon();
-        double sey = southEast.getLat();
-
-        Polygon<G2D> polygon = polygon(WGS84, ring(g(ney, nex), g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
-
-        return storeRepository.getStoresBySTContains(polygon);
+        return storeRepository.getStoresBySTContains(getPolygon(lat, lon, dist));
     }
     public List<Store> getStoresBySTContainsWithCircle(double dist, double lat, double lon) throws ParseException {
-        Geometry circle = createCircle(lat, lon, dist);
+        org.locationtech.jts.geom.Geometry circle = createCircle(lat, lon, dist);
         return storeRepository.getStoresBySTContainsWithCircle(JTS.from(circle));
     }
 
 
-    public List<Store> getStoresByStContains(double lat, double lon){
+    public List<Store> getStoresByStContains(double lat, double lon) throws ParseException {
         double dist = 3;
+        Geometry<G2D> polygon = getPolygon(lat, lon, dist);
 
-        Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
-        Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
-        Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
-        Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
-
-        double nex = northEast.getLon();
-        double ney = northEast.getLat();
-
-        double nwx = northWest.getLon();
-        double nwy = northWest.getLat();
-
-        double swx = southWest.getLon();
-        double swy = southWest.getLat();
-
-        double sex = southEast.getLon();
-        double sey = southEast.getLat();
-
-        return storeRepository.getStoresByStContains(nex, ney, nwx, nwy, swx, swy, sex, sey);
+        return storeRepository.getStoresByStContains(polygon);
     }
 
     public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
-        Geometry lineString = getLineString(lat, lon, dist);
+        Geometry<G2D> lineString = getLineString(lat, lon, dist);
         List<Store> topStoreList = storeRepository.getTopNByCategories(lineString, categoryId);
 
         return topStoreList.stream()
@@ -329,25 +286,10 @@ public class StoreService {
     public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat, double lon) throws ParseException {
         double dist = 3;
 
-        Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
-        Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
-        Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
-        Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
-
-        double nex = northEast.getLon();
-        double ney = northEast.getLat();
-
-        double nwx = northWest.getLon();
-        double nwy = northWest.getLat();
-
-        double swx = southWest.getLon();
-        double swy = southWest.getLat();
-
-        double sex = southEast.getLon();
-        double sey = southEast.getLat();
+        Geometry<G2D> polygon = getPolygon(lat, lon, dist);
 
         PageRequest pageRequest = PageRequest.of(page, 10);
-        return storeRepository.searchByHashtag(hashtagIdList, nex, ney, nwx, nwy, swx, swy, sex, sey, pageRequest);
+        return storeRepository.searchByHashtag(hashtagIdList, polygon, pageRequest);
     }
 
 
@@ -383,7 +325,7 @@ public class StoreService {
     }
 
     // LineString 생성 메소드
-    private Geometry getLineString(double lat, double lon, double dist) throws ParseException {
+    private Geometry<G2D> getLineString(double lat, double lon, double dist) throws ParseException {
         Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
         Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
 
@@ -392,13 +334,11 @@ public class StoreService {
         double swx = southWest.getLat();
         double swy = southWest.getLon();
 
-        String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", nex, ney, swx, swy);
-
-        return wktToGeometry(lineStringFormat);
+        return linestring(WGS84,g(nex,ney),g(swx,swy));
     }
 
     // Polygon 생성 메소드
-    private Geometry getPolygon(double lat, double lon, double dist) throws ParseException {
+    private Geometry<G2D> getPolygon(double lat, double lon, double dist) throws ParseException {
         Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
         Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
         Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
@@ -416,11 +356,8 @@ public class StoreService {
         double sex = southEast.getLon();
         double sey = southEast.getLat();
 
-        String polygonFormat = String.format("POLYGON((%f %f, %f %f, %f %f, %f %f, %f %f))",
-                ney, nex, nwy, nwx, swy, swx, sey, sex, ney, nex);
-
-
-        return wktToGeometry(polygonFormat);
+        return polygon(WGS84,ring(g(ney,nex),
+                g(nwy,nwx),g(swy,swx), g(sey, sex), g(ney, nex)));
     }
 
     @Transactional
@@ -492,13 +429,7 @@ public class StoreService {
         }
     }
 
-
-    // WKT로 spatial type을 읽어드림
-    private Geometry wktToGeometry(String text) throws ParseException {
-        return new WKTReader().read(text);
-    }
-
-    private Geometry createCircle(double x, double y, double radius) {
+    private org.locationtech.jts.geom.Geometry createCircle(double x, double y, double radius) {
         GeometricShapeFactory factory = new GeometricShapeFactory();
         factory.setNumPoints(32);
         factory.setCentre(new Coordinate(x, y));

@@ -123,7 +123,12 @@ public class StoreApiController {
     }
 
     @PostMapping("/user/request-add-store")
-    public Long requestAddStore(RequestAddStoreDTO requestAddStoreDTO, Long memberId) {
+    public Long requestAddStore(RequestAddStoreDTO.Add requestAddStoreDTO, Long memberId) {
         return requestAddStoreService.save(requestAddStoreDTO, memberId);
+    }
+
+    @DeleteMapping("/admin/request-add-store/delete")
+    public Long deleteRequestAddStore(Long requestAddStoreId) {
+        return requestAddStoreService.delete(requestAddStoreId);
     }
 }

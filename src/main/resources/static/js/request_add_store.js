@@ -6,12 +6,20 @@ var main = {
         let _this = this;
 
         const requestAddBtn = document.getElementById("request-add-store");
-
+        const requestDeleteBtnList = document.querySelectorAll(".request-delete");
 
         if (requestAddBtn !== null) {
             requestAddBtn.addEventListener("click", () => {
                 _this.save()
             });
+        }
+
+        if (requestDeleteBtnList !== null) {
+            requestDeleteBtnList.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    _this.delete(btn.id);
+                })
+            })
         }
     },
 
@@ -74,6 +82,23 @@ var main = {
             }
         }
 
+    },
+
+    delete: function (btnId) {
+        const requestId = btnId.substring(18);
+
+        axios({
+            method: "delete",
+            url: "/admin/request-add-store/delete",
+            params: {
+                requestAddStoreId: requestId
+            }
+        }).then((resp) => {
+            alert("가게추가 요청 삭제가 완료됐습니다.");
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error);
+        })
     },
 
 };

@@ -3,6 +3,7 @@ package ywphsm.ourneighbor.domain.member;
 import lombok.*;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
 import ywphsm.ourneighbor.domain.Review;
+import ywphsm.ourneighbor.domain.store.RequestAddStore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -45,12 +46,15 @@ public class Member extends BaseTimeEntity {
     private Role role;
 
     //(N:N) Store
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
 
     //(1:N) Review
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviewList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<RequestAddStore> requestAddStoreList = new ArrayList<>();
 
     // 생성 메소드
     public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {

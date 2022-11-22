@@ -6,15 +6,19 @@ var main = {
         let _this = this;
 
         // mask.loadingWithMask();
-        const categoryMain = document.getElementById("category-main").value;
-        const categoryMid = document.getElementById("category-mid").value;
-        const categorySub = document.getElementById("category-sub").value;
-        let categoryList = [];
-        categoryList.push(categoryMain);
-        categoryList.push(categoryMid);
-        categoryList.push(categorySub);
-        console.log("categoryList = ", categoryList)
-        _this.getCategories(categoryList);
+        if (document.getElementById("category-main")) {
+            const categoryMain = document.getElementById("category-main").value;
+            const categoryMid = document.getElementById("category-mid").value;
+            const categorySub = document.getElementById("category-sub").value;
+            let categoryList = [];
+            categoryList.push(categoryMain);
+            categoryList.push(categoryMid);
+            categoryList.push(categorySub);
+            console.log("categoryList = ", categoryList)
+            _this.getCategories(categoryList);
+        } else {
+            _this.getCategories();
+        }
 
         const storeSaveBtn = document.getElementById("store-save");
         const storeUpdateBtn = document.getElementById("store-update");
@@ -260,10 +264,12 @@ var main = {
             let mainOption = document.createElement("option");
             mainOption.text = rc.name;
             mainOption.value = rc.categoryId;
-            if (mainOption.value === categoryList[0]) {
-                mainOption.selected = true;
-                this.storeEditCheck = true;
-                console.log("true")
+            if (this.storeEditCheck) {
+                if (mainOption.value === categoryList[0]) {
+                    mainOption.selected = true;
+                    this.storeEditCheck = true;
+                    console.log("true");
+                }
             }
             this.categoryLayerEl.main.appendChild(mainOption);
 

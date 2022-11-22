@@ -195,4 +195,10 @@ public class StoreController {
         return "store/store_owner_edit";
     }
 
+    @GetMapping("/user/request-add-store")
+    public String requestAddStore(Model model) {
+        model.addAttribute("request", new RequestAddStoreDTO());
+        return "store/request_add_store";
+    }
+
 }

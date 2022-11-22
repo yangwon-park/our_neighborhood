@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.domain.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -53,5 +54,7 @@ public class ReviewMemberDTO {
         this.storeName = storeName;
         this.storeId = storeId;
     }
+
+
 
 }

@@ -54,14 +54,14 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .fetch();
     }
 
-    //  Projections 참고
-    //  https://wildeveloperetrain.tistory.com/94
-    //  geolatte 참고
-    //  https://github.com/GeoLatte/geolatte-geom
+    /*
+        Projections 참고
+        https://wildeveloperetrain.tistory.com/94
+        Geolatte Geom 참고
+        https://github.com/GeoLatte/geolatte-geom
+     */
     @Override
-    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList,
-                                                       Geometry<G2D> polygon,
-                                                       Pageable pageable) {
+    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, Geometry<G2D> polygon, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -99,7 +99,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .from(store)
                 .leftJoin(store.file, QUploadFile.uploadFile)
                 .fetchJoin()
-                .where(pointContains(polygon), store.id.lt(20000000))
+                .where(pointContains(polygon), store.id.goe(14500000), store.id.lt(15500000))
                 .fetch();
     }
 

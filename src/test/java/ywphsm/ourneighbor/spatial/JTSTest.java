@@ -10,11 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.StoreService;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,67 +30,6 @@ class JTSTest {
     void before() {
 
     }
-
-    @Test
-    @DisplayName("단순 조회 후 거리 필터")
-    void searchByCategory() {
-
-        String myLat = "35.1633408";
-        String myLon = "129.1845632";
-        double dist = 3000;
-
-        Long range = 10000000L;
-
-        List<Store> allStores = storeService.findAllStores(range);
-
-//        List<SimpleSearchStoreDTO> dto = allStores.stream().map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
-//
-//        calculateHowFarToTheTarget(myLat, myLon, dto);
-//
-//        List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
-//                -> simpleSearchStoreDTO.getDistance() <= dist / 1000).collect(Collectors.toList());
-    }
-
-    @Test
-    @DisplayName("MBR Contains")
-    void mbr() throws ParseException {
-        double myLat = 35.1633408;
-        double myLon = 129.1845632;
-        double dist = 3;
-
-        List<Store> result = storeService.getStoresByMbrContains(dist, myLat, myLon);
-    }
-
-    @Test
-    @DisplayName("St_Contains")
-    void st_contains() throws ParseException {
-        double myLat = 35.1633408;
-        double myLon = 129.1845632;
-        double dist = 3;
-
-        List<Store> result = storeService.getStoresBySTContains(dist, myLat, myLon);
-    }
-
-    @Test
-    @DisplayName("St_Contains With circle")
-    void st_contains_circle() throws ParseException {
-        double myLat = 35.1633408;
-        double myLon = 129.1845632;
-        double dist = 3;
-
-        List<Store> result = storeService.getStoresBySTContainsWithCircle(2, myLat, myLon);
-        System.out.println("result.size() = " + result.size());
-    }
-
-    @Test
-    @DisplayName("ST_Contains QueryDSL")
-    void st_contains_querydsl() throws ParseException {
-        double myLat = 35.1633408;
-        double myLon = 129.1845632;
-
-        List<Store> result = storeService.getStoresByStContains(myLat, myLon);
-    }
-
 
     @Test
     @DisplayName("WKT 읽기")

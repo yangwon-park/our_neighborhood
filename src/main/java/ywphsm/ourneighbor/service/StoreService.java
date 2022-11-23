@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
-import org.geolatte.geom.builder.DSL.*;
 import org.geolatte.geom.*;
 import org.geolatte.geom.jts.JTS;
 import org.locationtech.jts.geom.Coordinate;
@@ -245,56 +244,48 @@ public class StoreService {
         return storeRepository.searchByCategory(categoryId);
     }
 
-    // Hibernate Spatial 참고
-    // https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
-    // https://www.baeldung.com/hibernate-spatial
+    /*
+        Hibernate Spatial 참고
+            https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
+            https://www.baeldung.com/hibernate-spatial
+     */
     public List<Store> getTopNByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
         return storeRepository.getTopNByCategories(getLineString(lat, lon, dist), categoryId);
     }
+
+    public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
+        List<Store> topStoreList = storeRepository.getTopNByCategories(getLineString(lat, lon, dist), categoryId);
+
+        return topStoreList.stream()
+                .filter(store -> store.getFile() != null)
+                .map(store -> store.getFile().getUploadImageUrl())
+                .collect(Collectors.toList());
+    }
+
+    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat, double lon) throws ParseException {
+        double dist = 3;
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        return storeRepository.searchByHashtag(hashtagIdList, getPolygon(lat, lon, dist), pageRequest);
+    }
+
 
     public List<Store> getStoresByMbrContains(double dist, double lat, double lon) throws ParseException {
         return storeRepository.getStoresByMbrContains(getLineString(lat, lon, dist));
     }
 
     public List<Store> getStoresBySTContains(double dist, double lat, double lon) throws ParseException {
-
         return storeRepository.getStoresBySTContains(getPolygon(lat, lon, dist));
     }
+
     public List<Store> getStoresBySTContainsWithCircle(double dist, double lat, double lon) throws ParseException {
         org.locationtech.jts.geom.Geometry circle = createCircle(lat, lon, dist);
         return storeRepository.getStoresBySTContainsWithCircle(JTS.from(circle));
     }
 
-
-    public List<Store> getStoresByStContains(double lat, double lon) throws ParseException {
+    public List<Store> getStoresByStContainsWithQueryDSL(double lat, double lon) throws ParseException {
         double dist = 3;
-        Geometry<G2D> polygon = getPolygon(lat, lon, dist);
-
-        return storeRepository.getStoresByStContains(polygon);
+        return storeRepository.getStoresByStContains(getPolygon(lat, lon, dist));
     }
-
-    public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
-        Geometry<G2D> lineString = getLineString(lat, lon, dist);
-        List<Store> topStoreList = storeRepository.getTopNByCategories(lineString, categoryId);
-
-        return topStoreList.stream()
-                    .filter(store -> store.getFile() != null)
-                    .map(store -> store.getFile().getUploadImageUrl())
-                    .collect(Collectors.toList());
-    }
-
-    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat, double lon) throws ParseException {
-        double dist = 3;
-
-        Geometry<G2D> polygon = getPolygon(lat, lon, dist);
-
-        PageRequest pageRequest = PageRequest.of(page, 10);
-        return storeRepository.searchByHashtag(hashtagIdList, polygon, pageRequest);
-    }
-
-
-
-
 
 
     //매장주인이 맞는지 체크
@@ -325,20 +316,20 @@ public class StoreService {
     }
 
     // LineString 생성 메소드
-    private Geometry<G2D> getLineString(double lat, double lon, double dist) throws ParseException {
+    private LineString<G2D> getLineString(double lat, double lon, double dist) throws ParseException {
         Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
         Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
 
-        double nex = northEast.getLat();
-        double ney = northEast.getLon();
-        double swx = southWest.getLat();
-        double swy = southWest.getLon();
+        double nex = northEast.getLon();
+        double ney = northEast.getLat();
+        double swx = southWest.getLon();
+        double swy = southWest.getLat();
 
-        return linestring(WGS84,g(nex,ney),g(swx,swy));
+        return linestring(WGS84, g(ney,nex), g(swy,swx));
     }
 
     // Polygon 생성 메소드
-    private Geometry<G2D> getPolygon(double lat, double lon, double dist) throws ParseException {
+    private Polygon<G2D> getPolygon(double lat, double lon, double dist) throws ParseException {
         Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
         Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
         Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
@@ -355,6 +346,15 @@ public class StoreService {
 
         double sex = southEast.getLon();
         double sey = southEast.getLat();
+
+        System.out.println("ney = " + ney);
+        System.out.println("nex = " + nex);
+        System.out.println("nwy = " + nwy);
+        System.out.println("nwx = " + nwx);
+        System.out.println("swy = " + swy);
+        System.out.println("swx = " + swx);
+        System.out.println("sey = " + sey);
+        System.out.println("sex = " + sex);
 
         return polygon(WGS84,ring(g(ney,nex),
                 g(nwy,nwx),g(swy,swx), g(sey, sex), g(ney, nex)));

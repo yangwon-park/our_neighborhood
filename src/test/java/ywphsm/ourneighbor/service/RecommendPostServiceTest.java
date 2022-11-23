@@ -154,18 +154,4 @@ class RecommendPostServiceTest {
 //        assertThat(check).isTrue();
     }
 
-    @Test
-    void 나누기() {
-        String hashtagIdList = "5005,5007,5009,5010";
-
-        List<Long> result = new ArrayList<>();
-
-        String[] split = hashtagIdList.split(",");
-
-        for (String s : split) {
-            result.add(Long.parseLong(s));
-        }
-
-        System.out.println("result = " + result);
-    }
 }

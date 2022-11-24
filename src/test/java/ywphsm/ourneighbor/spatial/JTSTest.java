@@ -1,6 +1,5 @@
 package ywphsm.ourneighbor.spatial;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Geometry;
@@ -25,11 +24,6 @@ class JTSTest {
 
     @Autowired
     MemberService memberService;
-
-    @BeforeEach
-    void before() {
-
-    }
 
     @Test
     @DisplayName("WKT 읽기")

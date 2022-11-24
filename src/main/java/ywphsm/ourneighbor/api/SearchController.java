@@ -116,7 +116,10 @@ public class SearchController {
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
 
-        Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(hashtagList, 0, Double.parseDouble(myLat), Double.parseDouble(myLon));
+        double dist = 3;
+
+        Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(
+                hashtagList, 0, Double.parseDouble(myLat), Double.parseDouble(myLon), dist);
 
         calculateHowFarToTheTarget(myLat, myLon, result.getContent());
 

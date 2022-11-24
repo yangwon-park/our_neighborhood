@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 public class MenuApiController {
 
     private final MenuService menuService;
+
     private final StoreService storeService;
 
     private final FileStore fileStore;

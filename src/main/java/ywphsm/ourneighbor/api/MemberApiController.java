@@ -19,9 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.Random;
-import java.util.stream.Collectors;
-
-import static ywphsm.ourneighbor.domain.store.distance.Distance.calculateHowFarToTheTarget;
 
 @Slf4j
 @RequiredArgsConstructor

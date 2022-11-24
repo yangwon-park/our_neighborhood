@@ -6,16 +6,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
-import org.locationtech.jts.util.GeometricShapeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -28,22 +21,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
-import ywphsm.ourneighbor.config.AuditingConfig;
-import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.*;
-import ywphsm.ourneighbor.domain.store.distance.Direction;
-import ywphsm.ourneighbor.domain.store.distance.Location;
+import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import javax.persistence.EntityManager;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -52,7 +42,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
-import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
+import static ywphsm.ourneighbor.domain.store.distance.Distance.calculateHowFarToTheTarget;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
@@ -173,7 +163,7 @@ class StoreServiceTest {
         // 원인은 알겠으나 해결법을 아직 모름 => SpringBootTest의 기능으로만 테스트 구현하면 성공하므로 일단 이렇게 대처
         // 저장된 store 불러옴
 //        Store findStore = storeService.searchByKeyword(dto.getName()).get(0);
-        
+
         // API 호출의 Return 값인 Id를 구하기 위한 로직
         MvcResult mvcResult = resultActions.andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();
@@ -281,24 +271,7 @@ class StoreServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    void hibernate_spatial_test() throws ParseException {
-        String pointFormat = String.format("POINT(%f %f)", 35.1710366410643, 129.175759994618);
-        String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156);
-        String polygonFormat = String.format("POLYGON((%f %f, %f %f, %f %f))", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156, 35.182416023937336, 129.20790463400292);
 
-        Geometry point = wktToGeometry(pointFormat);
-        Geometry lineString = wktToGeometry(lineStringFormat);
-        // polygon : startPoint와 endPoint가 일치해야만 함
-        Geometry polygon = wktToGeometry(polygonFormat);
 
-        assertThat(point.getGeometryType()).isEqualTo("Point");
-        assertThat(lineString.getGeometryType()).isEqualTo("LineString");
-        assertThat(polygon.getGeometryType()).isEqualTo("Polygon");
-    }
-
-    private Geometry wktToGeometry(String text) throws ParseException {
-        return new WKTReader().read(text);
-    }
 
 }

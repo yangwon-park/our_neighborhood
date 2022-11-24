@@ -1,3 +1,5 @@
+import mask from "./mask.js";
+
 var app = {
     init: function () {
 
@@ -15,6 +17,7 @@ var app = {
                 });
             });
         }
+
     },
 
 }

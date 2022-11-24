@@ -6,7 +6,6 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 
 import java.util.Map;
-import java.util.Objects;
 
 @Data
 public class OAuthAttributes {

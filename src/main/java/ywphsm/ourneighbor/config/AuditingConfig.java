@@ -12,12 +12,16 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 
-// Spring Data JPA에서 Auditing 기능 사용을 위해 필수 (등록, 수정 추적)
+/*
+    Spring Data JPA에서 Auditing 기능 사용을 위해 필수 (등록, 수정 추적)
+ */
 @EnableJpaAuditing
 @Configuration
 public class AuditingConfig {
 
-    // 생성자, 수정자 Email로 받아옴
+    /*
+        생성자, 수정자 Email로 받아옴
+     */
     @Bean
     public AuditorAware<String> auditorProvider(HttpServletRequest request) {
         return () -> {

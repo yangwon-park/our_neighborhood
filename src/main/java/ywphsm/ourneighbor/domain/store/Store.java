@@ -2,8 +2,8 @@ package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import ywphsm.ourneighbor.domain.*;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
@@ -42,6 +42,13 @@ public class Store extends BaseEntity {
 
     private Double lon;                // 경도
 
+    @Column(columnDefinition = "Point")
+    private Point<G2D> point;
+
+    public void addPoint(Point<G2D> point) {
+        this.point = point;
+    }
+
     private String phoneNumber;
 
     private String notice;                    // 가게 소식
@@ -49,6 +56,8 @@ public class Store extends BaseEntity {
     private String intro;                     // 가게 소개
 
     private int ratingTotal;
+
+    private String homePage;
 
 //    @OneToMany(mappedBy = "store")
 //    private List<DaysOfStore> daysOfStore;
@@ -111,15 +120,16 @@ public class Store extends BaseEntity {
      */
     @Builder
     public Store(Long id, String name, Double lat, Double lon,
-                 String phoneNumber, BusinessTime businessTime, String notice, String intro,
+                 Point point, String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address,
-                 ParkAvailable park, String parkDetail,
+                 ParkAvailable park, String parkDetail, String homePage,
                  List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,
                  List<HashtagOfStore> hashtagOfStoreList) {
         this.id = id;
         this.name = name;
         this.lat = lat;
         this.lon = lon;
+        this.point = point;
         this.phoneNumber = phoneNumber;
         this.businessTime = businessTime;
         this.notice = notice;
@@ -128,6 +138,7 @@ public class Store extends BaseEntity {
         this.status = status;
         this.address = address;
         this.park = park;
+        this.homePage = homePage;
         this.parkDetail = parkDetail;
         this.menuList = menuList;
         this.categoryOfStoreList = categoryOfStoreList;
@@ -166,6 +177,7 @@ public class Store extends BaseEntity {
         this.intro = store.getIntro();
         this.park = store.getPark();
         this.parkDetail = store.getParkDetail();
+        this.homePage = store.getHomePage();
         this.offDays = store.getOffDays();
         this.address = store.getAddress();
     }

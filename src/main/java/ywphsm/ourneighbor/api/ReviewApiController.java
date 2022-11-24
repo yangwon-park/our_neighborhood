@@ -23,7 +23,6 @@ public class ReviewApiController {
         return reviewService.pagingReview(storeId, page);
     }
 
-    // hastag는 Store에 연관돼있음
     @PostMapping("/user/review")
     public Long save(ReviewDTO.Add dto, @RequestParam String hashtag) throws IOException, ParseException {
         return reviewService.save(dto, hashtag);

@@ -23,6 +23,8 @@ var main = {
         const storeSaveBtn = document.getElementById("store-save");
         const storeUpdateBtn = document.getElementById("store-update");
         const storeDeleteBtn = document.getElementById("store-delete");
+        const storeOwnerAddBtn = document.getElementById("store-owner-add");
+        const storeOwnerDeleteBtn = document.querySelectorAll(".store-owner-delete");
 
         if (storeSaveBtn !== null) {
             storeSaveBtn.addEventListener("click", () => {
@@ -60,8 +62,6 @@ var main = {
     },
 
     save: function () {
-        mask.loadingWithMask();
-
         // input 태그
         const els = {
             name: document.getElementById("name"),
@@ -105,6 +105,8 @@ var main = {
             && els["roadAddr"].value !== "" && els["numberAddr"].value !== ""
             && els["openingTime"].value !== "" && els["closingTime"].value !== ""
             && mainCateVal !== "") {
+
+            mask.loadingWithMask();
 
             axios({
                 method: "post",
@@ -457,8 +459,6 @@ var main = {
         const memberId = btnId.substring(22);
         const storeId = document.getElementById("storeId");
 
-        console.log("storeId = ", memberId)
-        console.log("userId = ", storeId.value)
 
         axios({
             method: "delete",

@@ -182,10 +182,10 @@ var main = {
             });
     },
 
-    getTop5Categories: function (categoryId, map) {
+    getTopNCategories: function (categoryId, map) {
         axios({
             method: "get",
-            url: "/get-top5-categories",
+            url: "/get-topN-categories",
             params: {
                 categoryId: categoryId
             }
@@ -382,7 +382,7 @@ var main = {
                     if (sessionStorage.getItem("cateFromHome") !== null) {
                         let cateFromHome = sessionStorage.getItem("cateFromHome");
 
-                        this.getTop5Categories(cateFromHome, map);
+                        this.getTopNCategories(cateFromHome, map);
                     }
                 }
             }
@@ -410,7 +410,7 @@ var main = {
                     if (sessionStorage.getItem("cateFromHome") != null) {
                         let cateFromHome = sessionStorage.getItem("cateFromHome");
 
-                        this.getTop5Categories(cateFromHome, map);
+                        this.getTopNCategories(cateFromHome, map);
                     }
                 }
 

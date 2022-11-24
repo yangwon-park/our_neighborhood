@@ -1,5 +1,6 @@
 package ywphsm.ourneighbor.repository.store.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -26,6 +27,11 @@ public class SimpleSearchStoreDTO {
 
     private Double distance;
 
+    private int average;
+
+    private String uploadImgUrl;
+
+    @Builder
     public SimpleSearchStoreDTO(Store store) {
         storeId = store.getId();
         name = store.getName();
@@ -34,5 +40,25 @@ public class SimpleSearchStoreDTO {
         phoneNumber = store.getPhoneNumber();
         status = store.getStatus();
         address = store.getAddress();
+        average = store.getRatingTotal();
+
+        if (store.getFile() != null) {
+            uploadImgUrl = store.getFile().getUploadImageUrl();
+        }
+    }
+
+    public SimpleSearchStoreDTO(Long storeId, String name,
+                                Double lon, Double lat, int average,
+                                String phoneNumber, StoreStatus status,
+                                Address address, String uploadImgUrl) {
+        this.storeId = storeId;
+        this.name = name;
+        this.lon = lon;
+        this.lat = lat;
+        this.average = average;
+        this.phoneNumber = phoneNumber;
+        this.status = status;
+        this.address = address;
+        this.uploadImgUrl = uploadImgUrl;
     }
 }

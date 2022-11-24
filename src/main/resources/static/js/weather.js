@@ -2,10 +2,13 @@ import mask from "./mask.js";
 
 var main = {
     init: async function () {
+        sessionStorage.clear();
         let _this = this;
 
         mask.loadingWithMask();
+
         await _this.findCoords();
+        this.getCateImages();
     },
 
     findCoords: async function () {
@@ -18,23 +21,47 @@ var main = {
 
         let currentNx = this.getCookie("nx");
         let currentNy = this.getCookie("ny");
+        let skyStatus = this.getCookie("skyStatus");
 
-        // 이전에 쿠키값과 현재 쿠키값이 다른 경우에만 API 호출 
-        // 즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우에만 API 재호출
+        // 이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
+        // 즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
         // => 메인 홈페이지 재방문시 로딩 속도 향상
         if (prevNx !== currentNx && prevNy !== currentNy) {
+            this.setWeatherInfoWithAPI();
+        // 어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
+        } else if (skyStatus === null) {
             this.setWeatherInfoWithAPI();
         } else {
             this.setWeatherInfoWithCookies();
         }
-
-        this.setCateImages();
     },
 
-    setCateImages: function () {
+    getStoreBasedOnWeather: function () {
+        const recommendPostHeader = document.getElementById("recommend-post-header");
+        const recommendPostContent = document.getElementById("recommend-post-content");
+        const weatherBtn = document.getElementById("weather-btn");
+
         axios({
             method: "get",
-            url: "/get-images"
+            url: "/get-recommend-post"
+        }).then((resp) => {
+            recommendPostHeader.innerText = resp.data.header;
+            recommendPostContent.firstElementChild.innerText = resp.data.content;
+
+            weatherBtn.addEventListener("click", () => {
+                sessionStorage.setItem("hashtagIdList", resp.data.hashtagIdList);
+                window.location = "/recommend/store/list";
+            });
+
+        }).catch((error) => {
+            console.error(error);
+        });
+    },
+
+    getCateImages: function () {
+        axios({
+            method: "get",
+            url: "/get-cate-images"
         }).then((resp) => {
             const restaurantImages = resp.data[0];
             const cafeImages = resp.data[1];
@@ -78,66 +105,85 @@ var main = {
             let skyStatus = resp.data.status;
             let currentTmp = resp.data.tmp;
             let currentPop = resp.data.pop;
+            let currentPcp = resp.data.pcp;
             let pm10Value = resp.data.pm10Value;
 
-            this.setCookie("skyStatus", skyStatus, 6);
-            this.setCookie("tmp", currentTmp, 6);
-            this.setCookie("pop", currentPop, 6);
-            this.setCookie("pm10Value", pm10Value, 6);
+            this.setCookie("skyStatus", skyStatus, 1);
+            this.setCookie("tmp", currentTmp, 1);
+            this.setCookie("pop", currentPop, 1);
+            this.setCookie("pcp", currentPcp, 1);
+            this.setCookie("pm10Value", pm10Value, 1);
 
-            this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, pm10Value);
+            this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, currentPcp, pm10Value);
+
+            this.getStoreBasedOnWeather();
 
             mask.closeMask();
         }).catch((error) => {
             alert("현재 날씨 정보를 불러올 수 없습니다.");
             console.error(error);
             mask.closeMask();
-        })
+        });
     },
 
     setWeatherInfoWithCookies: function () {
         let skyStatus = this.getCookie("skyStatus");
         let currentTmp =  this.getCookie("tmp");
         let currentPop = this.getCookie("pop");
+        let currentPcp = this.getCookie("pcp");
         let pm10Value = this.getCookie("pm10Value");
 
-        this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, pm10Value);
+        this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, currentPcp, pm10Value);
+
+        this.getStoreBasedOnWeather();
 
         mask.closeMask();
     },
 
-    setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, pm10Value) {
+    setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, currentPcp, pm10Value) {
         const _skyStatus = document.getElementById("sky-status");
         const _tmp = document.getElementById("tmp");
         const _pop = document.getElementById("pop");
         const _pm10Value = document.getElementById("pm-10-value");
-        const fontAwesome = document.createElement("i")
 
         if (skyStatus === "SUNNY") {
-            fontAwesome.innerHTML = "<i class=\"fa-solid fa-sun orange fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/sunny.png)"
         } else if (skyStatus === "CLOUDY") {
-            fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud-sun fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/cloudy.png)"
         } else if (skyStatus === "VERYCLOUDY") {
-            fontAwesome.innerHTML = "<i class=\"fa-solid fa-cloud fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/very_cloudy.png)"
         } else if (skyStatus === "RAINY") {
-            fontAwesome.innerHTML = "<i class=\"fa-solid fa-umbrella fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/rainy.png)"
         } else if (skyStatus === "SNOWY") {
-            fontAwesome.innerHTML = "<i class=\"fa-regular fa-snowflake fs-1\"></i>"
+            _skyStatus.style.backgroundImage = "url(../images/icon/weather/snowy.png)"
         }
+
+        _skyStatus.style.backgroundSize = "contain";
+        _skyStatus.style.backgroundRepeat = "no-repeat";
+        _skyStatus.style.backgroundPosition = "center";
 
         if (pm10Value <= 30) {
-            _pm10Value.innerText = "좋음 (미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.firstElementChild.innerText = "미세먼지 수준";
+            _pm10Value.lastElementChild.innerText = "좋음 (농도 : " + pm10Value + ")";
+            _pm10Value.lastElementChild.style.color = "green";
         } else if (pm10Value <= 80) {
-            _pm10Value.innerText = "보통 (미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.firstElementChild.innerText = "미세먼지 수준";
+            _pm10Value.lastElementChild.innerText = "보통 (농도 : " + pm10Value + ")";
         } else if (pm10Value <= 150) {
-            _pm10Value.innerText = "나쁨 (미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.firstElementChild.innerText = "미세먼지 수준";
+            _pm10Value.lastElementChild.innerText = "나쁨 (농도 : " + pm10Value + ")";
+            _pm10Value.lastElementChild.style.color = "#F01D04";
         } else {
-            _pm10Value.innerText = "매우 나쁨 (미세먼지 농도 : " + pm10Value + ")";
+            _pm10Value.firstElementChild.innerText = "미세먼지 수준";
+            _pm10Value.lastElementChild.innerText = "매우 나쁨 (농도 : " + pm10Value + ")";
+            _pm10Value.lastElementChild.style.color = "#F01D04";
         }
 
-        _skyStatus.appendChild(fontAwesome);
-        _tmp.innerText = "현재 기온 : " + currentTmp + "℃";
-        _pop.innerText = "강수 확률 : " + currentPop + "%";
+        _tmp.firstElementChild.innerText = "현재 기온";
+        _tmp.lastElementChild.innerText = currentTmp + "°";
+
+        _pop.firstElementChild.innerText = "시간당 강수량";
+        _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
     },
 
     getCoords: function (options) {
@@ -154,7 +200,7 @@ var main = {
 
         let sidoName = data.result[0].region_1depth_name;
 
-        this.setCookie("sidoName", sidoName, 6);
+        this.setCookie("sidoName", sidoName, 1);
     },
 
     getRegionCode: function (lat, lon) {
@@ -182,10 +228,10 @@ var main = {
         let nx = coords["nx"];
         let ny = coords["ny"];
 
-        this.setCookie("nx", nx, 6);
-        this.setCookie("ny", ny, 6);
-        this.setCookie("lat", lat, 6);
-        this.setCookie("lon", lon, 6);
+        this.setCookie("nx", nx, 1);
+        this.setCookie("ny", ny, 1);
+        this.setCookie("lat", lat, 1);
+        this.setCookie("lon", lon, 1);
 
         await this.getSidoName(position);
     },
@@ -282,7 +328,7 @@ var main = {
 
     setCookie: function (key, value, exp) {
         let date = new Date();
-        date.setDate(date.getDate() + (exp * 1000 * 60 * 60)); // 1000 * 60 * 60 = 1시간
+        date.setTime(date.getTime() + (exp * 1000 * 60 * 30)); // 1000 * 60 * 60 = 1시간, exp 1 => 1ms
         document.cookie = key + "=" + value + "; path=/; expires=" + date.toUTCString() + ";";
     },
 

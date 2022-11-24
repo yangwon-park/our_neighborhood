@@ -285,6 +285,8 @@ class MemberServiceTest {
 
         String result = resultActions_findPassword.andReturn().getResponse().getContentAsString();
         assertThat(result).isEqualTo("성공");
+
+
     }
 }
 

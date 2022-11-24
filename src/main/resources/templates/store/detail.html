@@ -36,7 +36,7 @@
                     </span>
                 </th:block>
             </div>
-            <div class="col-6">
+            <div class="col-4">
                 <th:block th:if="${session.loginMember ne null}">
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">

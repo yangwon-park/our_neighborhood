@@ -48,6 +48,13 @@
                 type="button">상점 추가
         </button>
     </div>
+    <hr class="my-2">
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                th:onclick="|location.href='@{/admin/request-add-store-list}'|"
+                type="button">가게추가 요청 관리
+        </button>
+    </div>
 </section>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터

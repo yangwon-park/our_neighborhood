@@ -103,7 +103,7 @@ public class StoreService {
         List<CategoryOfStore> prevCategoryOfStoreList = findStore.getCategoryOfStoreList();
 
         List<Category> categoryList = getNotNullCategoryList(categoryIdList);
-        
+
         // 카테고리는 무조건 1개 이상 존재해야 함
         if (prevCategoryOfStoreList != null) {
             if (prevCategoryOfStoreList.size() == categoryList.size()) {
@@ -258,7 +258,8 @@ public class StoreService {
                 .collect(Collectors.toList());
     }
 
-    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat, double lon, double dist) {
+    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat,
+                                                       double lon, double dist) {
         PageRequest pageRequest = PageRequest.of(page, 10);
         return storeRepository.searchByHashtag(hashtagIdList, getPolygon(lat, lon, dist), pageRequest);
     }
@@ -314,8 +315,8 @@ public class StoreService {
         double sex = southEast.getLon();
         double sey = southEast.getLat();
 
-        return polygon(WGS84,ring(g(ney,nex),
-                g(nwy,nwx),g(swy,swx), g(sey, sex), g(ney, nex)));
+        return polygon(WGS84, ring(g(ney, nex),
+                g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
     }
 
     @Transactional

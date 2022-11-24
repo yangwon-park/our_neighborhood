@@ -28,7 +28,7 @@ var main = {
         // => 메인 홈페이지 재방문시 로딩 속도 향상
         if (prevNx !== currentNx && prevNy !== currentNy) {
             this.setWeatherInfoWithAPI();
-        // 어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
+            // 어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
         } else if (skyStatus === null) {
             this.setWeatherInfoWithAPI();
         } else {

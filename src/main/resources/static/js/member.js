@@ -389,7 +389,7 @@ var main = {
 
     findUserId: function () {
         const email = document.getElementById("email");
-        const emailValid = document.getElementById('find-userId-email-valid');
+        const emailValid = document.getElementById("find-userId-email-valid");
 
         email.classList.remove("valid-custom");
 

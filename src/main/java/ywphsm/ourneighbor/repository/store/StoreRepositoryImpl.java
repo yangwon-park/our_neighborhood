@@ -9,7 +9,6 @@ import com.querydsl.spatial.GeometryExpressions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.*;
-import org.locationtech.jts.io.ParseException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;

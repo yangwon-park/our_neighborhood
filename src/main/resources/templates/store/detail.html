@@ -27,7 +27,7 @@
                 <th:block th:if="${session.loginMember ne null}">
                     <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
                     <div class="right_area">
-                        <a href="javascript:;" class="icon heart" id="icon-heart">
+                        <a href="javascript:;" class="icon heart">
                             <img th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png' : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
                                  alt="찜하기" id="like-img">
                         </a>

@@ -16,6 +16,10 @@
       padding: 7px;
       font-weight: 500;
     }
+    .active{
+      background-color: #cdd5ec;
+    }
+
     a:link {color:black; text-decoration: none;}
     a:visited {color:black; text-decoration: none;}
     a:hover {color:black; text-decoration: underline;}
@@ -28,7 +32,6 @@
 <!-- Header -->
 <section class="header">
   <div class="header py-5">
-
   </div>
 </section>
 <section class="main">
@@ -78,7 +81,7 @@
 
           <!-- 페이지 번호 -->
           <th:block th:each="num : ${#numbers.sequence(pageMake.getStartPage(),pageMake.getEndPage())}">
-            <li class="pageInfo_btn">
+            <li class="pageInfo_btn" th:classappend="${pageMake.pageNum == num} ? 'active' : ''">
               <a th:href="|/admin/request-add-store-list?page=${num}|" th:text="${num}" class="page-number"></a>
             </li>
           </th:block>

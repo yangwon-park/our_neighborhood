@@ -6,6 +6,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+import org.locationtech.jts.util.GeometricShapeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -26,11 +31,14 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.*;
+import ywphsm.ourneighbor.domain.store.distance.Direction;
+import ywphsm.ourneighbor.domain.store.distance.Location;
 
 import javax.persistence.EntityManager;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -40,6 +48,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
+import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
@@ -267,4 +276,25 @@ class StoreServiceTest {
         assertThatThrownBy(() -> storeService.findById(storeId))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void hibernate_spatial_test() throws ParseException {
+        String pointFormat = String.format("POINT(%f %f)", 35.1710366410643, 129.175759994618);
+        String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156);
+        String polygonFormat = String.format("POLYGON((%f %f, %f %f, %f %f))", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156, 35.182416023937336, 129.20790463400292);
+
+        Geometry point = wktToGeometry(pointFormat);
+        Geometry lineString = wktToGeometry(lineStringFormat);
+        // polygon : startPoint와 endPoint가 일치해야만 함
+        Geometry polygon = wktToGeometry(polygonFormat);
+
+        assertThat(point.getGeometryType()).isEqualTo("Point");
+        assertThat(lineString.getGeometryType()).isEqualTo("LineString");
+        assertThat(polygon.getGeometryType()).isEqualTo("Polygon");
+    }
+
+    private Geometry wktToGeometry(String text) throws ParseException {
+        return new WKTReader().read(text);
+    }
+
 }

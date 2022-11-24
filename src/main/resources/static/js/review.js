@@ -67,16 +67,16 @@ var main = {
         mask.closeMask();
 
         //좋아요 버튼
-        let $likeBtn =$(".icon.heart");
+        let likeBtn =$(".icon.heart");
 
-        $likeBtn.click(function(){
+        likeBtn.click(function(){
             console.log("likeBtn.src=", document.getElementById("like-img").src);
             if (document.getElementById("like-img").src === "https://cdn-icons-png.flaticon.com/512/803/803087.png") {
-                $likeBtn.addClass("active");
+                likeBtn.addClass("active");
             }
-            $likeBtn.toggleClass("active");
+            likeBtn.toggleClass("active");
 
-            if($likeBtn.hasClass("active")){
+            if(likeBtn.hasClass("active")){
                 _this.likeUpdate(true)
                 $(this).find("img").attr({
                     "src": "https://cdn-icons-png.flaticon.com/512/803/803087.png",
@@ -197,9 +197,6 @@ var main = {
     },
 
     more: function () {
-        let page = $("#reviewBody tr").length / 5 + 1;  //마지막 리스트 번호를 알아내기 위해서 tr태그의 length를 구함.
-        let addListHtml = "";
-        console.log("page", page);
 
         const storeId = document.getElementById("storeId").value;
 
@@ -220,40 +217,52 @@ var main = {
             let data = resp.data
 
             if (data.last) {
-                $("#review-more").remove();
+                let reviewMore = document.getElementById("review-more");
+                reviewMore.remove();
+                // $("#review-more").remove();
             }
+            const table = document.getElementById("more_list");
             for (let contentElement of data.content) {
-                addListHtml += "<tr>";
+                let row = table.insertRow(table.rows.length);
+
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+                let cell4 = row.insertCell(3);
+                let cell5 = row.insertCell(4);
+                let cell6 = row.insertCell(5);
+
                 switch (contentElement.rating) {
                     case 1:
-                        addListHtml += "<td>★☆☆☆☆</td>";
+                        cell1.innerHTML = "<td>★☆☆☆☆</td>";
                         break;
                     case 2:
-                        addListHtml += "<td>★★☆☆☆</td>";
+                        cell1.innerHTML = "<td>★★☆☆☆</td>";
                         break;
                     case 3:
-                        addListHtml += "<td>★★★☆☆</td>";
+                        cell1.innerHTML = "<td>★★★☆☆</td>";
                         break;
                     case 4:
-                        addListHtml += "<td>★★★★☆</td>";
+                        cell1.innerHTML = "<td>★★★★☆</td>";
                         break;
                     case 5:
-                        addListHtml += "<td>★★★★★</td>";
+                        cell1.innerHTML = "<td>★★★★★</td>";
                         break;
                 }
-                addListHtml += "<td>" + contentElement.content + "</td>";
-                addListHtml += "<td>" + contentElement.username + "</td>";
-                addListHtml += "<td>" + contentElement.createDate.substring(0, 10) + "</td>";
-                addListHtml += '<td><img src="' + contentElement.uploadImgUrl + '" width="180" height="180" alt="리뷰 사진"></td>';
+                cell2.innerHTML = "<td>" + contentElement.content + "</td>";
+
+                cell3.innerHTML = "<td>" + contentElement.username + "</td>";
+
+                cell4.innerHTML = "<td>" + contentElement.createDate.substring(0, 10) + "</td>";
+
+                cell5.innerHTML = '<td><img src="' + contentElement.uploadImgUrl + '" width="180" height="180" alt="리뷰 사진"></td>';
+
                 if (loginMember !== null) {
                     if (loginMember === "ADMIN") {
-                        addListHtml += '<td><button id="review-delete-btn' + contentElement.reviewId + '" type="button" class="btn btn-dark mt-4 review-delete"> 삭제 </button></td>';
+                        cell6.innerHTML = '<td><button id="review-delete-btn' + contentElement.reviewId + '" type="button" class="btn btn-dark mt-4 review-delete"> 삭제 </button></td>';
                     }
                 }
-                addListHtml += "</tr>";
             }
-            // console.log("more = ", addListHtml);
-            $("#more_list tr:last").after(addListHtml);
 
             const reviewDeleteBtnList = document.querySelectorAll(".review-delete");
 

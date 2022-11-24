@@ -26,14 +26,12 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.*;
-import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import javax.persistence.EntityManager;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -42,7 +40,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ywphsm.ourneighbor.domain.menu.QMenu.menu;
-import static ywphsm.ourneighbor.domain.store.distance.Distance.calculateHowFarToTheTarget;
 
 @SpringBootTest(webEnvironment = SpringBootTest
         .WebEnvironment.RANDOM_PORT)
@@ -270,8 +267,4 @@ class StoreServiceTest {
         assertThatThrownBy(() -> storeService.findById(storeId))
                 .isInstanceOf(IllegalArgumentException.class);
     }
-
-
-
-
 }

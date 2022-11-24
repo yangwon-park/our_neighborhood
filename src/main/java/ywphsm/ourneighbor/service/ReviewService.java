@@ -2,12 +2,6 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-<<<<<<< HEAD
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-=======
->>>>>>> 61064a0757eef3190377cb85ec1496935a02fb1d
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -21,10 +15,6 @@ import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
-import ywphsm.ourneighbor.domain.hashtag.HashtagUtil;
-import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.domain.member.MemberOfStore;
-import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
@@ -36,7 +26,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.linkHashtagAndMenu;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfStore.linkHashtagAndStore;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
 

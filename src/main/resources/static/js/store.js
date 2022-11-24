@@ -62,6 +62,8 @@ var main = {
     },
 
     save: function () {
+        mask.loadingWithMask();
+
         // input 태그
         const els = {
             name: document.getElementById("name"),
@@ -105,8 +107,6 @@ var main = {
             && els["roadAddr"].value !== "" && els["numberAddr"].value !== ""
             && els["openingTime"].value !== "" && els["closingTime"].value !== ""
             && mainCateVal !== "") {
-
-            mask.loadingWithMask();
 
             axios({
                 method: "post",
@@ -459,6 +459,8 @@ var main = {
         const memberId = btnId.substring(22);
         const storeId = document.getElementById("storeId");
 
+        console.log("storeId = ", memberId)
+        console.log("userId = ", storeId.value)
 
         axios({
             method: "delete",

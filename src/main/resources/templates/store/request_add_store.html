@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{/css/argon.css}">
+<body id="main-body" class="bg-default">
+<!-- Navbar -->
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
+<section class="header">
+    <div class="header py-5">
+
+    </div>
+</section>
+<!--addForm-->
+<section class="store-add">
+    <div class="container-fluid mt--8 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="card-header bg-transparent pb-3">
+                        <div class="text-muted text-center mt-2 mb-4 fs-2">가게추가 요청</div>
+                    </div>
+                    <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
+                    <div class="card-body px-lg-5 py-lg-5">
+                        <form th:object="${request}" id="request-add-store-form" class="form-floating">
+                            <div class="form-group">
+                                <div class="">
+                                    <input th:field="*{name}" class="form-control"
+                                           placeholder="매장 이름을 입력해주세요." type="text">
+                                </div>
+                                <div id="store-name-valid" class="my-1 valid-custom">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="d-flex">
+                                    <input th:field="*{zipcode}" class="form-control zipcode"
+                                           placeholder="우편 번호" type="text" readonly>
+                                    <button type="button" onclick="openPostcode()"
+                                            class="text-center btn btn-main-color ms-3"
+                                            style="height: 3rem">우편 번호 찾기
+                                    </button>
+                                </div>
+                                <div id="store-zipcode-valid" class="my-1 valid-custom">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="">
+                                    <input th:field="*{roadAddr}" class="form-control roadAddr"
+                                           placeholder="도로명 주소" type="text" readonly>
+                                    <div id="store-roadAddr-valid" class="my-1 valid-custom">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="">
+                                    <input th:field="*{numberAddr}" class="form-control numberAddr"
+                                           placeholder="지번 주소" type="text">
+                                    <div id="store-numberAddr-valid" class="my-1 valid-custom">
+                                    </div>
+                                </div>
+                                <span id="guide" style="color:#999;display:none"></span>
+                            </div>
+                            <div class="text-center">
+                                <button id="request-add-store" type="button"
+                                        class="btn btn-main-color mt-4 float-end">가게 요청
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
+<script th:src="@{/js/postcode.js}"></script>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/request_add_store.js}"></script>
+
+</html>

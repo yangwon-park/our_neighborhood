@@ -66,7 +66,7 @@ class MemberServiceTest {
 
         queryFactory = new JPAQueryFactory(em);
     }
-    
+
     @Test
     @DisplayName("회원 가입 -> 수정 -> 삭제")
     void join_update_delete() throws Exception {
@@ -242,37 +242,51 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("멤버 Role 조회하기")
-    void findRole() {
-        String code = "판매자";
+    @WithMockUser(roles = "ADMIN")
+    void findRole() throws Exception {
+        MemberDTO.Add dto = MemberDTO.Add.builder()
+                .username("테스트1")
+                .nickname("닉네임1")
+                .birthDate("1994-05-23")
+                .email("test@1234.com")
+                .phoneNumber("01012341234")
+                .gender(0)
+                .certifiedNumber("789234")
+                .userId("testId")
+                .password("!1234")
+                .passwordCheck("!1234")
+                .build();
 
-        Role role = Role.of(code);
-        System.out.println("role.getKey() = " + role.getKey());
-        System.out.println("role.getTitle() = " + role.getTitle());
-    }
+        //회원 저장
+        String url = "http://localhost:" + port + "/member/add";
 
-    @Test
-    @WithMockUser(username = "admin", roles = "ADMIN")
-    @DisplayName("계정의 권한 업데이트")
-    void updateRole() throws Exception {
-        String userId = "ywonp94";
-        String role = "판매자";
-
-        Member findMember = memberService.findByUserId(userId);
-
-        assertThat(findMember.getRole()).isEqualTo(Role.ADMIN);
-
-        String url = "http://localhost:" + port + "/admin/update-role/" + findMember.getId();
-
-        mvc.perform(put(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(role))
+        ResultActions resultActions_save = mvc.perform(post(url)
+                        .param("username", dto.getUsername())
+                        .param("nickname", dto.getNickname())
+                        .param("birthDate", dto.getBirthDate())
+                        .param("email", dto.getEmail())
+                        .param("phoneNumber", dto.getPhoneNumber())
+                        .param("gender", String.valueOf(dto.getGender()))
+                        .param("certifiedNumber", dto.getCertifiedNumber())
+                        .param("userId", dto.getUserId())
+                        .param("password", dto.getPassword())
+                        .param("passwordCheck", dto.getPasswordCheck()))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        assertThat(findMember.getRole()).isEqualTo(Role.SELLER);
+        //비밀번호 찾기
+        url = "http://localhost:" + port + "/admin/member-role/edit";
+
+        ResultActions resultActions_findPassword = mvc.perform(put(url)
+                        .param("userId", "testId")
+                        .param("role", "SELLER"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String result = resultActions_findPassword.andReturn().getResponse().getContentAsString();
+        assertThat(result).isEqualTo("성공");
     }
 }
-
 
 
 

@@ -67,22 +67,26 @@ var main = {
         mask.closeMask();
 
         //좋아요 버튼
-        let $likeBtn =$('.icon.heart');
+        let $likeBtn =$(".icon.heart");
 
         $likeBtn.click(function(){
-            $likeBtn.toggleClass('active');
+            console.log("likeBtn.src=", document.getElementById("like-img").src);
+            if (document.getElementById("like-img").src === "https://cdn-icons-png.flaticon.com/512/803/803087.png") {
+                $likeBtn.addClass("active");
+            }
+            $likeBtn.toggleClass("active");
 
-            if($likeBtn.hasClass('active')){
+            if($likeBtn.hasClass("active")){
                 _this.likeUpdate(true)
-                $(this).find('img').attr({
-                    'src': 'https://cdn-icons-png.flaticon.com/512/803/803087.png',
-                    alt:'찜하기 완료'
+                $(this).find("img").attr({
+                    "src": "https://cdn-icons-png.flaticon.com/512/803/803087.png",
+                    alt:"찜하기 완료"
                 });
             }else{
                 _this.likeUpdate(false)
-                $(this).find('i').removeClass('fas').addClass('far')
-                $(this).find('img').attr({
-                    'src': 'https://cdn-icons-png.flaticon.com/512/812/812327.png',
+                $(this).find("i").removeClass("fas").addClass("far")
+                $(this).find("img").attr({
+                    "src": "https://cdn-icons-png.flaticon.com/512/812/812327.png",
                     alt:"찜하기"
                 })
             }
@@ -99,8 +103,8 @@ var main = {
         const storeId = document.getElementById("storeId").value;
         const memberId = document.getElementById("memberId").value;
 
-        const ratingValid = document.getElementById('review-rating-valid');
-        const contentValid = document.getElementById('review-content-valid');
+        const ratingValid = document.getElementById("review-rating-valid");
+        const contentValid = document.getElementById("review-content-valid");
 
         rating1.classList.remove("valid-custom");
         content.classList.remove("valid-custom");
@@ -111,7 +115,7 @@ var main = {
         let ratingCheck = true;
 
         if (rating1.value === "" || rating2.value === "" || rating3.value === "" ||
-            rating4.value === "" || rating5.value === '') {
+            rating4.value === "" || rating5.value === "") {
             ratingCheck = false;
         }
 
@@ -220,7 +224,6 @@ var main = {
             }
             for (let contentElement of data.content) {
                 addListHtml += "<tr>";
-                addListHtml += "<td>" + contentElement.reviewId + "</td>";
                 switch (contentElement.rating) {
                     case 1:
                         addListHtml += "<td>★☆☆☆☆</td>";
@@ -241,13 +244,25 @@ var main = {
                 addListHtml += "<td>" + contentElement.content + "</td>";
                 addListHtml += "<td>" + contentElement.username + "</td>";
                 addListHtml += "<td>" + contentElement.createDate.substring(0, 10) + "</td>";
-                addListHtml += '<td><img src="/menu/' + contentElement.storedFileName + '" width="180" height="180" alt="리뷰 사진"></td>';
+                addListHtml += '<td><img src="' + contentElement.uploadImgUrl + '" width="180" height="180" alt="리뷰 사진"></td>';
                 if (loginMember !== null) {
-                    if (loginMember === 'ADMIN') {
+                    if (loginMember === "ADMIN") {
                         addListHtml += '<td><button id="review-delete-btn' + contentElement.reviewId + '" type="button" class="btn btn-dark mt-4 review-delete"> 삭제 </button></td>';
                     }
                 }
                 addListHtml += "</tr>";
+            }
+            // console.log("more = ", addListHtml);
+            $("#more_list tr:last").after(addListHtml);
+
+            const reviewDeleteBtnList = document.querySelectorAll(".review-delete");
+
+            if (reviewDeleteBtnList !== null) {
+                reviewDeleteBtnList.forEach((btn) => {
+                    btn.addEventListener("click", () => {
+                        this.delete(btn.id);
+                    })
+                })
             }
 
             $("#reviewBody").append(addListHtml);
@@ -271,7 +286,7 @@ var main = {
             }
         }).then((resp) => {
             let check = resp.data;
-                // alert(check);
+            // alert(check);
         }).catch((error) => {
             console.log(error);
         });

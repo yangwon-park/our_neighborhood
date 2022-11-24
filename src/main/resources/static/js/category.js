@@ -106,7 +106,7 @@ var main = {
                 method: "delete",
                 url: "/admin/category/" + categoryId,
             }).then((resp) => {
-                alert('카테고리 삭제가 완료됐습니다.');
+                alert("카테고리 삭제가 완료됐습니다.");
                 window.location.reload();
             }).catch((error) => {
                 console.log(error);

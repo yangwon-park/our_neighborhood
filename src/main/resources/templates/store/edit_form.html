@@ -40,7 +40,7 @@
                                 <div class="mb-3">
                                     <input th:field="*{name}" th:errorclass="input-error" class="form-control"
                                            placeholder="매장 이름을 입력해주세요." type="text">
-                                    <div class="input-error" th:errors="*{name}"></div>
+                                    <div id="store-name-valid" class="my-1 valid-custom"></div>
                                 </div>
                             </div>
                             <div class="form-group d-flex">
@@ -52,12 +52,14 @@
                                 <button type="button" onclick="openPostcode()" class="text-center btn btn-main-color ms-3"
                                         style="height: 3rem">우편 번호 찾기
                                 </button>
+                                <div id="store-zipcode-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
                                     <input th:field="*{roadAddr}" class="form-control"
                                            placeholder="도로명 주소" type="text"
                                            readonly>
+                                    <div id="store-roadAddr-valid" class="my-1 valid-custom"></div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -65,6 +67,7 @@
                                     <input  th:field="*{numberAddr}" class="form-control"
                                            placeholder="지번 주소"
                                            type="text">
+                                    <div id="store-numberAddr-valid" class="my-1 valid-custom"></div>
                                 </div>
                             </div>
                             <span id="guide" style="color: #999 ;display: none"></span>
@@ -122,14 +125,14 @@
                                         시작</label>
                                     <input th:field="*{openingTime}" th:errorclass="input-error" class="form-control"
                                            type="time">
-                                    <div class="input-error" th:errors="*{openingTime}"></div>
+                                    <div id="store-openingTime-valid" class="my-1 valid-custom"></div>
                                 </div>
                                 <div class="ms-3">
                                     <label for="closingTime" class="m-auto fw-light px-2" style="font-size: 1rem">영업
                                         종료</label>
                                     <input th:field="*{closingTime}" th:errorclass="input-error" class="form-control"
                                            type="time">
-                                    <div class="input-error" th:errors="*{closingTime}"></div>
+                                    <div id="store-closingTime-valid" class="my-1 valid-custom"></div>
                                 </div>
                             </div>
                             <div class="form-group d-flex">
@@ -146,6 +149,9 @@
                                            class="form-control input-time" type="time">
                                 </div>
                             </div>
+                            <input id="category-main" th:value="${categoryList.get(0).categoryId}" hidden>
+                            <input id="category-mid" th:value="${categoryList.size() > 1} ? ${categoryList.get(1).categoryId} : ''" hidden>
+                            <input id="category-sub" th:value="${categoryList.size() > 2} ? ${categoryList.get(2).categoryId} : ''" hidden>
                             <div class="form-group d-flex">
                                 <div class="input-group input-group-alternative">
                                     <select id="main-cate" name="categoryId" class="form-select">
@@ -159,6 +165,7 @@
                                     </select>
                                 </div>
                             </div>
+                            <div id="store-category-valid" class="my-1 valid-custom"></div>
                             <div class="form-group">
                                 <div class="flex-wrap mb-2">
                                     <h5 style="display: inline">휴무일 선택</h5>

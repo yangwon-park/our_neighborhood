@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ReviewDTO {
 
@@ -24,12 +25,12 @@ public class ReviewDTO {
         private String content;
         @NotNull
         private Integer rating;
-        private MultipartFile file;
+        private List<MultipartFile> file;
         private Long storeId;
         private Long memberId;
 
         @Builder
-        public Add(String content, Integer rating, Long storeId, Long memberId, MultipartFile file) {
+        public Add(String content, Integer rating, Long storeId, Long memberId, List<MultipartFile> file) {
             this.content = content;
             this.rating = rating;
             this.storeId = storeId;

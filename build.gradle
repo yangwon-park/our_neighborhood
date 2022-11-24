@@ -96,9 +96,9 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-//	// QueryDSL spatial
-//	// https://mvnrepository.com/artifact/com.querydsl/querydsl-sql-spatial
-//	implementation group: 'com.querydsl', name: 'querydsl-sql-spatial', version: '5.0.0'
+	// QueryDSL spatial
+	// https://mvnrepository.com/artifact/com.querydsl/querydsl-sql-spatial
+	implementation group: 'com.querydsl', name: 'querydsl-sql-spatial', version: '5.0.0'
 
 	// DB Spatial Type들 사용하기 위한 Library
 	// https://mvnrepository.com/artifact/org.locationtech.jts/jts-core
@@ -134,7 +134,7 @@ dependencies {
 }
 
 //tasks.named('test') {
-//	useJUnitPlatform()
+//   useJUnitPlatform()
 //}
 
 //Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거

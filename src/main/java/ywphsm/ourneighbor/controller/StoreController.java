@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +48,8 @@ public class StoreController {
     private final MemberService memberService;
 
     private final HashtagOfStoreService hashtagOfStoreService;
+
+    private final RequestAddStoreService requestAddStoreService;
 
     @ModelAttribute("menuTypes")
     public MenuType[] menuTypes() {
@@ -160,7 +163,13 @@ public class StoreController {
         Store findStore = storeService.findById(storeId);
         StoreDTO.Update store = new StoreDTO.Update(findStore);
 
+        List<CategorySimpleDTO> categorySimpleDTOList = store.getCategoryList().stream()
+                .map(categoryOfStoreDTO ->
+                        categoryService.findById(categoryOfStoreDTO.getCategoryId()))
+                .map(CategorySimpleDTO::of).collect(Collectors.toList());
+
         model.addAttribute("store", store);
+        model.addAttribute("categoryList", categorySimpleDTOList);
 
         return "store/edit_form";
     }
@@ -187,6 +196,31 @@ public class StoreController {
         model.addAttribute("count", count);
 
         return "store/store_owner_edit";
+    }
+
+    @GetMapping("/user/request-add-store")
+    public String requestAddStore(Model model) {
+        model.addAttribute("request", new RequestAddStoreDTO.Add());
+        return "store/request_add_store";
+    }
+
+    @GetMapping("/admin/request-add-store-list")
+    public String requestAddStoreList(Model model, Integer page) {
+        if (page == null) {
+            page = 0;
+        } else {
+            page--;
+        }
+        Page<RequestAddStoreDTO.Detail> requestAddStoreDTOS = requestAddStoreService.pagingRequestAddStore(page);
+        List<RequestAddStoreDTO.Detail> content = requestAddStoreDTOS.getContent();
+
+        PageMakeDTO pageMakeDTO = new PageMakeDTO(page, 10, requestAddStoreDTOS.getTotalElements());
+
+        model.addAttribute("count", requestAddStoreDTOS.getTotalElements());
+        model.addAttribute("request", content);
+        model.addAttribute("pageMake", pageMakeDTO);
+
+        return "store/request_add_store_list";
     }
 
 }

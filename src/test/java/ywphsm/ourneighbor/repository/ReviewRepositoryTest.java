@@ -9,6 +9,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
@@ -80,15 +81,19 @@ class ReviewRepositoryTest {
                 new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/785c984e-fab2-4422-9833-646d94b631ae.jpg"));
 //                new FileInputStream("C:/Users/HOME/Desktop/JAVA/menu_file/5cf53790-54a5-4c5f-9709-0394d58cec94.png"));
 //                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
-        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), file)
+
+        List<MultipartFile> fileList = new ArrayList<>();
+        fileList.add(file);
+
+        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), fileList)
                 .toEntity(store, member));
-        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), file)
+        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), fileList)
                 .toEntity(store, member));
-        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), file)
+        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), fileList)
                 .toEntity(store, member));
-        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), file)
+        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), fileList)
                 .toEntity(store, member));
-        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), file)
+        reviewRepository.save(new ReviewDTO.Add("Test Content", 5, store.getId(), member.getId(), fileList)
                 .toEntity(store, member));
 
         PageRequest pageRequest = PageRequest.of(0, 4);

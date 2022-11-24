@@ -100,8 +100,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        ScriptUtils.alert(response, "로그아웃되었습니다.");
-                        response.sendRedirect("/");
+                        ScriptUtils.alertAndMovePage(response, "로그아웃되었습니다.", "/");
                     }
                 })
                 .deleteCookies("remember-me")

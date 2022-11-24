@@ -56,8 +56,8 @@
                                                   id="content" th:field="*{content}" rows="5"
                                                   th:errorclass="field-error"></textarea>
                                     </div>
-                                    <div id="review-content-valid" class="my-1 valid-custom"></div>
                                 </div>
+                                <div id="review-content-valid" class="my-1 valid-custom"></div>
                                 <div class="form-group">
                                     <span class="mb-2">해쉬태그 추가</span>
                                     <div class="mb-3">
@@ -70,7 +70,8 @@
                                         <input th:field="*{file}"
                                                th:errorclass="field-error"
                                                class="form-control"
-                                               type="file"/>
+                                               type="file"
+                                               multiple/>
                                     </div>
                                     <div class="field-error" th:errors="*{file}"></div>
                                 </div>

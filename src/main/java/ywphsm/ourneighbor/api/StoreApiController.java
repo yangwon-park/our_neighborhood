@@ -7,9 +7,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.config.ScriptUtils;
+import ywphsm.ourneighbor.domain.dto.RequestAddStoreDTO;
 import ywphsm.ourneighbor.domain.dto.StoreDTO;
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.service.CategoryService;
+import ywphsm.ourneighbor.service.RequestAddStoreService;
 import ywphsm.ourneighbor.service.StoreService;
 
 import ywphsm.ourneighbor.domain.member.Member;
@@ -29,6 +31,8 @@ public class StoreApiController {
 
     private final StoreService storeService;
     private final CategoryService categoryService;
+
+    private final RequestAddStoreService requestAddStoreService;
 
     @GetMapping("/get-images")
     public List<List<String>> getImages(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
@@ -107,13 +111,23 @@ public class StoreApiController {
         return storeService.delete(storeId);
     }
 
-    @PostMapping("/admin/storeOwner/add")
+    @PostMapping("/admin/store-owner/add")
     public String addStoreOwner(String userId, Long storeId) {
         return storeService.addStoreOwner(userId, storeId);
     }
 
-    @DeleteMapping("/admin/storeOwner/delete")
+    @DeleteMapping("/admin/store-owner/delete")
     public String deleteStoreOwner(Long memberId, Long storeId) {
         return storeService.deleteStoreOwner(memberId, storeId);
+    }
+
+    @PostMapping("/user/request-add-store")
+    public Long requestAddStore(RequestAddStoreDTO.Add requestAddStoreDTO, Long memberId) {
+        return requestAddStoreService.save(requestAddStoreDTO, memberId);
+    }
+
+    @DeleteMapping("/admin/request-add-store/delete")
+    public Long deleteRequestAddStore(Long requestAddStoreId) {
+        return requestAddStoreService.delete(requestAddStoreId);
     }
 }

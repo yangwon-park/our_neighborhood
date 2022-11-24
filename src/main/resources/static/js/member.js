@@ -12,7 +12,7 @@ var main = {
         const memberDeleteBtn = document.getElementById("member-delete");
         const findUserIdBtn = document.getElementById("find-userId");
         const findPasswordBtn = document.getElementById("find-password");
-        const memberRoleEditBtn = document.getElementById('member-role-edit');
+        const memberRoleEditBtn = document.getElementById("member-role-edit");
 
         if (signUpSaveBtn !== null) {
             signUpSaveBtn.addEventListener("click", () => {
@@ -63,7 +63,7 @@ var main = {
         }
 
         if (memberRoleEditBtn !== null) {
-            memberRoleEditBtn.addEventListener('click', () => {
+            memberRoleEditBtn.addEventListener("click", () => {
                 _this.memberRoleEdit();
             });
         }
@@ -80,15 +80,15 @@ var main = {
         const phoneNumber = document.getElementById("phoneNumber");
         const certifiedNumber = document.getElementById("certifiedNumber");
 
-        const userIdValid = document.getElementById('sign-up-userId-valid');
-        const passwordValid = document.getElementById('sign-up-password-valid');
-        const passwordCheckValid = document.getElementById('sign-up-passwordCheck-valid');
-        const emailValid = document.getElementById('sign-up-email-valid');
-        const usernameValid = document.getElementById('sign-up-username-valid');
-        const nicknameValid = document.getElementById('sign-up-nickname-valid');
-        const birthDateValid = document.getElementById('sign-up-birthDate-valid');
-        const phoneNumberValid = document.getElementById('sign-up-phoneNumber-valid');
-        const certifiedNumberValid = document.getElementById('sign-up-certifiedNumber-valid');
+        const userIdValid = document.getElementById("sign-up-userId-valid");
+        const passwordValid = document.getElementById("sign-up-password-valid");
+        const passwordCheckValid = document.getElementById("sign-up-passwordCheck-valid");
+        const emailValid = document.getElementById("sign-up-email-valid");
+        const usernameValid = document.getElementById("sign-up-username-valid");
+        const nicknameValid = document.getElementById("sign-up-nickname-valid");
+        const birthDateValid = document.getElementById("sign-up-birthDate-valid");
+        const phoneNumberValid = document.getElementById("sign-up-phoneNumber-valid");
+        const certifiedNumberValid = document.getElementById("sign-up-certifiedNumber-valid");
 
         userId.classList.remove("valid-custom");
         password.classList.remove("valid-custom");
@@ -293,7 +293,7 @@ var main = {
         let afterPasswordValidation = passwordRegExp.test(afterPassword.value);
 
         if (!afterPasswordValidation) {
-            alert('특수문자,문자,숫자 포함 형태의 8~15자리 이내의 암호여야 합니다.')
+            alert("특수문자,문자,숫자 포함 형태의 8~15자리 이내의 암호여야 합니다.")
         }else {
             axios({
                 method: "put",
@@ -322,8 +322,8 @@ var main = {
         const email = document.getElementById("email");
         const nickname = document.getElementById("nickname");
 
-        const emailValid = document.getElementById('sign-up-email-valid');
-        const nicknameValid = document.getElementById('sign-up-nickname-valid');
+        const emailValid = document.getElementById("sign-up-email-valid");
+        const nicknameValid = document.getElementById("sign-up-nickname-valid");
 
         email.classList.remove("valid-custom");
         nickname.classList.remove("valid-custom");
@@ -360,7 +360,7 @@ var main = {
             email.classList.add("valid-custom");
             validation.addValidation(emailValid, "올바른 이메일 형식이 아닙니다.");
         }
-        if (nickname.value === '') {
+        if (nickname.value === "") {
             nickname.classList.add("valid-custom");
             validation.addValidation(nicknameValid, "닉네임을 입력해주세요.");
         }
@@ -368,7 +368,7 @@ var main = {
     },
 
     delete: function () {
-        const memberId = document.getElementById('memberId')
+        const memberId = document.getElementById("memberId")
 
         console.log(memberId);
 
@@ -390,7 +390,7 @@ var main = {
 
         const email = document.getElementById("email");
 
-        const emailValid = document.getElementById('find-userId-email-valid');
+        const emailValid = document.getElementById("find-userId-email-valid");
 
         email.classList.remove("valid-custom");
 
@@ -432,8 +432,8 @@ var main = {
         const email = document.getElementById("email");
         const userId = document.getElementById("userId");
 
-        const emailValid = document.getElementById('find-password-email-valid');
-        const userIdValid = document.getElementById('find-password-userId-valid');
+        const emailValid = document.getElementById("find-password-email-valid");
+        const userIdValid = document.getElementById("find-password-userId-valid");
 
         email.classList.remove("valid-custom");
         userId.classList.remove("valid-custom");
@@ -444,7 +444,7 @@ var main = {
         let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
         let emailValidation = emailRegExp.test(email.value);
 
-        if (emailValidation && userId.value !== '') {
+        if (emailValidation && userId.value !== "") {
             axios({
                 method: "post",
                 url: "/find-password",
@@ -483,8 +483,8 @@ var main = {
         const role = document.getElementById("role").options
             [document.getElementById("role").selectedIndex].value;
 
-        const userIdValid = document.getElementById('member-role-edit-userId-valid');
-        const roleValid = document.getElementById('member-role-edit-role-valid');
+        const userIdValid = document.getElementById("member-role-edit-userId-valid");
+        const roleValid = document.getElementById("member-role-edit-role-valid");
 
         userId.classList.remove("valid-custom");
         // role.classList.remove("valid-custom");
@@ -492,7 +492,7 @@ var main = {
         validation.removeValidation(userIdValid);
         validation.removeValidation(roleValid);
 
-        if (userId.value !== '' && role !== '') {
+        if (userId.value !== "" && role !== "") {
             axios({
                 method: "put",
                 url: "/admin/member-role/edit",
@@ -502,7 +502,7 @@ var main = {
                 }
             }).then((resp) => {
                 let check = resp.data;
-                if (check === '성공') {
+                if (check === "성공") {
                     alert("권한이 성공적으로 변경되었습니다");
                     window.location.reload();
                 } else {
@@ -513,12 +513,12 @@ var main = {
             })
         }
 
-        if (role.value === '') {
+        if (role.value === "") {
             role.classList.add("valid-custom");
             validation.addValidation(roleValid, "권한을 정해주세요.");
         }
 
-        if (userId.value === '') {
+        if (userId.value === "") {
             userId.classList.add("valid-custom");
             validation.addValidation(userIdValid, "아이디를 입력해주세요.");
         }

@@ -19,7 +19,7 @@ var main = {
 
     getMap: function () {
         // 지도를 담을 div를 찾음
-        var mapContainer = document.getElementById('map');
+        var mapContainer = document.getElementById("map");
 
         // 지도에 관한 옵션 부여
         var mapOptions = {
@@ -123,7 +123,7 @@ var main = {
                 sessionStorage.setItem("keyword", keyword);
 
                 // input 태그 값 지움
-                const input = document.getElementById('keyword');
+                const input = document.getElementById("keyword");
                 input.value = null;
             })
             .catch((e) => {
@@ -281,7 +281,7 @@ var main = {
     },
 
     addMarker: function (data, map) {
-        var imageSrc = '../images/main/map_marker.png',
+        var imageSrc = "../images/main/map_marker.png",
             imageSize = new kakao.maps.Size(55, 60),
             imageOption = {offset: new kakao.maps.Point(27, 69)};
 
@@ -300,7 +300,7 @@ var main = {
             removable: true
         });
 
-        kakao.maps.event.addListener(marker, 'click', this.addInfoWindow(marker, data, infoWindow, map));
+        kakao.maps.event.addListener(marker, "click", this.addInfoWindow(marker, data, infoWindow, map));
 
         marker.setMap(map);
         this.markers.push(marker);

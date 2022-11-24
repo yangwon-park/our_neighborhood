@@ -2,9 +2,12 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+<<<<<<< HEAD
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+=======
+>>>>>>> 61064a0757eef3190377cb85ec1496935a02fb1d
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -22,6 +25,7 @@ import ywphsm.ourneighbor.domain.hashtag.HashtagUtil;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
@@ -59,13 +63,15 @@ public class ReviewService {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
         Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
 
-//        UploadFile newUploadFile = fileStore.storeFile(reviewAddDTO.getFile());
-        UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
+        List<UploadFile> newUploadFiles = fileStore.storeFiles(dto.getFile());
+//        List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
 
         Review review = dto.toEntity(linkedStore, linkedMember);
-        newUploadFile.addReview(review);
         linkedStore.addReview(review);
         linkedMember.addReview(review);
+        for (UploadFile newUploadFile : newUploadFiles) {
+            newUploadFile.addReview(review);
+        }
 
         if (!hashtag.isEmpty()) {
             Store findStore = storeRepository.findById(dto.getStoreId()).orElseThrow(

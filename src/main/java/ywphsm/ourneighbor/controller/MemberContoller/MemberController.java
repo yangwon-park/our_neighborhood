@@ -9,6 +9,7 @@ import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -16,12 +17,13 @@ import java.io.IOException;
 public class
 MemberController {
 
+
     @GetMapping("/login")
     public String login(@ModelAttribute(name = "loginForm") LoginForm loginForm,
                         @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
                         @RequestParam(value = "error", required = false) String error,
                         @RequestParam(value = "exception", required = false) String exception,
-                        Model model, HttpServletResponse response) throws IOException {
+                        Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {
 
         if (member != null) {
             ScriptUtils.alertAndMovePage(response, "이미 로그인이 되어있습니다.", "/");

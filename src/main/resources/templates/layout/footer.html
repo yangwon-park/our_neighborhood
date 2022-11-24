@@ -6,6 +6,18 @@
             <div class="row align-items-center justify-content-around">
                 <div class="col-md-3 mb-4 footer-1 text-nowrap">
                     <h4 class="fw-bold">Contact Us</h4>
+                </div>
+                <div class="col-md-3 mb-4 text-center footer-3">
+                    <h4 class="fw-bold">Content</h4>
+                </div>
+                <div class="col-md-3 mb-4 text-center footer-3">
+                    <h4 class="fw-bold">Version</h4>
+                </div>
+                <div class="col-md-3 mb-4 text-center footer-3">
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-around">
+                <div class="col-md-3 mb-4 footer-1 text-nowrap">
                     <ul class="contact mt-4" style="list-style: none; padding-left: 0px;">
                         <li>
                             <img src="/images/icon/gmail.svg" alt="Mail" width="38px" class="me-3"/> ywonp94@gmail.com
@@ -15,23 +27,32 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-3 mb-4 text-center footer-2">
-                    <ul class="sns mt-4" style="list-style: none; padding-left: 0px;">
-                        <li>
-                            <a target="_blank" href="https://github.com/" class="mx-1 text-decoration-none social">
-                                <img src="/images/icon/github.svg" alt="Github" width="38px"/>
-                            </a>
-                        </li>
-                        <li>
-                            <a target="_blank" href="https://yangwon-park.github.io/" class="mx-1 text-decoration-none social">
-                                <img src="/images/icon/githubpages.svg" alt="GithubPages" width="100px"/>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
                 <div class="col-md-3 mb-4 text-center footer-3">
                     <div>
-                        <h4 class="fw-bold">Thank You!</h4>
+                        <ul class="contact mt-4" style="list-style: none; padding-left: 0px;">
+                            <li>이용약관</li>
+                            <li>개인정보처리방침</li>
+                            <li>
+                                <a href="/user/request-add-store">
+                                    가게추가요청
+                                </a>
+                            </li>
+                            <li>공지사항</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4 text-center footer-2">
+                    <div>
+                        <ul class="contact mt-4" style="list-style: none; padding-left: 0px;">
+                            <li>1.911 ver</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4 text-center footer-3">
+                    <div style="position:fixed; bottom:35px; right:30px; z-index:99;">
+                        <a href="#" id="btn_gotop">
+                            <img src="/images/icon/top-button.jpg" style="width:70px" alt="top-button">
+                        </a>
                     </div>
                 </div>
             </div>
@@ -78,6 +99,20 @@
 
     <!-- slick js (커스텀) -->
     <script defer th:src="@{/js/slick.js}"></script>
+
+    <script>
+        $(window).scroll(function(){
+            if ($(this).scrollTop() > 300){
+                $('.btn_gotop').show();
+            } else{
+                $('.btn_gotop').hide();
+            }
+        });
+        $('.btn_gotop').click(function(){
+            $('html, body').animate({scrollTop:0},400);
+            return false;
+        });
+    </script>
 </th:block>
 
 </html>

@@ -174,7 +174,7 @@ public class MemberApiController {
         return memberService.sendEmailByPassword(email, userId);
     }
 
-    @PutMapping("/admin/memberRole/edit")
+    @PutMapping("/admin/member-role/edit")
     public String memberRoleEdit(String userId, Role role) {
         return memberService.updateRole(userId, role);
     }

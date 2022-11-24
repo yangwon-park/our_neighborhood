@@ -1,4 +1,4 @@
-const slickSlide = jQuery('#slick-slide')
+const slickSlide = jQuery("#slick-slide")
 
 if (slickSlide) {
     slickSlide.slick({

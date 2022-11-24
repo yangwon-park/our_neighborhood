@@ -3,25 +3,25 @@ package ywphsm.ourneighbor.repository.store;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.spatial.GeometryExpressions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.*;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import ywphsm.ourneighbor.domain.file.QUploadFile;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import java.util.List;
 
-import static org.geolatte.geom.builder.DSL.*;
-import static org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84;
 import static org.springframework.util.StringUtils.*;
 import static ywphsm.ourneighbor.domain.category.QCategory.*;
 import static ywphsm.ourneighbor.domain.category.QCategoryOfStore.*;
+import static ywphsm.ourneighbor.domain.file.QUploadFile.*;
 import static ywphsm.ourneighbor.domain.hashtag.QHashtag.*;
 import static ywphsm.ourneighbor.domain.hashtag.QHashtagOfStore.*;
 import static ywphsm.ourneighbor.domain.store.QStore.*;
@@ -48,11 +48,12 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .from(store)
                 .innerJoin(store.categoryOfStoreList, categoryOfStore)
                 .innerJoin(categoryOfStore.category, category)
-                .innerJoin(store.file, QUploadFile.uploadFile)
+                .innerJoin(store.file, uploadFile)
                 .fetchJoin()
                 .where(categoryOfStore.category.id.eq(categoryId), categoryOfStore.store.id.eq(store.id))
                 .fetch();
     }
+
 
     /*
         Projections 참고
@@ -76,7 +77,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .innerJoin(store.hashtagOfStoreList, hashtagOfStore)
                 .innerJoin(hashtagOfStore.hashtag, hashtag)
                 .where(builder)
-                .where(pointContains(polygon))
+                .where(stContains(polygon))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -92,31 +93,28 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     }
 
 
-    @Override
-    public List<Store> getStoresByStContains(Geometry<G2D> polygon) {
-        return queryFactory
-                .select(store)
-                .from(store)
-                .leftJoin(store.file, QUploadFile.uploadFile)
-                .fetchJoin()
-                .where(pointContains(polygon), store.id.goe(14500000), store.id.lt(15500000))
-                .fetch();
-    }
+
 
     @Override
     public List<Store> findAllStores() {
         return queryFactory
                 .select(store)
                 .from(store)
-                .leftJoin(store.file, QUploadFile.uploadFile)
+                .leftJoin(store.file, uploadFile)
                 .fetchJoin()
                 .fetch();
     }
 
-    private BooleanExpression pointContains(Geometry<G2D> polygon) {
+    private BooleanExpression stContains(Geometry<?> polygon) {
         return GeometryExpressions
                 .asGeometry(polygon)
                 .contains(store.point);
+    }
+
+    private NumberExpression<Double> stDistance(Geometry<G2D> polygon) {
+        return GeometryExpressions
+                .asGeometry(store.point)
+                .distance(polygon);
     }
 
     private BooleanExpression keywordContains(String keyword) {

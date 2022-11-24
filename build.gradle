@@ -121,7 +121,7 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 	/*
-		QueryDSL Spatial - geol
+		QueryDSL Spatial
 		https://mvnrepository.com/artifact/com.querydsl/querydsl-sql-spatial
 	 */
 	implementation group: 'com.querydsl', name: 'querydsl-sql-spatial', version: '5.0.0'

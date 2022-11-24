@@ -225,8 +225,8 @@ public class StoreService {
     }
 
     // 전체 매장 조회
-    public List<Store> findAllStores(Long range) {
-        return storeRepository.findAllStoresLt(range);
+    public List<Store> findAllStores() {
+        return storeRepository.findAllStores();
     }
 
     // 검색어 포함 매장명 조회
@@ -268,26 +268,6 @@ public class StoreService {
         return storeRepository.searchByHashtag(hashtagIdList, getPolygon(lat, lon, dist), pageRequest);
     }
 
-
-    public List<Store> getStoresByMbrContains(double dist, double lat, double lon) throws ParseException {
-        return storeRepository.getStoresByMbrContains(getLineString(lat, lon, dist));
-    }
-
-    public List<Store> getStoresBySTContains(double dist, double lat, double lon) throws ParseException {
-        return storeRepository.getStoresBySTContains(getPolygon(lat, lon, dist));
-    }
-
-    public List<Store> getStoresBySTContainsWithCircle(double dist, double lat, double lon) throws ParseException {
-        org.locationtech.jts.geom.Geometry circle = createCircle(lat, lon, dist);
-        return storeRepository.getStoresBySTContainsWithCircle(JTS.from(circle));
-    }
-
-    public List<Store> getStoresByStContainsWithQueryDSL(double lat, double lon) throws ParseException {
-        double dist = 3;
-        return storeRepository.getStoresByStContains(getPolygon(lat, lon, dist));
-    }
-
-
     //매장주인이 맞는지 체크
     public boolean OwnerCheck(Member member, Long storeId) {
         Store store = storeRepository.findById(storeId).orElse(null);
@@ -316,7 +296,7 @@ public class StoreService {
     }
 
     // LineString 생성 메소드
-    private LineString<G2D> getLineString(double lat, double lon, double dist) throws ParseException {
+    private LineString<G2D> getLineString(double lat, double lon, double dist) {
         Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
         Location southWest = calculatePoint(lat, lon, dist, SOUTHWEST.getAngle());
 
@@ -329,7 +309,7 @@ public class StoreService {
     }
 
     // Polygon 생성 메소드
-    private Polygon<G2D> getPolygon(double lat, double lon, double dist) throws ParseException {
+    private Polygon<G2D> getPolygon(double lat, double lon, double dist) {
         Location northEast = calculatePoint(lat, lon, dist, NORTHEAST.getAngle());
         Location northWest = calculatePoint(lat, lon, dist, NORTHWEST.getAngle());
         Location southEast = calculatePoint(lat, lon, dist, SOUTHEAST.getAngle());
@@ -346,15 +326,6 @@ public class StoreService {
 
         double sex = southEast.getLon();
         double sey = southEast.getLat();
-
-        System.out.println("ney = " + ney);
-        System.out.println("nex = " + nex);
-        System.out.println("nwy = " + nwy);
-        System.out.println("nwx = " + nwx);
-        System.out.println("swy = " + swy);
-        System.out.println("swx = " + swx);
-        System.out.println("sey = " + sey);
-        System.out.println("sex = " + sex);
 
         return polygon(WGS84,ring(g(ney,nex),
                 g(nwy,nwx),g(swy,swx), g(sey, sex), g(ney, nex)));

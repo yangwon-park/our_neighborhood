@@ -54,6 +54,19 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Store> getTopNByCategories(Polygon<G2D> polygon, Long categoryId) {
+        return queryFactory
+                .select(store)
+                .from(store)
+                .innerJoin(store.categoryOfStoreList, categoryOfStore)
+                .innerJoin(categoryOfStore.category, category)
+                .innerJoin(store.file, uploadFile)
+                .fetchJoin()
+                .where(stContains(polygon), stDistance(polygon).loe(3), categoryOfStore.category.id.eq(categoryId))
+                .fetch();
+    }
+
 
     /*
         Projections 참고
@@ -77,7 +90,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .innerJoin(store.hashtagOfStoreList, hashtagOfStore)
                 .innerJoin(hashtagOfStore.hashtag, hashtag)
                 .where(builder)
-                .where(stContains(polygon))
+                .where(stContains(polygon), stDistance(polygon).loe(3))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -91,9 +104,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
         return new SliceImpl<>(list, pageable, hasNext);
     }
-
-
-
 
     @Override
     public List<Store> findAllStores() {

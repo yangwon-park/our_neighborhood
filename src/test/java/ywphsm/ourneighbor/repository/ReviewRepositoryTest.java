@@ -1,5 +1,7 @@
 package ywphsm.ourneighbor.repository;
 
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.geolatte.geom.builder.DSL.g;
+import static org.geolatte.geom.builder.DSL.point;
+import static org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84;
 
 @SpringBootTest
 @Transactional
@@ -74,7 +79,11 @@ class ReviewRepositoryTest {
                 .closingTime(LocalTime.now())
                 .build();
 
-        Store store = storeRepository.save(dto.toEntity());
+        Store entity = dto.toEntity();
+            Point<G2D> point = point(WGS84, g(dto.getLat(), dto.getLon()));
+            entity.addPoint(point);
+
+        Store store = storeRepository.save(entity);
 
 //        new MockMultipartFile("필드명", storedFileName, contentType, 서버에 있는 파일 경로)
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",

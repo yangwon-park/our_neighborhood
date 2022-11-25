@@ -54,7 +54,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     }
 
     @Override
-    public List<Store> getTopNByCategories(Polygon<G2D> polygon, Long categoryId) {
+    public List<Store> searchTopNByCategories(Polygon<G2D> polygon, Long categoryId) {
         return queryFactory
                 .select(store)
                 .from(store)
@@ -69,9 +69,9 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
     /*
         Projections 참고
-        https://wildeveloperetrain.tistory.com/94
+            https://wildeveloperetrain.tistory.com/94
         Geolatte Geom 참고
-        https://github.com/GeoLatte/geolatte-geom
+            https://github.com/GeoLatte/geolatte-geom
      */
     @Override
     public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, Geometry<G2D> polygon, Pageable pageable) {

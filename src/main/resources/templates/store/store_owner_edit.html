@@ -1,79 +1,79 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>우리 동네</title>
-  <style>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
 
-  </style>
+    </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
 <body class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <section class="header">
-  <div class="header py-7 py-lg-8">
-    <div class="separator separator-bottom separator-skew zindex-100">
-      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-           xmlns="http://www.w3.org/2000/svg">
-        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-      </svg>
+    <div class="header py-7 py-lg-8">
+        <div class="separator separator-bottom separator-skew zindex-100">
+            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg">
+                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
     </div>
-  </div>
 </section>
 <section class="main">
-  <div class="container px-0">
-    <div class="row store-head">
-      <div class="col-6 d-flex">
-        <h1 class="my-auto" style="font-size: 2.0rem">가게 관리자 변경</h1>
-      </div>
+    <div class="container px-0">
+        <div class="row store-head">
+            <div class="col-6 d-flex">
+                <h1 class="my-auto" style="font-size: 2.0rem">가게 관리자 변경</h1>
+            </div>
+        </div>
+        <hr class="my-2">
+        <div class="row store-info" style="font-size: 1.5rem">
+            <div class="form-group">
+                <small>아이디</small>
+                <div class="">
+                    <input class="form-control" placeholder="회원 아이디"
+                           type="text" id="userId" name="userId">
+                </div>
+                <div id="store-owner-add-userId-valid" class="my-1 valid-custom"></div>
+            </div>
+            <div class="text-center">
+                <button id="store-owner-add" type="button"
+                        class="btn btn-main-color mt-4 float-end">추가
+                </button>
+            </div>
+        </div>
+        <hr class="my-2">
+        <div class="row store-head">
+            <div class="col-6 d-flex">
+                <h1 class="my-auto" th:text="|가게 관리자 ${count}명|" style="font-size: 2.0rem">관리자 인원</h1>
+            </div>
+            <input id="storeId" name="storeId" th:value="${storeId}" class="form-control"
+                   placeholder="매장 번호" type="hidden">
+        </div>
+        <section class="container px-0" th:each="owner : ${owners}">
+            <div class="row store-info" style="font-size: 1.5rem">
+                <div class="col-12 my-1">
+                    <span>아이디 : </span>
+                    <span th:text="${owner.userId}"></span>
+                </div>
+                <div class="col-12 my-1">
+                    <span>이메일 : </span>
+                    <span th:text="${owner.email}"></span>
+                </div>
+                <div class="col-12 my-1">
+                    <button th:id="|store-owner-delete-btn${owner.memberId}|"
+                            type="button" class="btn btn-dark mt-4 store-owner-delete">
+                        삭제
+                    </button>
+                </div>
+            </div>
+            <hr class="my-2">
+        </section>
     </div>
-    <hr class="my-2">
-    <div class="row store-info" style="font-size: 1.5rem">
-      <div class="form-group">
-        <small>아이디</small>
-        <div class="">
-          <input class="form-control" placeholder="회원 아이디"
-                 type="text" id="userId" name="userId">
-        </div>
-        <div id="store-owner-add-userId-valid" class="my-1 valid-custom"></div>
-      </div>
-      <div class="text-center">
-        <button id="store-owner-add" type="button"
-                class="btn btn-main-color mt-4 float-end">추가
-        </button>
-      </div>
-    </div>
-    <hr class="my-2">
-    <div class="row store-head">
-      <div class="col-6 d-flex">
-        <h1 class="my-auto" th:text="|가게 관리자 ${count}명|" style="font-size: 2.0rem" >관리자 인원</h1>
-      </div>
-      <input id="storeId" name="storeId" th:value="${storeId}" class="form-control"
-             placeholder="매장 번호" type="hidden">
-    </div>
-    <section class="container px-0" th:each="owner : ${owners}">
-      <div class="row store-info" style="font-size: 1.5rem">
-        <div class="col-12 my-1">
-          <span>아이디 : </span>
-          <span th:text="${owner.userId}"></span>
-        </div>
-        <div class="col-12 my-1">
-          <span>이메일 : </span>
-          <span th:text="${owner.email}"></span>
-        </div>
-        <div class="col-12 my-1">
-          <button th:id="|store-owner-delete-btn${owner.memberId}|"
-                  type="button" class="btn btn-dark mt-4 store-owner-delete">
-            삭제
-          </button>
-        </div>
-      </div>
-      <hr class="my-2">
-    </section>
-  </div>
 </section>
 <footer th:replace="layout/footer :: common_footer">
-  템플릿 푸터
+    템플릿 푸터
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/store.js}"></script>

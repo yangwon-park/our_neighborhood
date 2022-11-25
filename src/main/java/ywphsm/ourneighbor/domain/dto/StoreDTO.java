@@ -62,6 +62,9 @@ public class StoreDTO {
         @DateTimeFormat(pattern = "HH:mm")
         private LocalTime breakEnd;               // 쉬는 시간 끝
 
+        @DateTimeFormat(pattern = "HH:mm")
+        private LocalTime lastOrder;              // 쉬는 시간 끝
+
         private String notice;
 
         private String intro;
@@ -72,13 +75,15 @@ public class StoreDTO {
 
         private String parkDetail;
 
+        private String homePage;
+
         private Long memberId;
 
         private List<CategoryOfStoreDTO> categoryOfStores;
 
         @Builder
         public Add(String name, String zipcode, String roadAddr, String numberAddr, String detail,
-                   Double lat, Double lon, String phoneNumber,
+                   Double lat, Double lon, String phoneNumber, String homePage, LocalTime lastOrder,
                    LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
                    String notice, String intro, List<String> offDays,
                    ParkAvailable park, String parkDetail, Long memberId,
@@ -91,6 +96,8 @@ public class StoreDTO {
             this.lat = lat;
             this.lon = lon;
             this.phoneNumber = phoneNumber;
+            this.homePage = homePage;
+            this.lastOrder = lastOrder;
             this.openingTime = openingTime;
             this.closingTime = closingTime;
             this.breakStart = breakStart;
@@ -110,10 +117,12 @@ public class StoreDTO {
             phoneNumber = store.getPhoneNumber();
             lat = store.getLat();
             lon = store.getLon();
+            homePage = store.getHomePage();
             openingTime = store.getBusinessTime().getOpeningTime();
             closingTime = store.getBusinessTime().getClosingTime();
             breakStart = store.getBusinessTime().getBreakStart();
             breakEnd = store.getBusinessTime().getBreakEnd();
+            lastOrder = store.getBusinessTime().getLastOrder();
             notice = store.getNotice();
             intro = store.getIntro();
             offDays = store.getOffDays();
@@ -132,9 +141,10 @@ public class StoreDTO {
             return Store.builder()
                     .name(name)
                     .phoneNumber(phoneNumber)
-                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd))
+                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd, lastOrder))
                     .lat(lat)
                     .lon(lon)
+                    .homePage(homePage)
                     .notice(notice)
                     .intro(intro)
                     .park(park)
@@ -156,6 +166,8 @@ public class StoreDTO {
 
         private String phoneNumber;
 
+        private String homePage;
+
         @NotNull
         @DateTimeFormat(pattern = "HH:mm:ss a")
         private LocalTime openingTime;            // 여는 시간
@@ -169,6 +181,9 @@ public class StoreDTO {
 
         @DateTimeFormat(pattern = "HH:mm:ss a")
         private LocalTime breakEnd;               // 쉬는 시간 끝
+
+        @DateTimeFormat(pattern = "HH:mm:ss a")
+        private LocalTime lastOrder;               // 라스트 오더
 
         private String notice;                    // 가게 소식
 
@@ -209,10 +224,12 @@ public class StoreDTO {
             storeId = store.getId();
             name = store.getName();
             phoneNumber = store.getPhoneNumber();
+            homePage = store.getHomePage();
             openingTime = store.getBusinessTime().getOpeningTime();
             closingTime = store.getBusinessTime().getClosingTime();
             breakStart = store.getBusinessTime().getBreakStart();
             breakEnd = store.getBusinessTime().getBreakEnd();
+            lastOrder = store.getBusinessTime().getLastOrder();
             notice = store.getNotice();
             intro = store.getIntro();
             average = store.getRatingTotal();
@@ -241,7 +258,8 @@ public class StoreDTO {
             return Store.builder()
                     .name(name)
                     .phoneNumber(phoneNumber)
-                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd))
+                    .homePage(homePage)
+                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd, lastOrder))
                     .notice(notice)
                     .intro(intro)
                     .offDays(offDays)
@@ -262,6 +280,8 @@ public class StoreDTO {
 
         private String phoneNumber;
 
+        private String homePage;
+
         @NotNull
         private Double lat;
 
@@ -281,6 +301,9 @@ public class StoreDTO {
 
         @DateTimeFormat(pattern = "HH:mm")
         private LocalTime breakEnd;               // 쉬는 시간 끝
+        
+        @DateTimeFormat(pattern = "HH:mm")
+        private LocalTime lastOrder;               // 라스트 오더
 
         private String notice;                    // 가게 소식
         private String intro;                     // 가게 소개
@@ -306,6 +329,7 @@ public class StoreDTO {
 
         @Builder
         public Update(String name, String phoneNumber, Double lat, Double lon,
+                      String homePage, LocalTime lastOrder,
                       LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
                       String notice, String intro, List<String> offDays,
                       ParkAvailable park, String parkDetail,
@@ -315,6 +339,8 @@ public class StoreDTO {
             this.phoneNumber = phoneNumber;
             this.lat = lat;
             this.lon = lon;
+            this.homePage = homePage;
+            this.lastOrder = lastOrder;
             this.openingTime = openingTime;
             this.closingTime = closingTime;
             this.breakStart = breakStart;
@@ -338,10 +364,12 @@ public class StoreDTO {
             phoneNumber = store.getPhoneNumber();
             lat = store.getLat();
             lon = store.getLon();
+            homePage = store.getHomePage();
             openingTime = store.getBusinessTime().getOpeningTime();
             closingTime = store.getBusinessTime().getClosingTime();
             breakStart = store.getBusinessTime().getBreakStart();
             breakEnd = store.getBusinessTime().getBreakEnd();
+            lastOrder = store.getBusinessTime().getLastOrder();
             notice = store.getNotice();
             intro = store.getIntro();
             offDays = store.getOffDays();
@@ -363,7 +391,8 @@ public class StoreDTO {
                     .phoneNumber(phoneNumber)
                     .lat(lat)
                     .lon(lon)
-                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd))
+                    .homePage(homePage)
+                    .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd, lastOrder))
                     .notice(notice)
                     .intro(intro)
                     .park(park)
@@ -372,5 +401,6 @@ public class StoreDTO {
                     .address(new Address(roadAddr, numberAddr, zipcode, detail))
                     .build();
         }
+
     }
 }

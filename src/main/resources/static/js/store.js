@@ -243,10 +243,10 @@ var main = {
             this.getMainCategories(rootChildren, categoryList);
             console.log("mainChildren = ", this.mainChildren)
             if (this.storeEditCheck) {
-                if (categoryList[1] !== '') {
+                if (categoryList[0] !== '') {
                     this.getMidCategories(this.mainChildren, categoryList);
                 }
-                if (categoryList[2] !== '') {
+                if (categoryList[1] !== '') {
                     this.getSubCategories(this.midChildren, categoryList);
                 }
             }
@@ -264,7 +264,7 @@ var main = {
             let mainOption = document.createElement("option");
             mainOption.text = rc.name;
             mainOption.value = rc.categoryId;
-            if (this.storeEditCheck) {
+            if (categoryList != null) {
                 if (mainOption.value === categoryList[0]) {
                     mainOption.selected = true;
                     this.storeEditCheck = true;
@@ -346,73 +346,90 @@ var main = {
     },
 
     getMidCategories: function (mainChildrenParam, categoryList) {
-        axios({
-            method: "get",
-            url: "/categories-hier-edit",
-            params: {
-                categoryId: categoryList[1]
-            }
-        }).then((resp) => {
-            let midParentId = resp.data
 
-            this.mainChildren = [];
+        let midParentId;
+        if (categoryList[1] !== '') {
+            axios({
+                method: "get",
+                url: "/categories-hier-edit",
+                params: {
+                    categoryId: categoryList[1]
+                }
+            }).then((resp) => {
+                midParentId = resp.data
+            }).catch((e) => {
+                console.error(e);
+            });
+        }
 
-            this.resetCategories(this.categoryLayerEl.mid, "중분류 선택");
-            this.resetCategories(this.categoryLayerEl.sub, "소분류 선택");
+        this.mainChildren = [];
+        midParentId = this.categoryLayerEl.main.options
+            [this.categoryLayerEl.main.selectedIndex].value;
+        console.log("midParentId = ", midParentId)
 
-            for (const mid of mainChildrenParam) {
-                for (let i = 0; i < mid.length; i++) {
-                    if (midParentId === mid[i].parentId) {
-                        let option = document.createElement("option");
-                        option.text = mid[i].name;
-                        option.value = mid[i].categoryId;
-                        if (option.value === categoryList[1]) {
-                            option.selected = true;
-                            console.log("true2")
-                        }
+        this.resetCategories(this.categoryLayerEl.mid, "중분류 선택");
+        this.resetCategories(this.categoryLayerEl.sub, "소분류 선택");
 
-                        main.categoryLayerEl.mid.appendChild(option);
-                        this.midChildren.push(mid[i].children);
+        for (const mid of mainChildrenParam) {
+            for (let i = 0; i < mid.length; i++) {
+                if (midParentId === String(mid[i].parentId)) {
+                    let option = document.createElement("option");
+                    option.text = mid[i].name;
+                    option.value = mid[i].categoryId;
+                    if (option.value === categoryList[1]) {
+                        option.selected = true;
+                        console.log("true2");
                     }
+
+                    main.categoryLayerEl.mid.appendChild(option);
+                    this.midChildren.push(mid[i].children);
                 }
             }
-        }).catch((e) => {
-            console.error(e);
-        })
+        }
+
     },
 
     getSubCategories: function (midChildrenParam, categoryList) {
-        axios({
-            method: "get",
-            url: "/categories-hier-edit",
-            params: {
-                categoryId: categoryList[2]
-            }
-        }).then((resp) => {
-            let subParentId = resp.data
 
-            this.midChildren = [];
+        let subParentId;
+        if (categoryList[2] !== '') {
+            axios({
+                method: "get",
+                url: "/categories-hier-edit",
+                params: {
+                    categoryId: categoryList[2]
+                }
+            }).then((resp) => {
+                subParentId = resp.data
+            }).catch((e) => {
+                console.error(e);
+            })
+        }
 
-            this.resetCategories(this.categoryLayerEl.sub, "소분류 선택");
+        subParentId = this.categoryLayerEl.mid.options
+                [this.categoryLayerEl.mid.selectedIndex].value;
+        console.log("subParentId = ", subParentId)
 
-            for (const sub of midChildrenParam) {
-                for (let i = 0; i < sub.length; i++) {
-                    if (subParentId === sub[i].parentId) {
-                        let option = document.createElement("option");
-                        option.text = sub[i].name;
-                        option.value = sub[i].categoryId;
-                        if (option.value === categoryList[2]) {
-                            option.selected = true;
-                            console.log("true3")
-                        }
+        this.midChildren = [];
 
-                        main.categoryLayerEl.sub.appendChild(option)
+        this.resetCategories(this.categoryLayerEl.sub, "소분류 선택");
+
+        for (const sub of midChildrenParam) {
+            for (let i = 0; i < sub.length; i++) {
+                if (subParentId === String(sub[i].parentId)) {
+                    let option = document.createElement("option");
+                    option.text = sub[i].name;
+                    option.value = sub[i].categoryId;
+                    if (option.value === categoryList[2]) {
+                        option.selected = true;
+                        console.log("true3");
                     }
+
+                    main.categoryLayerEl.sub.appendChild(option)
                 }
             }
-        }).catch((e) => {
-            console.error(e);
-        })
+        }
+
     },
 
     addStoreOwner: function () {

@@ -48,12 +48,13 @@ public class HashtagService {
         if (!duplicateCheck) {
             newHashtag = save(dto);
 
-            linkHashtagAndStore(newHashtag, findStore);
-
-            return newHashtag.getId();
         } else {
-            return -1L;
+            newHashtag = hashtagRepository.findByName(dto.getName());
         }
+
+        linkHashtagAndStore(newHashtag, findStore);
+
+        return newHashtag.getId();
     }
 
     @Transactional

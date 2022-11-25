@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import ywphsm.ourneighbor.controller.form.FindPasswordForm;
 import ywphsm.ourneighbor.controller.form.FindUserIdForm;
-import ywphsm.ourneighbor.service.MemberService;
 
 @RequiredArgsConstructor
 @Controller

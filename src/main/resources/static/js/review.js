@@ -120,7 +120,7 @@ var main = {
         }
 
         if (content.value !== "" && ratingCheck === true
-        && memberId !== "" && storeId !== "") {
+            && memberId !== "" && storeId !== "") {
             this.save();
         }
 

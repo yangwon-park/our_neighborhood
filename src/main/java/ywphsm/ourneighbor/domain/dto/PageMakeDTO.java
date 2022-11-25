@@ -25,6 +25,7 @@ public class PageMakeDTO {
 
         this.total = total;
 
+
         /* 마지막 페이지 */
         pageNum++;
         this.pageNum = pageNum;

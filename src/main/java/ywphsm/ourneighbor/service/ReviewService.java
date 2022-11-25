@@ -62,7 +62,6 @@ public class ReviewService {
             newUploadFile.addReview(review);
         }
 
-
         if (!hashtag.isEmpty()) {
             Store findStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
                     () -> new IllegalArgumentException("해당 매장이 없습니다. storeId = " + dto.getStoreId()));
@@ -96,10 +95,7 @@ public class ReviewService {
 
     public Slice<ReviewMemberDTO> pagingReview(Long storeId, int page) {
         PageRequest pageRequest = PageRequest.of(page, 5);
-        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, storeId);
-        log.info("reviewMemberDTO={}", reviewMemberDTOS);
-
-        return reviewMemberDTOS;
+        return reviewRepository.reviewPage(pageRequest, storeId);
     }
 
     public List<ReviewMemberDTO> myReviewList(Long memberId) {
@@ -122,15 +118,15 @@ public class ReviewService {
 
     private void saveHashtagLinkedStore(Store store, List<String> hashtagNameList) {
         for (String name : hashtagNameList) {
-            HashtagDTO hashtagDTO = HashtagDTO.builder()
-                    .name(name)
-                    .build();
-
             boolean duplicateCheck = hashtagRepository.existsByName(name);
 
             Hashtag newHashtag;
 
             if (!duplicateCheck) {
+                HashtagDTO hashtagDTO = HashtagDTO.builder()
+                        .name(name)
+                        .build();
+
                 newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
             } else {
                 newHashtag = hashtagRepository.findByName(name);

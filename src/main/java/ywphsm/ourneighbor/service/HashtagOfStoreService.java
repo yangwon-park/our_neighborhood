@@ -25,6 +25,7 @@ public class HashtagOfStoreService {
         return hashtagOfStoreRepository.findAllHashtagAndCountByStoreId(storeId);
     }
 
+    @Transactional
     public Long deleteHashtagOfStore(Long hashtagId, Long storeId) {
         return hashtagOfStoreRepository.deleteByHashtagIdByStoreId(hashtagId, storeId);
     }

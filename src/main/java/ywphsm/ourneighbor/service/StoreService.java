@@ -2,11 +2,11 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
-import org.locationtech.jts.util.GeometricShapeFactory;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
+import org.geolatte.geom.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,16 +20,21 @@ import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
-import ywphsm.ourneighbor.domain.store.distance.Direction;
 import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
+import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static org.geolatte.geom.builder.DSL.*;
+import static org.geolatte.geom.builder.DSL.ring;
+import static org.geolatte.geom.crs.CoordinateReferenceSystems.*;
 import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
+import static ywphsm.ourneighbor.domain.store.distance.Direction.*;
 import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
 @Slf4j
@@ -54,6 +59,9 @@ public class StoreService {
 
         Store store = dto.toEntity();
         Member member = memberService.findById(dto.getMemberId());
+
+        Point<G2D> point = point(WGS84, g(dto.getLat(), dto.getLon()));
+        store.addPoint(point);
 
         MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(member, storeRepository.save(store));
         memberOfStore.updateMyStore(true);
@@ -95,7 +103,7 @@ public class StoreService {
         List<CategoryOfStore> prevCategoryOfStoreList = findStore.getCategoryOfStoreList();
 
         List<Category> categoryList = getNotNullCategoryList(categoryIdList);
-        
+
         // 카테고리는 무조건 1개 이상 존재해야 함
         if (prevCategoryOfStoreList != null) {
             if (prevCategoryOfStoreList.size() == categoryList.size()) {
@@ -213,8 +221,8 @@ public class StoreService {
     }
 
     // 전체 매장 조회
-    public List<Store> findStores() {
-        return storeRepository.findAll();
+    public List<Store> findAllStores() {
+        return storeRepository.findAllStores();
     }
 
     // 검색어 포함 매장명 조회
@@ -232,33 +240,29 @@ public class StoreService {
         return storeRepository.searchByCategory(categoryId);
     }
 
-    // 참고
-    // https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
-    // https://www.baeldung.com/hibernate-spatial
-    public List<Store> getTopNByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
-        Geometry lineString = getLineString(lat, lon, dist);
-        return storeRepository.getTopNByCategories(lineString, categoryId);
+    /*
+        Hibernate Spatial 참고
+            https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
+            https://www.baeldung.com/hibernate-spatial
+     */
+    public List<Store> getTopNByCategories(Long categoryId, double dist, double lat, double lon) {
+        return storeRepository.getTopNByCategories(getPolygon(lat, lon, dist), categoryId);
     }
 
-    public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) throws ParseException {
-        Geometry lineString = getLineString(lat, lon, dist);
-        List<Store> topStoreList = storeRepository.getTopNByCategories(lineString, categoryId);
-//        List<String> topUrlList = new ArrayList<>();
-//
-//        for (Store store : topStoreList) {
-//            if (store.getFile() != null) {
-//                String url = store.getFile().getUploadImageUrl();
-//
-//                topUrlList.add(url);
-//            }
-//        }
+    public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) {
+        List<Store> topStoreList = storeRepository.getTopNByCategories(getPolygon(lat, lon, dist), categoryId);
 
         return topStoreList.stream()
-                    .filter(store -> store.getFile() != null)
-                    .map(store -> store.getFile().getUploadImageUrl())
-                    .collect(Collectors.toList());
+                .filter(store -> store.getFile() != null)
+                .map(store -> store.getFile().getUploadImageUrl())
+                .collect(Collectors.toList());
     }
 
+    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat,
+                                                       double lon, double dist) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        return storeRepository.searchByHashtag(hashtagIdList, getPolygon(lat, lon, dist), pageRequest);
+    }
 
     //매장주인이 맞는지 체크
     public boolean OwnerCheck(Member member, Long storeId) {
@@ -287,34 +291,32 @@ public class StoreService {
                 .collect(Collectors.toList());
     }
 
-    // LineString 생성 메소드
-    private Geometry getLineString(double lat, double lon, double dist) throws ParseException {
-        Location northEast = calculatePoint(lat, lon, dist, Direction.NORTHEAST.getAngle());
-        Location southWest = calculatePoint(lat, lon, dist, Direction.SOUTHWEST.getAngle());
+    // Polygon 생성 메소드
+    private Polygon<G2D> getPolygon(double lat, double lon, double dist) {
 
-        double nex = northEast.getLat();
-        double ney = northEast.getLon();
-        double swx = southWest.getLat();
-        double swy = southWest.getLon();
+        double sqrt = Math.sqrt(2);
 
-        String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", nex, ney, swx, swy);
+        double toCorner = dist * sqrt;
 
-        return wktToGeometry(lineStringFormat);
-    }
+        Location northEast = calculatePoint(lat, lon, toCorner, NORTHEAST.getAngle());
+        Location northWest = calculatePoint(lat, lon, toCorner, NORTHWEST.getAngle());
+        Location southEast = calculatePoint(lat, lon, toCorner, SOUTHEAST.getAngle());
+        Location southWest = calculatePoint(lat, lon, toCorner, SOUTHWEST.getAngle());
 
-    // WKT로 spatial type을 읽어드림
-    private Geometry wktToGeometry(String text) throws ParseException {
-        return new WKTReader().read(text);
-    }
+        double nex = northEast.getLon();
+        double ney = northEast.getLat();
 
+        double nwx = northWest.getLon();
+        double nwy = northWest.getLat();
 
-    private Geometry createCircle(double x, double y, double radius) {
-        GeometricShapeFactory factory = new GeometricShapeFactory();
-        factory.setNumPoints(32);
-        factory.setCentre(new Coordinate(x, y));
-        factory.setSize(radius * 2);
+        double swx = southWest.getLon();
+        double swy = southWest.getLat();
 
-        return factory.createCircle();
+        double sex = southEast.getLon();
+        double sey = southEast.getLat();
+
+        return polygon(WGS84, ring(g(ney, nex),
+                g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
     }
 
     @Transactional
@@ -324,6 +326,7 @@ public class StoreService {
             if (findMember.getRole() == Role.USER) {
                 return "가게를 관리할 권한이 없는 아이디입니다";
             }
+
             Store findStore = findById(storeId);
             List<MemberOfStore> DuplicateCheck = findStore.getMemberOfStoreList().stream()
                     .filter(memberOfStore -> memberOfStore.getMember().equals(findMember))

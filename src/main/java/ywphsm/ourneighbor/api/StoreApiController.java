@@ -30,34 +30,12 @@ import java.util.List;
 public class StoreApiController {
 
     private final StoreService storeService;
-    private final CategoryService categoryService;
-
 
     private final RequestAddStoreService requestAddStoreService;
 
-    @GetMapping("/get-images")
-    public List<List<String>> getImages(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
-                                        @CookieValue(value = "lon", required = false, defaultValue = "") String lon) throws ParseException {
-
-        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
-
-        List<List<String>> categoryImageList = new ArrayList<>();
-
-        double dist = 3;
-
-        if (lat != null && lon != null) {
-            for (CategoryDTO.Simple simple : rootCategoryList) {
-                categoryImageList.add(storeService.getTopNImageByCategories(
-                        (simple.getCategoryId()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
-            }
-        }
-
-        return categoryImageList;
-    }
-
     @PostMapping("/seller/store")
     public Long save(@Validated StoreDTO.Add dto,
-                     @RequestParam(value = "categoryId") List<Long> categoryIdList) throws IOException {
+                     @RequestParam(value = "categoryId") List<Long> categoryIdList) throws IOException, ParseException {
         return storeService.save(dto, categoryIdList);
     }
 

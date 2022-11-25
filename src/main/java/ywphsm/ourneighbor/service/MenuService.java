@@ -2,9 +2,6 @@ package ywphsm.ourneighbor.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +20,6 @@ import ywphsm.ourneighbor.repository.menu.MenuRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,13 +99,13 @@ public class MenuService {
 
             // 해쉬태그에 새로운 값을 추가한 경우
             if (!(hashtagJson.isEmpty())) {
-                List<String> newHashtagNameList = getHashtagNameList(hashtagJson);
+                List<String> hashtagNameList = getHashtagNameList(hashtagJson);
 
                 // 기존 해쉬태그가 없는 경우 => 그냥 처음 저장하는 과정과 동일
                 if (previousHashtagName.size() == 0) {
-                    saveHashtagLinkedMenu(menu, newHashtagNameList);
+                    saveHashtagLinkedMenu(menu, hashtagNameList);
                 } else {
-                    updateAndDeleteHashtagLinkedMenu(menu, previousHashtagName, newHashtagNameList);
+                    updateAndDeleteHashtagLinkedMenu(menu, previousHashtagName, hashtagNameList);
                 }
             }
         }
@@ -160,15 +156,15 @@ public class MenuService {
     // hashtag save 로직
     private void saveHashtagLinkedMenu(Menu menu, List<String> hashtagNameList) {
         for (String name : hashtagNameList) {
-            HashtagDTO hashtagDTO = HashtagDTO.builder()
-                    .name(name)
-                    .build();
-
             boolean duplicateCheck = hashtagRepository.existsByName(name);
 
             Hashtag newHashtag;
 
             if (!duplicateCheck) {
+                HashtagDTO hashtagDTO = HashtagDTO.builder()
+                        .name(name)
+                        .build();
+
                 newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
             } else {
                 newHashtag = hashtagRepository.findByName(name);
@@ -179,14 +175,14 @@ public class MenuService {
     }
 
     // 해쉬태그 update, delete 로직
-    private void updateAndDeleteHashtagLinkedMenu(Menu menu, List<String> previousHashtagName, List<String> newHashtagNameList) {
-        for (String name : newHashtagNameList) {
-            boolean duplicateHashtagCheck = hashtagRepository.existsByName(name);
+    private void updateAndDeleteHashtagLinkedMenu(Menu menu, List<String> previousHashtagName, List<String> hashtagNameList) {
+        for (String name : hashtagNameList) {
+            boolean duplicateCheck = hashtagRepository.existsByName(name);
 
             Hashtag hashtag;
 
             // 기존에 등록돼있던 해쉬태그인 경우
-            if (duplicateHashtagCheck) {
+            if (duplicateCheck) {
                 hashtag = hashtagRepository.findByName(name);
 
                 Boolean duplicateHashtagOfStoreCheck = hashtagOfMenuRepository.existsByHashtagAndMenu(hashtag, menu);
@@ -198,7 +194,9 @@ public class MenuService {
 
                 // 수정 중, 완전히 새로운 해쉬태그를 만들 경우
             } else {
-                HashtagDTO hashtagDTO = HashtagDTO.builder().name(name).build();
+                HashtagDTO hashtagDTO = HashtagDTO.builder()
+                        .name(name)
+                        .build();
 
                 hashtag = hashtagRepository.save(hashtagDTO.toEntity());
                 linkHashtagAndMenu(hashtag, menu);
@@ -208,7 +206,7 @@ public class MenuService {
         // 기존의 해쉬태그 중, 새로운 해쉬태그에 포함되지 않는 경우
         //      => 해쉬태그를 삭제한 경우
         for (String prevName : previousHashtagName) {
-            boolean containsCheck = newHashtagNameList.contains(prevName);
+            boolean containsCheck = hashtagNameList.contains(prevName);
 
             if (!(containsCheck)) {
                 hashtagOfMenuRepository.deleteByHashtag(hashtagRepository.findByName(prevName));

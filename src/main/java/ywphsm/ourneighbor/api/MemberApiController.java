@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static ywphsm.ourneighbor.domain.store.distance.Distance.calculateHowFarToTheTarget;
+import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor

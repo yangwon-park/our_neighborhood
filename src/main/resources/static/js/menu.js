@@ -161,6 +161,7 @@ var main = {
     },
 
     save: function () {
+        mask.loadingWithMask();
         const menuForm = document.getElementById("menu-add-form");
 
         const formData = new FormData(menuForm);

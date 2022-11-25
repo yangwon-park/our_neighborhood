@@ -22,16 +22,18 @@
         <div class="row store-head">
             <div class="col-6 d-flex">
                 <h1 class="my-auto h1 text-dark fw-bold" th:text="*{name}">가게명</h1>
-                <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{status}"
-                      th:classappend="*{status}"></span>
+                <p class="badge ms-3 me-3 my-auto" style="font-size: 1.3rem" th:text="*{status}"
+                   th:classappend="*{status}"></p>
                 <th:block th:if="${session.loginMember ne null}">
                     <input th:value="${session.loginMember.id}" id="memberId" type="hidden">
-                    <div class="right_area">
+                    <span class="ms-3 my-auto">
                         <a href="javascript:;" class="icon heart">
-                            <img th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png' : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
-                                 alt="찜하기" id="like-img">
+                            <img style="width: 2vh; height: 2vh"
+                                 th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png'
+                                                       : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
+                                 alt="찜하기">
                         </a>
-                    </div>
+                    </span>
                 </th:block>
             </div>
             <div class="col-4">
@@ -52,11 +54,13 @@
                                     th:onclick="|location.href='@{/seller/store/edit/{storeId}(storeId=${store.storeId})}'|">
                                 정보 수정
                             </button>
-                            <button class="btn btn-info" style="font-size: 1.1rem; color: #ffffff"
-                                    th:onclick="|location.href='@{/admin/storeOwner/edit/{storeId}(storeId=${store.storeId})}'|"
-                                    th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
-                                관리자 수정
-                            </button>
+                            <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
+                                <button class="btn btn-dark" style="font-size: 1.1rem; color: #ffffff"
+                                        th:onclick="|location.href='@{/admin/store-owner/edit/{storeId}(storeId=${store.storeId})}'|"
+                                        th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
+                                    관리자 수정
+                                </button>
+                            </th:block>
                         </div>
                     </th:block>
                 </th:block>
@@ -68,7 +72,8 @@
                     <div class="modal-content">
                         <form id="main-image-form" enctype="multipart/form-data">
                             <div class="modal-header">
-                                <h5 class="modal-title text-dark fw-bold" id="edit-image-modal-label">대표 이미지 등록</h5>
+                                <h5 class="modal-title text-dark fw-bold me-3" id="edit-image-modal-label">
+                                    대표 이미지 등록</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
@@ -101,82 +106,165 @@
         <hr class="my-2">
         <div class="row store-info d-flex" style="font-size: 1rem">
             <div class="col-7">
-                <div class="col-12 my-1">
-                <span class="m-auto">
-                        <th:block th:each="cate, i : ${categoryList}">
-                            <th:block>
-                                <a href="#" th:text="${cate.name}" class="text-dark fw-bold">카테고리명</a>
-                            </th:block>
-                            <th:block th:if="${i.index+1 < categoryList.size()}">
-                                <span class="text-dark fw-bold mx-2">></span>
+                <div class="row mt-1 mb-2">
+                    <div class="col-8">
+                        <span class="ms-4">
+                                <th:block th:each="cate, i : ${categoryList}">
+                                    <th:block>
+                                        <a href="#" th:text="${cate.name}" class="main-color fw-bold"
+                                           style="font-size: 0.9rem">카테고리명</a>
+                                    </th:block>
+                                    <th:block th:if="${i.index+1 < categoryList.size()}">
+                                        <span class="main-color fw-bold me-3 mx-2">></span>
+                                    </th:block>
+                                </th:block>
+                        </span>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col-3">
+                        <span>
+                            <i class="fa-solid fa-map-location-dot main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">주소</span>
+                    </div>
+                    <div class="col-9">
+                        <span th:text="*{roadAddr}"></span>
+                    </div>
+                </div>
+                <div class="row my-1" style="font-size: 0.8rem">
+                    <div class="col-3">
+                    </div>
+                    <div class="col-9 my-auto">
+                        <span class="badge bg-dark">지번</span>
+                        <span th:text="*{numberAddr}"></span>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col-3">
+                        <span>
+                            <i class="fa-solid fa-square-phone main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">전화 번호</span>
+                    </div>
+                    <div class="col-9">
+                        <a th:href="@{tel:{phoneNumber}(phoneNumeber=*{phoneNumber})}"
+                           th:text="*{phoneNumber}" style="color: #000000">전화번호</a>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col-3 d-flex align-items-center">
+                        <span>
+                            <i class="fa-solid fa-calendar main-color me-1 fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">휴무일</span>
+                    </div>
+                    <div class="col-9">
+                        <th:block th:if="${not #lists.isEmpty(store.offDays)}" class="text-dark fw-bold ms-1">
+                            <span th:each="day : *{offDays}" class="me-2">
+                                <th:block th:text="${day}"></th:block> 휴무
+                            </span>
+                        </th:block>
+                        <th:block th:if="${#lists.isEmpty(store.offDays)}" class="text-dark fw-bold ms-1">
+                            없음
+                        </th:block>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col-3">
+                        <span>
+                            <i class="fa-solid fa-clock main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">영업 시간</span>
+                    </div>
+                    <div class="col-9">
+                        <span th:text="*{#temporals.format(openingTime, 'a hh:mm')}"></span>
+                        ~
+                        <span th:text="*{#temporals.format(closingTime, 'a hh:mm')}"></span>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col-3">
+                        <span>
+                            <i class="fa-solid fa-clock main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">라스트 오더</span>
+                    </div>
+                    <div class="col-9">
+                        <span th:text="*{#temporals.format(lastOrder, 'a hh:mm')}"></span>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col-3">
+                        <span>
+                            <i class="fa-solid fa-clock main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">휴식 시간</span>
+                    </div>
+                    <div class="col-9">
+                        <th:block th:if="*{breakStart ne null}">
+                            <th:block th:if="*{breakStart ne breakEnd}">
+                                <span th:text="*{#temporals.format(breakStart, 'a hh:mm')}"></span>
+                                ~
+                                <span th:text="*{#temporals.format(breakEnd, 'a hh:mm')}"></span>
                             </th:block>
                         </th:block>
-                </span>
-                </div>
-                <div class="col-12 my-1">
-                    <i class="fa-solid fa-map-location-dot main-color fa-sm"></i>
-                    <span>주소</span>
-                    <span th:text="*{roadAddr}"></span>
-                </div>
-                <div class="col-12 my-1" style="font-size: 0.8rem">
-                    <span class="badge bg-dark my-auto ms-3">지번</span>
-                    <span th:text="*{numberAddr}"></span>
-                </div>
-                <div class="col-12 my-1">
-                    <i class="fa-solid fa-square-phone main-color fa-sm"></i>
-                    <span>전화 번호</span>
-                    <a th:href="@{tel:{phoneNumber}(phoneNumeber=*{phoneNumber})}"
-                       th:text="*{phoneNumber}" style="color: #000000">전화번호</a>
-                </div>
-                <div class="col-12 d-flex align-items-center my-1">
-                    <i class="fa-solid fa-calendar main-color me-1 fa-sm"></i>
-                    <span th:each="day : *{offDays}" class="me-2">
-                    <th:block th:text="${day}"></th:block>
-                </span>
-                    <span th:if="${not #lists.isEmpty(store.offDays)}">휴무</span>
-                    <span th:if="${#lists.isEmpty(store.offDays)}">휴무일 없음</span>
-                </div>
-                <div class="col-12 my-1">
-                    <i class="fa-solid fa-clock main-color fa-sm"></i>
-                    <span>영업 시간</span>
-                    <span th:text="*{#temporals.format(openingTime, 'a hh:mm')}"></span>
-                    ~
-                    <span th:text="*{#temporals.format(closingTime, 'a hh:mm')}"></span>
-                </div>
-                <div class="col-12 my-1">
-                    <i class="fa-solid fa-clock main-color fa-sm"></i>
-                    <span>휴식 시간</span>
-                    <th:block th:if="*{breakStart ne null}">
-                        <th:block th:if="*{breakStart ne breakEnd}">
-                            <span th:text="*{#temporals.format(breakStart, 'a hh:mm')}"></span>
-                            ~
-                            <span th:text="*{#temporals.format(breakEnd, 'a hh:mm')}"></span>
+                        <th:block th:if="*{breakStart eq null}">
+                            없음
                         </th:block>
-                    </th:block>
-                    <th:block th:if="*{breakStart eq null}">
-                        없음
-                    </th:block>
+                    </div>
                 </div>
-                <div class="col-12 my-1">
-                    <i class="fa-solid fa-square-parking main-color fa-sm"></i>
-                    <span>주차</span>
-                    <th:block th:if="*{park ne null}">
-                        <span class="ms-2 me-3 fw-bold" th:text="*{park.description}"
-                            th:classappend="|park-*{park.name()}|"></span>
-                    </th:block>
-                    <th:block th:if="*{parkDetail ne null}">
-                        <span class="ms-3 fw-bold" th:text="|(*{parkDetail})|"></span>
-                    </th:block>
+                <div class="row">
+                    <div class="col-3">
+                        <span>
+                            <i class="fa-solid fa-square-parking main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">주차</span>
+                    </div>
+                    <div class="col-9">
+                        <th:block th:if="*{park ne null}">
+                            <span class="me-3 fw-bold" th:text="*{park.description}"
+                                  th:classappend="|park-*{park.name()}|"></span>
+                        </th:block>
+                        <th:block th:if="*{parkDetail ne null}">
+                            <span class="ms-3 fw-bold" th:text="|(*{parkDetail})|"></span>
+                        </th:block>
+                    </div>
                 </div>
-                <div class="col-12 my-1">
-                    <p>
+                <div class="row">
+                    <div class="col-3">
+                        <span>
+                            <i class="fa-solid fa-shop main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">매장 소개</span>
+                    </div>
+                    <div class="col-9">
                         <span class="mx-auto" th:text="*{intro}"></span>
-                    </p>
+                    </div>
                 </div>
-                <div class="col-12 my-1">
-                    <p>
-                        <span class="fw-bold mx-auto" style="color: red" th:text="*{notice}"></span>
-                    </p>
+                <div class="row">
+                    <div class="col-3">
+                        <span>
+                            <i class="fa-solid fa-link main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold ms-1">홈페이지</span>
+                    </div>
+                    <div class="col-9">
+                        <span class="fw-bold mx-auto" style="color: red">
+                            <a th:href="|https://*{homePage}|" th:text="*{homePage}" target="_blank"></a>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <span>
+                            <i class="fa-solid fa-check main-color fa-sm"></i>
+                        </span>
+                        <span class="text-dark fw-bold me-3">공지</span>
+                        <p>
+                            <span class="fw-bold mx-auto" style="color: red" th:text="*{notice}"></span>
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="col-5">
@@ -213,7 +301,7 @@
                     <div class="menu-title my-3">
                         <div class="row">
                             <div class="col-6">
-                                <p class="my-auto h1 text-dark fw-bold">메뉴</p>
+                                <p class="my-auto h1 text-dark fw-bold me-3">메뉴</p>
                             </div>
                             <div class="col-6">
                                 <div class="float-end" th:if="${!menuImgList.isEmpty()}">
@@ -229,7 +317,7 @@
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div id="modal-content" class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title text-dark fw-bold">메뉴판</h5>
+                                            <h5 class="modal-title text-dark fw-bold me-3">메뉴판</h5>
                                             <button type="button" id="btn-close" class="btn-close"
                                                     data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
@@ -309,7 +397,7 @@
         <hr class="my-5">
         <div class="row review">
             <div class="col-6">
-                <p class="my-auto h1 text-dark fw-bold">리뷰</p>
+                <p class="my-auto h1 text-dark fw-bold me-3">리뷰</p>
             </div>
             <div class="col-6">
                 <button class="btn btn-main-color float-end" style="font-size: 1.1rem; color: #ffffff"
@@ -376,6 +464,5 @@
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/review.js}"></script>
-
 </body>
 </html>

@@ -29,7 +29,6 @@ public class HomeController {
         return "index";
     }
 
-    // 검색 뷰페이지 임시
     @GetMapping("/map")
     public String map(@ModelAttribute("storeSearchCond") StoreSearchCond storeSearchCond) {
         return "map";

@@ -51,7 +51,6 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
          */
         if (savedRequest != null) {
             uri = savedRequest.getRedirectUrl();
-            ScriptUtils.alert(response, "로그인후 이용할 수 있습니다.");
         } else if (prevPage != null && !prevPage.equals("")) {
             /*
                 회원가입 - 로그인으로 넘어온 경우 "/"로 redirect

@@ -66,7 +66,7 @@ public class Store extends BaseEntity {
     private List<String> offDays = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private StoreStatus status;               // 가게 오픈 상황
+    private StoreStatus status = StoreStatus.OPEN;               // 가게 오픈 상황 (default: OPEN)
 
     @Enumerated(EnumType.STRING)
     private ParkAvailable park;
@@ -97,7 +97,7 @@ public class Store extends BaseEntity {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Menu> menuList = new ArrayList<>();
 
-    // Meview(N:1)
+    // Review(N:1)
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviewList = new ArrayList<>();
 
@@ -184,49 +184,6 @@ public class Store extends BaseEntity {
 
     public void updateStatus(StoreStatus status) {
         this.status = status;
-    }
-
-    // Status 업데이트 구문 (검색시 반영되게 만듬)
-    public void autoUpdateStatus(List<String> offDays, BusinessTime businessTime) {
-
-        // 오늘의 요일을 한글로 바꿔주는 로직
-        String today = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
-
-        // 현재 시간
-        LocalTime time = LocalTime.now();
-
-        if (!offDays.isEmpty()) {
-            for (String offDay : offDays) {
-                if (today.equals(offDay)) {
-
-                    updateStatus(StoreStatus.CLOSED);
-                    return;
-                }
-            }
-        }
-
-        // null인 경우를 처리하지 않으면 에러 발생 (검색 결과가 2개 이상인 경우 그냥 터져버림)
-        if (businessTime.getOpeningTime() == null || businessTime.getClosingTime() == null) {
-            return;
-        }
-
-        if (businessTime.getOpeningTime().equals(businessTime.getClosingTime())) {
-            updateStatus(StoreStatus.OPEN);
-            return;
-        }
-
-        if (!(time.isAfter(businessTime.getOpeningTime()) && time.isBefore(businessTime.getClosingTime()))) {
-            updateStatus(StoreStatus.CLOSED);
-            return;
-        }
-
-        if (businessTime.getBreakStart() == null) {
-            return;
-        }
-
-        if (time.isAfter(businessTime.getBreakStart()) && time.isBefore(businessTime.getBreakEnd())) {
-            updateStatus(StoreStatus.BREAK);
-        }
     }
 
     public void reviewDelete(Integer rating) {

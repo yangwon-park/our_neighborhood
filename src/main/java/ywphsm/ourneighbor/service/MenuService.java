@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
-import ywphsm.ourneighbor.domain.hashtag.HashtagUtil;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
@@ -93,7 +92,6 @@ public class MenuService {
         // 실제로 이럴 경우는 잘 없다고 봄
         if (hashtagJson != null) {
             if (previousHashtagName.size() != 0 && hashtagJson.isEmpty()) {
-                log.info("해쉬태그 모두 삭제");
                 hashtagOfMenuRepository.deleteByMenu(menu);
             }
 

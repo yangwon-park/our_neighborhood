@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{/css/argon.css}">
+<body id="main-body" class="bg-default">
+<!-- Navbar -->
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
+<section class="header">
+    <div class="header py-5">
+
+    </div>
+</section>
+<!--addForm-->
+<section class="recommend-post-add">
+    <div class="container-fluid mt--8 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="card-header bg-transparent pb-3">
+                        <div class="text-center mt-2 mb-4 fs-2">
+                            추천 게시글 양식 등록
+                        </div>
+                    </div>
+                    <div class="card-body px-lg-5 py-lg-5">
+                        <form th:object="${recommend}" id="recommend-post-add-form" class="form-floating">
+                            <div class="form-group">
+                                <div class="">
+                                    <input th:field="*{header}" class="form-control"
+                                           placeholder="제목을 입력해주세요." type="text">
+                                </div>
+                            </div>
+                            <div class="form-group" style="height: 10rem">
+                                <div class="mb-3">
+                                    <label for="content" class="mb-2">내용 작성</label>
+                                    <textarea class="form-control" style="height: 100%" placeholder="50자 이하여야 합니다"
+                                              id="content" th:field="*{content}" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="fw-bold mb-3">
+                                    추천 양식 종류
+                                </span>
+                            </div>
+                            <div class="form-group d-flex text-nowrap mt-3">
+                                <div class="row">
+                                    <div class="col-3" th:each="r : ${recommendKinds}">
+                                        <input type="radio" th:field="*{recommendKind}"
+                                               th:value="${r.name()}"/>
+                                        <label th:text="${r.description}"
+                                               class="form-check-label"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="mb-2">해쉬태그 추가</span>
+                                <div class="mb-3">
+                                    <input id="hashtag" class="tagify--outside"
+                                           name="hashtag" type="hidden" style="width: 100%">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button id="recommend-post-save" type="button"
+                                        class="btn btn-main-color mt-4 float-end">양식 등록
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/recommend_post.js}"></script>
+<script type="module" th:src="@{/js/hashtag.js}"></script>
+
+</html>

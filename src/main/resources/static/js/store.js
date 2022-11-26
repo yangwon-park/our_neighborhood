@@ -250,8 +250,8 @@ var main = {
                     this.getSubCategories(this.midChildren, categoryList);
                 }
             }
+
             this.changeMainCategories(this.mainChildren);
-            this.changeMidCategories(this.midChildren);
 
         }).catch((e) => {
             console.error(e);
@@ -300,6 +300,7 @@ var main = {
                     }
                 }
             }
+            this.changeMidCategories(this.midChildren);
 
         });
     },
@@ -356,13 +357,12 @@ var main = {
                     categoryId: categoryList[1]
                 }
             }).then((resp) => {
-                midParentId = resp.data
+                midParentId = String(resp.data);
             }).catch((e) => {
                 console.error(e);
             });
         }
 
-        this.mainChildren = [];
         midParentId = this.categoryLayerEl.main.options
             [this.categoryLayerEl.main.selectedIndex].value;
         console.log("midParentId = ", midParentId)
@@ -400,7 +400,7 @@ var main = {
                     categoryId: categoryList[2]
                 }
             }).then((resp) => {
-                subParentId = resp.data
+                subParentId = String(resp.data);
             }).catch((e) => {
                 console.error(e);
             })
@@ -410,7 +410,6 @@ var main = {
                 [this.categoryLayerEl.mid.selectedIndex].value;
         console.log("subParentId = ", subParentId)
 
-        this.midChildren = [];
 
         this.resetCategories(this.categoryLayerEl.sub, "소분류 선택");
 

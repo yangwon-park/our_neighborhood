@@ -85,9 +85,9 @@ public class SearchController {
         List<Store> findStores = storeService.searchTopNByCategories(categoryId, dist,
                 Double.parseDouble(myLat), Double.parseDouble(myLon));
 
-
         List<SimpleSearchStoreDTO> result = findStores.stream()
-                .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
+                .map(SimpleSearchStoreDTO::new)
+                .collect(Collectors.toList());
 
         result.forEach(StoreUtil::autoUpdateStatus);
 
@@ -139,7 +139,7 @@ public class SearchController {
             calculateHowFarToTheTarget(myLat, myLon, result.getContent());
         }
 
-        log.info("result={}", result);
+        log.info("result={}", result.getContent());
 
         return result;
     }

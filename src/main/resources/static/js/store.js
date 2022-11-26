@@ -264,7 +264,7 @@ var main = {
             let mainOption = document.createElement("option");
             mainOption.text = rc.name;
             mainOption.value = rc.categoryId;
-            if (this.storeEditCheck) {
+            if (categoryList !== null) {
                 if (mainOption.value === categoryList[0]) {
                     mainOption.selected = true;
                     this.storeEditCheck = true;

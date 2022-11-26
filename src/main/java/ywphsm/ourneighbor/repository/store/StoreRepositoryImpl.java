@@ -82,8 +82,8 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
         List<SimpleSearchStoreDTO> list = queryFactory
                 .select(Projections.constructor(SimpleSearchStoreDTO.class,
-                        store.id, store.name, store.lon, store.lat, store.ratingTotal,
-                        store.phoneNumber, store.status, store.address, store.file.uploadImageUrl
+                        store.id, store.name, store.lon, store.lat, store.phoneNumber,
+                        store.status, store.businessTime, store.address, store.ratingTotal, store.file.uploadImageUrl
                 )).distinct()
                 .from(store)
                 .innerJoin(store.hashtagOfStoreList, hashtagOfStore)

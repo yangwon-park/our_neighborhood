@@ -300,6 +300,7 @@ var main = {
                     }
                 }
             }
+
             this.changeMidCategories(this.midChildren);
 
         });

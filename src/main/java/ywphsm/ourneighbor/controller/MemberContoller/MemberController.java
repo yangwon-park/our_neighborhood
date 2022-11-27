@@ -1,5 +1,9 @@
 package ywphsm.ourneighbor.controller.MemberContoller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-public class
-MemberController {
+@RequiredArgsConstructor
+public class MemberController {
 
-
-
+    private final RequestCache requestCache = new HttpSessionRequestCache();
 
     @GetMapping("/login")
     public String login(@ModelAttribute(name = "loginForm") LoginForm loginForm,
@@ -29,6 +32,11 @@ MemberController {
 
         if (member != null) {
             ScriptUtils.alertAndMovePage(response, "이미 로그인이 되어있습니다.", "/");
+        }
+
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
+        if (savedRequest != null) {
+            ScriptUtils.alert(response, "로그인후 이용해 주세요.");
         }
 
         model.addAttribute("error", error);

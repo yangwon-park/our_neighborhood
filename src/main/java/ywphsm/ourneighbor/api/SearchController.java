@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +59,6 @@ public class SearchController {
                                            @CookieValue(value = "lon", required = false) String myLon) {
         List<Store> findStores = storeService.searchByCategory(Long.parseLong(categoryId));
 
-
         List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
@@ -108,7 +108,6 @@ public class SearchController {
         List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
 
         List<List<String>> categoryImageList = new ArrayList<>();
-
 
         if (lat != null && lon != null) {
             for (CategoryDTO.Simple simple : rootCategoryList) {

@@ -252,6 +252,7 @@ var main = {
             }
 
             this.changeMainCategories(this.mainChildren);
+            this.changeMidCategories(this.midChildren);
 
         }).catch((e) => {
             console.error(e);
@@ -264,7 +265,7 @@ var main = {
             let mainOption = document.createElement("option");
             mainOption.text = rc.name;
             mainOption.value = rc.categoryId;
-            if (categoryList !== null) {
+            if (categoryList != null) {
                 if (mainOption.value === categoryList[0]) {
                     mainOption.selected = true;
                     this.storeEditCheck = true;
@@ -408,7 +409,7 @@ var main = {
         }
 
         subParentId = this.categoryLayerEl.mid.options
-                [this.categoryLayerEl.mid.selectedIndex].value;
+            [this.categoryLayerEl.mid.selectedIndex].value;
         console.log("subParentId = ", subParentId)
 
 

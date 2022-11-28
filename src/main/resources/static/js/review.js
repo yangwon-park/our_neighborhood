@@ -1,5 +1,6 @@
 import validation from "./validation.js";
 import mask from "./mask.js";
+import menu from "./menu.js";
 
 var main = {
     init: async function () {
@@ -135,20 +136,6 @@ var main = {
 
     },
 
-    createDefaultImg: function (formData) {
-        let file = formData.get("file");
-
-        if (file.name === "") {
-            formData.delete("file");
-        }
-
-        let defaultFile = new File(["foo"], "default.png", {
-            type: "image/png"
-        })
-
-        formData.append("file", defaultFile);
-    },
-
     save: function () {
         mask.loadingWithMask();
 
@@ -157,7 +144,7 @@ var main = {
 
         let formData = new FormData(reviewForm);
 
-        this.createDefaultImg(formData);
+        menu.createDefaultImg(formData);
 
         axios({
             headers: {

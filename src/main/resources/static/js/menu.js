@@ -145,19 +145,20 @@ var main = {
     createDefaultImg: function (formData) {
         let file = formData.get("file");
 
+        console.log("file=", file);
+
         if (file === null) {
             return;
         }
 
         if (file.name === "") {
             formData.delete("file");
+            let defaultFile = new File(["foo"], "default.png", {
+                type: "image/png"
+            })
+
+            formData.append("file", defaultFile);
         }
-
-        let defaultFile = new File(["foo"], "default.png", {
-            type: "image/png"
-        })
-
-        formData.append("file", defaultFile);
     },
 
     save: function () {
@@ -167,6 +168,17 @@ var main = {
         const formData = new FormData(menuForm);
 
         this.createDefaultImg(formData);
+
+        // FormData의 key 확인
+        for (let key of formData.keys()) {
+            console.log(key);
+        }
+
+        // FormData의 value 확인
+        for (let value of formData.values()) {
+            console.log(value);
+        }
+
 
         axios({
             headers: {
@@ -178,7 +190,7 @@ var main = {
             data: formData
         }).then((resp) => {
             alert("메뉴가 등록됐습니다.")
-            window.location.reload()
+            window.location.reload();
             mask.closeMask();
         }).catch((error) => {
             console.log(error)
@@ -241,3 +253,5 @@ var main = {
 };
 
 main.init();
+
+export default main;

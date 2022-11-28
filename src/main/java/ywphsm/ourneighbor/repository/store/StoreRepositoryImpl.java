@@ -4,14 +4,14 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.spatial.GeometryExpressions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.*;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.*;
+import org.springframework.data.support.PageableExecutionUtils;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
@@ -102,6 +102,39 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         }
 
         return new SliceImpl<>(list, pageable, hasNext);
+    }
+
+    @Override
+    public List<SimpleSearchStoreDTO> searchTop7Random(Polygon<G2D> polygon, Pageable pageable) {
+        final int dist = 3;
+
+        List<SimpleSearchStoreDTO> content = queryFactory
+                .select(Projections.constructor(SimpleSearchStoreDTO.class,
+                        store.id, store.name, store.lon, store.lat, store.phoneNumber,
+                        store.status, store.businessTime, store.address, store.ratingTotal, store.file.uploadImageUrl
+                )).distinct()
+                .from(store)
+                .where(stContains(polygon), stDistance(polygon).loe(dist))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(store.count())
+                .from(store)
+                .where(stContains(polygon), stDistance(polygon).loe(dist));
+
+        return content;
+    }
+
+    @Override
+    public Long countStoreInPolygon(Polygon<G2D> polygon) {
+        return queryFactory
+                .select(store.count())
+                .from(store)
+                .where(store.file.uploadImageUrl.isNotNull())
+                .where(stContains(polygon), stDistance(polygon).loe(3))
+                .fetchOne();
     }
 
     @Override

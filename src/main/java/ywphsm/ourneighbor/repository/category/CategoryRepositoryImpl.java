@@ -30,7 +30,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
     public List<Category> findByDepth(Long depth) {
         NumberExpression<Integer> rank = new CaseBuilder()
                 .when(category.name.eq("동네 맛집")).then(1)
-                .when(category.name.eq("카페")).then(2)
+                .when(category.name.eq("카페 / 베이커리")).then(2)
                 .when(category.name.eq("인기 술집")).then(3)
                 .when(category.name.eq("문화 / 여가")).then(4)
                 .otherwise(5);

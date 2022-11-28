@@ -76,6 +76,15 @@ public class SearchController {
         return new ResultClass<>(result.size(), result);
     }
 
+    @GetMapping("/search-top7-random")
+    public ResultClass<?> searchTop7Random (@CookieValue(value = "lat", required = false) Double myLat,
+                                            @CookieValue(value = "lon", required = false) Double myLon){
+        final double dist = 3;
+        List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, dist);
+
+        return new ResultClass<>(result.size(), result);
+    }
+
     @GetMapping("/search-topN-categories")
     public ResultClass<?> searchTopNStoresByCategories(@RequestParam Long categoryId,
                                                        @CookieValue(value = "lat", required = false) String myLat,
@@ -142,4 +151,5 @@ public class SearchController {
 
         return result;
     }
+
 }

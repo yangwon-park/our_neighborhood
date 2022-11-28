@@ -3,6 +3,8 @@ package ywphsm.ourneighbor.repository.store;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometry;
 import org.geolatte.geom.Polygon;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -18,7 +20,11 @@ public interface StoreRepositoryCustom {
 
     List<Store> searchByCategory(Long categoryId);
 
-    List<Store> searchTopNByCategories(Polygon<G2D> lineString, Long categoryId);
+    List<Store> searchTopNByCategories(Polygon<G2D> polygon, Long categoryId);
 
     Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, Geometry<G2D> polygon, Pageable pageable);
+
+    List<SimpleSearchStoreDTO> searchTop7Random(Polygon<G2D> polygon, Pageable pageable);
+
+    Long countStoreInPolygon(Polygon<G2D> polygon);
 }

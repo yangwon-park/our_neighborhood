@@ -238,13 +238,19 @@ public class StoreService {
     }
 
     public List<SimpleSearchStoreDTO> searchTop7Random(double lat, double lon, double dist) {
+        final int n = 8;
+
         Polygon<G2D> polygon = getPolygon(lat, lon, dist);
 
         Long count = storeRepository.countStoreInPolygon(polygon);
 
-        int idx = (int)(Math.random() * (count / 7) + 1);
+        int idx = count % n != 0
+                    ? (int) (Math.random() * (count / n + 1))
+                    : (int) (Math.random() * (count / n));
 
-        PageRequest pageRequest = PageRequest.of(idx, 7);
+        log.info("idx={}", idx);
+
+        PageRequest pageRequest = PageRequest.of(idx, n);
 
         return storeRepository.searchTop7Random(polygon, pageRequest);
     }

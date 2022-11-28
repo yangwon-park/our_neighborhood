@@ -106,13 +106,15 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
     @Override
     public List<SimpleSearchStoreDTO> searchTop7Random(Polygon<G2D> polygon, Pageable pageable) {
+        final int dist = 3;
+
         List<SimpleSearchStoreDTO> content = queryFactory
                 .select(Projections.constructor(SimpleSearchStoreDTO.class,
                         store.id, store.name, store.lon, store.lat, store.phoneNumber,
                         store.status, store.businessTime, store.address, store.ratingTotal, store.file.uploadImageUrl
                 )).distinct()
                 .from(store)
-                .where(stContains(polygon), stDistance(polygon).loe(3))
+                .where(stContains(polygon), stDistance(polygon).loe(dist))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -120,7 +122,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(store.count())
                 .from(store)
-                .where(stContains(polygon), stDistance(polygon).loe(3));
+                .where(stContains(polygon), stDistance(polygon).loe(dist));
 
         return content;
     }

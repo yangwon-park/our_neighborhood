@@ -77,10 +77,10 @@ public class SearchController {
     }
 
     @GetMapping("/search-top7-random")
-    public ResultClass<?> searchTop7Random (@CookieValue(value = "lat", required = false) String myLat,
-                                            @CookieValue(value = "lon", required = false) String myLon){
+    public ResultClass<?> searchTop7Random (@CookieValue(value = "lat", required = false) Double myLat,
+                                            @CookieValue(value = "lon", required = false) Double myLon){
         final double dist = 3;
-        List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(Double.parseDouble(myLat), Double.parseDouble(myLon), dist);
+        List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, dist);
 
         return new ResultClass<>(result.size(), result);
     }

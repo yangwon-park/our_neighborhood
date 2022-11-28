@@ -67,7 +67,7 @@ var main = {
         mask.closeMask();
 
         //좋아요 버튼
-        let likeBtn =$(".icon.heart");
+        let likeBtn = $(".icon.heart");
 
         likeBtn.click(function(){
             console.log("likeBtn.src=", document.getElementById("like-img").src);
@@ -274,6 +274,7 @@ var main = {
                 })
             }
 
+            $("#reviewBody").append(addListHtml);
 
         }).catch((e) => {
             console.error(e);

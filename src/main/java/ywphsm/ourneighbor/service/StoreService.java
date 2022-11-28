@@ -40,7 +40,7 @@ import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true) // 데이터 변경 X
+@Transactional(readOnly = true)
 public class StoreService {
 
     private final StoreRepository storeRepository;
@@ -194,7 +194,6 @@ public class StoreService {
 
         memberOfStore.updateStoreLike(false);
         return "가게가 찜 등록이 취소되었습니다.";
-
     }
 
     @Transactional
@@ -212,12 +211,8 @@ public class StoreService {
 
     // 매장 하나 조회
     public Store findById(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(
+        return storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
-
-        store.autoUpdateStatus(store.getOffDays(), store.getBusinessTime());
-
-        return store;
     }
 
     // 전체 매장 조회
@@ -227,30 +222,19 @@ public class StoreService {
 
     // 검색어 포함 매장명 조회
     public List<Store> searchByKeyword(String keyword) {
-        List<Store> stores = storeRepository.searchByKeyword(keyword);
-
-        for (Store store : stores) {
-            store.autoUpdateStatus(store.getOffDays(), store.getBusinessTime());
-        }
-
-        return stores;
+        return storeRepository.searchByKeyword(keyword);
     }
 
     public List<Store> searchByCategory(Long categoryId) {
         return storeRepository.searchByCategory(categoryId);
     }
 
-    /*
-        Hibernate Spatial 참고
-            https://wooody92.github.io/project/JPA%EC%99%80-MySQL%EB%A1%9C-%EC%9C%84%EC%B9%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0/
-            https://www.baeldung.com/hibernate-spatial
-     */
-    public List<Store> getTopNByCategories(Long categoryId, double dist, double lat, double lon) {
-        return storeRepository.getTopNByCategories(getPolygon(lat, lon, dist), categoryId);
+    public List<Store> searchTopNByCategories(Long categoryId, double dist, double lat, double lon) {
+        return storeRepository.searchTopNByCategories(getPolygon(lat, lon, dist), categoryId);
     }
 
     public List<String> getTopNImageByCategories(Long categoryId, double dist, double lat, double lon) {
-        List<Store> topStoreList = storeRepository.getTopNByCategories(getPolygon(lat, lon, dist), categoryId);
+        List<Store> topStoreList = storeRepository.searchTopNByCategories(getPolygon(lat, lon, dist), categoryId);
 
         return topStoreList.stream()
                 .filter(store -> store.getFile() != null)
@@ -289,34 +273,6 @@ public class StoreService {
 
         return collect.stream().map(categoryService::findById)
                 .collect(Collectors.toList());
-    }
-
-    // Polygon 생성 메소드
-    private Polygon<G2D> getPolygon(double lat, double lon, double dist) {
-
-        double sqrt = Math.sqrt(2);
-
-        double toCorner = dist * sqrt;
-
-        Location northEast = calculatePoint(lat, lon, toCorner, NORTHEAST.getAngle());
-        Location northWest = calculatePoint(lat, lon, toCorner, NORTHWEST.getAngle());
-        Location southEast = calculatePoint(lat, lon, toCorner, SOUTHEAST.getAngle());
-        Location southWest = calculatePoint(lat, lon, toCorner, SOUTHWEST.getAngle());
-
-        double nex = northEast.getLon();
-        double ney = northEast.getLat();
-
-        double nwx = northWest.getLon();
-        double nwy = northWest.getLat();
-
-        double swx = southWest.getLon();
-        double swy = southWest.getLat();
-
-        double sex = southEast.getLon();
-        double sey = southEast.getLat();
-
-        return polygon(WGS84, ring(g(ney, nex),
-                g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
     }
 
     @Transactional
@@ -386,5 +342,33 @@ public class StoreService {
         } catch (IllegalArgumentException e) {
             return "존재하지 않는 아이디 입니다";
         }
+    }
+
+    // Polygon 생성 메소드
+    private Polygon<G2D> getPolygon(double lat, double lon, double dist) {
+
+        double sqrt = Math.sqrt(2);
+
+        double toCorner = dist * sqrt;
+
+        Location northEast = calculatePoint(lat, lon, toCorner, NORTHEAST.getAngle());
+        Location northWest = calculatePoint(lat, lon, toCorner, NORTHWEST.getAngle());
+        Location southEast = calculatePoint(lat, lon, toCorner, SOUTHEAST.getAngle());
+        Location southWest = calculatePoint(lat, lon, toCorner, SOUTHWEST.getAngle());
+
+        double nex = northEast.getLon();
+        double ney = northEast.getLat();
+
+        double nwx = northWest.getLon();
+        double nwy = northWest.getLat();
+
+        double swx = southWest.getLon();
+        double swy = southWest.getLat();
+
+        double sex = southEast.getLon();
+        double sey = southEast.getLat();
+
+        return polygon(WGS84, ring(g(ney, nex),
+                g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
     }
 }

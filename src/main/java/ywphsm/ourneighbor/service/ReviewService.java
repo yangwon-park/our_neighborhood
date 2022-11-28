@@ -52,7 +52,8 @@ public class ReviewService {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
         Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
 
-        List<UploadFile> newUploadFiles = fileStore.storeFiles(dto.getFile());
+        List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
+        log.info("newUploadFiles = {}", newUploadFiles);
 //        List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
 
         Review review = dto.toEntity(linkedStore, linkedMember);

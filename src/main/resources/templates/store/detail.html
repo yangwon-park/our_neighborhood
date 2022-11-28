@@ -31,12 +31,12 @@
                             <img style="width: 2vh; height: 2vh"
                                  th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png'
                                                        : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
-                                 alt="찜하기">
+                                 alt="찜하기" id="like-img">
                         </a>
                     </span>
                 </th:block>
             </div>
-            <div class="col-4">
+            <div class="col-6">
                 <th:block th:if="${session.loginMember ne null}">
                     <th:block th:if="${#strings.equals(session.loginMember.role, 'SELLER')} or
                             ${#strings.equals(session.loginMember.role, 'ADMIN')}">
@@ -455,7 +455,6 @@
                 </tr>
             </table>
             <button type="button" class="btn btn-main-color mt-4" id="review-more">더보기</button>
-<!--            <button type="button" class="btn btn-main-color mt-4" id="alertStart">테스트</button>-->
         </div>
     </div>
 </section>

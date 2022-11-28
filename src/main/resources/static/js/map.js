@@ -185,7 +185,7 @@ var main = {
     getTopNCategories: function (categoryId, map) {
         axios({
             method: "get",
-            url: "/get-topN-categories",
+            url: "/search-topN-categories",
             params: {
                 categoryId: categoryId
             }
@@ -257,15 +257,14 @@ var main = {
 
     searchResult: [],
 
-    displayMarker: function (result, map) {
+    displayMarker: function (data, map) {
         this.removeMarker();
 
         var bounds = new kakao.maps.LatLngBounds();
 
-        for (let i = 0; i < result.length; i++) {
-
-            this.addMarker(result[i], map);
-            var position = new kakao.maps.LatLng(result[i].lat, result[i].lon);
+        for (let i = 0; i < data.length; i++) {
+            this.addMarker(data[i], map);
+            var position = new kakao.maps.LatLng(data[i].lat, data[i].lon);
 
             bounds.extend(position);
         }

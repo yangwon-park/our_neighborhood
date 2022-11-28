@@ -1,28 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>우리 동네</title>
-  <style>
-    .pageInfo{
-      list-style : none;
-      display: inline-block;
-      margin: 50px 0 0 100px;
-    }
-    .pageInfo li{
-      float: left;
-      font-size: 20px;
-      margin-left: 18px;
-      padding: 7px;
-      font-weight: 500;
-    }
-    .active{
-      background-color: #cdd5ec;
-    }
-    a:link {color:black; text-decoration: none;}
-    a:visited {color:black; text-decoration: none;}
-    a:hover {color:black; text-decoration: underline;}
-  </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
 <body id="main-body" class="bg-default">
@@ -30,75 +13,85 @@
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
 <section class="header">
-  <div class="header py-5">
+    <div class="header py-5">
 
-  </div>
+    </div>
 </section>
 <section class="main">
-  <div class="container px-0">
-    <div class="row store-head">
-      <div class="col-6 d-flex">
-        <h1 class="my-auto" th:text="|가게추가 요청 총 ${count}개|" style="font-size: 2.0rem" ></h1>
-      </div>
-    </div>
-    <hr class="my-2">
-    <section class="container px-0" th:each="request : ${request}">
-      <div class="row store-info" style="font-size: 1.5rem">
-        <div class="col-12 my-1">
-          <span th:text="*{request.name}" class="text-dark fw-bold"></span>
+    <div class="container px-0">
+        <div class="row store-head" th:if="${count != 0}">
+            <div class="col-6 d-flex">
+                <h1 class="my-auto" th:text="|가게추가 요청 총 ${count}개|" style="font-size: 2.0rem"></h1>
+            </div>
+            <hr class="my-2">
         </div>
-        <div class="col-12 my-1">
-          <i class="fa-solid fa-map-location-dot main-color fa-sm"></i>
-          <span>주소</span>
-          <span th:text="*{request.roadAddr}"></span>
-        </div>
-        <div class="col-12 my-1" style="font-size: 0.8rem">
-          <span class="badge bg-dark my-auto ms-3">지번</span>
-          <span th:text="*{request.numberAddr}"></span>
-        </div>
-        <div class="col-12 my-1" style="font-size: 0.8rem">
-          <span >회원 이메일</span>
-          <span th:text="*{request.email}"></span>
-        </div>
-        <div class="col-12 my-1">
-          <button th:id="|request-delete-btn${request.id}|"
-                  type="button" class="btn btn-dark mt-4 request-delete">
-            삭제
-          </button>
-        </div>
-      </div>
-      <hr class="my-2">
-    </section>
-    <div class="pageInfo_wrap">
-      <div class="pageInfo_area">
-        <ul id="pageInfo" class="pageInfo">
-          <!-- 이전페이지 버튼 -->
-          <th:block th:if="${pageMake.isPrev()}">
-            <li class="pageInfo_btn previous">
-              <a th:href="|/admin/request-add-store-list?page=${pageMake.pageNum - 1}|" id="previous">Previous</a>
-            </li>
-          </th:block>
+        <section class="container px-0" th:each="request : ${request}">
+            <div class="row store-info" style="font-size: 1.5rem">
+                <div class="col-12 my-1">
+                    <span th:text="*{request.name}" class="text-dark fw-bold"></span>
+                </div>
+                <div class="col-12 my-1">
+                    <i class="fa-solid fa-map-location-dot main-color fa-sm"></i>
+                    <span>주소</span>
+                    <span th:text="*{request.roadAddr}"></span>
+                </div>
+                <div class="col-12 my-1" style="font-size: 0.8rem">
+                    <span class="badge bg-dark my-auto ms-3">지번</span>
+                    <span th:text="*{request.numberAddr}"></span>
+                </div>
+                <div class="col-12 my-1" style="font-size: 0.8rem">
+                    <span>회원 이메일</span>
+                    <span th:text="*{request.email}"></span>
+                </div>
+                <div class="col-12 my-1">
+                    <button th:id="|request-delete-btn${request.id}|"
+                            type="button" class="btn btn-dark mt-4 request-delete">
+                        삭제
+                    </button>
+                </div>
+            </div>
+            <hr class="my-2">
+        </section>
+        <div class="pageInfo_wrap">
+            <div class="pageInfo_area">
+                <ul id="pageInfo" class="pageInfo">
+                    <!-- 이전페이지 버튼 -->
+                    <th:block th:if="${pageMake.isPrev()}">
+                        <li class="pageInfo_btn previous">
+                            <a th:href="|/admin/request-add-store-list?page=${pageMake.pageNum - 1}|" id="previous">Previous</a>
+                        </li>
+                    </th:block>
 
-          <!-- 페이지 번호 -->
-          <th:block th:each="num : ${#numbers.sequence(pageMake.getStartPage(),pageMake.getEndPage())}">
-            <li class="pageInfo_btn" th:classappend="${pageMake.pageNum == num} ? 'active' : ''">
-              <a th:href="|/admin/request-add-store-list?page=${num}|" th:text="${num}" class="page-number"></a>
-            </li>
-          </th:block>
+                    <!-- 페이지 번호 -->
+                    <th:block th:if="${count != 0}" th:each="num : ${#numbers.sequence(pageMake.getStartPage(),pageMake.getEndPage())}">
+                        <li class="pageInfo_btn" th:if="${num != 0}" th:classappend="${pageMake.pageNum == num} ? 'active' : ''">
+                            <a th:href="|/admin/request-add-store-list?page=${num}|" th:text="${num}"
+                               class="page-number"></a>
+                        </li>
+                    </th:block>
 
-          <!-- 다음페이지 버튼 -->
-          <th:block th:if="${pageMake.isNext()}">
-            <li class="pageInfo_btn next">
-              <a th:href="|/admin/request-add-store-list?page=${pageMake.pageNum + 1}|" id="next">Next</a>
-            </li>
-          </th:block>
-        </ul>
-      </div>
+                    <!-- 다음페이지 버튼 -->
+                    <th:block th:if="${pageMake.isNext()}">
+                        <li class="pageInfo_btn next">
+                            <a th:href="|/admin/request-add-store-list?page=${pageMake.pageNum + 1}|" id="next">Next</a>
+                        </li>
+                    </th:block>
+                </ul>
+
+                <th:block th:if="${count == 0}">
+                    <div class="col-12 my-1">
+                        <span class="text-dark fw-bold" style="font-size: 1.5rem">
+                            가게 추가 요청이 존재하지 않습니다.
+                        </span>
+                    </div>
+                </th:block>
+            </div>
+        </div>
     </div>
-  </div>
+
 </section>
 <footer th:replace="layout/footer :: common_footer">
-  템플릿 푸터
+    템플릿 푸터
 </footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/request_add_store.js}"></script>

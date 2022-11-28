@@ -85,18 +85,24 @@ public class CategoryService {
         return category.stream().map(CategoryDTO.Simple::of).collect(Collectors.toList());
     }
 
-    // 단순히 모든 카테고리들을 보여주는 쿼리
+    /*
+        단순히 모든 카테고리들을 보여주는 쿼리
+     */
     public List<CategoryDTO.Detail> findAll() {
         return categoryRepository.findAllByOrderByDepthAscParentIdAscNameAsc().stream()
                 .map(CategoryDTO.Detail::new).collect(Collectors.toList());
     }
 
-    // 하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리
+    /*
+        하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리
+     */
     public List<CategoryDTO.Detail> findAllCategoriesHier() {
         return categoryRepository.findByCategories().stream().map(CategoryDTO.Detail::of).collect(Collectors.toList());
     }
 
-    // 중복 체크 로직
+    /*
+        카테고리 중복 체크 로직
+     */
     public boolean checkCategoryDuplicate(String categoryName, Category parent) {
         return categoryRepository.existsByNameAndParent(categoryName, parent);
     }

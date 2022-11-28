@@ -177,6 +177,8 @@ class StoreServiceTest {
 
         Store findStore = storeService.findById(storeId);
 
+        assertThat(findStore.getStatus()).isEqualTo(StoreStatus.OPEN);
+
         assertThat(findStore.getName()).isEqualTo(dto.getName());
 
         assertThat(findStore.getOffDays().get(0)).isEqualTo("월");

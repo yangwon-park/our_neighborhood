@@ -22,7 +22,7 @@ public class ProfileControllerTest {
     private String profile;
 
     @Test
-    void get_profile_without_authentication() {
+    void getProfileWithoutAuthentication() {
 
         String expected = "local";
 
@@ -32,7 +32,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    void get_active_profile() {
+    void getActiveProfile() {
         System.out.println("profile = " + profile);
     }
 }

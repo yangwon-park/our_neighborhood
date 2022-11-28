@@ -7,22 +7,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.*;
-import ywphsm.ourneighbor.domain.dto.ReviewDTO;
-import ywphsm.ourneighbor.domain.dto.StoreDTO;
 
 import java.io.FileInputStream;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -96,7 +91,7 @@ class ReviewServiceTest {
             if (review.getMember().getId().equals(memberId) && review.getStore().getId().equals(storeId)) {
                 assertThat(review.getContent()).isEqualTo("존맛탱");
                 assertThat(review.getRating()).isEqualTo(5);
-                assertThat(review.getFile().getUploadedFileName()).isEqualTo("test.png");
+                assertThat(review.getFileList().getUploadedFileName()).isEqualTo("test.png");
             }
         }
 

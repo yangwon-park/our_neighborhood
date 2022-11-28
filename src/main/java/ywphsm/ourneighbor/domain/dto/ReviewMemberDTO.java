@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -28,29 +29,26 @@ public class ReviewMemberDTO {
 
     private Long storeId;
 
-    private String uploadImgUrl;
+    private List<String> uploadImgUrl;
 
     @QueryProjection
     public ReviewMemberDTO(Long reviewId, String content, Integer rating,
-                           LocalDateTime createDate, Long memberId, String username,
-                           String uploadImgUrl) {
+                           LocalDateTime createDate, Long memberId, String username) {
         this.reviewId = reviewId;
         this.content = content;
         this.rating = rating;
         this.createDate = createDate;
         this.memberId = memberId;
         this.username = username;
-        this.uploadImgUrl = uploadImgUrl;
     }
 
     @QueryProjection
     public ReviewMemberDTO(Long reviewId, String content, Integer rating,
-                           LocalDateTime createDate, String uploadImgUrl, String storeName, Long storeId) {
+                           LocalDateTime createDate, String storeName, Long storeId) {
         this.reviewId = reviewId;
         this.content = content;
         this.rating = rating;
         this.createDate = createDate;
-        this.uploadImgUrl = uploadImgUrl;
         this.storeName = storeName;
         this.storeId = storeId;
     }

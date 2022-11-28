@@ -31,7 +31,7 @@ public class UploadFile {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
 
@@ -61,7 +61,6 @@ public class UploadFile {
 
     public void addReview(Review review) {
         this.review = review;
-        review.setFile(this);
     }
 
     /*

@@ -1,5 +1,6 @@
 import validation from "./validation.js";
 import mask from "./mask.js";
+import menu from "./menu.js";
 
 var main = {
     init: async function () {
@@ -67,7 +68,7 @@ var main = {
         mask.closeMask();
 
         //좋아요 버튼
-        let likeBtn = $(".icon.heart");
+        let likeBtn =$(".icon.heart");
 
         likeBtn.click(function(){
             console.log("likeBtn.src=", document.getElementById("like-img").src);
@@ -94,32 +95,23 @@ var main = {
     },
 
     check: function () {
-        const rating1 = document.getElementById("rating1");
-        const rating2 = document.getElementById("rating2");
-        const rating3 = document.getElementById("rating3");
-        const rating4 = document.getElementById("rating4");
-        const rating5 = document.getElementById("rating5");
         const content = document.getElementById("content");
         const storeId = document.getElementById("storeId").value;
         const memberId = document.getElementById("memberId").value;
+        const reviewForm = document.getElementById("review-add-form");
 
-        const ratingValid = document.getElementById("review-rating-valid");
+        const formData = new FormData(reviewForm);
+        let rating_form = formData.get("rating");
+        console.log("rating = ", rating_form)
+
         const contentValid = document.getElementById("review-content-valid");
 
-        rating1.classList.remove("valid-custom");
         content.classList.remove("valid-custom");
 
-        validation.removeValidation(ratingValid);
         validation.removeValidation(contentValid);
 
-        let ratingCheck = true;
 
-        if (rating1.value === "" || rating2.value === "" || rating3.value === "" ||
-            rating4.value === "" || rating5.value === "") {
-            ratingCheck = false;
-        }
-
-        if (content.value !== "" && ratingCheck === true
+        if (content.value !== "" && rating_form !== null
             && memberId !== "" && storeId !== "") {
             this.save();
         }
@@ -129,24 +121,10 @@ var main = {
             validation.addValidation(contentValid, "리뷰 내용을 작성해주세요.");
         }
 
-        if (ratingCheck === false) {
-            validation.addValidation(ratingValid, "평점을 선택해주세요.");
+        if (rating_form === null) {
+            alert("별점을 정해주세요.")
         }
 
-    },
-
-    createDefaultImg: function (formData) {
-        let file = formData.get("file");
-
-        if (file.name === "") {
-            formData.delete("file");
-        }
-
-        let defaultFile = new File(["foo"], "default.png", {
-            type: "image/png"
-        })
-
-        formData.append("file", defaultFile);
     },
 
     save: function () {
@@ -157,7 +135,9 @@ var main = {
 
         let formData = new FormData(reviewForm);
 
-        this.createDefaultImg(formData);
+        menu.createDefaultImg(formData);
+        let file = formData.get("file");
+        console.log(file);
 
         axios({
             headers: {
@@ -197,7 +177,7 @@ var main = {
     },
 
     more: function () {
-
+        let page = $("#reviewBody tr").length / 5 + 1;  //마지막 리스트 번호를 알아내기 위해서 tr태그의 length를 구함.
         const storeId = document.getElementById("storeId").value;
 
         let loginMember = null;
@@ -215,11 +195,11 @@ var main = {
             }
         }).then((resp) => {
             let data = resp.data
+            console.log("data= ", data)
 
             if (data.last) {
                 let reviewMore = document.getElementById("review-more");
                 reviewMore.remove();
-                // $("#review-more").remove();
             }
             const table = document.getElementById("more_list");
             for (let contentElement of data.content) {
@@ -255,7 +235,11 @@ var main = {
 
                 cell4.innerHTML = "<td>" + contentElement.createDate.substring(0, 10) + "</td>";
 
-                cell5.innerHTML = '<td><img src="' + contentElement.uploadImgUrl + '" width="180" height="180" alt="리뷰 사진"></td>';
+                cell5.innerHTML = '<td>'
+                for (let uploadImgUrl of contentElement.uploadImgUrl) {
+                    cell5.innerHTML += '<img src="' + uploadImgUrl + '" width="180" height="180" alt="리뷰 사진">';
+                }
+                cell5.innerHTML += '<td>'
 
                 if (loginMember !== null) {
                     if (loginMember === "ADMIN") {
@@ -273,8 +257,6 @@ var main = {
                     })
                 })
             }
-
-            $("#reviewBody").append(addListHtml);
 
         }).catch((e) => {
             console.error(e);
@@ -345,3 +327,4 @@ var main = {
 };
 
 main.init();
+

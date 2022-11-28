@@ -59,9 +59,8 @@ public class ReviewService {
         Review review = dto.toEntity(linkedStore, linkedMember);
         linkedStore.addReview(review);
         linkedMember.addReview(review);
-        for (UploadFile newUploadFile : newUploadFiles) {
-            newUploadFile.addReview(review);
-        }
+
+        review.addFile(newUploadFiles);
 
         if (!hashtag.isEmpty()) {
             Store findStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
@@ -96,7 +95,9 @@ public class ReviewService {
 
     public Slice<ReviewMemberDTO> pagingReview(Long storeId, int page) {
         PageRequest pageRequest = PageRequest.of(page, 5);
-        return reviewRepository.reviewPage(pageRequest, storeId);
+        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, storeId);
+        findImg(reviewMemberDTOS.getContent());
+        return reviewMemberDTOS;
     }
 
     public List<ReviewMemberDTO> myReviewList(Long memberId) {
@@ -135,5 +136,13 @@ public class ReviewService {
 
             linkHashtagAndStore(newHashtag, store);
         }
+    }
+
+    public List<ReviewMemberDTO> findImg(List<ReviewMemberDTO> content) {
+        for (ReviewMemberDTO reviewMemberDTO : content) {
+            List<String> imgUrl = reviewRepository.reviewImageUrl(reviewMemberDTO.getReviewId());
+            reviewMemberDTO.setUploadImgUrl(imgUrl);
+        }
+        return content;
     }
 }

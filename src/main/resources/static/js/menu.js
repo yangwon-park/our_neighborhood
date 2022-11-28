@@ -145,19 +145,20 @@ var main = {
     createDefaultImg: function (formData) {
         let file = formData.get("file");
 
+        // console.log("file=", file);
+
         if (file === null) {
             return;
         }
 
         if (file.name === "") {
             formData.delete("file");
+            let defaultFile = new File(["foo"], "default.png", {
+                type: "image/png"
+            })
+
+            formData.append("file", defaultFile);
         }
-
-        let defaultFile = new File(["foo"], "default.png", {
-            type: "image/png"
-        })
-
-        formData.append("file", defaultFile);
     },
 
     save: function () {
@@ -241,3 +242,5 @@ var main = {
 };
 
 main.init();
+
+export default main;

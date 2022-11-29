@@ -1,21 +1,24 @@
+import slick from "./slick.js";
 import mask from "./mask.js";
 
 var main = {
     init: async function () {
         sessionStorage.clear();
-        let _this = this;
-
         mask.loadingWithMask();
 
-        await _this.findCoords();
+        await this.findCoords();
         this.getCateImages();
 
-        // 해당 카테고리 기준 무조건 Top5가 나오게 search되는 SQL 작성 (5개 미만이면 알아서 처리)
+        this.setCategoryIdInSessionStorage();
+
+        this.getStoresRandomly();
+    },
+
+    setCategoryIdInSessionStorage: function () {
         const categoryDivList = document.querySelectorAll(".category-div");
 
         if (categoryDivList !== null) {
             categoryDivList.forEach((el) => {
-
                 let categoryId = el.children.namedItem("categoryId").value;
 
                 el.addEventListener("click", () => {
@@ -38,12 +41,17 @@ var main = {
         let currentNy = this.getCookie("ny");
         let skyStatus = this.getCookie("skyStatus");
 
-        // 이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
-        // 즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
-        // => 메인 홈페이지 재방문시 로딩 속도 향상
+        /*
+            이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
+            즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
+                => 메인 홈페이지 재방문시 로딩 속도 향상
+         */
         if (prevNx !== currentNx && prevNy !== currentNy) {
             this.setWeatherInfoWithAPI();
-            // 어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
+
+            /*
+                어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
+             */
         } else if (skyStatus === null) {
             this.setWeatherInfoWithAPI();
         } else {
@@ -199,6 +207,54 @@ var main = {
 
         _pop.firstElementChild.innerText = "시간당 강수량";
         _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
+    },
+
+    getStoresRandomly: function () {
+        axios({
+            method: "get",
+            url: "/search-top7-random"
+        }).then((resp) => {
+            const slide = document.getElementById("slick-slide").firstElementChild.firstElementChild;
+
+            for (const store of resp.data.data) {
+                let cardWrap = document.createElement("div");
+                cardWrap.classList.add("random-col", "mx-2", "my-3");
+
+                let card = document.createElement("div");
+                card.classList.add("card");
+
+                let aTag = document.createElement("a");
+                aTag.href = "/store/" + store.storeId;
+                aTag.tabIndex = 0;
+
+                let img = document.createElement("img");
+                img.classList.add("card-img-top");
+                img.src = store.uploadImgUrl;
+                img.alt = "대표이미지";
+
+                let cardBody = document.createElement("div");
+                cardBody.classList.add("card-body");
+
+                let title = document.createElement("h4");
+                title.classList.add("card-title", "fw-bold");
+                title.innerText = store.name;
+
+                let cardText = document.createElement("p");
+                cardText.classList.add("card-text", "fw-light", "mb-4");
+
+                aTag.appendChild(img);
+
+                cardBody.appendChild(title);
+                cardBody.appendChild(cardText);
+
+                card.appendChild(aTag);
+                card.appendChild(cardBody);
+
+                cardWrap.appendChild(card);
+
+                $("#slick-slide").slick("slickAdd", cardWrap);
+            }
+        })
     },
 
     getCoords: function (options) {

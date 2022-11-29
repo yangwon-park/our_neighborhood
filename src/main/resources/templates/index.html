@@ -31,7 +31,7 @@
             <div class="row align-items-center mt-3">
                 <div class="col-md-9 welcome">
                     <div class="row gallery-body">
-                        <div class="section-title mb-2">
+                        <div class="section-title mb-4">
                             <p class="h3 main-color fw-bold">주변 인기 스팟 추천</p>
                         </div>
                         <th:block th:each="root, i: ${rootCategoryList}">
@@ -86,11 +86,11 @@
 <div class="main-divider"></div>
 <section id="weather">
     <div class="section-content">
-        <div class="container weather">
+        <div class="container-xxl weather">
             <div class="row align-items-center">
                 <div class="col-md-8 weather-first">
                     <div class="row px-md-3">
-                        <div class="section-title mb-2">
+                        <div class="section-title mb-4">
                             <p class="h3 main-color fw-bold">날씨에 어울리는 스팟 추천</p>
                         </div>
                         <div class="col-6">
@@ -151,28 +151,14 @@
     </div>
 </section>
 <div class="main-divider"></div>
-<section id="services">
+<section id="random">
     <div class="section-content">
-        <div class="container services">
+        <div class="container-xxl random">
             <div class="section-title mb-4">
                 <p class="h3 main-color fw-bold">무작위 랜덤 추천</p>
             </div>
-            <div id="slick-slide" class="services-body">
-                <div class="services-col mx-2 my-3">
-                    <div class="card">
-                        <a href="#">
-                            <img src="" alt="" class="card-img-top">
-                        </a>
-                        <div class="card-body">
-                            <h4 class="card-title">Slide Title</h4>
-                            <p class="card-text fw-light mb-4">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam doloremque
-                                ducimus expedita fugiat hic quam quis recusandae, vel vero.
-                            </p>
-                            <a href="#" class="btn btn-main-color">View More...</a>
-                        </div>
-                    </div>
-                </div>
+            <div id="slick-slide" class="random-body">
+
             </div>
         </div>
     </div>

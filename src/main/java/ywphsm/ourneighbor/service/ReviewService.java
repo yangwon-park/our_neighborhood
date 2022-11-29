@@ -52,15 +52,15 @@ public class ReviewService {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
         Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
 
-        List<UploadFile> newUploadFiles = fileStore.storeFiles(dto.getFile());
+        List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
+        log.info("newUploadFiles = {}", newUploadFiles);
 //        List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
 
         Review review = dto.toEntity(linkedStore, linkedMember);
         linkedStore.addReview(review);
         linkedMember.addReview(review);
-        for (UploadFile newUploadFile : newUploadFiles) {
-            newUploadFile.addReview(review);
-        }
+
+        review.addFile(newUploadFiles);
 
         if (!hashtag.isEmpty()) {
             Store findStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
@@ -95,7 +95,9 @@ public class ReviewService {
 
     public Slice<ReviewMemberDTO> pagingReview(Long storeId, int page) {
         PageRequest pageRequest = PageRequest.of(page, 5);
-        return reviewRepository.reviewPage(pageRequest, storeId);
+        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, storeId);
+        findImg(reviewMemberDTOS.getContent());
+        return reviewMemberDTOS;
     }
 
     public List<ReviewMemberDTO> myReviewList(Long memberId) {
@@ -134,5 +136,13 @@ public class ReviewService {
 
             linkHashtagAndStore(newHashtag, store);
         }
+    }
+
+    public List<ReviewMemberDTO> findImg(List<ReviewMemberDTO> content) {
+        for (ReviewMemberDTO reviewMemberDTO : content) {
+            List<String> imgUrl = reviewRepository.reviewImageUrl(reviewMemberDTO.getReviewId());
+            reviewMemberDTO.setUploadImgUrl(imgUrl);
+        }
+        return content;
     }
 }

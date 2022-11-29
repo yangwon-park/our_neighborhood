@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.Review;
+import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewDTO {
@@ -58,7 +60,7 @@ public class ReviewDTO {
 
         private Integer rating;
 
-        private String file;
+        private List<UploadFile> file = new ArrayList<>();
 
         private LocalDateTime createDate;
 
@@ -66,7 +68,7 @@ public class ReviewDTO {
             id = review.getId();
             content = review.getContent();
             rating = review.getRating();
-            file = review.getFile().getStoredFileName();
+            file = review.getFileList();
             createDate = review.getCreatedDate();
         }
     }

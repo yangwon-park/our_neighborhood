@@ -47,14 +47,13 @@
                                                 class="fs-3" for="rating1">★</label>
                                         </fieldset>
                                     </div>
-                                    <div id="review-rating-valid" class="my-1 valid-custom"></div>
                                 </div>
                                 <div class="form-group" style="height: 10rem">
                                     <div class="mb-3">
                                         <label class="mb-2" for="content">리뷰 작성</label>
                                         <textarea class="form-control" style="height: 100%" placeholder="200자 이하여야 합니다"
-                                                  id="content" th:field="*{content}" rows="5"
-                                                  th:errorclass="field-error"></textarea>
+                                                  id="content" th:field="*{content}" rows="5">
+                                        </textarea>
                                     </div>
                                 </div>
                                 <div id="review-content-valid" class="my-1 valid-custom"></div>
@@ -68,7 +67,6 @@
                                 <div class="form-group">
                                     <div class="mb-3">
                                         <input th:field="*{file}"
-                                               th:errorclass="field-error"
                                                class="form-control"
                                                type="file"
                                                multiple/>

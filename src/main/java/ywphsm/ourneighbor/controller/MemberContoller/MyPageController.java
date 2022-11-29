@@ -72,6 +72,7 @@ public class MyPageController {
                            Model model) {
 
         List<ReviewMemberDTO> content = reviewService.myReviewList(member.getId());
+
         int count = 0;
         if (!content.isEmpty()) {
             count = content.size();

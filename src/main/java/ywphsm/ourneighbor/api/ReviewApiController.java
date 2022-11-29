@@ -10,6 +10,7 @@ import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.service.ReviewService;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class ReviewApiController {
 
     @PostMapping("/user/review")
     public Long save(ReviewDTO.Add dto, @RequestParam String hashtag) throws IOException, ParseException {
+        log.info("dto = {}", dto.getFile());
         return reviewService.save(dto, hashtag);
     }
 

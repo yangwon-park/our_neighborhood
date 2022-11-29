@@ -40,8 +40,8 @@
                     <span th:if="${myReview.rating == 4}">★★★★☆</span>
                     <span th:if="${myReview.rating == 5}">★★★★★</span>
                 </div>
-                <div class="col-12 my-1">
-                    <img th:src="|/menu/${myReview.storedFileName}|" width="180" height="180" alt="리뷰 사진">
+                <div class="col-12 my-1" th:each="imgUrl : ${myReview.uploadImgUrl}">
+                    <img th:src="${imgUrl}" width="180" height="180" alt="리뷰 사진">
                 </div>
                 <div class="col-12 my-1">
                     <span>내용 : </span>

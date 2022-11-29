@@ -31,7 +31,7 @@
                             <img style="width: 2vh; height: 2vh"
                                  th:src="${likeStatus} ? 'https://cdn-icons-png.flaticon.com/512/803/803087.png'
                                                        : 'https://cdn-icons-png.flaticon.com/512/812/812327.png'"
-                                 alt="찜하기">
+                                 alt="찜하기" id="like-img">
                         </a>
                     </span>
                 </th:block>
@@ -441,8 +441,10 @@
                     <td th:text="${review.content}"></td>
                     <td th:text="${review.username}"></td>
                     <td th:text="${#strings.substring(review.createDate, 0, 10)}"></td>
-                    <td>
-                        <img th:src="${review.uploadImgUrl}" width="180" height="180" alt="리뷰 사진">
+                    <td >
+                        <span th:each="imgUrl : ${review.uploadImgUrl}">
+                            <img th:src="${imgUrl}" width="180" height="180" alt="리뷰 사진">
+                        </span>
                     </td>
                     <th:block th:if="${session.loginMember ne null}">
                         <td th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">

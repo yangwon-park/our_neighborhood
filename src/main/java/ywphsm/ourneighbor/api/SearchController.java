@@ -97,7 +97,7 @@ public class SearchController {
         List<SimpleSearchStoreDTO> result = findStores.stream()
                 .map(SimpleSearchStoreDTO::new)
                 .collect(Collectors.toList());
-
+                
         result.forEach(StoreUtil::autoUpdateStatus);
 
         if (!myLat.isEmpty() && !myLon.isEmpty()) {

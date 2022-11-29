@@ -145,8 +145,6 @@ var main = {
     createDefaultImg: function (formData) {
         let file = formData.get("file");
 
-        console.log("file=", file);
-
         if (file === null) {
             return;
         }

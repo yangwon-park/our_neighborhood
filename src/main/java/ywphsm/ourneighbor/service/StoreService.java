@@ -394,5 +394,4 @@ public class StoreService {
         return polygon(WGS84, ring(g(ney, nex),
                 g(nwy, nwx), g(swy, swx), g(sey, sex), g(ney, nex)));
     }
-
 }

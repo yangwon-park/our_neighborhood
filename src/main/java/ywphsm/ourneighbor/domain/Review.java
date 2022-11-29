@@ -6,6 +6,8 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @ToString(of = {
@@ -36,11 +38,14 @@ public class Review extends BaseEntity{
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToOne(mappedBy = "review", cascade = CascadeType.ALL)
-    private UploadFile file;
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UploadFile> fileList = new ArrayList<>();
 
-    public void setFile(UploadFile file) {
-        this.file = file;
+    public void addFile(List<UploadFile> fileList) {
+        this.fileList = fileList;
+        for (UploadFile uploadFile : fileList) {
+            uploadFile.addReview(this);
+        }
     }
 
     public void setStore(Store store) {
@@ -52,13 +57,13 @@ public class Review extends BaseEntity{
     }
 
     @Builder
-    public Review(Long id, String content, Integer rating, Member member, Store store, UploadFile file) {
+    public Review(Long id, String content, Integer rating, Member member, Store store, List<UploadFile> fileList) {
         this.id = id;
         this.content = content;
         this.rating = rating;
         this.member = member;
         this.store = store;
-        this.file = file;
+        this.fileList = fileList;
     }
 
 

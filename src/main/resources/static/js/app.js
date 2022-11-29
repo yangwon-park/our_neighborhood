@@ -1,82 +1,108 @@
-import slick from "./slick.js";
 import mask from "./mask.js";
+import slick from "./slick.js";
 
 var main = {
     init: async function () {
         sessionStorage.clear();
-
         mask.loadingWithMask();
 
-        await this.findCoords();
-        this.getCateImages();
+        let check = this.getCookie("customCheck");
+
+        if (check !== "true") {
+            await this.findCoords();
+        } else {
+            await this.changeCustomPosition();
+        }
 
         this.setCategoryIdInSessionStorage();
 
-        this.getStoresRandomly();
-
         const setCustomLocationBtn = document.getElementById("set-custom-location");
+        const setCurrentLocationBtn = document.getElementById("set-current-location");
 
         setCustomLocationBtn.addEventListener("click", async () => {
             mask.loadingWithMask();
-
-            this.getCateImages();
-            this.getStoresRandomly();
+            await this.changeCustomPosition();
         });
-
-        const setCurrentLocationBtn = document.getElementById("set-current-location");
 
         setCurrentLocationBtn.addEventListener("click", async () => {
             mask.loadingWithMask();
             await this.findCoords();
-            this.getCateImages();
-
-            this.getStoresRandomly();
         });
     },
 
-    setCategoryIdInSessionStorage: function () {
-        const categoryDivList = document.querySelectorAll(".category-div");
+    getStoreBasedOnWeather: function () {
+        const recommendPostHeader = document.getElementById("recommend-post-header");
+        const recommendPostContent = document.getElementById("recommend-post-content");
+        const weatherBtn = document.getElementById("weather-btn");
 
-        if (categoryDivList !== null) {
-            categoryDivList.forEach((el) => {
-                let categoryId = el.children.namedItem("categoryId").value;
+        axios({
+            method: "get",
+            url: "/get-recommend-post"
+        }).then((resp) => {
+            recommendPostHeader.innerText = resp.data.header;
+            recommendPostContent.firstElementChild.innerText = resp.data.content;
 
-                el.addEventListener("click", () => {
-                    sessionStorage.setItem("cateFromHome", categoryId);
-                    window.location.href = "map";
-                });
+            weatherBtn.addEventListener("click", () => {
+                sessionStorage.setItem("hashtagIdList", resp.data.hashtagIdList);
+                window.location = "/recommend/store/list";
             });
-        }
+        }).catch((error) => {
+            console.error(error);
+        });
     },
 
-    findCoords: async function () {
-        let prevNx = this.getCookie("nx");
-        let prevNy = this.getCookie("ny");
-
-        let position = await this.getCoords();
-
-        await this.setCurrentPositionData(position);
-
-        let currentNx = this.getCookie("nx");
-        let currentNy = this.getCookie("ny");
-        let skyStatus = this.getCookie("skyStatus");
-
-        /*
-            이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
-            즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
-                => 메인 홈페이지 재방문시 로딩 속도 향상
-         */
-        if (prevNx !== currentNx && prevNy !== currentNy) {
-            this.setWeatherInfoWithAPI();
-
+    getStoresRandomly: function () {
+        axios({
+            method: "get",
+            url: "/search-top7-random"
+        }).then((resp) => {
+            console.log(resp.data.data);
             /*
-                어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
+                index, removeBefore, removeAll (true)
              */
-        } else if (skyStatus === null) {
-            this.setWeatherInfoWithAPI();
-        } else {
-            this.setWeatherInfoWithCookies();
-        }
+            let slide = $("#slick-slide");
+
+            slide.slick("slickRemove", null, null, true);
+
+            for (const store of resp.data.data) {
+                let cardWrap = document.createElement("div");
+                cardWrap.classList.add("random-col", "mx-2", "my-3");
+
+                let card = document.createElement("div");
+                card.classList.add("card");
+
+                let aTag = document.createElement("a");
+                aTag.href = "/store/" + store.storeId;
+                aTag.tabIndex = 0;
+
+                let img = document.createElement("img");
+                img.classList.add("card-img-top");
+                img.src = store.uploadImgUrl;
+                img.alt = "대표이미지";
+
+                let cardBody = document.createElement("div");
+                cardBody.classList.add("card-body");
+
+                let title = document.createElement("h4");
+                title.classList.add("card-title", "fw-bold");
+                title.innerText = store.name;
+
+                let cardText = document.createElement("p");
+                cardText.classList.add("card-text", "fw-light", "mb-4");
+
+                aTag.appendChild(img);
+
+                cardBody.appendChild(title);
+                cardBody.appendChild(cardText);
+
+                card.appendChild(aTag);
+                card.appendChild(cardBody);
+
+                cardWrap.appendChild(card);
+
+                slide.slick("slickAdd", cardWrap);
+            }
+        })
     },
 
     getCateImages: function () {
@@ -93,6 +119,11 @@ var main = {
             const cafeDiv = document.getElementById("cate-img2");
             const barDiv = document.getElementById("cate-img3");
             const leisureDiv = document.getElementById("cate-img4");
+
+            restDiv.style.backgroundImage = "";
+            cafeDiv.style.backgroundImage = "";
+            barDiv.style.backgroundImage = "";
+            leisureDiv.style.backgroundImage = "";
 
             if (restaurantImages.length > 0) {
                 let restNum = this.randomInt(0, restaurantImages.length);
@@ -149,7 +180,7 @@ var main = {
 
     setWeatherInfoWithCookies: function () {
         let skyStatus = this.getCookie("skyStatus");
-        let currentTmp =  this.getCookie("tmp");
+        let currentTmp = this.getCookie("tmp");
         let currentPop = this.getCookie("pop");
         let currentPcp = this.getCookie("pcp");
         let pm10Value = this.getCookie("pm10Value");
@@ -161,7 +192,7 @@ var main = {
         mask.closeMask();
     },
 
-    setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, currentPcp, pm10Value) {
+    setWeatherInfoInEl: function (skyStatus, currentTmp, currentPop, currentPcp, pm10Value) {
         const _skyStatus = document.getElementById("sky-status");
         const _tmp = document.getElementById("tmp");
         const _pop = document.getElementById("pop");
@@ -207,72 +238,73 @@ var main = {
         _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
     },
 
-    getStoreBasedOnWeather: function () {
-        const recommendPostHeader = document.getElementById("recommend-post-header");
-        const recommendPostContent = document.getElementById("recommend-post-content");
-        const weatherBtn = document.getElementById("weather-btn");
+    changeCustomPosition: function () {
+        let geocoder = new kakao.maps.services.Geocoder(); // 카카오맵 geocoder 라이브러리 객체 생성
+        let lat;
+        let lon;
 
-        axios({
-            method: "get",
-            url: "/get-recommend-post"
-        }).then((resp) => {
-            recommendPostHeader.innerText = resp.data.header;
-            recommendPostContent.firstElementChild.innerText = resp.data.content;
+        this.setCookie("customCheck", true, 1);
 
-            weatherBtn.addEventListener("click", () => {
-                sessionStorage.setItem("hashtagIdList", resp.data.hashtagIdList);
-                window.location = "/recommend/store/list";
-            });
+        geocoder.addressSearch("부산광역시 부산진구", async (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+                lat = result[0].y
+                lon = result[0].x
 
-        }).catch((error) => {
-            console.error(error);
+                await this.setMainData(lat, lon);
+            }
         });
     },
 
-    getStoresRandomly: function () {
-        axios({
-            method: "get",
-            url: "/search-top7-random"
-        }).then((resp) => {
-            for (const store of resp.data.data) {
-                let cardWrap = document.createElement("div");
-                cardWrap.classList.add("random-col", "mx-2", "my-3");
+    setMainData: async function (lat, lon) {
+        let prevNx = this.getCookie("nx");
+        let prevNy = this.getCookie("ny");
 
-                let card = document.createElement("div");
-                card.classList.add("card");
+        await this.setCurrentPositionData(lat, lon);
 
-                let aTag = document.createElement("a");
-                aTag.href = "/store/" + store.storeId;
-                aTag.tabIndex = 0;
+        let currentNx = this.getCookie("nx");
+        let currentNy = this.getCookie("ny");
+        let skyStatus = this.getCookie("skyStatus");
 
-                let img = document.createElement("img");
-                img.classList.add("card-img-top");
-                img.src = store.uploadImgUrl;
-                img.alt = "대표이미지";
+        /*
+            이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
+            즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
+                => 메인 홈페이지 재방문시 로딩 속도 향상
+         */
+        if (prevNx !== currentNx && prevNy !== currentNy) {
+            this.setWeatherInfoWithAPI();
 
-                let cardBody = document.createElement("div");
-                cardBody.classList.add("card-body");
+            /*
+                어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
+             */
+        } else if (skyStatus === null) {
+            this.setWeatherInfoWithAPI();
+        } else {
+            this.setWeatherInfoWithCookies();
+        }
 
-                let title = document.createElement("h4");
-                title.classList.add("card-title", "fw-bold");
-                title.innerText = store.name;
+        this.getCateImages();
+        this.getStoresRandomly()
+    },
 
-                let cardText = document.createElement("p");
-                cardText.classList.add("card-text", "fw-light", "mb-4");
+    setCategoryIdInSessionStorage: function () {
+        const categoryDivList = document.querySelectorAll(".category-div");
 
-                aTag.appendChild(img);
+        if (categoryDivList !== null) {
+            categoryDivList.forEach((el) => {
+                let categoryId = el.children.namedItem("categoryId").value;
 
-                cardBody.appendChild(title);
-                cardBody.appendChild(cardText);
+                el.addEventListener("click", () => {
+                    sessionStorage.setItem("cateFromHome", categoryId);
+                    window.location.href = "map";
+                });
+            });
+        }
+    },
 
-                card.appendChild(aTag);
-                card.appendChild(cardBody);
-
-                cardWrap.appendChild(card);
-
-                $("#slick-slide").slick("slickAdd", cardWrap);
-            }
-        })
+    findCoords: async function () {
+        let position = await this.getCoords();
+        this.setCookie("customCheck", false, 1);
+        await this.setMainData(position.coords.latitude, position.coords.longitude);
     },
 
     getCoords: function (options) {
@@ -281,10 +313,7 @@ var main = {
         })
     },
 
-    getSidoName: async function (position) {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
+    getSidoName: async function (lat, lon) {
         let data = await this.getRegionCode(lat, lon);
 
         let sidoName = data.result[0].region_1depth_name;
@@ -308,12 +337,8 @@ var main = {
         })
     },
 
-    setCurrentPositionData: async function (position) {
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-
+    setCurrentPositionData: async function (lat, lon) {
         let coords = this.dfs_xy_conv("toXY", lat, lon);
-
         let nx = coords["nx"];
         let ny = coords["ny"];
 
@@ -322,7 +347,7 @@ var main = {
         this.setCookie("lat", lat, 1);
         this.setCookie("lon", lon, 1);
 
-        await this.getSidoName(position);
+        await this.getSidoName(lat, lon);
     },
 
     error: function () {

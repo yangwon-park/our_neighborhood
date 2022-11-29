@@ -95,16 +95,19 @@ public class StoreService {
 
     @Transactional
     public Long update(Long storeId, StoreDTO.Update dto, List<Long> categoryIdList) {
-
         Store findStore = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
 
-        // 먼저 카테고리를 업데이트
+        /*
+            먼저 카테고리를 업데이트
+         */
         List<CategoryOfStore> prevCategoryOfStoreList = findStore.getCategoryOfStoreList();
 
         List<Category> categoryList = getNotNullCategoryList(categoryIdList);
 
-        // 카테고리는 무조건 1개 이상 존재해야 함
+        /*
+            카테고리는 무조건 1개 이상 존재해야 함
+         */
         if (prevCategoryOfStoreList != null) {
             if (prevCategoryOfStoreList.size() == categoryList.size()) {
                 for (int i = 0; i < prevCategoryOfStoreList.size(); i++) {
@@ -137,14 +140,18 @@ public class StoreService {
             }
         }
 
-        // 그 후, dto로 전달받은 수정된 정보를 별도로 업데이트 시킴
+        /*
+            그 후, dto로 전달받은 수정된 정보를 별도로 업데이트 시킴
+         */
         findStore.update(dto.toEntity());
 
         return storeId;
     }
 
 
-    // 메인 이미지 업데이트
+    /*
+        메인 이미지 업데이트
+     */
     @Transactional
     public Long updateMainImage(Long storeId, MultipartFile file) throws IOException {
 
@@ -164,7 +171,9 @@ public class StoreService {
         return storeId;
     }
 
-    //찜 상태 업데이트
+    /*
+        찜 상태 업데이트
+     */
     @Transactional
     public String updateLike(boolean likeStatus, Long memberId, Long storeId) {
         Member member = memberService.findById(memberId);

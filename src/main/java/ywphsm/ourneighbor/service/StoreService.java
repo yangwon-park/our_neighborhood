@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
 import org.geolatte.geom.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -238,7 +236,7 @@ public class StoreService {
     }
 
     public List<SimpleSearchStoreDTO> searchTop7Random(double lat, double lon, double dist) {
-        final int n = 8;
+        final int n = 7;
 
         Polygon<G2D> polygon = getPolygon(lat, lon, dist);
 
@@ -247,8 +245,6 @@ public class StoreService {
         int idx = count % n != 0
                     ? (int) (Math.random() * (count / n + 1))
                     : (int) (Math.random() * (count / n));
-
-        log.info("idx={}", idx);
 
         PageRequest pageRequest = PageRequest.of(idx, n);
 

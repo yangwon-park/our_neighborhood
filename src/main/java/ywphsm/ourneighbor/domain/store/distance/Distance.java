@@ -11,11 +11,11 @@ public class Distance {
         현재 위치 -> 검색한 장소까지의 거리값 세팅을 위한 메소드
         DTO에 거리값을 세팅해줌
      */
-    public static void calculateHowFarToTheTarget(String myLat, String myLon,
+    public static void calculateHowFarToTheTarget(double myLat, double myLon,
                                                    List<SimpleSearchStoreDTO> findDTO) {
         findDTO.forEach(dto -> {
             double dist = Distance.calculateDistByHaversine(dto.getLat(), dto.getLon(),
-                    Double.parseDouble(myLat), Double.parseDouble(myLon));
+                    myLat, myLon);
 
             double refineDist = Math.ceil(dist * 10) / 10.0;
 

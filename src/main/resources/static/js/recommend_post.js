@@ -29,8 +29,6 @@ let main = {
     },
 
     getRecommendPost: function () {
-        console.log(sessionStorage.getItem("hashtagIdList"));
-
         let hashtagIdList = sessionStorage.getItem("hashtagIdList");
 
         axios({

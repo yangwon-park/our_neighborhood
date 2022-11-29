@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.*;
 class ProfileControllerUnitTest {
 
     @Test
-    void get_real_profile() {
+    void getRealProfile() {
 
         String expectedProfile = "real";
         MockEnvironment env = new MockEnvironment();
@@ -27,7 +27,7 @@ class ProfileControllerUnitTest {
     }
 
     @Test
-    void no_real_profile() {
+    void noRealProfile() {
 
         String expectedProfile = "oauth";
         MockEnvironment env = new MockEnvironment();
@@ -44,7 +44,7 @@ class ProfileControllerUnitTest {
     }
 
     @Test
-    void no_active_profile() {
+    void noActiveProfile() {
         String expectedProfile = "default";
         MockEnvironment env = new MockEnvironment();
 

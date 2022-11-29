@@ -61,7 +61,6 @@
                             <a th:href="|/admin/request-add-store-list?page=${pageMake.pageNum - 1}|" id="previous">Previous</a>
                         </li>
                     </th:block>
-
                     <!-- 페이지 번호 -->
                     <th:block th:if="${count != 0}" th:each="num : ${#numbers.sequence(pageMake.getStartPage(),pageMake.getEndPage())}">
                         <li class="pageInfo_btn" th:if="${num != 0}" th:classappend="${pageMake.pageNum == num} ? 'active' : ''">
@@ -88,7 +87,6 @@
             </div>
         </div>
     </div>
-
 </section>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터

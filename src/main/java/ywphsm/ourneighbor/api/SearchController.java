@@ -2,8 +2,8 @@ package ywphsm.ourneighbor.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.locationtech.jts.io.ParseException;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,8 +33,8 @@ public class SearchController {
 
     @GetMapping("/search-by-keyword")
     public ResultClass<?> searchByKeyword(@RequestParam String keyword,
-                                          @CookieValue(value = "lat", required = false) String myLat,
-                                          @CookieValue(value = "lon", required = false) String myLon) {
+                                          @CookieValue(value = "lat", required = false) Double myLat,
+                                          @CookieValue(value = "lon", required = false) Double myLon) {
         List<Store> findStores = storeService.searchByKeyword(keyword);
 
         List<SimpleSearchStoreDTO> result = findStores.stream()
@@ -43,67 +43,70 @@ public class SearchController {
 
         result.forEach(StoreUtil::autoUpdateStatus);
 
-        if (!myLat.isEmpty() && !myLon.isEmpty()) {
+        if (!(myLat == null) && !(myLon == null)) {
             calculateHowFarToTheTarget(myLat, myLon, result);
         }
-
-        log.info("result={}", result);
 
         return new ResultClass<>(result.size(), result);
     }
 
     @GetMapping("/search-by-category")
-    public ResultClass<?> searchByCategory(@RequestParam String categoryId,
+    public ResultClass<?> searchByCategory(@RequestParam Long categoryId,
                                            @RequestParam double dist,
-                                           @CookieValue(value = "lat", required = false) String myLat,
-                                           @CookieValue(value = "lon", required = false) String myLon) {
-        List<Store> findStores = storeService.searchByCategory(Long.parseLong(categoryId));
+                                           @CookieValue(value = "lat", required = false) Double myLat,
+                                           @CookieValue(value = "lon", required = false) Double myLon) {
+        List<Store> findStores = storeService.searchByCategory(categoryId);
 
         List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
         dto.forEach(StoreUtil::autoUpdateStatus);
 
-        if (!myLat.isEmpty() && !myLon.isEmpty()) {
+        if (!(myLat == null) && !(myLon == null)) {
             calculateHowFarToTheTarget(myLat, myLon, dto);
         }
 
         List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
                 -> simpleSearchStoreDTO.getDistance() <= dist / 1000).collect(Collectors.toList());
 
-        log.info("result={}", result);
+        return new ResultClass<>(result.size(), result);
+    }
+
+    @GetMapping("/search-top7-random")
+    public ResultClass<?> searchTop7Random(@CookieValue(value = "lat", required = false) Double myLat,
+                                           @CookieValue(value = "lon", required = false) Double myLon) {
+        final double dist = 3;
+        List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, dist);
 
         return new ResultClass<>(result.size(), result);
     }
 
     @GetMapping("/search-topN-categories")
     public ResultClass<?> searchTopNStoresByCategories(@RequestParam Long categoryId,
-                                                       @CookieValue(value = "lat", required = false) String myLat,
-                                                       @CookieValue(value = "lon", required = false) String myLon) {
-        double dist = 3;
-
-        List<Store> findStores = storeService.searchTopNByCategories(categoryId, dist,
-                Double.parseDouble(myLat), Double.parseDouble(myLon));
-
-        List<SimpleSearchStoreDTO> result = findStores.stream()
-                .map(SimpleSearchStoreDTO::new)
-                .collect(Collectors.toList());
-
-        result.forEach(StoreUtil::autoUpdateStatus);
-
-        if (!myLat.isEmpty() && !myLon.isEmpty()) {
-            calculateHowFarToTheTarget(myLat, myLon, result);
+                                                       @CookieValue(value = "lat", required = false) Double myLat,
+                                                       @CookieValue(value = "lon", required = false) Double myLon) {
+        if (myLat == null || myLon == null) {
+            return new ResultClass<>(0, new ArrayList<>());
         }
+            double dist = 3;
 
-        log.info("result={}", result);
+            List<Store> findStores = storeService.searchTopNByCategories(categoryId, dist, myLat, myLon);
 
-        return new ResultClass<>(result.size(), result);
+            List<SimpleSearchStoreDTO> result = findStores.stream()
+                    .map(SimpleSearchStoreDTO::new)
+                    .collect(Collectors.toList());
+
+            result.forEach(StoreUtil::autoUpdateStatus);
+
+            calculateHowFarToTheTarget(myLat, myLon, result);
+
+            return new ResultClass<>(result.size(), result);
     }
 
     @GetMapping("/get-cate-images")
-    public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") String lat,
-                                                              @CookieValue(value = "lon", required = false, defaultValue = "") String lon) {
-        double dist = 3;
+    public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") Double lat,
+                                                              @CookieValue(value = "lon", required = false, defaultValue = "") Double lon) {
+        final double dist = 3;
 
         List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
 
@@ -112,7 +115,7 @@ public class SearchController {
         if (lat != null && lon != null) {
             for (CategoryDTO.Simple simple : rootCategoryList) {
                 categoryImageList.add(storeService.getTopNImageByCategories(
-                        (simple.getCategoryId()), dist, Double.parseDouble(lat), Double.parseDouble(lon)));
+                        (simple.getCategoryId()), dist, lat, lon));
             }
         }
 
@@ -120,25 +123,25 @@ public class SearchController {
     }
 
     @GetMapping("/recommend-post")
-    public Slice<SimpleSearchStoreDTO> getRecommendStoreByHashtag(String hashtagIdList,
-                                                                  @CookieValue(value = "lat", required = false) String myLat,
-                                                                  @CookieValue(value = "lon", required = false) String myLon) {
-        double dist = 3;
+    public Slice<SimpleSearchStoreDTO> getRecommendStoreByHashtag(@RequestParam String hashtagIdList,
+                                                                  @CookieValue(value = "lat", required = false) Double myLat,
+                                                                  @CookieValue(value = "lon", required = false) Double myLon) {
+        if (myLat == null || myLon == null) {
+            return new SliceImpl<>(null, null, false);
+        }
+
+        final double dist = 3;
 
         List<Long> hashtagList = Arrays.stream(hashtagIdList.split(","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
 
         Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(
-                hashtagList, 0, Double.parseDouble(myLat), Double.parseDouble(myLon), dist);
+                hashtagList, 0, myLat, myLon, dist);
 
         result.forEach(StoreUtil::autoUpdateStatus);
 
-        if (!myLat.isEmpty() && !myLon.isEmpty()) {
-            calculateHowFarToTheTarget(myLat, myLon, result.getContent());
-        }
-
-        log.info("result={}", result.getContent());
+        calculateHowFarToTheTarget(myLat, myLon, result.getContent());
 
         return result;
     }

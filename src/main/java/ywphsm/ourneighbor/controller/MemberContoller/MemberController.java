@@ -33,9 +33,9 @@ public class MemberController {
         if (member != null) {
             ScriptUtils.alertAndMovePage(response, "이미 로그인이 되어있습니다.", "/");
         }
-
         SavedRequest savedRequest = requestCache.getRequest(request, response);
-        if (savedRequest != null) {
+
+        if (savedRequest != null && error == null) {
             ScriptUtils.alert(response, "로그인후 이용해 주세요.");
         }
 

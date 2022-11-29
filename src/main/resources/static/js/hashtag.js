@@ -30,6 +30,19 @@ var main = {
                 this.saveHashtag();
             });
         }
+
+        const hashtagInput = document.getElementById("hashtag");
+
+        // 엔터키 입력하면 saveHashtag() 동작
+        hashtagInput.addEventListener("keydown", (e) => {
+            if (hashtagInput.value !== "") {
+                if (e.isComposing === false && e.code === "Enter") { // 한글 입력 시 이벤트 두번 발생 방지
+                    e.preventDefault();
+                    this.saveHashtag();
+                }
+            }
+        });
+
     },
 
     createHashtagInput: function (menuId) {
@@ -53,24 +66,24 @@ var main = {
             // Chainable event listeners
             tagify.on("input", onInput);
 
-            var mockAjax = (function mockAjax(){
+            var mockAjax = (function mockAjax() {
                 var timeout;
-                return function(duration){
+                return function (duration) {
                     clearTimeout(timeout);
-                    return new Promise(function(resolve, reject){
+                    return new Promise(function (resolve, reject) {
                         timeout = setTimeout(resolve, duration || 700, whitelist)
                     })
                 }
             })();
 
             // on character(s) added/removed (user is typing/deleting)
-            function onInput(e){
+            function onInput(e) {
                 tagify.settings.whitelist.length = 0;                   // reset current whitelist
                 tagify.loading(true).dropdown.hide.call(tagify); // show the loader animation
 
                 // get new whitelist from a delayed mocked request (Promise)
                 mockAjax()
-                    .then(function(result){
+                    .then(function (result) {
                         // replace tagify "whitelist" array values with new values
                         // and add back the ones already choses as Tags
                         tagify.settings.whitelist.push(...result, ...tagify.value)

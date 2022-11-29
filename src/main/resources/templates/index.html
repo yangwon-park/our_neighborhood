@@ -11,7 +11,7 @@
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!--    div class="overlay"는 상위 section id="top"의 위치, 크기와 동일 => position을 relative로 설정-->
 <section class="main-title" style="height: 70vh">
-    <div class="container-xxl align-self-center" style="height: 100%">
+    <div class="container-xxl align-self-center" style="height: 100%; position: relative">
         <div class="row align-items-center mt-3" style="height: 100%">
             <div>
                 <div class="text-left text-dark mt-5 mb-4">
@@ -21,6 +21,18 @@
                     <p>주변 이웃들의 리얼한 리뷰, 평점!<br>핫플레이스를 우리동네가 찾아드려요.</p>
                 </div>
             </div>
+        </div>
+        <div class="float-end d-flex" style="position: absolute; bottom: 0;">
+            <p>
+                <button id="set-custom-location" class="btn btn-main-color w-100" type="button">
+                    원하는 위치 설정
+                </button>
+            </p>
+            <p class="ms-2">
+                <button id="set-current-location" class="btn btn-main-color w-100" type="button">
+                    현재 위치로 설정
+                </button>
+            </p>
         </div>
     </div>
 </section>
@@ -63,19 +75,23 @@
                                     조건에 맞게 보여드려요!
                                 </th:block>
                                 <th:block th:if="${session.loginMember ne null}">
-                                    <span th:type="${session.loginMember.getUsername()}"></span>님이 원하시는 장소를 <br/>
-                                    조건에 맞게 보여드려요!
+                                    <th:block th:if="${!session.loginMember.getUsername().isEmpty()}">
+                                        <span th:text="${session.loginMember.getUsername()}"></span>님이 원하시는 장소를 <br/>
+                                        조건에 맞게 보여드려요!
+                                    </th:block>
+                                    <th:block th:if="${session.loginMember.getUsername().isEmpty()}">
+                                        회원님이 원하시는 장소를 <br/>
+                                        조건에 맞게 보여드려요!
+                                    </th:block>
                                 </th:block>
                             </p>
                         </div>
                         <div class="letsgo-card-form">
-                            <form>
-                                <p class="mb-3">
-                                    <button class="btn btn-main-color w-100" type="button" onclick=location.href="map">
-                                        이동
-                                    </button>
-                                </p>
-                            </form>
+                            <p class="mb-3">
+                                <button class="btn btn-main-color w-100" type="button" onclick=location.href="map">
+                                    이동
+                                </button>
+                            </p>
                         </div>
                     </div>
                 </div>

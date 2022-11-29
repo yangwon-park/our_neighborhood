@@ -241,7 +241,7 @@ var main = {
         }).then((resp) => {
             let rootChildren = resp.data.children;
             this.getMainCategories(rootChildren, categoryList);
-            console.log("mainChildren = ", this.mainChildren)
+
             if (this.storeEditCheck) {
                 if (categoryList[0] !== '') {
                     this.getMidCategories(this.mainChildren, categoryList);
@@ -367,7 +367,6 @@ var main = {
 
         midParentId = this.categoryLayerEl.main.options
             [this.categoryLayerEl.main.selectedIndex].value;
-        console.log("midParentId = ", midParentId)
 
         this.resetCategories(this.categoryLayerEl.mid, "중분류 선택");
         this.resetCategories(this.categoryLayerEl.sub, "소분류 선택");
@@ -380,7 +379,6 @@ var main = {
                     option.value = mid[i].categoryId;
                     if (option.value === categoryList[1]) {
                         option.selected = true;
-                        console.log("true2");
                     }
 
                     main.categoryLayerEl.mid.appendChild(option);
@@ -410,8 +408,6 @@ var main = {
 
         subParentId = this.categoryLayerEl.mid.options
             [this.categoryLayerEl.mid.selectedIndex].value;
-        console.log("subParentId = ", subParentId)
-
 
         this.resetCategories(this.categoryLayerEl.sub, "소분류 선택");
 
@@ -423,7 +419,6 @@ var main = {
                     option.value = sub[i].categoryId;
                     if (option.value === categoryList[2]) {
                         option.selected = true;
-                        console.log("true3");
                     }
 
                     main.categoryLayerEl.sub.appendChild(option)
@@ -437,9 +432,6 @@ var main = {
 
         const userId = document.getElementById("userId");
         const storeId = document.getElementById("storeId");
-
-        console.log("userId", userId.value);
-
         const userIdValid = document.getElementById("store-owner-add-userId-valid");
 
         userId.classList.remove("valid-custom");
@@ -476,9 +468,6 @@ var main = {
     deleteStoreOwner: function (btnId) {
         const memberId = btnId.substring(22);
         const storeId = document.getElementById("storeId");
-
-        console.log("storeId = ", memberId)
-        console.log("userId = ", storeId.value)
 
         axios({
             method: "delete",

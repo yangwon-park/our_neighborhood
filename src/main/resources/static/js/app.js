@@ -4,6 +4,7 @@ import mask from "./mask.js";
 var main = {
     init: async function () {
         sessionStorage.clear();
+
         mask.loadingWithMask();
 
         await this.findCoords();
@@ -12,6 +13,25 @@ var main = {
         this.setCategoryIdInSessionStorage();
 
         this.getStoresRandomly();
+
+        const setCustomLocationBtn = document.getElementById("set-custom-location");
+
+        setCustomLocationBtn.addEventListener("click", async () => {
+            mask.loadingWithMask();
+
+            this.getCateImages();
+            this.getStoresRandomly();
+        });
+
+        const setCurrentLocationBtn = document.getElementById("set-current-location");
+
+        setCurrentLocationBtn.addEventListener("click", async () => {
+            mask.loadingWithMask();
+            await this.findCoords();
+            this.getCateImages();
+
+            this.getStoresRandomly();
+        });
     },
 
     setCategoryIdInSessionStorage: function () {
@@ -57,28 +77,6 @@ var main = {
         } else {
             this.setWeatherInfoWithCookies();
         }
-    },
-
-    getStoreBasedOnWeather: function () {
-        const recommendPostHeader = document.getElementById("recommend-post-header");
-        const recommendPostContent = document.getElementById("recommend-post-content");
-        const weatherBtn = document.getElementById("weather-btn");
-
-        axios({
-            method: "get",
-            url: "/get-recommend-post"
-        }).then((resp) => {
-            recommendPostHeader.innerText = resp.data.header;
-            recommendPostContent.firstElementChild.innerText = resp.data.content;
-
-            weatherBtn.addEventListener("click", () => {
-                sessionStorage.setItem("hashtagIdList", resp.data.hashtagIdList);
-                window.location = "/recommend/store/list";
-            });
-
-        }).catch((error) => {
-            console.error(error);
-        });
     },
 
     getCateImages: function () {
@@ -144,8 +142,8 @@ var main = {
             mask.closeMask();
         }).catch((error) => {
             alert("현재 날씨 정보를 불러올 수 없습니다.");
-            console.error(error);
             mask.closeMask();
+            console.error(error);
         });
     },
 
@@ -209,13 +207,33 @@ var main = {
         _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
     },
 
+    getStoreBasedOnWeather: function () {
+        const recommendPostHeader = document.getElementById("recommend-post-header");
+        const recommendPostContent = document.getElementById("recommend-post-content");
+        const weatherBtn = document.getElementById("weather-btn");
+
+        axios({
+            method: "get",
+            url: "/get-recommend-post"
+        }).then((resp) => {
+            recommendPostHeader.innerText = resp.data.header;
+            recommendPostContent.firstElementChild.innerText = resp.data.content;
+
+            weatherBtn.addEventListener("click", () => {
+                sessionStorage.setItem("hashtagIdList", resp.data.hashtagIdList);
+                window.location = "/recommend/store/list";
+            });
+
+        }).catch((error) => {
+            console.error(error);
+        });
+    },
+
     getStoresRandomly: function () {
         axios({
             method: "get",
             url: "/search-top7-random"
         }).then((resp) => {
-            const slide = document.getElementById("slick-slide").firstElementChild.firstElementChild;
-
             for (const store of resp.data.data) {
                 let cardWrap = document.createElement("div");
                 cardWrap.classList.add("random-col", "mx-2", "my-3");

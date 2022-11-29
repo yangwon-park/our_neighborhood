@@ -726,7 +726,6 @@ a{
         width: 940px;
     }
 }
-
 .pageInfo {
     list-style: none;
     display: inline-block;
@@ -741,21 +740,21 @@ a{
     font-weight: 500;
 }
 
-.active {
+.pageInfo .active {
     background-color: #cdd5ec;
 }
 
-a:link {
+.pageInfo a:link {
     color: black;
     text-decoration: none;
 }
 
-a:visited {
+.pageInfo a:visited {
     color: black;
     text-decoration: none;
 }
 
-a:hover {
+.pageInfo a:hover {
     color: black;
     text-decoration: underline;
 }

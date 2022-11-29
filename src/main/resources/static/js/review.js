@@ -136,6 +136,7 @@ var main = {
         let formData = new FormData(reviewForm);
 
         menu.createDefaultImg(formData);
+        
         let file = formData.get("file");
         console.log(file);
 
@@ -257,7 +258,6 @@ var main = {
                     })
                 })
             }
-
         }).catch((e) => {
             console.error(e);
         });

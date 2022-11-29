@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
 import org.geolatte.geom.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -229,6 +231,30 @@ public class StoreService {
         return storeRepository.searchByCategory(categoryId);
     }
 
+    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat,
+                                                       double lon, double dist) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        return storeRepository.searchByHashtag(hashtagIdList, getPolygon(lat, lon, dist), pageRequest);
+    }
+
+    public List<SimpleSearchStoreDTO> searchTop7Random(double lat, double lon, double dist) {
+        final int n = 8;
+
+        Polygon<G2D> polygon = getPolygon(lat, lon, dist);
+
+        Long count = storeRepository.countStoreInPolygon(polygon);
+
+        int idx = count % n != 0
+                    ? (int) (Math.random() * (count / n + 1))
+                    : (int) (Math.random() * (count / n));
+
+        log.info("idx={}", idx);
+
+        PageRequest pageRequest = PageRequest.of(idx, n);
+
+        return storeRepository.searchTop7Random(polygon, pageRequest);
+    }
+
     public List<Store> searchTopNByCategories(Long categoryId, double dist, double lat, double lon) {
         return storeRepository.searchTopNByCategories(getPolygon(lat, lon, dist), categoryId);
     }
@@ -242,13 +268,10 @@ public class StoreService {
                 .collect(Collectors.toList());
     }
 
-    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat,
-                                                       double lon, double dist) {
-        PageRequest pageRequest = PageRequest.of(page, 10);
-        return storeRepository.searchByHashtag(hashtagIdList, getPolygon(lat, lon, dist), pageRequest);
-    }
 
-    //매장주인이 맞는지 체크
+    /*
+        매장주인이 맞는지 체크
+     */
     public boolean OwnerCheck(Member member, Long storeId) {
         Store store = storeRepository.findById(storeId).orElse(null);
         if (store != null) {

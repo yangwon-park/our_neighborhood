@@ -75,6 +75,9 @@ public class SearchController {
     @GetMapping("/search-top7-random")
     public ResultClass<?> searchTop7Random(@CookieValue(value = "lat", required = false) Double myLat,
                                            @CookieValue(value = "lon", required = false) Double myLon) {
+        log.info("lat={}", myLat);
+        log.info("lat={}", myLon);
+
         final double dist = 3;
         List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, dist);
 
@@ -85,6 +88,9 @@ public class SearchController {
     public ResultClass<?> searchTopNStoresByCategories(@RequestParam Long categoryId,
                                                        @CookieValue(value = "lat", required = false) Double myLat,
                                                        @CookieValue(value = "lon", required = false) Double myLon) {
+        log.info("lat={}", myLat);
+        log.info("lat={}", myLon);
+
         if (myLat == null || myLon == null) {
             return new ResultClass<>(0, new ArrayList<>());
         }
@@ -104,18 +110,21 @@ public class SearchController {
     }
 
     @GetMapping("/get-cate-images")
-    public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") Double lat,
-                                                              @CookieValue(value = "lon", required = false, defaultValue = "") Double lon) {
+    public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") Double myLat,
+                                                              @CookieValue(value = "lon", required = false, defaultValue = "") Double myLon) {
+        log.info("lat={}", myLat);
+        log.info("lat={}", myLon);
+
         final double dist = 3;
 
         List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
 
         List<List<String>> categoryImageList = new ArrayList<>();
 
-        if (lat != null && lon != null) {
+        if (myLat != null && myLon != null) {
             for (CategoryDTO.Simple simple : rootCategoryList) {
                 categoryImageList.add(storeService.getTopNImageByCategories(
-                        (simple.getCategoryId()), dist, lat, lon));
+                        (simple.getCategoryId()), dist, myLat, myLon));
             }
         }
 

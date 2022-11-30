@@ -43,9 +43,9 @@
                                 <div class="d-flex mb-3">
                                     <input th:field="*{zipcode}" class="form-control zipcode"
                                            placeholder="우편 번호" type="text" readonly>
-                                    <button type="button" onclick="openPostcode()"
+                                    <button id="post-btn"
                                             class="text-center btn btn-main-color ms-3"
-                                            style="height: 3rem">우편 번호 찾기
+                                            type="button" style="height: 3rem">우편 번호 찾기
                                     </button>
                                 </div>
                                 <div id="store-zipcode-valid" class="my-1 valid-custom">
@@ -212,8 +212,8 @@
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
 </footer>
-<script th:src="@{/js/postcode.js}"></script>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/postcode.js}"></script>
 <script type="module" th:src="@{/js/store.js}"></script>
 
 </html>

@@ -11,7 +11,7 @@
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!--    div class="overlay"는 상위 section id="top"의 위치, 크기와 동일 => position을 relative로 설정-->
 <section class="main-title" style="height: 70vh">
-    <div class="container-xxl align-self-center" style="height: 100%">
+    <div class="container-xxl align-self-center" style="height: 100%; position: relative">
         <div class="row align-items-center mt-3" style="height: 100%">
             <div>
                 <div class="text-left text-dark mt-5 mb-4">
@@ -19,6 +19,55 @@
                 </div>
                 <div>
                     <p>주변 이웃들의 리얼한 리뷰, 평점!<br>핫플레이스를 우리동네가 찾아드려요.</p>
+                </div>
+            </div>
+        </div>
+        <div class="float-end d-flex" style="position: absolute; bottom: 0;">
+            <p>
+                <button id="set-custom-location" class="btn btn-main-color w-100"
+                        data-bs-toggle="modal" data-bs-target="#set-custom-location-modal"
+                        type="button">
+                    원하는 위치 설정
+                </button>
+            </p>
+            <p class="ms-2">
+                <button id="set-current-location" class="btn btn-main-color w-100" type="button">
+                    현재 위치로 설정
+                </button>
+            </p>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="set-custom-location-modal" data-bs-keyboard="true" data-bs-config='{"backdrop": "static"}'
+             tabindex="-1" aria-labelledby="set-custom-location-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form id="set-custom-location-form">
+                        <div class="modal-header">
+                            <h4 class="modal-title text-dark fw-bold" id="set-custom-location-modal-label">원하는 위치 설정</h4>
+                            <button type="button" class="btn-close"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="custom-location-input">
+                                    <span class="mb-1">도로명주소 혹은 행정동까지 입력해주세요.</span>
+                                    <br/>
+                                    <span class="text-muted" style="font-size: 0.9rem">예) 부산광역시 해운대구 좌동순환로</span>
+                                </label>
+                                <div class="mb-3">
+                                    <input id="custom-location-input" style="width: 100%" autofocus>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    style="font-size: 1.1rem">닫기
+                            </button>
+                            <button class="btn btn-main-color" id="set-custom-location-modal-save"
+                                    type="button">완료
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -63,19 +112,23 @@
                                     조건에 맞게 보여드려요!
                                 </th:block>
                                 <th:block th:if="${session.loginMember ne null}">
-                                    <span th:type="${session.loginMember.getUsername()}"></span>님이 원하시는 장소를 <br/>
-                                    조건에 맞게 보여드려요!
+                                    <th:block th:if="${!session.loginMember.getUsername().isEmpty()}">
+                                        <span th:text="${session.loginMember.getUsername()}"></span>님이 원하시는 장소를 <br/>
+                                        조건에 맞게 보여드려요!
+                                    </th:block>
+                                    <th:block th:if="${session.loginMember.getUsername().isEmpty()}">
+                                        회원님이 원하시는 장소를 <br/>
+                                        조건에 맞게 보여드려요!
+                                    </th:block>
                                 </th:block>
                             </p>
                         </div>
                         <div class="letsgo-card-form">
-                            <form>
-                                <p class="mb-3">
-                                    <button class="btn btn-main-color w-100" type="button" onclick=location.href="map">
-                                        이동
-                                    </button>
-                                </p>
-                            </form>
+                            <p class="mb-3">
+                                <button class="btn btn-main-color w-100" type="button" onclick=location.href="map">
+                                    이동
+                                </button>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -134,7 +187,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="weather-second mx-auto p-3">
+                    <div class="weather-second main-border mx-auto p-3">
                         <h3 id="recommend-post-header" class="mt-4 mb-4 fw-bold text-dark"></h3>
                         <div id="recommend-post-content" class="weather-text">
                             <p class=""></p>
@@ -169,36 +222,45 @@
         <div class="container features">
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <div class="card card-body shadow border-0 features-card">
-                        <h4 class="card-title mb-3">
-                            <span class="fw-bold">1</span>
-                            Feature 1
-                        </h4>
-                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus
-                            veniam.</p>
+                    <div class="card card-body shadow main-border features-card">
+                        <a href="/user/request-add-store">
+                            <h2 class="card-title mb-3">
+                                <span class="fw-bold">장소 추가 요청</span>
+                            </h2>
+                        </a>
+                        <p class="card-text fw-light">
+                            마음에 드시는 장소가 없나요? <br />
+                            아직 저희가 알지 못하는 핫한 장소를 추천해주세요! <br />
+                            <strong>우리동네</strong> 여러분과 함께 만들어갑니다.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <div class="card card-body shadow border-0 features-card">
-                        <h4 class="card-title mb-3">
-                            <span class="fw-bold">2</span>
-                            Feature 2
-                        </h4>
-                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus
-                            veniam.</p>
+                    <div class="card card-body shadow main-border features-card">
+                        <a href="/user/request-add-store">
+                            <h2 class="card-title mb-3">
+                                <span class="fw-bold">장소 추가 요청</span>
+                            </h2>
+                        </a>
+                        <p class="card-text fw-light">
+                            마음에 드시는 장소가 없나요? <br />
+                            아직 저희가 알지 못하는 핫한 장소를 추천해주세요! <br />
+                            <strong>우리동네</strong> 여러분과 함께 만들어갑니다.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <div class="card card-body shadow border-0 features-card">
-                        <h4 class="card-title mb-3">
-                            <span class="fw-bold">3</span>
-                            Feature 3
-                        </h4>
-                        <p class="card-text fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            Dignissimos in omnis veniam. Dolore et maiores necessitatibus obcaecati, quo temporibus
-                            veniam.</p>
+                    <div class="card card-body shadow main-border features-card">
+                        <a href="/user/request-add-store">
+                            <h2 class="card-title mb-3">
+                                <span class="fw-bold">장소 추가 요청</span>
+                            </h2>
+                        </a>
+                        <p class="card-text fw-light">
+                            마음에 드시는 장소가 없나요? <br />
+                            아직 저희가 알지 못하는 핫한 장소를 추천해주세요! <br />
+                            <strong>우리동네</strong> 여러분과 함께 만들어갑니다.
+                        </p>
                     </div>
                 </div>
             </div>

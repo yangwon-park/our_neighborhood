@@ -43,16 +43,17 @@
                                     <div id="store-name-valid" class="my-1 valid-custom"></div>
                                 </div>
                             </div>
-                            <div class="form-group d-flex">
-                                <div class="mb-3">
-                                    <input th:field="*{zipcode}" class="form-control"
-                                           placeholder="우편 번호" type="text"
-                                           readonly>
+                            <div class="form-group">
+                                <div class="d-flex mb-3">
+                                    <input th:field="*{zipcode}" class="form-control zipcode"
+                                           placeholder="우편 번호" type="text" readonly>
+                                    <button id="post-btn"
+                                            class="text-center btn btn-main-color ms-3"
+                                            type="button" style="height: 3rem">우편 번호 찾기
+                                    </button>
                                 </div>
-                                <button type="button" onclick="openPostcode()" class="text-center btn btn-main-color ms-3"
-                                        style="height: 3rem">우편 번호 찾기
-                                </button>
-                                <div id="store-zipcode-valid" class="my-1 valid-custom"></div>
+                                <div id="store-zipcode-valid" class="my-1 valid-custom">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">

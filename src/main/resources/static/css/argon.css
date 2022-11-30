@@ -853,21 +853,6 @@ button.bg-default:focus {
     font-weight: 600 !important;
 }
 
-.text-white {
-    color: #fff !important;
-}
-
-.text-light {
-    color: #adb5bd !important;
-}
-
-.text-white {
-    color: #fff !important;
-}
-
-.text-muted {
-    color: #8898aa !important;
-}
 
 @media print {
     *,

@@ -1,7 +1,5 @@
 var main = {
     loadingWithMask: function () {
-        console.log("spinner 호출");
-
         const path = "/images/main/loading.gif";
 
         let mainBody = document.getElementById("main-body");

@@ -90,5 +90,3 @@ var main = {
 }
 
 main.init();
-
-export default main;

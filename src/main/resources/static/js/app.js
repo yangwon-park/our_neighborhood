@@ -1,25 +1,32 @@
 import mask from "./mask.js";
-import slick from "./slick.js";
 
 var main = {
     init: async function () {
         sessionStorage.clear();
         mask.loadingWithMask();
 
-        let check = this.getCookie("customCheck");
+        let customCheckCookie = this.getCookie("customCheck");
+        let customLocationCookie = this.getCookie("customLocation");
 
-        if (check !== "true") {
-            await this.findCoords();
-        } else {
+        /*
+            위치 설정을 직접한 값이 있는 경우에만 input tag에 값을 넣어줌
+         */
+        if (customLocationCookie !== null) {
+            document.getElementById("custom-location-input").value = decodeURIComponent(customLocationCookie);
+        }
+
+        if (customCheckCookie === "true") {
             await this.changeCustomPosition();
+        } else {
+            await this.findCoords();
         }
 
         this.setCategoryIdInSessionStorage();
 
-        const setCustomLocationBtn = document.getElementById("set-custom-location");
+        const setCustomLocationModalBtn = document.getElementById("set-custom-location-modal-save");
         const setCurrentLocationBtn = document.getElementById("set-current-location");
 
-        setCustomLocationBtn.addEventListener("click", async () => {
+        setCustomLocationModalBtn.addEventListener("click", async () => {
             mask.loadingWithMask();
             await this.changeCustomPosition();
         });
@@ -56,7 +63,7 @@ var main = {
             method: "get",
             url: "/search-top7-random"
         }).then((resp) => {
-            console.log(resp.data.data);
+
             /*
                 index, removeBefore, removeAll (true)
              */
@@ -70,6 +77,7 @@ var main = {
 
                 let card = document.createElement("div");
                 card.classList.add("card");
+                card.classList.add("main-border")
 
                 let aTag = document.createElement("a");
                 aTag.href = "/store/" + store.storeId;
@@ -149,7 +157,7 @@ var main = {
         })
     },
 
-    setWeatherInfoWithAPI: function () {
+    getWeatherInfoWithAPI: function () {
         axios({
             method: "get",
             url: "/weather",
@@ -178,7 +186,7 @@ var main = {
         });
     },
 
-    setWeatherInfoWithCookies: function () {
+    getWeatherInfoWithCookies: function () {
         let skyStatus = this.getCookie("skyStatus");
         let currentTmp = this.getCookie("tmp");
         let currentPop = this.getCookie("pop");
@@ -238,17 +246,32 @@ var main = {
         _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
     },
 
-    changeCustomPosition: function () {
+    changeCustomPosition: async function () {
+        const customLocation = document.getElementById("custom-location-input");
         let geocoder = new kakao.maps.services.Geocoder(); // 카카오맵 geocoder 라이브러리 객체 생성
-        let lat;
-        let lon;
 
+        /*
+            직접 설정한 위치인지 체크해주는 쿠키
+         */
         this.setCookie("customCheck", true, 1);
 
-        geocoder.addressSearch("부산광역시 부산진구", async (result, status) => {
+
+        /*
+            직접 설정한 주소값을 쿠키에 저장하는 조건
+                1. 기존의 쿠키값이 없는 경우 (공백, null)
+                2. 새로 입력한 주소값과 기존의 주소값이 다른 경우
+         */
+        let prevCustomLocationCookie = this.getCookie("customLocation");
+
+        if (prevCustomLocationCookie === "" || prevCustomLocationCookie === null
+                || customLocation.value !== decodeURIComponent(prevCustomLocationCookie)) {
+            this.setCookie("customLocation", customLocation.value, 1);
+        }
+
+        geocoder.addressSearch(decodeURIComponent(this.getCookie("customLocation")), async (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-                lat = result[0].y
-                lon = result[0].x
+                let lat = result[0].y
+                let lon = result[0].x
 
                 await this.setMainData(lat, lon);
             }
@@ -271,15 +294,15 @@ var main = {
                 => 메인 홈페이지 재방문시 로딩 속도 향상
          */
         if (prevNx !== currentNx && prevNy !== currentNy) {
-            this.setWeatherInfoWithAPI();
+            this.getWeatherInfoWithAPI();
 
             /*
                 어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
              */
         } else if (skyStatus === null) {
-            this.setWeatherInfoWithAPI();
+            this.getWeatherInfoWithAPI();
         } else {
-            this.setWeatherInfoWithCookies();
+            this.getWeatherInfoWithCookies();
         }
 
         this.getCateImages();
@@ -338,7 +361,7 @@ var main = {
     },
 
     setCurrentPositionData: async function (lat, lon) {
-        let coords = this.dfs_xy_conv("toXY", lat, lon);
+        let coords = this.dfsXyConv("toXY", lat, lon);
         let nx = coords["nx"];
         let ny = coords["ny"];
 
@@ -371,7 +394,7 @@ var main = {
 
             ** 참고 : https://gist.github.com/fronteer-kr/14d7f779d52a21ac2f16
      */
-    dfs_xy_conv: function (code, v1, v2) {
+    dfsXyConv: function (code, v1, v2) {
         var DEGRAD = Math.PI / 180.0;
         var RADDEG = 180.0 / Math.PI;
 

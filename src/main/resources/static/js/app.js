@@ -1,4 +1,5 @@
 import mask from "./mask.js";
+import slick from "./slick.js";
 
 var main = {
     init: async function () {
@@ -264,7 +265,7 @@ var main = {
         let prevCustomLocationCookie = this.getCookie("customLocation");
 
         if (prevCustomLocationCookie === "" || prevCustomLocationCookie === null
-                || customLocation.value !== decodeURIComponent(prevCustomLocationCookie)) {
+            || customLocation.value !== decodeURIComponent(prevCustomLocationCookie)) {
             this.setCookie("customLocation", customLocation.value, 1);
         }
 
@@ -274,6 +275,13 @@ var main = {
                 let lon = result[0].x
 
                 await this.setMainData(lat, lon);
+            }
+
+            if (status === kakao.maps.services.Status.ZERO_RESULT ||
+                    status === kakao.maps.services.Status.ERROR) {
+                alert("올바른 주소를 입력해주세요.");
+                await this.findCoords();
+                window.location.reload();
             }
         });
     },

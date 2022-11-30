@@ -5,11 +5,15 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static ywphsm.ourneighbor.domain.file.FileUtil.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,9 +67,14 @@ public class AwsS3FileStore {
             storeFileName = "defaultImg.png";
             imageUrl = "https://neighbor-build.s3.ap-northeast-2.amazonaws.com/images/defaultImg.png";
         } else {
-            storeFileName = FileUtil.createStoreFileName(originalFileName);
+            storeFileName = createStoreFileName(originalFileName);
 
-            File uploadFile = convert(multipartFile).orElseThrow(
+            /*
+                이미지 리사이징
+             */
+            MultipartFile resizedMultipartFile = getResizedMultipartFile(multipartFile, originalFileName);
+
+            File uploadFile = convert(resizedMultipartFile).orElseThrow(
                     () -> new IllegalArgumentException("전환 실패"));
 
             imageUrl = getImageUrl(uploadFile, storeFileName);
@@ -71,6 +82,7 @@ public class AwsS3FileStore {
 
         return new UploadFile(originalFileName, storeFileName, imageUrl);
     }
+
 
     private String getImageUrl(File uploadFile, String storeFileName) {
         String fileName = dir + "/" + storeFileName;

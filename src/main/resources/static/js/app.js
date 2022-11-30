@@ -5,6 +5,8 @@ var main = {
         sessionStorage.clear();
         mask.loadingWithMask();
 
+        this.initSlick();
+
         let customCheckCookie = this.getCookie("customCheck");
         let customLocationCookie = this.getCookie("customLocation");
 
@@ -246,6 +248,35 @@ var main = {
         _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
     },
 
+    initSlick: function () {
+        const slickSlide = $("#slick-slide");
+
+        if(slickSlide) {
+            slickSlide.slick({
+                dots: true,
+                arrows: false,
+                slidesToShow: 3,
+                slideToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 2
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1
+                        }
+                    }
+                ]
+            });
+        }
+    },
+
     changeCustomPosition: async function () {
         const customLocation = document.getElementById("custom-location-input");
         let geocoder = new kakao.maps.services.Geocoder(); // 카카오맵 geocoder 라이브러리 객체 생성
@@ -264,7 +295,7 @@ var main = {
         let prevCustomLocationCookie = this.getCookie("customLocation");
 
         if (prevCustomLocationCookie === "" || prevCustomLocationCookie === null
-                || customLocation.value !== decodeURIComponent(prevCustomLocationCookie)) {
+            || customLocation.value !== decodeURIComponent(prevCustomLocationCookie)) {
             this.setCookie("customLocation", customLocation.value, 1);
         }
 
@@ -274,6 +305,13 @@ var main = {
                 let lon = result[0].x
 
                 await this.setMainData(lat, lon);
+            }
+
+            if (status === kakao.maps.services.Status.ZERO_RESULT ||
+                    status === kakao.maps.services.Status.ERROR) {
+                alert("올바른 주소를 입력해주세요.");
+                await this.findCoords();
+                window.location.reload();
             }
         });
     },

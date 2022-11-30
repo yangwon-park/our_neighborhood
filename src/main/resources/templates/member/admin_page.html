@@ -11,49 +11,46 @@
 <body class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <section class="header">
-    <div class="header py-7 py-lg-8">
-        <div class="separator separator-bottom separator-skew zindex-100">
-            <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                 xmlns="http://www.w3.org/2000/svg">
-                <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-            </svg>
-        </div>
+    <div class="header py-7">
+
     </div>
 </section>
 <section class="main">
-  <div class="col">
-    <button class="w-100 btn btn-secondary btn-lg"
-            th:onclick="|location.href='@{/admin/category/add}'|"
-            type="button">카테고리</button>
-  </div>
-  <hr class="my-2">
-  <div class="col">
-    <button class="w-100 btn btn-secondary btn-lg"
-            th:onclick="|location.href='@{/admin/store/list}'|"
-            type="button">상점 보기</button>
-  </div>
-  <hr class="my-2">
-  <div class="col">
-    <button class="w-100 btn btn-secondary btn-lg"
-            th:onclick="|location.href='@{/admin/member-role/edit}'|"
-            type="button">회원 권한 변경</button>
-  </div>
-  <hr class="my-2">
-  <div class="col">
-    <button class="w-100 btn btn-secondary btn-lg"
-            th:onclick="|location.href='@{/seller/store/add}'|"
-            type="button">상점 추가</button>
-  </div>
-  <hr class="my-2">
-  <div class="col">
-    <button class="w-100 btn btn-secondary btn-lg"
-            th:onclick="|location.href='@{/admin/request-add-store-list}'|"
-            type="button">가게추가 요청 관리</button>
-  </div>
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                th:onclick="|location.href='@{/admin/category/add}'|"
+                type="button">카테고리 관리
+        </button>
+    </div>
+    <hr class="my-2">
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                th:onclick="|location.href='@{/admin/store/list}'|"
+                type="button">상점 보기
+        </button>
+    </div>
+    <hr class="my-2">
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                th:onclick="|location.href='@{/admin/member-role/edit}'|"
+                type="button">회원 권한 변경
+        </button>
+    </div>
+    <hr class="my-2">
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                th:onclick="|location.href='@{/seller/store/add}'|"
+                type="button">상점 추가
+        </button>
+    </div>
+    <hr class="my-2">
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                th:onclick="|location.href='@{/admin/request-add-store-list}'|"
+                type="button">가게추가 요청 관리
+        </button>
+    </div>
 </section>
-<footer th:replace="layout/footer :: common_footer">
-    템플릿 푸터
-</footer>
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 </body>
 </html>

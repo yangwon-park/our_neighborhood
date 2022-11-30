@@ -13,7 +13,7 @@
 <nav th:replace="layout/navbar :: common_navbar"></nav>
 <!-- Header -->
 <section class="header">
-    <div class="header py-5">
+    <div class="header py-7">
 
     </div>
 </section>
@@ -25,7 +25,7 @@
                 <div class="card bg-secondary shadow border-0">
                     <div class="row card-header bg-transparent pb-5">
                         <div class="text-center mt-2 mb-4">
-                            <span class="mb-2 text-dark fw-bold">소셜 미디어로 로그인</span>
+                            <span class="mb-2 text-dark fw-bold fs-5">소셜 미디어로 로그인</span>
                         </div>
                         <div class="text-center my-1">
                             <!-- 카카오 로그인 -->
@@ -48,7 +48,7 @@
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="text-center text-muted mb-4">
-                            <span class="mb-2 text-dark fw-bold">우리 동네 계정으로 로그인</span>
+                            <span class="mb-2 text-dark fw-bold fs-5">우리 동네 계정으로 로그인</span>
                         </div>
                         <form role="form" th:action="@{/loginSecurity}" th:object="${loginForm}" method="post">
                             <div class="form-group">
@@ -82,15 +82,15 @@
                             <div class="col-4">
                                 <span class="float-start">
                                     <!-- 회원가입 -->
-                                    <a class="p-2 text-dark" href="/sign-up">회원가입</a>
+                                    <a class="p-2 fw-bold text-dark" href="/sign-up">회원가입</a>
                                 </span>
                             </div>
                             <div class="col-8">
                                 <span class="float-end">
                                     <!-- 아이디 찾기 -->
-                                    <a class="p-2 text-dark" href="/find-userId">아이디 찾기</a>
+                                    <a class="p-2 fw-bold text-dark" href="/find-userId">아이디 찾기</a>
                                     <!-- 비밀번호 찾기 -->
-                                    <a class="p-2 text-dark" href="/find-password">비밀번호 찾기</a>
+                                    <a class="p-2 fw-bold text-dark" href="/find-password">비밀번호 찾기</a>
                                 </span>
                             </div>
                         </div>

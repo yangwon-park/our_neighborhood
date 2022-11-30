@@ -795,14 +795,6 @@ button.bg-default:focus {
     padding-bottom: 3rem !important;
 }
 
-.py-7 {
-    padding-top: 6rem !important;
-}
-
-.py-7 {
-    padding-bottom: 6rem !important;
-}
-
 .ml-auto {
     margin-left: auto !important;
 }
@@ -848,11 +840,6 @@ button.bg-default:focus {
         text-align: left !important;
     }
 }
-
-.font-weight-bold {
-    font-weight: 600 !important;
-}
-
 
 @media print {
     *,

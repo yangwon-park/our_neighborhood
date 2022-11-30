@@ -1,10 +1,11 @@
 import mask from "./mask.js";
-import slick from "./slick.js";
 
 var main = {
     init: async function () {
         sessionStorage.clear();
         mask.loadingWithMask();
+
+        this.initSlick();
 
         let customCheckCookie = this.getCookie("customCheck");
         let customLocationCookie = this.getCookie("customLocation");
@@ -245,6 +246,35 @@ var main = {
 
         _pop.firstElementChild.innerText = "시간당 강수량";
         _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
+    },
+
+    initSlick: function () {
+        const slickSlide = $("#slick-slide");
+
+        if(slickSlide) {
+            slickSlide.slick({
+                dots: true,
+                arrows: false,
+                slidesToShow: 3,
+                slideToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 2
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1
+                        }
+                    }
+                ]
+            });
+        }
     },
 
     changeCustomPosition: async function () {

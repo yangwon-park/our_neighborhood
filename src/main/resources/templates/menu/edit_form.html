@@ -125,6 +125,14 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="mb-3">
+                                                <input class="form-control" th:id="|menu-edit-storedFileName${i.index+1}|"
+                                                    name="storedFileName" type="hidden" th:value="${menu.storedFileName}"/>
+                                                <input class="form-control" th:id="|menu-edit-uploadImgUrl${i.index+1}|"
+                                                    name="uploadImgUrl" type="hidden" th:value="${menu.uploadImgUrl}"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div>
                                                 <label class="text-secondary" th:for="|active-upload${i.index+1}|">
                                                     이미지 업로드를 하시려면 체크해주세요

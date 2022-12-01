@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /*
-    MultipartFile을 생성하기 위해
-    MultipartFile 인터페이스를 상속받은 클래스
+    MultipartFile을 생성하기 위해 만든
+    MultipartFile 인터페이스의 구현체
  */
 public class CustomMultipartFile implements MultipartFile {
 

@@ -68,19 +68,21 @@
     </div>
 </section>
 <!-- Modal -->
-<div class="modal fade" id="edit-hashtag-modal" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="edit-hashtag-modal-label" aria-hidden="true">
+<div class="modal fade" id="edit-hashtag-modal" data-bs-keyboard="true"
+     tabindex="-1" aria-labelledby="edit-hashtag-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form id="hashtag-form">
                 <div class="modal-header">
                     <h5 class="modal-title text-dark fw-bold" id="edit-hashtag-modal-label">해쉬태그 직접 등록</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <span class="mb-2">해쉬태그 추가</span>
+                        <label for="hashtag">
+                            <span class="mb-2">해쉬태그 추가</span>
+                        </label>
                         <div class="mb-3">
                             <input id="hashtag" name="name" style="width: 100%" autofocus>
                         </div>

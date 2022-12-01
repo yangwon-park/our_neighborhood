@@ -99,8 +99,7 @@ class MenuServiceTest {
 
 //        new MockMultipartFile("필드명", storedFileName, contentType, 서버에 있는 파일 경로)
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png",
-//                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
-                new FileInputStream("C:/Users/HOME/Desktop/JAVA/menu_file/5cf53790-54a5-4c5f-9709-0394d58cec94.png"));
+                new FileInputStream("C:/Users/ywOnp/Desktop/Study/review/file/761c40d5-8fae-4d40-85b8-a26d10a6e52c.png"));
 //                new FileInputStream("/Users/bag-yang-won/Desktop/file/ad9e8baf-5293-4403-b796-fb59a6f0c317.jpg"));
 
         JSONObject json = new JSONObject();

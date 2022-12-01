@@ -75,14 +75,18 @@ var main = {
     setSearchKeywordEvent: function (map) {
         let prevKeyword = sessionStorage.getItem("keyword");
 
-        // 엔터키 입력하면 searchByKeyword 동작
+        /*
+            엔터키 입력하면 searchByKeyword 동작
+         */
         document.getElementById("keyword").addEventListener("keydown", (e) => {
             if (e.isComposing === false && e.code === "Enter") { // 한글 입력 시 이벤트 두번 발생 방지
                 this.searchByKeyword(prevKeyword, map);
             }
         });
 
-        // 클릭 이벤트 시 searchByKeyword 동작
+        /*
+            클릭 이벤트 시 searchByKeyword 동작
+         */
         document.getElementById("searchBtn").addEventListener("click", () => {
             this.searchByKeyword(prevKeyword, map);
         });

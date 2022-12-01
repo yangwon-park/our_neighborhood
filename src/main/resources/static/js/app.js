@@ -1,4 +1,3 @@
-import slick from "./slick.js";
 import mask from "./mask.js";
 
 var main = {
@@ -6,57 +5,38 @@ var main = {
         sessionStorage.clear();
         mask.loadingWithMask();
 
-        await this.findCoords();
-        this.getCateImages();
+        this.initSlick();
+
+        let customCheckCookie = this.getCookie("customCheck");
+        let customLocationCookie = this.getCookie("customLocation");
+
+        /*
+            위치 설정을 직접한 값이 있는 경우에만 input tag에 값을 넣어줌
+         */
+        if (customLocationCookie !== null) {
+            document.getElementById("custom-location-input").value = decodeURIComponent(customLocationCookie);
+        }
+
+        if (customCheckCookie === "true") {
+            await this.changeCustomPosition();
+        } else {
+            await this.findCoords();
+        }
 
         this.setCategoryIdInSessionStorage();
 
-        this.getStoresRandomly();
-    },
+        const setCustomLocationModalBtn = document.getElementById("set-custom-location-modal-save");
+        const setCurrentLocationBtn = document.getElementById("set-current-location");
 
-    setCategoryIdInSessionStorage: function () {
-        const categoryDivList = document.querySelectorAll(".category-div");
+        setCustomLocationModalBtn.addEventListener("click", async () => {
+            mask.loadingWithMask();
+            await this.changeCustomPosition();
+        });
 
-        if (categoryDivList !== null) {
-            categoryDivList.forEach((el) => {
-                let categoryId = el.children.namedItem("categoryId").value;
-
-                el.addEventListener("click", () => {
-                    sessionStorage.setItem("cateFromHome", categoryId);
-                    window.location.href = "map";
-                });
-            });
-        }
-    },
-
-    findCoords: async function () {
-        let prevNx = this.getCookie("nx");
-        let prevNy = this.getCookie("ny");
-
-        let position = await this.getCoords();
-
-        await this.setCurrentPositionData(position);
-
-        let currentNx = this.getCookie("nx");
-        let currentNy = this.getCookie("ny");
-        let skyStatus = this.getCookie("skyStatus");
-
-        /*
-            이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
-            즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
-                => 메인 홈페이지 재방문시 로딩 속도 향상
-         */
-        if (prevNx !== currentNx && prevNy !== currentNy) {
-            this.setWeatherInfoWithAPI();
-
-            /*
-                어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
-             */
-        } else if (skyStatus === null) {
-            this.setWeatherInfoWithAPI();
-        } else {
-            this.setWeatherInfoWithCookies();
-        }
+        setCurrentLocationBtn.addEventListener("click", async () => {
+            mask.loadingWithMask();
+            await this.findCoords();
+        });
     },
 
     getStoreBasedOnWeather: function () {
@@ -75,10 +55,64 @@ var main = {
                 sessionStorage.setItem("hashtagIdList", resp.data.hashtagIdList);
                 window.location = "/recommend/store/list";
             });
-
         }).catch((error) => {
             console.error(error);
         });
+    },
+
+    getStoresRandomly: function () {
+        axios({
+            method: "get",
+            url: "/search-top7-random"
+        }).then((resp) => {
+
+            /*
+                index, removeBefore, removeAll (true)
+             */
+            let slide = $("#slick-slide");
+
+            slide.slick("slickRemove", null, null, true);
+
+            for (const store of resp.data.data) {
+                let cardWrap = document.createElement("div");
+                cardWrap.classList.add("random-col", "mx-2", "my-3");
+
+                let card = document.createElement("div");
+                card.classList.add("card");
+                card.classList.add("main-border")
+
+                let aTag = document.createElement("a");
+                aTag.href = "/store/" + store.storeId;
+                aTag.tabIndex = 0;
+
+                let img = document.createElement("img");
+                img.classList.add("card-img-top");
+                img.src = store.uploadImgUrl;
+                img.alt = "대표이미지";
+
+                let cardBody = document.createElement("div");
+                cardBody.classList.add("card-body");
+
+                let title = document.createElement("h4");
+                title.classList.add("card-title", "fw-bold");
+                title.innerText = store.name;
+
+                let cardText = document.createElement("p");
+                cardText.classList.add("card-text", "fw-light", "mb-4");
+
+                aTag.appendChild(img);
+
+                cardBody.appendChild(title);
+                cardBody.appendChild(cardText);
+
+                card.appendChild(aTag);
+                card.appendChild(cardBody);
+
+                cardWrap.appendChild(card);
+
+                slide.slick("slickAdd", cardWrap);
+            }
+        })
     },
 
     getCateImages: function () {
@@ -95,6 +129,11 @@ var main = {
             const cafeDiv = document.getElementById("cate-img2");
             const barDiv = document.getElementById("cate-img3");
             const leisureDiv = document.getElementById("cate-img4");
+
+            restDiv.style.backgroundImage = "";
+            cafeDiv.style.backgroundImage = "";
+            barDiv.style.backgroundImage = "";
+            leisureDiv.style.backgroundImage = "";
 
             if (restaurantImages.length > 0) {
                 let restNum = this.randomInt(0, restaurantImages.length);
@@ -120,7 +159,7 @@ var main = {
         })
     },
 
-    setWeatherInfoWithAPI: function () {
+    getWeatherInfoWithAPI: function () {
         axios({
             method: "get",
             url: "/weather",
@@ -144,14 +183,14 @@ var main = {
             mask.closeMask();
         }).catch((error) => {
             alert("현재 날씨 정보를 불러올 수 없습니다.");
-            console.error(error);
             mask.closeMask();
+            console.error(error);
         });
     },
 
-    setWeatherInfoWithCookies: function () {
+    getWeatherInfoWithCookies: function () {
         let skyStatus = this.getCookie("skyStatus");
-        let currentTmp =  this.getCookie("tmp");
+        let currentTmp = this.getCookie("tmp");
         let currentPop = this.getCookie("pop");
         let currentPcp = this.getCookie("pcp");
         let pm10Value = this.getCookie("pm10Value");
@@ -163,7 +202,7 @@ var main = {
         mask.closeMask();
     },
 
-    setWeatherInfoInEl: function(skyStatus, currentTmp, currentPop, currentPcp, pm10Value) {
+    setWeatherInfoInEl: function (skyStatus, currentTmp, currentPop, currentPcp, pm10Value) {
         const _skyStatus = document.getElementById("sky-status");
         const _tmp = document.getElementById("tmp");
         const _pop = document.getElementById("pop");
@@ -209,52 +248,124 @@ var main = {
         _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";
     },
 
-    getStoresRandomly: function () {
-        axios({
-            method: "get",
-            url: "/search-top7-random"
-        }).then((resp) => {
-            const slide = document.getElementById("slick-slide").firstElementChild.firstElementChild;
+    initSlick: function () {
+        const slickSlide = $("#slick-slide");
 
-            for (const store of resp.data.data) {
-                let cardWrap = document.createElement("div");
-                cardWrap.classList.add("random-col", "mx-2", "my-3");
+        if(slickSlide) {
+            slickSlide.slick({
+                dots: true,
+                arrows: false,
+                slidesToShow: 3,
+                slideToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 2
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1
+                        }
+                    }
+                ]
+            });
+        }
+    },
 
-                let card = document.createElement("div");
-                card.classList.add("card");
+    changeCustomPosition: async function () {
+        const customLocation = document.getElementById("custom-location-input");
+        let geocoder = new kakao.maps.services.Geocoder(); // 카카오맵 geocoder 라이브러리 객체 생성
 
-                let aTag = document.createElement("a");
-                aTag.href = "/store/" + store.storeId;
-                aTag.tabIndex = 0;
+        /*
+            직접 설정한 위치인지 체크해주는 쿠키
+         */
+        this.setCookie("customCheck", true, 1);
 
-                let img = document.createElement("img");
-                img.classList.add("card-img-top");
-                img.src = store.uploadImgUrl;
-                img.alt = "대표이미지";
 
-                let cardBody = document.createElement("div");
-                cardBody.classList.add("card-body");
+        /*
+            직접 설정한 주소값을 쿠키에 저장하는 조건
+                1. 기존의 쿠키값이 없는 경우 (공백, null)
+                2. 새로 입력한 주소값과 기존의 주소값이 다른 경우
+         */
+        let prevCustomLocationCookie = this.getCookie("customLocation");
 
-                let title = document.createElement("h4");
-                title.classList.add("card-title", "fw-bold");
-                title.innerText = store.name;
+        if (prevCustomLocationCookie === "" || prevCustomLocationCookie === null
+            || customLocation.value !== decodeURIComponent(prevCustomLocationCookie)) {
+            this.setCookie("customLocation", customLocation.value, 1);
+        }
 
-                let cardText = document.createElement("p");
-                cardText.classList.add("card-text", "fw-light", "mb-4");
+        geocoder.addressSearch(decodeURIComponent(this.getCookie("customLocation")), async (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+                let lat = result[0].y
+                let lon = result[0].x
 
-                aTag.appendChild(img);
-
-                cardBody.appendChild(title);
-                cardBody.appendChild(cardText);
-
-                card.appendChild(aTag);
-                card.appendChild(cardBody);
-
-                cardWrap.appendChild(card);
-
-                $("#slick-slide").slick("slickAdd", cardWrap);
+                await this.setMainData(lat, lon);
             }
-        })
+
+            if (status === kakao.maps.services.Status.ZERO_RESULT ||
+                    status === kakao.maps.services.Status.ERROR) {
+                alert("올바른 주소를 입력해주세요.");
+                await this.findCoords();
+                window.location.reload();
+            }
+        });
+    },
+
+    setMainData: async function (lat, lon) {
+        let prevNx = this.getCookie("nx");
+        let prevNy = this.getCookie("ny");
+
+        await this.setCurrentPositionData(lat, lon);
+
+        let currentNx = this.getCookie("nx");
+        let currentNy = this.getCookie("ny");
+        let skyStatus = this.getCookie("skyStatus");
+
+        /*
+            이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
+            즉, 현재 위치 정보가 변경됐거나 쿠키가 만료됐을 경우 API 재호출
+                => 메인 홈페이지 재방문시 로딩 속도 향상
+         */
+        if (prevNx !== currentNx && prevNy !== currentNy) {
+            this.getWeatherInfoWithAPI();
+
+            /*
+                어쩌다 날씨 정보가 불러와지지 않았으면 API로 호출
+             */
+        } else if (skyStatus === null) {
+            this.getWeatherInfoWithAPI();
+        } else {
+            this.getWeatherInfoWithCookies();
+        }
+
+        this.getCateImages();
+        this.getStoresRandomly()
+    },
+
+    setCategoryIdInSessionStorage: function () {
+        const categoryDivList = document.querySelectorAll(".category-div");
+
+        if (categoryDivList !== null) {
+            categoryDivList.forEach((el) => {
+                let categoryId = el.children.namedItem("categoryId").value;
+
+                el.addEventListener("click", () => {
+                    sessionStorage.setItem("cateFromHome", categoryId);
+                    window.location.href = "map";
+                });
+            });
+        }
+    },
+
+    findCoords: async function () {
+        let position = await this.getCoords();
+        this.setCookie("customCheck", false, 1);
+        await this.setMainData(position.coords.latitude, position.coords.longitude);
     },
 
     getCoords: function (options) {
@@ -263,10 +374,7 @@ var main = {
         })
     },
 
-    getSidoName: async function (position) {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
+    getSidoName: async function (lat, lon) {
         let data = await this.getRegionCode(lat, lon);
 
         let sidoName = data.result[0].region_1depth_name;
@@ -290,12 +398,8 @@ var main = {
         })
     },
 
-    setCurrentPositionData: async function (position) {
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-
-        let coords = this.dfs_xy_conv("toXY", lat, lon);
-
+    setCurrentPositionData: async function (lat, lon) {
+        let coords = this.dfsXyConv("toXY", lat, lon);
         let nx = coords["nx"];
         let ny = coords["ny"];
 
@@ -304,7 +408,7 @@ var main = {
         this.setCookie("lat", lat, 1);
         this.setCookie("lon", lon, 1);
 
-        await this.getSidoName(position);
+        await this.getSidoName(lat, lon);
     },
 
     error: function () {
@@ -328,7 +432,7 @@ var main = {
 
             ** 참고 : https://gist.github.com/fronteer-kr/14d7f779d52a21ac2f16
      */
-    dfs_xy_conv: function (code, v1, v2) {
+    dfsXyConv: function (code, v1, v2) {
         var DEGRAD = Math.PI / 180.0;
         var RADDEG = 180.0 / Math.PI;
 

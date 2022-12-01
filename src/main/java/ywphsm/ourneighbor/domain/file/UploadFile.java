@@ -18,6 +18,7 @@ public class UploadFile {
     private Long id;
 
     private String uploadedFileName;
+
     private String storedFileName;
 
     private String uploadImageUrl;
@@ -71,6 +72,4 @@ public class UploadFile {
         this.uploadedFileName = uploadedFileName;
         this.uploadImageUrl = uploadImageUrl;
     }
-
-
 }

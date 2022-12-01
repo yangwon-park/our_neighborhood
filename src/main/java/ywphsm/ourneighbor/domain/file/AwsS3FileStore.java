@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.domain.file;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static ywphsm.ourneighbor.domain.file.FileUtil.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -35,13 +38,11 @@ public class AwsS3FileStore {
     private String dir;
 
     public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
-
-        // 생성될 때 마다 새로운 리스트를 생성해줘야 함
-        List<UploadFile> storeFileResult = new ArrayList<>();
+        List<UploadFile> storeFileResult = new ArrayList<>();           // 생성될 때 마다 새로운 리스트를 생성해줘야 함
 
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
-                storeFileResult.add(storeFile(multipartFile));
+                storeFileResult.add(storeFile(getResizedMultipartFile(multipartFile, multipartFile.getOriginalFilename())));
             }
         }
 
@@ -49,6 +50,9 @@ public class AwsS3FileStore {
     }
 
     public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
+        final String defaultImgUrl = "https://neighbor-build.s3.ap-northeast-2.amazonaws.com/images/defaultImg.png";
+        final String defaultImgName = "defaultImg.png";
+
         if (multipartFile.isEmpty()) {
             return null;
         }
@@ -57,11 +61,11 @@ public class AwsS3FileStore {
         String storeFileName;
         String imageUrl;
 
-        if (originalFileName.equals("default.png")) {
-            storeFileName = "defaultImg.png";
-            imageUrl = "https://neighbor-build.s3.ap-northeast-2.amazonaws.com/images/defaultImg.png";
+        if (originalFileName.equals(defaultImgName)) {
+            storeFileName = defaultImgName;
+            imageUrl = defaultImgUrl;
         } else {
-            storeFileName = FileUtil.createStoreFileName(originalFileName);
+            storeFileName = createStoreFileName(originalFileName);
 
             File uploadFile = convert(multipartFile).orElseThrow(
                     () -> new IllegalArgumentException("전환 실패"));
@@ -72,33 +76,19 @@ public class AwsS3FileStore {
         return new UploadFile(originalFileName, storeFileName, imageUrl);
     }
 
-    private String getImageUrl(File uploadFile, String storeFileName) {
-        String fileName = dir + "/" + storeFileName;
-        String uploadImageUrl = storeFileToS3(uploadFile, fileName);
-
-        removeNewFile(uploadFile);
-
-        return uploadImageUrl;
-    }
-
-    private String storeFileToS3(File uploadFile, String fileName) {
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, uploadFile)
-                .withCannedAcl(CannedAccessControlList.PublicRead);
-
-        amazonS3Client.putObject(putObjectRequest);
-
-        return amazonS3Client.getUrl(bucketName, fileName).toString();
-    }
-
-    private void removeNewFile(File targetFile) {
-        if (targetFile.delete()) {
-            log.info("파일이 삭제됐습니다.");
-        } else {
-            log.info("파일이 삭제되지 못했습니다.");
+    public void deleteFile(String storedFileName) {
+        try {
+            deleteFileInS3(storedFileName);
+            log.info("s3 파일 삭제를 완료했습니다. S3 저장명={}", storedFileName);
+        } catch (Exception e) {
+            log.info("s3 파일 삭제에 실패했습니다.");
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws IOException {
+    /*
+        MultipartFile => File
+     */
+    private Optional<File> convert(MultipartFile multipartFile) throws IOException {
         List<String> profiles = Arrays.stream(environment.getActiveProfiles()).
                 collect(Collectors.toList());
 
@@ -111,18 +101,48 @@ public class AwsS3FileStore {
         File convertFile;
 
         if (!localCheck && !testCheck) {
-            convertFile = new File("/tmp/" + file.getOriginalFilename());
+            convertFile = new File("/tmp/" + multipartFile.getOriginalFilename());
         } else {
-            convertFile = new File(file.getOriginalFilename());
+            convertFile = new File(multipartFile.getOriginalFilename());
         }
 
-        if(convertFile.createNewFile()) {
+        if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
+                fos.write(multipartFile.getBytes());
             }
             return Optional.of(convertFile);
         }
 
         return Optional.empty();
+    }
+
+    private String getImageUrl(File uploadFile, String storeFileName) {
+        String fileName = dir + "/" + storeFileName;
+        String uploadImageUrl = storeFileToS3(uploadFile, fileName);
+
+        removeNewFile(uploadFile);
+
+        return uploadImageUrl;
+    }
+
+    private void removeNewFile(File targetFile) {
+        if (targetFile.delete()) {
+            log.info("파일이 삭제에 성공했습니다.");
+        } else {
+            log.info("파일이 삭제에 실패했습니다.");
+        }
+    }
+
+    private String storeFileToS3(File uploadFile, String fileName) {
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, uploadFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead);
+
+        amazonS3Client.putObject(putObjectRequest);
+
+        return amazonS3Client.getUrl(bucketName, fileName).toString();
+    }
+
+    private void deleteFileInS3(String storedFileName) {
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, dir + "/" + storedFileName));
     }
 }

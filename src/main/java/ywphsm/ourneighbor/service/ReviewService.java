@@ -80,6 +80,9 @@ public class ReviewService {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
         store.reviewDelete(review.getRating());
 
+        review.getFileList().stream()
+                .map(UploadFile::getStoredFileName).forEach(awsS3FileStore::deleteFile);
+
         reviewRepository.delete(review);
 
         return reviewId;

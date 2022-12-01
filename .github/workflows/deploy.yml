@@ -33,7 +33,7 @@ jobs:
       - name: Start MariaDB
         uses: getong/mariadb-action@v1.1
         with:                
-          mariadb version: '10.6.12' # Optional, default value is "latest". The version of the MariaDB
+#           mariadb version: '10.6.12' # Optional, default value is "latest". The version of the MariaDB
 #           mysql database: 'some_test' # Optional, default value is "test". The specified database which will be create
 #           mysql root password: ${{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
           mysql user: 'neighbor' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too

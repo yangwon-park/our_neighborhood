@@ -47,7 +47,7 @@ public class AwsS3FileStore {
 
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
-                storeFileResult.add(storeFile(multipartFile));
+                storeFileResult.add(storeFile(getResizedMultipartFile(multipartFile, multipartFile.getOriginalFilename())));
             }
         }
 

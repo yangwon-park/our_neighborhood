@@ -34,6 +34,7 @@ import static org.geolatte.geom.builder.DSL.*;
 import static org.geolatte.geom.builder.DSL.ring;
 import static org.geolatte.geom.crs.CoordinateReferenceSystems.*;
 import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
+import static ywphsm.ourneighbor.domain.file.FileUtil.getResizedMultipartFile;
 import static ywphsm.ourneighbor.domain.store.distance.Direction.*;
 import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
@@ -85,7 +86,7 @@ public class StoreService {
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
 
-        UploadFile newUploadFile = awsS3FileStore.storeFile(file);
+        UploadFile newUploadFile = awsS3FileStore.storeFile(getResizedMultipartFile(file, file.getOriginalFilename()));
 
         newUploadFile.addStore(store);
 
@@ -158,13 +159,13 @@ public class StoreService {
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
 
-        UploadFile uploadFile = awsS3FileStore.storeFile(file);
+        UploadFile newUploadFile = awsS3FileStore.storeFile(getResizedMultipartFile(file, file.getOriginalFilename()));
 
         if (store.getFile() != null) {
             UploadFile prevFile = store.getFile();
 
             prevFile.updateUploadedFileName(
-                    uploadFile.getStoredFileName(), uploadFile.getUploadedFileName(), uploadFile.getUploadImageUrl()
+                    newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName(), newUploadFile.getUploadImageUrl()
             );
         }
 

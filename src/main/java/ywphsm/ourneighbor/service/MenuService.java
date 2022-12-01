@@ -46,7 +46,6 @@ public class MenuService {
 
     private final FileStore fileStore;
 
-    // 메뉴 등록
     @Transactional
     public Long save(MenuDTO.Add dto) throws IOException, ParseException {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
@@ -60,7 +59,9 @@ public class MenuService {
 
         Menu savedMenu = menuRepository.save(menu);
 
-        // 해쉬태그 저장 로직
+        /*
+            해쉬태그 저장 로직
+         */
         if (!dto.getHashtag().isEmpty()) {
             List<String> hashtagNameList = getHashtagNameList(dto.getHashtag());
 
@@ -70,51 +71,69 @@ public class MenuService {
         return savedMenu.getId();
     }
 
-    // 메뉴 수정
     @Transactional
     public Long update(Long storeId, MenuDTO.Update dto) throws IOException, ParseException {
 
-        // 전달받은 dto => Entity 변환
         Menu entity = dto.toEntity();
 
-        // 수정하고자 하는 메뉴 찾음
         Menu menu = menuRepository.findById(dto.getId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + dto.getId()));
 
-        // 메뉴에 있던 기존 해쉬태그를 불러옴
+        /*
+            메뉴에 있던 기존 해쉬태그를 불러옴
+         */
         List<String> previousHashtagName = menu.getHashtagOfMenuList().stream()
                 .map(hashtagOfMenu -> hashtagOfMenu.getHashtag().getName()).collect(Collectors.toList());
 
-        // 새로 저장할 해쉬태그
+        /*
+            dto로 전달 받은 새로 저장할 해쉬태그
+         */
         String hashtagJson = dto.getHashtag();
 
-        // 기존 메뉴의 해쉬태그가 0개가 아닌데 dto로 들어온 해쉬태그 값이 0개인 경우
-        //      => 해쉬태그를 모두 삭제한 경우
-        // 하나 하나 삭제하기보단 걍 통째로 지우는게 좋을듯
-        // 실제로 이럴 경우는 잘 없다고 봄
         if (hashtagJson != null) {
+
+            /*
+                기존 메뉴의 해쉬태그가 0개가 아닌데 dto로 들어온 해쉬태그 값이 0개인 경우
+                      => 해쉬태그를 모두 삭제한 경우
+                 하나 하나 삭제하기보단 걍 통째로 지우는게 좋을듯
+             */
             if (previousHashtagName.size() != 0 && hashtagJson.isEmpty()) {
                 hashtagOfMenuRepository.deleteByMenu(menu);
             }
 
-            // 해쉬태그에 새로운 값을 추가한 경우
+            /*
+                해쉬태그에 새로운 값을 추가한 경우
+             */
             if (!(hashtagJson.isEmpty())) {
                 List<String> hashtagNameList = getHashtagNameList(hashtagJson);
 
-                // 기존 해쉬태그가 없는 경우 => 그냥 처음 저장하는 과정과 동일
+                /*
+                    기존 해쉬태그가 없는 경우
+                        => 최초 해쉬태그 저장 과정과 동일
+                 */
                 if (previousHashtagName.size() == 0) {
                     saveHashtagLinkedMenu(menu, hashtagNameList);
+
+                /*
+                    기존 해쉬태그가 있는 경우
+                        => 조건에 따라 업데이트 및 삭제
+                 */
                 } else {
                     updateAndDeleteHashtagLinkedMenu(menu, previousHashtagName, hashtagNameList);
                 }
             }
         }
 
-        // 파일이 null이 아닌 경우만 파일 수정
         if (dto.getFile() != null) {
+            
+            /*
+                리사이징을 적용할 것인가 따져봄
+             */
             UploadFile newUploadFile = checkMenuTypeForResizing(dto.getType(), dto.getFile());
 
-            // 기존 메뉴의 업로드 파일 찾음
+            /*
+                기존 메뉴의 업로드 파일 찾음
+             */
             UploadFile prevFile = menu.getFile();
 
             // 메뉴의 저장명, 업로드명 업데이트
@@ -122,7 +141,9 @@ public class MenuService {
                     newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName(), newUploadFile.getUploadImageUrl());
         }
 
-        // 기존 메뉴 업데이트
+        /*
+            기존 메뉴 업데이트
+         */
         menu.updateWithoutImage(entity);
 
         return storeId;

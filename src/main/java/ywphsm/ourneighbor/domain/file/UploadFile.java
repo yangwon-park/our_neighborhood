@@ -71,6 +71,4 @@ public class UploadFile {
         this.uploadedFileName = uploadedFileName;
         this.uploadImageUrl = uploadImageUrl;
     }
-
-
 }

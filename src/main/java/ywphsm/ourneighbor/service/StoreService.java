@@ -54,10 +54,8 @@ public class StoreService {
 
     private final AwsS3FileStore awsS3FileStore;
 
-    // 매장 등록
     @Transactional
     public Long save(StoreDTO.Add dto, List<Long> categoryIdList) {
-
         Store store = dto.toEntity();
         Member member = memberService.findById(dto.getMemberId());
 
@@ -80,19 +78,6 @@ public class StoreService {
 
         return store.getId();
     }
-
-    @Transactional
-    public Long saveMainImage(Long storeId, MultipartFile file) throws IOException {
-        Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
-
-        UploadFile newUploadFile = awsS3FileStore.storeFile(getResizedMultipartFile(file, file.getOriginalFilename()));
-
-        newUploadFile.addStore(store);
-
-        return storeId;
-    }
-
 
     @Transactional
     public Long update(Long storeId, StoreDTO.Update dto, List<Long> categoryIdList) {
@@ -149,15 +134,40 @@ public class StoreService {
         return storeId;
     }
 
-
-    /*
-        메인 이미지 업데이트
-     */
     @Transactional
-    public Long updateMainImage(Long storeId, MultipartFile file) throws IOException {
+    public Long delete(Long storeId) {
 
         Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("해당 매장이 없습니다. id = " + storeId));
+
+        List<MemberOfStore> memberOfStoreList = store.getMemberOfStoreList();
+        memberOfStoreRepository.deleteAll(memberOfStoreList);
+
+        awsS3FileStore.deleteFile(store.getFile().getStoredFileName());
+
+        storeRepository.delete(store);
+
+        return storeId;
+    }
+
+    @Transactional
+    public Long saveMainImage(Long storeId, MultipartFile file) throws IOException {
+        Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
+
+        UploadFile newUploadFile = awsS3FileStore.storeFile(getResizedMultipartFile(file, file.getOriginalFilename()));
+
+        newUploadFile.addStore(store);
+
+        return storeId;
+    }
+
+    @Transactional
+    public Long updateMainImage(Long storeId, MultipartFile file) throws IOException {
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
+
+        awsS3FileStore.deleteFile(store.getFile().getStoredFileName());
 
         UploadFile newUploadFile = awsS3FileStore.storeFile(getResizedMultipartFile(file, file.getOriginalFilename()));
 
@@ -172,9 +182,6 @@ public class StoreService {
         return storeId;
     }
 
-    /*
-        찜 상태 업데이트
-     */
     @Transactional
     public String updateLike(boolean likeStatus, Long memberId, Long storeId) {
         Member member = memberService.findById(memberId);
@@ -206,31 +213,15 @@ public class StoreService {
         return "가게가 찜 등록이 취소되었습니다.";
     }
 
-    @Transactional
-    public Long delete(Long storeId) {
-
-        Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 매장이 없습니다. id = " + storeId));
-
-        List<MemberOfStore> memberOfStoreList = store.getMemberOfStoreList();
-        memberOfStoreRepository.deleteAll(memberOfStoreList);
-        storeRepository.delete(store);
-
-        return storeId;
-    }
-
-    // 매장 하나 조회
     public Store findById(Long storeId) {
         return storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
     }
 
-    // 전체 매장 조회
     public List<Store> findAllStores() {
         return storeRepository.findAllStores();
     }
 
-    // 검색어 포함 매장명 조회
     public List<Store> searchByKeyword(String keyword) {
         return storeRepository.searchByKeyword(keyword);
     }
@@ -292,16 +283,6 @@ public class StoreService {
         }
 
         return false;
-    }
-
-    // 대 중 소 분류 모두가 들어오지 않을 수도 있으므로
-    // null이 아닌 categoryId만 리스트로 반환
-    private List<Category> getNotNullCategoryList(List<Long> categoryIdList) {
-        List<Long> collect = categoryIdList.stream().filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        return collect.stream().map(categoryService::findById)
-                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -373,9 +354,23 @@ public class StoreService {
         }
     }
 
-    // Polygon 생성 메소드
-    private Polygon<G2D> getPolygon(double lat, double lon, double dist) {
 
+    /*
+        대 중 소 분류 모두가 들어오지 않을 수도 있으므로
+        null이 아닌 categoryId만 리스트로 반환
+     */
+    private List<Category> getNotNullCategoryList(List<Long> categoryIdList) {
+        List<Long> collect = categoryIdList.stream().filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return collect.stream().map(categoryService::findById)
+                .collect(Collectors.toList());
+    }
+
+    /*
+        Polygon 생성 메소드
+     */
+    private Polygon<G2D> getPolygon(double lat, double lon, double dist) {
         double sqrt = Math.sqrt(2);
 
         double toCorner = dist * sqrt;

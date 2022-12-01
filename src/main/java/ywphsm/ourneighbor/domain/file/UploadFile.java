@@ -18,6 +18,7 @@ public class UploadFile {
     private Long id;
 
     private String uploadedFileName;
+
     private String storedFileName;
 
     private String uploadImageUrl;

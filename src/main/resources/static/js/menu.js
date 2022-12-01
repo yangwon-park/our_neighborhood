@@ -151,7 +151,7 @@ var main = {
 
         if (file.name === "") {
             formData.delete("file");
-            let defaultFile = new File(["foo"], "default.png", {
+            let defaultFile = new File(["foo"], "defaultImg.png", {
                 type: "image/png"
             })
 

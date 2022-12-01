@@ -74,6 +74,9 @@ public class MenuService {
     @Transactional
     public Long update(Long storeId, MenuDTO.Update dto) throws IOException, ParseException {
 
+        log.info("dto={}", dto);
+        log.info("file={}", dto.getFile().getOriginalFilename());
+
         Menu entity = dto.toEntity();
 
         Menu menu = menuRepository.findById(dto.getId()).orElseThrow(
@@ -127,6 +130,11 @@ public class MenuService {
         if (dto.getFile() != null) {
             
             /*
+                기존 메뉴 이미지 삭제
+             */
+            awsS3FileStore.deleteFile(dto.getStoredFileName());
+            
+            /*
                 리사이징을 적용할 것인가 따져봄
              */
             UploadFile newUploadFile = checkMenuTypeForResizing(dto.getType(), dto.getFile());
@@ -154,26 +162,31 @@ public class MenuService {
         Menu menu = menuRepository.findById(menuId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + menuId));
 
+        awsS3FileStore.deleteFile(menu.getFile().getStoredFileName());
         menuRepository.delete(menu);
 
         return menuId;
     }
-    // 메뉴 하나 조회
+
+    /*
+        메뉴 중복 여부 체크
+     */
+    public boolean checkMenuDuplicate(String name, Store store) {
+        return menuRepository.existsByNameAndStore(name, store);
+    }
 
     public Menu findById(Long menuId) {
         return menuRepository.findById(menuId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + menuId));
     }
 
-    public boolean checkMenuDuplicate(String name, Store store) {
-        return menuRepository.existsByNameAndStore(name, store);
-    }
-
     public List<Menu> findByStoreIdWithoutTypeMenuCaseByOrderByType(Long storeId) {
         return menuRepository.findByStoreIdWithoutTypeMenuCaseByOrderByType(storeId);
     }
 
-    // hashtag save 로직
+    /*
+        메뉴에 연동돼있는 해쉬태그 저장 로직
+     */
     private void saveHashtagLinkedMenu(Menu menu, List<String> hashtagNameList) {
         for (String name : hashtagNameList) {
             boolean duplicateCheck = hashtagRepository.existsByName(name);
@@ -194,25 +207,33 @@ public class MenuService {
         }
     }
 
-    // 해쉬태그 update, delete 로직
+    /*
+        해쉬태그 update, delete 로직
+     */
     private void updateAndDeleteHashtagLinkedMenu(Menu menu, List<String> previousHashtagName, List<String> hashtagNameList) {
         for (String name : hashtagNameList) {
             boolean duplicateCheck = hashtagRepository.existsByName(name);
 
             Hashtag hashtag;
 
-            // 기존에 등록돼있던 해쉬태그인 경우
+            /*
+                기존에 등록돼있던 해쉬태그인 경우
+             */
             if (duplicateCheck) {
                 hashtag = hashtagRepository.findByName(name);
 
                 Boolean duplicateHashtagOfStoreCheck = hashtagOfMenuRepository.existsByHashtagAndMenu(hashtag, menu);
 
-                // 기존에 연관관계가 설정되지 않은 해쉬태그 - 메뉴인 경우
+                /*
+                    기존에 연관관계가 설정되지 않은 해쉬태그 - 메뉴인 경우
+                 */
                 if (!duplicateHashtagOfStoreCheck) {
                     linkHashtagAndMenu(hashtag, menu);
                 }
 
-                // 수정 중, 완전히 새로운 해쉬태그를 만들 경우
+                /*
+                    수정 중, 완전히 새로운 해쉬태그를 만들 경우
+                 */
             } else {
                 HashtagDTO hashtagDTO = HashtagDTO.builder()
                         .name(name)
@@ -223,8 +244,10 @@ public class MenuService {
             }
         }
 
-        // 기존의 해쉬태그 중, 새로운 해쉬태그에 포함되지 않는 경우
-        //      => 해쉬태그를 삭제한 경우
+        /*
+            기존의 해쉬태그 중, 새로운 해쉬태그에 포함되지 않는 경우
+                => 해쉬태그를 삭제한 경우
+         */
         for (String prevName : previousHashtagName) {
             boolean containsCheck = hashtagNameList.contains(prevName);
 

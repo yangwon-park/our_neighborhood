@@ -83,7 +83,6 @@ public class AwsS3FileStore {
         return new UploadFile(originalFileName, storeFileName, imageUrl);
     }
 
-
     private String getImageUrl(File uploadFile, String storeFileName) {
         String fileName = dir + "/" + storeFileName;
         String uploadImageUrl = storeFileToS3(uploadFile, fileName);

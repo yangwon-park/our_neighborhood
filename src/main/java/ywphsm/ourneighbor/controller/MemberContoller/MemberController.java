@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.controller.MemberContoller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -19,6 +20,7 @@ import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final RequestCache requestCache = new HttpSessionRequestCache();
@@ -52,6 +54,11 @@ public class MemberController {
     @GetMapping("/admin/member-role/edit")
     public String memberRoleEdit() {
         return "member/edit/member_role_edit";
+    }
+
+    @GetMapping("/delete-request-cache")
+    public void deleteRequestCache(HttpServletResponse response, HttpServletRequest request) {
+        requestCache.removeRequest(request, response);
     }
 
 }

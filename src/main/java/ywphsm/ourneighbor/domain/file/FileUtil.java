@@ -1,5 +1,6 @@
 package ywphsm.ourneighbor.domain.file;
 
+import lombok.extern.slf4j.Slf4j;
 import org.imgscalr.Scalr;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+@Slf4j
 public class FileUtil {
 
     public static String extractExt(String originalFilename) {
@@ -23,13 +25,13 @@ public class FileUtil {
         return uuid + "." + ext;                            // 최종 저장 명
     }
 
-
     /*
         이미지 리사이징 메소드
      */
     public static MultipartFile getResizedMultipartFile(MultipartFile multipartFile, String originalFileName) throws IOException {
-        final int TARGET_IMAGE_WIDTH = 420;
-        final int TARGET_IMAGE_HEIGHT = 200;
+        log.info("리사이징 동작 = {}", originalFileName);
+        final int TARGET_IMAGE_WIDTH = 450;
+        final int TARGET_IMAGE_HEIGHT = 450;
         final String TARGET_IMAGE_TYPE = "jpg";
 
         BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
@@ -43,6 +45,6 @@ public class FileUtil {
     }
 
     private static BufferedImage resizeImages(BufferedImage originalImage, int width, int height) {
-        return Scalr.resize(originalImage, width, height);
+        return Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, width, height);
     }
 }

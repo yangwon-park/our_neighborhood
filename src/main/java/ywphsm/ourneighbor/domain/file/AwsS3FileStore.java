@@ -69,12 +69,7 @@ public class AwsS3FileStore {
         } else {
             storeFileName = createStoreFileName(originalFileName);
 
-            /*
-                이미지 리사이징
-             */
-            MultipartFile resizedMultipartFile = getResizedMultipartFile(multipartFile, originalFileName);
-
-            File uploadFile = convert(resizedMultipartFile).orElseThrow(
+            File uploadFile = convert(multipartFile).orElseThrow(
                     () -> new IllegalArgumentException("전환 실패"));
 
             imageUrl = getImageUrl(uploadFile, storeFileName);

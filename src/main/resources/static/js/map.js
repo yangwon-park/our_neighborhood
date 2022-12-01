@@ -1,5 +1,10 @@
+import mask from "./mask.js";
+import cookie from "./cookies.js";
+
 var main = {
     init: async function () {
+        mask.loadingWithMask();
+
         let _this = this;
 
         let map = _this.getMap();
@@ -18,20 +23,17 @@ var main = {
     },
 
     getMap: function () {
-        // 지도를 담을 div를 찾음
         var mapContainer = document.getElementById("map");
 
-        // 지도에 관한 옵션 부여
+        /*
+            지도에 관한 옵션 부여
+         */
         var mapOptions = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),  // 중심 좌표
-            level: 1		// 확대 레벨
+            center: new kakao.maps.LatLng(35.1633408, 129.1845632),  // 중심 좌표
+            level: 1		                                         // 확대 레벨
         };
 
-        // 지도 생성
-        var map = new kakao.maps.Map(mapContainer, mapOptions);
-
-        // var zoomControl = new kakao.maps.ZoomControl();
-        // map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+        var map = new kakao.maps.Map(mapContainer, mapOptions);      // 지도 생성
 
         var currentPosition;
         var pointerSrc = "../images/main/blink_pointer.gif",
@@ -42,12 +44,19 @@ var main = {
         // 현재 위치로 맵 중심 정렬 - geolocation (배포시, https 필수)
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
-                var lat = position.coords.latitude,
+
+                let latCookie = cookie.getCookie("lat"),
+                    lonCookie = cookie.getCookie("lon");
+                let lat = position.coords.latitude,
                     lon = position.coords.longitude;
 
-                currentPosition = new kakao.maps.LatLng(lat, lon);
+                if (latCookie === null || lonCookie === null) {
+                    currentPosition = new kakao.maps.LatLng(lat, lon);
+                } else {
+                    currentPosition = new kakao.maps.LatLng(latCookie, lonCookie);
+                }
 
-                var marker = new kakao.maps.Marker({
+                let marker = new kakao.maps.Marker({
                     position: currentPosition,
                     image: pointerImage
                 });
@@ -68,6 +77,8 @@ var main = {
 
             map.setCenter(locPosition, message)
         }
+
+        mask.closeMask();
 
         return map;
     },
@@ -352,8 +363,7 @@ var main = {
                 '</div>')
             // infoWindow.setPosition(marker.getPosition());
 
-            // 마커를 주면, 마커에 인포윈도우가 열림
-            infoWindow.open(map, marker);
+            infoWindow.open(map, marker);           // 마커를 주면, 마커에 인포윈도우가 열림
         }
     },
 
@@ -364,8 +374,10 @@ var main = {
             this.markers[i].setMap(null);
         }
 
-        // 전역 변수로 선언한 아래의 배열들 초기화
-        // 해줘야 매번 검색 시, 새로운 조건으로 검색 가능
+        /*
+            전역 변수로 선언한 아래의 배열들 초기화해줘야
+            매번 검색 시, 새로운 조건으로 검색 가능
+         */
         this.markers = [];
         this.infoWindows = [];
         this.searchResult = [];

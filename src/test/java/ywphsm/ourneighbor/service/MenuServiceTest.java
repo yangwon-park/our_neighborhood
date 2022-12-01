@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import org.springframework.web.context.WebApplicationContext;
+import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
@@ -114,6 +115,7 @@ class MenuServiceTest {
                         .file(file).session(session)
                         .param("storeId", String.valueOf(storeId))
                         .param("name", name)
+                        .param("type", String.valueOf(MenuType.MAIN))
                         .param("price", String.valueOf(price))
                         .param("hashtag", String.valueOf(array)))
                 .andDo(print())
@@ -146,6 +148,7 @@ class MenuServiceTest {
                         .param("id", String.valueOf(menuId))
                         .param("storeId", String.valueOf(storeId))
                         .param("name", "new")
+                        .param("type", String.valueOf(MenuType.MAIN))
                         .param("price", String.valueOf(12000))
                         .with(req -> {
                             req.setMethod("PUT");

@@ -76,7 +76,7 @@ input[type=radio] {
     content: "";
     vertical-align: middle;
     background-size: cover;
-    background: url("../images/icon/white_hamburger.png") no-repeat center center;
+    background: url("../images/icon/white-hamburger.png") no-repeat center center;
 }
 
 .header {

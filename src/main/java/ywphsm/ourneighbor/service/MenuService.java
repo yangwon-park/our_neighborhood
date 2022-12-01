@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
@@ -12,6 +13,7 @@ import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
+import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.hashtag.hashtagofmenu.HashtagOfMenuRepository;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ywphsm.ourneighbor.domain.file.FileUtil.*;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.linkHashtagAndMenu;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
 
@@ -49,7 +52,7 @@ public class MenuService {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + dto.getStoreId()));
 
-        UploadFile newUploadFile = awsS3FileStore.storeFile(dto.getFile());
+        UploadFile newUploadFile = checkMenuTypeForResizing(dto.getType(), dto.getFile());
 
         Menu menu = dto.toEntity(linkedStore);
         newUploadFile.addMenu(menu);
@@ -66,7 +69,6 @@ public class MenuService {
 
         return savedMenu.getId();
     }
-
 
     // 메뉴 수정
     @Transactional
@@ -110,15 +112,14 @@ public class MenuService {
 
         // 파일이 null이 아닌 경우만 파일 수정
         if (dto.getFile() != null) {
-            // 새로 업로드한 파일 UploadFile로 생성
-            UploadFile uploadFile = awsS3FileStore.storeFile(dto.getFile());
+            UploadFile newUploadFile = checkMenuTypeForResizing(dto.getType(), dto.getFile());
 
             // 기존 메뉴의 업로드 파일 찾음
             UploadFile prevFile = menu.getFile();
 
             // 메뉴의 저장명, 업로드명 업데이트
             prevFile.updateUploadedFileName(
-                    uploadFile.getStoredFileName(), uploadFile.getUploadedFileName(), uploadFile.getUploadImageUrl());
+                    newUploadFile.getStoredFileName(), newUploadFile.getUploadedFileName(), newUploadFile.getUploadImageUrl());
         }
 
         // 기존 메뉴 업데이트
@@ -214,5 +215,21 @@ public class MenuService {
 
     public List<String> findMenuImg(Long storeId) {
         return menuRepository.findMenuImg(storeId);
+    }
+    
+    /*
+        MenuType != 메뉴판인 경우에만 리사이징 적용
+     */
+    private UploadFile checkMenuTypeForResizing(MenuType type, MultipartFile file) throws IOException {
+        UploadFile newUploadFile;
+
+        if (!type.equals(MenuType.MENU)) {
+            MultipartFile resizedMultipartFile = getResizedMultipartFile(file, file.getOriginalFilename());
+            newUploadFile = awsS3FileStore.storeFile(resizedMultipartFile);
+        } else {
+            newUploadFile = awsS3FileStore.storeFile(file);
+        }
+
+        return newUploadFile;
     }
 }

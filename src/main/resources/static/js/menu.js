@@ -55,8 +55,6 @@ var main = {
     },
 
     check: function () {
-        mask.loadingWithMask();
-
         const name = document.getElementById("name");
         const price = document.getElementById("price");
         const type = document.getElementsByName("type");
@@ -66,8 +64,6 @@ var main = {
         const priceValid = document.getElementById("menu-price-valid");
         const typeValid = document.getElementById("menu-type-valid");
         const featureValid = document.getElementById("menu-feature-valid");
-
-        const storeId = document.getElementById("storeId").value;
 
         name.classList.remove("valid-custom");
         price.classList.remove("valid-custom");
@@ -95,8 +91,12 @@ var main = {
             }
         }
 
+        const storeId = document.getElementById("storeId").value;
+
         if (name.value !== "" && storeId !== "" && price.value !== ""
             && typeCheck === true && featureCheck === true && numRegCheck) {
+            mask.loadingWithMask();
+
             axios({
                 method: "get",
                 url: "/seller/menu/check",
@@ -160,23 +160,10 @@ var main = {
     },
 
     save: function () {
-        mask.loadingWithMask();
         const menuForm = document.getElementById("menu-add-form");
-
         const formData = new FormData(menuForm);
 
         this.createDefaultImg(formData);
-
-        // FormData의 key 확인
-        for (let key of formData.keys()) {
-            console.log(key);
-        }
-
-        // FormData의 value 확인
-        for (let value of formData.values()) {
-            console.log(value);
-        }
-
 
         axios({
             headers: {
@@ -197,31 +184,59 @@ var main = {
     },
 
     update: function (btnId) {
-        mask.loadingWithMask();
         const id = btnId.substring(13);
 
-        const menuForm = document.getElementById("menu-edit-form" + id);
-        const storeIdVal = document.getElementById("storeId").value;
+        const menuUpdateFormEls = {
+            name: document.getElementById("menu-edit-name" + id),
+            price: document.getElementById("menu-edit-price" + id)
+        }
 
-        let formData = new FormData(menuForm);
-        this.createDefaultImg(formData);
+        const menuUpdateFormValids = {
+            nameValid: document.getElementById("menu-edit-name" + id + "-valid"),
+            priceValid: document.getElementById("menu-edit-price" + id + "-valid")
+        }
 
-        axios({
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Access-Control-Allow_Origin": "*"
-            },
-            method: "put",
-            url: "/seller/menu/" + storeIdVal,
-            data: formData
-        }).then((resp) => {
-            alert("메뉴 정보 수정이 완료됐습니다.");
-            window.location.reload();
-            mask.closeMask();
-        }).catch((error) => {
-            console.log(error);
-            mask.closeMask();
-        })
+        for (const el in menuUpdateFormEls) {
+            menuUpdateFormEls[el].classList.remove("valid-custom");
+        }
+
+        for (const el in menuUpdateFormValids) {
+            validation.removeValidation(menuUpdateFormValids[el]);
+        }
+
+        if (menuUpdateFormEls["name"].value !== "" && menuUpdateFormEls["price"].value !== "") {
+            const menuForm = document.getElementById("menu-edit-form" + id);
+            const storeIdVal = document.getElementById("storeId").value;
+
+            let formData = new FormData(menuForm);
+            this.createDefaultImg(formData);
+
+            mask.loadingWithMask();
+
+            axios({
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Access-Control-Allow_Origin": "*"
+                },
+                method: "put",
+                url: "/seller/menu/" + storeIdVal,
+                data: formData
+            }).then((resp) => {
+                alert("메뉴 정보 수정이 완료됐습니다.");
+                window.location.reload();
+                mask.closeMask();
+            }).catch((error) => {
+                console.log(error);
+                mask.closeMask();
+            })
+        }
+
+        for (const el in menuUpdateFormEls) {
+            if (menuUpdateFormEls[el].value === "") {
+                menuUpdateFormEls[el].classList.add("valid-custom");
+                validation.addValidation(menuUpdateFormValids[el + "Valid"], "필수값입니다.");
+            }
+        }
     },
 
     delete: function (btnId) {
@@ -229,8 +244,6 @@ var main = {
         const id = btnId.substring(15);
         const storeId = document.getElementById("storeId").value;
         const menuId = document.getElementById("menuId" + id).value;
-
-        console.log(menuId);
 
         axios({
             method: "delete",

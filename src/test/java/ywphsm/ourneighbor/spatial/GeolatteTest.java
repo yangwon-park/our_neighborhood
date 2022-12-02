@@ -57,10 +57,4 @@ public class GeolatteTest {
 
         assertThat(refineDist).isEqualTo(3);
     }
-
-    @Test
-    @DisplayName("거리")
-    void test() {
-
-    }
 }

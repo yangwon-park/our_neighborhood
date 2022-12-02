@@ -27,7 +27,7 @@ class JTSTest {
 
     @Test
     @DisplayName("WKT 읽기")
-    void wktReader_test() throws ParseException {
+    void wktReaderTest() throws ParseException {
         String pointFormat = String.format("POINT(%f %f)", 35.1710366410643, 129.175759994618);
         String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156);
         String polygonFormat = String.format("POLYGON((%f %f, %f %f, %f %f))", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156, 35.182416023937336, 129.20790463400292);

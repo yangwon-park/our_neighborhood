@@ -11,7 +11,6 @@ class ProfileControllerUnitTest {
 
     @Test
     void getRealProfile() {
-
         String expectedProfile = "real";
         MockEnvironment env = new MockEnvironment();
 
@@ -28,7 +27,6 @@ class ProfileControllerUnitTest {
 
     @Test
     void noRealProfile() {
-
         String expectedProfile = "oauth";
         MockEnvironment env = new MockEnvironment();
 
@@ -39,7 +37,6 @@ class ProfileControllerUnitTest {
 
         String profile = controller.profile();
 
-        // 첫번째 profile인 oauth가 조회됨
         assertThat(profile).isEqualTo(expectedProfile);
     }
 
@@ -54,5 +51,4 @@ class ProfileControllerUnitTest {
 
         assertThat(profile).isEqualTo(expectedProfile);
     }
-
 }

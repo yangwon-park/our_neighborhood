@@ -5,7 +5,6 @@ var main = {
     init: function () {
         let _this = this;
 
-        // mask.loadingWithMask();
         if (document.getElementById("category-main")) {
             const categoryMain = document.getElementById("category-main").value;
             const categoryMid = document.getElementById("category-mid").value;
@@ -14,7 +13,7 @@ var main = {
             categoryList.push(categoryMain);
             categoryList.push(categoryMid);
             categoryList.push(categorySub);
-            console.log("categoryList = ", categoryList)
+
             _this.getCategories(categoryList);
         } else {
             _this.getCategories();
@@ -62,10 +61,7 @@ var main = {
     },
 
     save: function () {
-        mask.loadingWithMask();
-
-        // input 태그
-        const els = {
+        const storeFormEls = {
             name: document.getElementById("name"),
             zipcode: document.getElementById("zipcode"),
             roadAddr: document.getElementById("roadAddr"),
@@ -75,7 +71,7 @@ var main = {
         }
 
         // input 아래의 validation을 담을 div 태그
-        const valids = {
+        const storeFormValids = {
             nameValid: document.getElementById("store-name-valid"),
             zipcodeValid: document.getElementById("store-zipcode-valid"),
             roadAddrValid: document.getElementById("store-roadAddr-valid"),
@@ -87,26 +83,28 @@ var main = {
         const cateValid = document.getElementById("store-category-valid");
         const mainCateVal = document.getElementById("main-cate").options
             [document.getElementById("main-cate").selectedIndex].value;
-        const storeForm = document.getElementById("store-add-form");
 
-        const formData = new FormData(storeForm);
-
-        for (const el in els) {
-            els[el].classList.remove("valid-custom");
+        for (const el in storeFormEls) {
+            storeFormEls[el].classList.remove("valid-custom");
         }
 
-        for (const v in valids) {
-            validation.removeValidation(valids[v]);
+        for (const v in storeFormValids) {
+            validation.removeValidation(storeFormValids[v]);
         }
 
         validation.removeValidation(cateValid);
 
         this.categoryLayerEl.main.classList.remove("input-error-border");
 
-        if (els["name"].value !== "" && els["zipcode"].value !== ""
-            && els["roadAddr"].value !== "" && els["numberAddr"].value !== ""
-            && els["openingTime"].value !== "" && els["closingTime"].value !== ""
+        if (storeFormEls["name"].value !== "" && storeFormEls["zipcode"].value !== ""
+            && storeFormEls["roadAddr"].value !== "" && storeFormEls["numberAddr"].value !== ""
+            && storeFormEls["openingTime"].value !== "" && storeFormEls["closingTime"].value !== ""
             && mainCateVal !== "") {
+
+            const storeForm = document.getElementById("store-add-form");
+            const formData = new FormData(storeForm);
+
+            mask.loadingWithMask();
 
             axios({
                 method: "post",
@@ -123,10 +121,10 @@ var main = {
             });
         }
 
-        for (const el in els) {
-            if (els[el].value === "") {
-                els[el].classList.add("valid-custom");
-                validation.addValidation(valids[el + "Valid"], "위의 값들은 필수입니다.");
+        for (const el in storeFormEls) {
+            if (storeFormEls[el].value === "") {
+                storeFormEls[el].classList.add("valid-custom");
+                validation.addValidation(storeFormValids[el + "Valid"], "위의 값들은 필수입니다.");
             }
         }
 
@@ -162,10 +160,6 @@ var main = {
         const cateValid = document.getElementById("store-category-valid");
         const mainCateVal = document.getElementById("main-cate").options
             [document.getElementById("main-cate").selectedIndex].value;
-        const storeForm = document.getElementById("store-edit-form");
-
-        const formData = new FormData(storeForm);
-        const storeIdVal = document.getElementById("storeId").value;
 
         for (const el in els) {
             els[el].classList.remove("valid-custom");
@@ -183,6 +177,11 @@ var main = {
             && els["roadAddr"].value !== "" && els["numberAddr"].value !== ""
             && els["openingTime"].value !== "" && els["closingTime"].value !== ""
             && mainCateVal !== "") {
+
+            const storeForm = document.getElementById("store-edit-form");
+            const formData = new FormData(storeForm);
+            const storeIdVal = document.getElementById("storeId").value;
+
 
             axios({
                 method: "put",

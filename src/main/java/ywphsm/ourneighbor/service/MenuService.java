@@ -73,10 +73,6 @@ public class MenuService {
 
     @Transactional
     public Long update(Long storeId, MenuDTO.Update dto) throws IOException, ParseException {
-
-        log.info("dto={}", dto);
-        log.info("file={}", dto.getFile().getOriginalFilename());
-
         Menu entity = dto.toEntity();
 
         Menu menu = menuRepository.findById(dto.getId()).orElseThrow(

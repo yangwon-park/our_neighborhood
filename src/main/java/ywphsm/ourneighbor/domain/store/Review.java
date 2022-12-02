@@ -1,6 +1,7 @@
-package ywphsm.ourneighbor.domain;
+package ywphsm.ourneighbor.domain.store;
 
 import lombok.*;
+import ywphsm.ourneighbor.domain.BaseEntity;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -15,7 +16,7 @@ import java.util.List;
 })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Review extends BaseEntity{
+public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue

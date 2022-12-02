@@ -2,7 +2,7 @@ package ywphsm.ourneighbor.domain.member;
 
 import lombok.*;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
-import ywphsm.ourneighbor.domain.Review;
+import ywphsm.ourneighbor.domain.store.Review;
 import ywphsm.ourneighbor.domain.store.RequestAddStore;
 
 import javax.persistence.*;

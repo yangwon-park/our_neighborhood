@@ -26,7 +26,8 @@ public class RequestAddStoreRepositoryImpl implements RequestAddStoreRepositoryC
                         QRequestAddStore.requestAddStore.address.zipcode,
                         QRequestAddStore.requestAddStore.address.roadAddr,
                         QRequestAddStore.requestAddStore.address.numberAddr,
-                        QMember.member.email
+                        QMember.member.email,
+                        QRequestAddStore.requestAddStore.content
                 ))
                 .from(QRequestAddStore.requestAddStore)
                 .leftJoin(QRequestAddStore.requestAddStore.member, QMember.member)

@@ -39,9 +39,13 @@
                     <span class="badge bg-dark my-auto ms-3">지번</span>
                     <span th:text="*{request.numberAddr}"></span>
                 </div>
-                <div class="col-12 my-1" style="font-size: 0.8rem">
+                <div class="col-12 my-1">
                     <span>회원 이메일</span>
                     <span th:text="*{request.email}"></span>
+                </div>
+                <div class="col-12 my-1">
+                    <span>가게 설명</span>
+                    <span th:text="*{request.content}"></span>
                 </div>
                 <div class="col-12 my-1">
                     <button th:id="|request-delete-btn${request.id}|"

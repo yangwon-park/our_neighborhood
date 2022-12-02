@@ -13,9 +13,6 @@ var main = {
         axios({
             method: "get",
             url: "/delete-request-cache",
-        }).then((resp) => {
-            // alert("캐시 삭제")
-            // console.log(resp)
         }).catch((error) => {
             console.log(error)
         });

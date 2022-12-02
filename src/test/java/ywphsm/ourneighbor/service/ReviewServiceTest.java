@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ywphsm.ourneighbor.domain.*;
+import ywphsm.ourneighbor.domain.store.Review;
 
 import java.io.FileInputStream;
 import java.util.List;

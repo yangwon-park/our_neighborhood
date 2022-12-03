@@ -15,7 +15,7 @@ public class CustomMultipartFile implements MultipartFile {
     private final byte[] bytes;
     private final String name;
     private final String originalFilename;
-    private final String contentType;
+    private String contentType;
     private final boolean isEmpty;
     private final long size;
 
@@ -24,6 +24,14 @@ public class CustomMultipartFile implements MultipartFile {
         this.name = name;
         this.originalFilename = originalFilename;
         this.contentType = contentType;
+        this.isEmpty = isEmpty;
+        this.size = size;
+    }
+
+    public CustomMultipartFile(byte[] bytes, String name, String originalFilename, boolean isEmpty, long size) {
+        this.bytes = bytes;
+        this.name = name;
+        this.originalFilename = originalFilename;
         this.isEmpty = isEmpty;
         this.size = size;
     }

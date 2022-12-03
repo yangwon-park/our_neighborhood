@@ -152,7 +152,7 @@ var main = {
         if (file.name === "") {
             formData.delete("file");
             let defaultFile = new File(["foo"], "defaultImg.png", {
-                type: "image/png"
+                type: "image/png",
             })
 
             formData.append("file", defaultFile);
@@ -165,6 +165,16 @@ var main = {
 
         this.createDefaultImg(formData);
 
+        // FormData의 key 확인
+        for (let key of formData.keys()) {
+            console.log(key);
+        }
+
+        // FormData의 value 확인
+        for (let value of formData.values()) {
+            console.log(value);
+        }
+
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -175,7 +185,7 @@ var main = {
             data: formData
         }).then((resp) => {
             alert("메뉴가 등록됐습니다.")
-            window.location.reload();
+            // window.location.reload();
             mask.closeMask();
         }).catch((error) => {
             console.log(error)

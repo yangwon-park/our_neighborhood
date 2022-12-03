@@ -22,8 +22,10 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.*;
 import static ywphsm.ourneighbor.domain.file.FileUtil.*;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.linkHashtagAndMenu;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
@@ -50,6 +52,8 @@ public class MenuService {
     public Long save(MenuDTO.Add dto) throws IOException, ParseException {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + dto.getStoreId()));
+
+        log.info("dto={}", dto.getFile().getOriginalFilename());
 
         UploadFile newUploadFile = checkMenuTypeForResizing(dto.getType(), dto.getFile());
 
@@ -263,7 +267,9 @@ public class MenuService {
     private UploadFile checkMenuTypeForResizing(MenuType type, MultipartFile file) throws IOException {
         UploadFile newUploadFile;
 
-        if (!type.equals(MenuType.MENU)) {
+        final String defaultFileName = "defaultImg.png";
+
+        if (!type.equals(MenuType.MENU) && !(requireNonNull(file.getOriginalFilename()).equals(defaultFileName))) {
             MultipartFile resizedMultipartFile = getResizedMultipartFile(file, file.getOriginalFilename());
             newUploadFile = awsS3FileStore.storeFile(resizedMultipartFile);
         } else {

@@ -77,6 +77,12 @@ public class AwsS3FileStore {
     }
 
     public void deleteFile(String storedFileName) {
+        final String defaultImgName ="defaultImg.png";
+        if (storedFileName.equals(defaultImgName)) {
+            log.info("기본 이미지는 삭제하지 않습니다.");
+            return;
+        }
+
         try {
             deleteFileInS3(storedFileName);
             log.info("s3 파일 삭제를 완료했습니다. S3 저장명={}", storedFileName);

@@ -5,25 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.service.MemberService;
-import ywphsm.ourneighbor.service.StoreService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 class JTSTest {
-
-    @Autowired
-    StoreService storeService;
-
-    @Autowired
-    MemberService memberService;
 
     @Test
     @DisplayName("WKT 읽기")

@@ -178,6 +178,14 @@ dependencies {
 	 */
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	/*
+		Testcontainers
+		https://mvnrepository.com/artifact/org.testcontainers/testcontainers
+	 	https://mvnrepository.com/artifact/org.testcontainers/junit-jupiter
+	 */
+	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.6'
+	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.17.6'
 }
 
 //tasks.named('test') {

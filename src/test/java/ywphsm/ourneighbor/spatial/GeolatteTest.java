@@ -12,7 +12,6 @@ import static org.geolatte.geom.builder.DSL.*;
 import static org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84;
 
 @ActiveProfiles("test")
-@Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GeolatteTest {
 

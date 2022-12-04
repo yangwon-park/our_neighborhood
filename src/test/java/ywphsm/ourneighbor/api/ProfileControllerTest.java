@@ -23,7 +23,6 @@ public class ProfileControllerTest {
 
     @Test
     void getProfileWithoutAuthentication() {
-
         String expected = "local";
 
         ResponseEntity<String> response = restTemplate.getForEntity("/profile", String.class);

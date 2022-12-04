@@ -172,6 +172,7 @@ public class Store extends BaseEntity {
         this.phoneNumber = store.getPhoneNumber();
         this.lat = store.getLat();
         this.lon = store.getLon();
+        this.point = store.getPoint();
         this.businessTime = store.getBusinessTime();
         this.notice = store.getNotice();
         this.intro = store.getIntro();

@@ -2,11 +2,9 @@ package ywphsm.ourneighbor.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.env.MockEnvironment;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.*;
 
-@ActiveProfiles("test")
 class ProfileControllerUnitTest {
 
     @Test
@@ -19,7 +17,6 @@ class ProfileControllerUnitTest {
         env.addActiveProfile("real-db");
 
         ProfileController controller = new ProfileController(env);
-
         String profile = controller.profile();
 
         assertThat(profile).isEqualTo(expectedProfile);

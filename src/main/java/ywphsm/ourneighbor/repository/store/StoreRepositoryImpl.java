@@ -140,6 +140,9 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .fetch();
     }
 
+    /*
+        BooleanExpression
+     */
     private BooleanExpression stContains(Geometry<?> polygon) {
         return GeometryExpressions
                 .asGeometry(polygon)

@@ -75,7 +75,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
      */
     @Override
     public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, Geometry<G2D> polygon, Pageable pageable) {
-
         BooleanBuilder builder = new BooleanBuilder();
 
         buildHashtagIdEq(hashtagIdList, builder);

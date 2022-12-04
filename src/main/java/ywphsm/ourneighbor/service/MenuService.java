@@ -128,8 +128,6 @@ public class MenuService {
         }
 
         if (dto.getFile() != null) {
-            log.info("dto={}", dto.getStoredFileName());
-
             /*
                 기존 메뉴 이미지 삭제
              */

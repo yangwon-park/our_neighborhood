@@ -3,8 +3,6 @@ package ywphsm.ourneighbor.repository.store;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometry;
 import org.geolatte.geom.Polygon;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import ywphsm.ourneighbor.domain.store.Store;

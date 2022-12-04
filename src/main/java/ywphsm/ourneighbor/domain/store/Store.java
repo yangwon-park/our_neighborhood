@@ -120,7 +120,7 @@ public class Store extends BaseEntity {
      */
     @Builder
     public Store(Long id, String name, Double lat, Double lon,
-                 Point point, String phoneNumber, BusinessTime businessTime, String notice, String intro,
+                 Point<G2D> point, String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address,
                  ParkAvailable park, String parkDetail, String homePage,
                  List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,

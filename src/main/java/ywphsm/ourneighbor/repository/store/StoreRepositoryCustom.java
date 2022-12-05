@@ -22,7 +22,8 @@ public interface StoreRepositoryCustom {
 
     Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, Geometry<G2D> polygon, Pageable pageable);
 
+    Long countStoreInPolygon(Polygon<G2D> polygon);
+
     List<SimpleSearchStoreDTO> searchTop7Random(Polygon<G2D> polygon, Pageable pageable);
 
-    Long countStoreInPolygon(Polygon<G2D> polygon);
 }

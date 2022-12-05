@@ -12,15 +12,19 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import ywphsm.ourneighbor.domain.category.Category;
+import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.distance.Location;
+import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,11 +32,11 @@ import static org.assertj.core.api.Assertions.*;
 import static org.geolatte.geom.builder.DSL.*;
 import static org.geolatte.geom.builder.DSL.ring;
 import static org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84;
+import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
 import static ywphsm.ourneighbor.domain.store.distance.Direction.*;
 import static ywphsm.ourneighbor.domain.store.distance.Direction.SOUTHEAST;
 import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
-@Slf4j
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -43,6 +47,9 @@ public class StoreRepositoryTest {
 
     @Autowired
     StoreRepository storeRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @BeforeEach
     void beforeEach() {
@@ -57,6 +64,7 @@ public class StoreRepositoryTest {
                 .lon(129.175759994618)
                 .point(point(WGS84, g(129.175759994618, 35.1710366410643)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store2 = Store.builder()
@@ -66,6 +74,7 @@ public class StoreRepositoryTest {
                 .lon(129.196027224944)
                 .point(point(WGS84, g(129.196027224944, 35.174816681475)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store3 = Store.builder()
@@ -75,6 +84,7 @@ public class StoreRepositoryTest {
                 .lon(129.175206373038)
                 .point(point(WGS84, g(129.175206373038, 35.173114068165)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store4 = Store.builder()
@@ -84,6 +94,7 @@ public class StoreRepositoryTest {
                 .lon(129.196552443575)
                 .point(point(WGS84, g(129.196552443575, 35.1746804545724)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store5 = Store.builder()
@@ -93,6 +104,7 @@ public class StoreRepositoryTest {
                 .lon(129.169832029527)
                 .point(point(WGS84, g(129.169832029527, 35.176595357839)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store6 = Store.builder()
@@ -102,6 +114,7 @@ public class StoreRepositoryTest {
                 .lon(129.172098256716)
                 .point(point(WGS84, g(129.172098256716, 35.1712314290717)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store7 = Store.builder()
@@ -111,6 +124,7 @@ public class StoreRepositoryTest {
                 .lon(129.162621202408)
                 .point(point(WGS84, g(129.162621202408, 35.1637214604028)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store8 = Store.builder()
@@ -120,6 +134,7 @@ public class StoreRepositoryTest {
                 .lon(123.48)
                 .point(point(WGS84, g(123.48, 33.48)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store9 = Store.builder()
@@ -129,6 +144,7 @@ public class StoreRepositoryTest {
                 .lon(123.49)
                 .point(point(WGS84, g(123.49, 33.49)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Store store10 = Store.builder()
@@ -138,6 +154,7 @@ public class StoreRepositoryTest {
                 .lon(123.50)
                 .point(point(WGS84, g(123.50, 33.50)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
+                .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         UploadFile uploadFile1 = new UploadFile("업로드명1", "저장명1", "URL1");
@@ -172,6 +189,39 @@ public class StoreRepositoryTest {
         uploadFile8.addStore(store8);
         uploadFile9.addStore(store9);
         uploadFile10.addStore(store10);
+
+        Category category1 = Category.builder()
+                .name("카테고리1")
+                .depth(1L)
+                .categoryOfStoreList(new ArrayList<>())
+                .build();
+
+        Category category2 = Category.builder()
+                .name("카테고리2")
+                .depth(1L)
+                .categoryOfStoreList(new ArrayList<>())
+                .build();
+
+        Category category3 = Category.builder()
+                .name("카테고리3")
+                .depth(1L)
+                .categoryOfStoreList(new ArrayList<>())
+                .build();
+
+        tem.persist(category1);
+        tem.persist(category2);
+        tem.persist(category3);
+
+        linkCategoryAndStore(category1, store1);
+        linkCategoryAndStore(category2, store2);
+        linkCategoryAndStore(category2, store3);
+        linkCategoryAndStore(category2, store4);
+        linkCategoryAndStore(category3, store5);
+        linkCategoryAndStore(category3, store6);
+        linkCategoryAndStore(category3, store7);
+        linkCategoryAndStore(category1, store8);
+        linkCategoryAndStore(category1, store9);
+        linkCategoryAndStore(category1, store10);
     }
 
     @Test
@@ -220,7 +270,7 @@ public class StoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("매장 삭제")
+    @DisplayName("매장 삭제시 IsEmpty 체크")
     void should_IsEmpty_When_DeleteStore() {
         Store store = Store.builder()
                 .name("테스트 매장 4")
@@ -240,7 +290,7 @@ public class StoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("모든 매장 조회")
+    @DisplayName("모든 매장 조회시 개수 체크")
     void should_FindAllStores() {
         List<Store> storeList = storeRepository.findAllStores();
 
@@ -256,28 +306,44 @@ public class StoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("범위 내에 존재하는 매장의 개수 반환")
-    void should_ReturnCount_When_InPolygon() {
+    @DisplayName("범위 내에 존재하는 매장의 개수 체크")
+    void should_ReturnStoresCount_When_InPolygon() {
         Long cnt = storeRepository.countStoreInPolygon(getPolygon());
 
         assertThat(cnt).isEqualTo(7);
     }
 
     @Test
-    @DisplayName("범위 내 랜덤으로 7개 조회")
+    @DisplayName("범위 내에 존재하는 매장을 랜덤으로 7개 조회")
     void should_FindStores_When_InPolygonAndTop7() {
-        PageRequest pageRequest = PageRequest.of(0, 7);
+        final int size = 7;
+
+        PageRequest pageRequest = PageRequest.of(0, size);
         List<SimpleSearchStoreDTO> storeList = storeRepository.searchTop7Random(getPolygon(), pageRequest);
 
-        assertThat(storeList.size()).isEqualTo(7);
+        assertThat(storeList.size()).isEqualTo(size);
     }
 
-    private static Polygon<G2D> getPolygon() {
-        double dist = 3;
-        double toCorner = dist * (Math.sqrt(2));
+    @Test
+    @DisplayName("범위 내 존재하는 매장을 카테고리로 조회")
+    void should_FindStores_When_InPolygonAndByCategoryId() {
+        Long categoryId = categoryRepository.findByName("카테고리1").getId();
+        List<Store> storeList = storeRepository.searchTopNByCategories(getPolygon(), categoryId);
 
-        double lat = 35.1633408;
-        double lon = 129.1845632;
+        /*
+            카테고리1인 store는 총 4개
+            이 중 범위 내에 포함되는 store는 1개 (store1)
+         */
+        assertThat(storeList.size()).isEqualTo(1);
+    }
+
+
+
+    private static Polygon<G2D> getPolygon() {
+        final double dist = 3;
+        final double toCorner = dist * (Math.sqrt(2));
+        final double lat = 35.1633408;
+        final double lon = 129.1845632;
 
         Location northEast = calculatePoint(lat, lon, toCorner, NORTHEAST.getAngle());
         Location northWest = calculatePoint(lat, lon, toCorner, NORTHWEST.getAngle());

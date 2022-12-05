@@ -49,7 +49,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .innerJoin(categoryOfStore.category, category)
                 .innerJoin(store.file, uploadFile)
                 .fetchJoin()
-                .where(categoryOfStore.category.id.eq(categoryId), categoryOfStore.store.id.eq(store.id))
+                .where(categoryOfStore.category.id.eq(categoryId))
                 .fetch();
     }
 

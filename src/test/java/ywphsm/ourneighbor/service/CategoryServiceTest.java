@@ -53,7 +53,6 @@ class CategoryServiceTest {
     @WithMockUser(username = "admin", roles = "ADMIN")
     @DisplayName("카테고리 등록")
     void save() throws Exception {
-
         String name = "test";
         Long parentId = 5L;
 

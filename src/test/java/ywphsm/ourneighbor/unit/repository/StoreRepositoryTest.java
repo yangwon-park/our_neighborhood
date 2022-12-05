@@ -308,8 +308,8 @@ public class StoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("매장 삭제시 IsEmpty 체크")
-    void should_IsEmpty_When_DeleteStore() {
+    @DisplayName("매장 삭제시 IsEmpty 확인")
+    void should_IsEmpty_When_DeleteAStore() {
         Store store = Store.builder()
                 .name("테스트 매장 4")
                 .address(new Address("테스트 로", "11111", "48017", "상세 주소"))

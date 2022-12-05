@@ -53,8 +53,6 @@ public class MenuService {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + dto.getStoreId()));
 
-        log.info("dto={}", dto.getFile().getOriginalFilename());
-
         UploadFile newUploadFile = checkMenuTypeForResizing(dto.getType(), dto.getFile());
 
         Menu menu = dto.toEntity(linkedStore);

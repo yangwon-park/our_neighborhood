@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.spatial;
+package ywphsm.ourneighbor.unit.spatial;
 
 import org.geolatte.geom.*;
 import org.geolatte.geom.codec.Wkt;

@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.spatial;
+package ywphsm.ourneighbor.unit.spatial;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

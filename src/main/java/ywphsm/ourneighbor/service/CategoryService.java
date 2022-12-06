@@ -86,6 +86,7 @@ public class CategoryService {
 
     /*
         모든 카테고리들을 조건에 맞게 정렬하여 보여주는 쿼리
+        카테고리 등록 시, 카테고리 리스트 보여줄 때 사용
      */
     public List<CategoryDTO.Detail> findAllByOrderByDepthAscParentIdAscNameAsc() {
         return categoryRepository.findAllByOrderByDepthAscParentIdAscNameAsc().stream()

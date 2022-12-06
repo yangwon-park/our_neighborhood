@@ -7,6 +7,4 @@ import java.util.List;
 public interface HashtagOfMenuRepositoryCustom {
 
     List<HashtagOfMenu> findAllHashtagByMenuId(Long menuId);
-
-    Long deleteByHashtagIdByMenuId(Long menuId);
 }

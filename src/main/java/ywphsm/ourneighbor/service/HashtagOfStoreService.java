@@ -29,6 +29,4 @@ public class HashtagOfStoreService {
     public Long deleteHashtagOfStore(Long hashtagId, Long storeId) {
         return hashtagOfStoreRepository.deleteByHashtagIdByStoreId(hashtagId, storeId);
     }
-
-
 }

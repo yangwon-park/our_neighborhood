@@ -49,7 +49,8 @@ public class HashtagService {
             newHashtag = save(dto);
 
         } else {
-            newHashtag = hashtagRepository.findByName(dto.getName());
+            newHashtag = hashtagRepository.findByName(dto.getName())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
         }
 
         linkHashtagAndStore(newHashtag, findStore);
@@ -84,6 +85,7 @@ public class HashtagService {
     }
 
     public Hashtag findByName(String name) {
-        return hashtagRepository.findByName(name);
+        return hashtagRepository.findByName(name)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
     }
 }

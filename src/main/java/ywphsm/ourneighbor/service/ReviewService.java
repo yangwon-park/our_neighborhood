@@ -134,7 +134,8 @@ public class ReviewService {
 
                 newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
             } else {
-                newHashtag = hashtagRepository.findByName(name);
+                newHashtag = hashtagRepository.findByName(name)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
             }
 
             linkHashtagAndStore(newHashtag, store);

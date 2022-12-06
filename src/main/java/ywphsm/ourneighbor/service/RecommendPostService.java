@@ -3,7 +3,6 @@ package ywphsm.ourneighbor.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +14,7 @@ import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.recommendpost.RecommendPostRepository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.getHashtagNameList;
 
@@ -50,7 +47,8 @@ public class RecommendPostService {
 
                     newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
                 } else {
-                    newHashtag = hashtagRepository.findByName(name);
+                    newHashtag = hashtagRepository.findByName(name)
+                            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
                 }
 
                 entity.addHashtag(newHashtag);

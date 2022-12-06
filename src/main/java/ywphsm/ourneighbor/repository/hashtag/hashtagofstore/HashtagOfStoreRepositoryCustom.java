@@ -11,6 +11,4 @@ public interface HashtagOfStoreRepositoryCustom {
     List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreId(Long storeId);
 
     Long deleteByHashtagIdByStoreId(Long hashtagId, Long storeId);
-
-
 }

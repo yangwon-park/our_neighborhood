@@ -381,7 +381,8 @@ public class StoreRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 10);
         List<Long> hashtagIdList = new ArrayList<>();
 
-        hashtagIdList.add(hashtagRepository.findByName("해쉬태그 1").getId());
+        hashtagIdList.add(hashtagRepository.findByName("해쉬태그 1")
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다.")).getId());
 
         List<SimpleSearchStoreDTO> result = storeRepository.searchByHashtag(hashtagIdList, getPolygon(), pageRequest).getContent();
 

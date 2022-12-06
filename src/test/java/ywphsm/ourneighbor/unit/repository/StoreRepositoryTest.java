@@ -1,6 +1,5 @@
 package ywphsm.ourneighbor.unit.repository;
 
-import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Polygon;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,13 +12,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import ywphsm.ourneighbor.domain.category.Category;
-import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.file.UploadFile;
+import ywphsm.ourneighbor.domain.hashtag.Hashtag;
+import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
+import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
@@ -51,6 +52,9 @@ public class StoreRepositoryTest {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    HashtagRepository hashtagRepository;
+
     @BeforeEach
     void beforeEach() {
         
@@ -65,6 +69,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(129.175759994618, 35.1710366410643)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store2 = Store.builder()
@@ -75,6 +80,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(129.196027224944, 35.174816681475)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store3 = Store.builder()
@@ -85,6 +91,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(129.175206373038, 35.173114068165)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store4 = Store.builder()
@@ -95,6 +102,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(129.196552443575, 35.1746804545724)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store5 = Store.builder()
@@ -105,6 +113,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(129.169832029527, 35.176595357839)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store6 = Store.builder()
@@ -115,6 +124,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(129.172098256716, 35.1712314290717)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store7 = Store.builder()
@@ -125,6 +135,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(129.162621202408, 35.1637214604028)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store8 = Store.builder()
@@ -135,6 +146,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(123.48, 33.48)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store9 = Store.builder()
@@ -145,6 +157,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(123.49, 33.49)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         Store store10 = Store.builder()
@@ -155,6 +168,7 @@ public class StoreRepositoryTest {
                 .point(point(WGS84, g(123.50, 33.50)))
                 .businessTime(new BusinessTime(LocalTime.now(), LocalTime.now(), null, null, null))
                 .categoryOfStoreList(new ArrayList<>())
+                .hashtagOfStoreList(new ArrayList<>())
                 .build();
 
         UploadFile uploadFile1 = new UploadFile("업로드명1", "저장명1", "URL1");
@@ -222,6 +236,30 @@ public class StoreRepositoryTest {
         linkCategoryAndStore(category1, store8);
         linkCategoryAndStore(category1, store9);
         linkCategoryAndStore(category1, store10);
+
+        Hashtag hashtag1 = Hashtag.builder()
+                                    .name("해쉬태그 1")
+                                    .hashtagOfStoreList(new ArrayList<>())
+                                    .build();
+
+        Hashtag hashtag2 = Hashtag.builder()
+                                    .name("해쉬태그 2")
+                                    .hashtagOfStoreList(new ArrayList<>())
+                                    .build();
+
+        tem.persist(hashtag1);
+        tem.persist(hashtag2);
+
+        HashtagOfStore.linkHashtagAndStore(hashtag1, store1);
+        HashtagOfStore.linkHashtagAndStore(hashtag2, store2);
+        HashtagOfStore.linkHashtagAndStore(hashtag1, store3);
+        HashtagOfStore.linkHashtagAndStore(hashtag2, store4);
+        HashtagOfStore.linkHashtagAndStore(hashtag1, store5);
+        HashtagOfStore.linkHashtagAndStore(hashtag2, store6);
+        HashtagOfStore.linkHashtagAndStore(hashtag1, store7);
+        HashtagOfStore.linkHashtagAndStore(hashtag2, store8);
+        HashtagOfStore.linkHashtagAndStore(hashtag1, store9);
+        HashtagOfStore.linkHashtagAndStore(hashtag2, store10);
     }
 
     @Test
@@ -270,8 +308,8 @@ public class StoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("매장 삭제시 IsEmpty 체크")
-    void should_IsEmpty_When_DeleteStore() {
+    @DisplayName("매장 삭제시 IsEmpty 확인")
+    void should_IsEmpty_When_DeleteAStore() {
         Store store = Store.builder()
                 .name("테스트 매장 4")
                 .address(new Address("테스트 로", "11111", "48017", "상세 주소"))
@@ -290,23 +328,23 @@ public class StoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("모든 매장 조회시 개수 체크")
+    @DisplayName("모든 매장 조회")
     void should_FindAllStores() {
-        List<Store> storeList = storeRepository.findAllStores();
+        List<Store> result = storeRepository.findAllStores();
 
-        assertThat(storeList.size()).isEqualTo(10);
+        assertThat(result.size()).isEqualTo(10);
     }
 
     @Test
     @DisplayName("키워드로 매장 조회")
     void should_FindStores_When_ContainsKeyword() {
-        List<Store> storeList = storeRepository.searchByKeyword("테스트");
+        List<Store> result = storeRepository.searchByKeyword("테스트");
 
-        assertThat(storeList.size()).isEqualTo(3);
+        assertThat(result.size()).isEqualTo(3);
     }
 
     @Test
-    @DisplayName("범위 내에 존재하는 매장의 개수 체크")
+    @DisplayName("범위 내에 있는 매장의 개수 체크")
     void should_ReturnStoresCount_When_InPolygon() {
         Long cnt = storeRepository.countStoreInPolygon(getPolygon());
 
@@ -314,30 +352,41 @@ public class StoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("범위 내에 존재하는 매장을 랜덤으로 7개 조회")
+    @DisplayName("범위 내에 있는 매장을 랜덤으로 7개 조회")
     void should_FindStores_When_InPolygonAndTop7() {
         final int size = 7;
 
         PageRequest pageRequest = PageRequest.of(0, size);
-        List<SimpleSearchStoreDTO> storeList = storeRepository.searchTop7Random(getPolygon(), pageRequest);
+        List<SimpleSearchStoreDTO> result = storeRepository.searchTop7Random(getPolygon(), pageRequest);
 
-        assertThat(storeList.size()).isEqualTo(size);
+        assertThat(result.size()).isEqualTo(size);
     }
 
     @Test
-    @DisplayName("범위 내 존재하는 매장을 카테고리로 조회")
+    @DisplayName("범위 내에 있는 매장을 카테고리로 조회")
     void should_FindStores_When_InPolygonAndByCategoryId() {
         Long categoryId = categoryRepository.findByName("카테고리1").getId();
-        List<Store> storeList = storeRepository.searchTopNByCategories(getPolygon(), categoryId);
+        List<Store> result = storeRepository.searchTopNByCategories(getPolygon(), categoryId);
 
         /*
             카테고리1인 store는 총 4개
             이 중 범위 내에 포함되는 store는 1개 (store1)
          */
-        assertThat(storeList.size()).isEqualTo(1);
+        assertThat(result.size()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("범위 내에 있는 매장을 해쉬태그로 조회")
+    void should_FindStores_When_InPolygonAndByHashtagId() {
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        List<Long> hashtagIdList = new ArrayList<>();
 
+        hashtagIdList.add(hashtagRepository.findByName("해쉬태그 1").getId());
+
+        List<SimpleSearchStoreDTO> result = storeRepository.searchByHashtag(hashtagIdList, getPolygon(), pageRequest).getContent();
+
+        assertThat(result.size()).isEqualTo(4);
+    }
 
     private static Polygon<G2D> getPolygon() {
         final double dist = 3;

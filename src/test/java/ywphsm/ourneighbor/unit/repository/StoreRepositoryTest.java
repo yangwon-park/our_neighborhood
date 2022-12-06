@@ -330,7 +330,7 @@ public class StoreRepositoryTest {
     @Test
     @DisplayName("모든 매장 조회")
     void should_FindAllStores() {
-        List<Store> result = storeRepository.findAllStores();
+        List<Store> result = storeRepository.findAllStoresJoinUploadFileFetchJoin();
 
         assertThat(result.size()).isEqualTo(10);
     }
@@ -344,7 +344,7 @@ public class StoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("범위 내에 있는 매장의 개수 체크")
+    @DisplayName("범위 내에 있는 매장 수 체크")
     void should_ReturnStoresCount_When_InPolygon() {
         Long cnt = storeRepository.countStoreInPolygon(getPolygon());
 

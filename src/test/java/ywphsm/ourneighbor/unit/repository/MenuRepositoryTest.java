@@ -256,15 +256,14 @@ public class MenuRepositoryTest {
     }
 
     @Test
-    @DisplayName("매장X에 등록된 메뉴들이 정렬 기준에 알맞게 조회되는지 확인 (메뉴판은 제외)")
+    @DisplayName("매장X에 등록된 메뉴들이 메뉴 타입 정렬 기준에 알맞게 조회되는지 확인 (메뉴판은 제외)")
     void should_FindMenusInXStore_When_CaseByOrderByType() {
         /*
-            정렬 기준 MAIN, SIDE, DESSERT, BEVERAGE, DRINK
+            정렬 기준
+                MAIN, SIDE, DESSERT, BEVERAGE, DRINK
          */
         Long xId = storeRepository.findByName("매장X").get(0).getId();
-
         List<Menu> result = menuRepository.findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(xId);
-
         List<String> menuNameList = result.stream().map(Menu::getName).collect(Collectors.toList());
 
         assertThat(menuNameList).containsExactly("메뉴1", "메뉴2", "메뉴3", "메뉴4", "메뉴5");

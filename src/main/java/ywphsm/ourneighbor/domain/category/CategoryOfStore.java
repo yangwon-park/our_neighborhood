@@ -34,13 +34,11 @@ public class CategoryOfStore {
         this.store = store;
     }
 
-
     // update 메소드
     public void updateCategory(Category category) {
         this.category = category;
     }
-    
-    
+
     /*
         === 연관 관계 편의 메소드 ===
     */

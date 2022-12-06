@@ -62,7 +62,6 @@ public class CategoryService {
 
     @Transactional
     public Long delete(Long categoryId) {
-
         // findById + delete 조합 => 에러 발생 시 개발자가 직접 커스텀 가능
         Category category = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new IllegalArgumentException("해당 카테고리가 없습니다. categoryId = " + categoryId));
@@ -72,23 +71,23 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteByCategory(Category category) {
-        categoryRepository.deleteByCategory(category);
+    public void deleteByCategoryLinkedCategoryOfStore(Category category) {
+        categoryRepository.deleteByCategoryLinkedCategoryOfStore(category);
     }
 
     public CategoryDTO.Detail findByName(String name) {
         return new CategoryDTO.Detail(categoryRepository.findByName(name));
     }
 
-    public List<CategoryDTO.Simple> findByDepth(Long depth) {
-        List<Category> category = categoryRepository.findByDepth(depth);
-        return category.stream().map(CategoryDTO.Simple::of).collect(Collectors.toList());
+    public List<CategoryDTO.Simple> findByDepthCaseByOrderByName(Long depth) {
+        return categoryRepository.findByDepthCaseByOrderByName(depth).stream()
+                .map(CategoryDTO.Simple::of).collect(Collectors.toList());
     }
 
     /*
-        단순히 모든 카테고리들을 보여주는 쿼리
+        모든 카테고리들을 조건에 맞게 정렬하여 보여주는 쿼리
      */
-    public List<CategoryDTO.Detail> findAll() {
+    public List<CategoryDTO.Detail> findAllByOrderByDepthAscParentIdAscNameAsc() {
         return categoryRepository.findAllByOrderByDepthAscParentIdAscNameAsc().stream()
                 .map(CategoryDTO.Detail::new).collect(Collectors.toList());
     }
@@ -97,7 +96,8 @@ public class CategoryService {
         하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리
      */
     public List<CategoryDTO.Detail> findAllCategoriesHier() {
-        return categoryRepository.findByCategories().stream().map(CategoryDTO.Detail::of).collect(Collectors.toList());
+        return categoryRepository.findByParentIsNull().stream()
+                .map(CategoryDTO.Detail::of).collect(Collectors.toList());
     }
 
     /*

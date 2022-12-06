@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface StoreRepositoryCustom {
 
-    List<Store> findAllStores();
+    List<Store> findAllStoresJoinUploadFileFetchJoin();
 
     List<Store> searchByKeyword(String keyword);
 

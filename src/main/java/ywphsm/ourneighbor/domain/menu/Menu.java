@@ -46,12 +46,13 @@ public class Menu extends BaseEntity {
         JPA 연관 관계 매핑
      */
 
-    // store (N:1)
+    /*
+        store (N:1)
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
-    // 데이터 필수 변경이므로 setter를 열었음
     public void setStore(Store store) {
         this.store = store;
     }

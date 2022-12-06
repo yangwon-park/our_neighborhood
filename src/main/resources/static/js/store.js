@@ -389,7 +389,6 @@ var main = {
     },
 
     getSubCategories: function (midChildrenParam, categoryList) {
-
         let subParentId;
         if (categoryList[2] !== '') {
             axios({
@@ -428,7 +427,6 @@ var main = {
     },
 
     addStoreOwner: function () {
-
         const userId = document.getElementById("userId");
         const storeId = document.getElementById("storeId");
         const userIdValid = document.getElementById("store-owner-add-userId-valid");

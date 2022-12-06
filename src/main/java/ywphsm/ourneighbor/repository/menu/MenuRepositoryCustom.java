@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MenuRepositoryCustom {
 
-    List<Menu> findByStoreIdWithoutTypeMenuCaseByOrderByType(Long storeId);
+    List<Menu> findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(Long storeId);
 
-    List<String> findMenuImg(Long storeId);
+    List<String> findImageByMenuTypeIsMenu(Long storeId);
 }

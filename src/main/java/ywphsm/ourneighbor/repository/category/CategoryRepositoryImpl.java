@@ -18,16 +18,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public CategoryOfStore findCategoryOfStore(Long storeId, Long categoryId) {
-        return queryFactory
-                .select(categoryOfStore)
-                .from(categoryOfStore)
-                .where((categoryOfStore.store.id.eq(storeId)).and((categoryOfStore.category.id.eq(categoryId))))
-                .fetchOne();
-    }
-
-    @Override
-    public List<Category> findByDepth(Long depth) {
+    public List<Category> findByDepthCaseByOrderByName(Long depth) {
         NumberExpression<Integer> rank = new CaseBuilder()
                 .when(category.name.eq("동네 맛집")).then(1)
                 .when(category.name.eq("카페 / 베이커리")).then(2)
@@ -44,7 +35,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
     }
 
     @Override
-    public void deleteByCategory(Category category) {
+    public void deleteByCategoryLinkedCategoryOfStore(Category category) {
         queryFactory
                 .delete(categoryOfStore)
                 .where(categoryOfStore.category.eq(category))

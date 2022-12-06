@@ -107,12 +107,10 @@ public class SearchController {
     @GetMapping("/get-cate-images")
     public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") Double myLat,
                                                               @CookieValue(value = "lon", required = false, defaultValue = "") Double myLon) {
-        log.info("lat={}", myLat);
-        log.info("lat={}", myLon);
-
+        final Long depth = 1L;
         final double dist = 3;
 
-        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepthCaseByOrderByName(depth);
 
         List<List<String>> categoryImageList = new ArrayList<>();
 

@@ -18,8 +18,8 @@ public class CategoryApiController {
     private final CategoryService categoryService;
 
     @GetMapping("/categories")
-    public ResultClass<?> findAllCategories() {
-        List<CategoryDTO.Detail> categories = categoryService.findAll();
+    public ResultClass<?> findAllByOrderByDepthAscParentIdAscNameAsc() {
+        List<CategoryDTO.Detail> categories = categoryService.findAllByOrderByDepthAscParentIdAscNameAsc();
         return new ResultClass<>(categories);
     }
 

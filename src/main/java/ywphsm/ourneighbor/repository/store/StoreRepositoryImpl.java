@@ -130,7 +130,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     }
 
     @Override
-    public List<Store> findAllStores() {
+    public List<Store> findAllStoresJoinUploadFileFetchJoin() {
         return queryFactory
                 .select(store)
                 .from(store)

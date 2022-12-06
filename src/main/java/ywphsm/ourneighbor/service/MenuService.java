@@ -22,7 +22,6 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.*;
@@ -177,8 +176,8 @@ public class MenuService {
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + menuId));
     }
 
-    public List<Menu> findByStoreIdWithoutTypeMenuCaseByOrderByType(Long storeId) {
-        return menuRepository.findByStoreIdWithoutTypeMenuCaseByOrderByType(storeId);
+    public List<Menu> findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(Long storeId) {
+        return menuRepository.findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(storeId);
     }
 
     /*
@@ -254,12 +253,12 @@ public class MenuService {
         }
     }
 
-    public List<String> findMenuImg(Long storeId) {
-        return menuRepository.findMenuImg(storeId);
+    public List<String> findImageByMenuTypeIsMenu(Long storeId) {
+        return menuRepository.findImageByMenuTypeIsMenu(storeId);
     }
     
     /*
-        MenuType != 메뉴판인 경우에만 리사이징 적용
+        [MenuType != 메뉴판]인 경우에만 리사이징 적용
      */
     private UploadFile checkMenuTypeForResizing(MenuType type, MultipartFile file) throws IOException {
         UploadFile newUploadFile;

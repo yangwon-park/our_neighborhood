@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.repository.requestAddStore;
+package ywphsm.ourneighbor.repository.requestaddstore;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ywphsm.ourneighbor.domain.store.RequestAddStore;

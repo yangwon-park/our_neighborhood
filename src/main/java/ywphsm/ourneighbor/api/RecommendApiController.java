@@ -17,13 +17,11 @@ public class RecommendApiController {
 
     private final RecommendPostService recommendPostService;
 
-
     @GetMapping("/get-recommend-post")
     public RecommendPostDTO.Simple getRecommendPost(@CookieValue(value = "skyStatus", required = false) String skyStatus,
                                                     @CookieValue(value = "pm10Value", required = false) String pm10Value,
                                                     @CookieValue(value = "tmp", required = false) String tmp,
                                                     @CookieValue(value = "pcp", required = false) String pcp) {
-
         return recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp.replace("m", ""));
     }
 

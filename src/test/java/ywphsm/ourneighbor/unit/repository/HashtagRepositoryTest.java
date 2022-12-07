@@ -13,7 +13,6 @@ import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 import ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu;
-import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -165,7 +164,7 @@ public class HashtagRepositoryTest {
         List<String> result = allHashtagByMenuId.stream()
                 .map(hashtagOfMenu -> hashtagOfMenu.getHashtag().getName()).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("해쉬태그1", "해쉬태그2", "해쉬태그3");
+        assertThat(result).containsExactly("해쉬태그1", "해쉬태그2");
     }
     
     @Test

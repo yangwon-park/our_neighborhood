@@ -4,14 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.locationtech.jts.io.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.api.dto.RecommendKind;
 import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
-import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;

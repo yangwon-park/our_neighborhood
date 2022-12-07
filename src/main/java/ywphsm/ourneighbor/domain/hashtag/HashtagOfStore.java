@@ -48,14 +48,15 @@ public class HashtagOfStore {
         === 연관 관계 편의 메소드 ===
     */
 
-    // 아래 로직 (Category도 포함)
-    // HashtagOfStore Table엔 값이 persist 되지 않는다
-    // (별도의 save를 하지 않기 때문)
-    // save구문을 따로 만들지 않고 Store 쪽 연관 관계에서 CascadeType.PERSIST로 종속 관계를 부여하여
-    // 좀 더 간결하게 로직을 처리했음
+    /*
+        아래 로직 (Category도 포함)
+         HashtagOfStore Table엔 값이 persist 되지 않는다
+         (별도의 save를 하지 않기 때문)
+         save구문을 따로 만들지 않고 Store 쪽 연관 관계에서 CascadeType.PERSIST로 종속 관계를 부여하여
+         좀 더 간결하게 로직을 처리했음
+     */
     public static void linkHashtagAndStore(Hashtag hashtag, Store store) {
         HashtagOfStore hashtagOfStore = new HashtagOfStore(hashtag, store);
-
         hashtag.getHashtagOfStoreList().add(hashtagOfStore);
         store.getHashtagOfStoreList().add(hashtagOfStore);
     }

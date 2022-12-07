@@ -6,11 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ywphsm.ourneighbor.domain.dto.PageMakeDTO;
 import ywphsm.ourneighbor.domain.dto.RequestAddStoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.RequestAddStore;
-import ywphsm.ourneighbor.repository.requestAddStore.RequestAddStoreRepository;
+import ywphsm.ourneighbor.repository.requestaddstore.RequestAddStoreRepository;
 
 import java.util.List;
 

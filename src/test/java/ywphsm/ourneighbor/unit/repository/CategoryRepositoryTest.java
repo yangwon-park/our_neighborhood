@@ -159,13 +159,12 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    @DisplayName("카테고리 명, 카테고리 뎁스로 조회 실패")
-    void should_IllegalArgumentException_When_ByCategoryNameAndDepth() {
+    @DisplayName("존재하지 않는 카테고리 명, 카테고리 뎁스로 조회시 예외 발생")
+    void should_IllegalArgumentException_When_FindCategoryByCategoryNameAndDepth() {
         assertThatThrownBy(
                 () -> categoryRepository.findByNameAndDepth("없는 카테고리", 23L)
                         .orElseThrow(() -> new IllegalArgumentException("해당 뎁스의 카테고리를 찾지 못했습니다.")))
                 .isInstanceOf(IllegalArgumentException.class);
-
     }
 
     @Test
@@ -178,7 +177,7 @@ public class CategoryRepositoryTest {
         List<String> result = categoryList.stream()
                 .map(Category::getName).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("카테고리1", "카테고리2");
+        assertThat(result).containsExactly("동네 맛집", "카페 / 베이커리", "인기 술집", "문화 / 여가", "카테고리1", "카테고리2");
     }
 
     @Test
@@ -188,7 +187,7 @@ public class CategoryRepositoryTest {
         List<String> result = categoryList.stream()
                 .map(Category::getName).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("카테고리1", "카테고리2", "카테고리3", "카테고리4", "카테고리6", "카테고리5");
+        assertThat(result).containsExactly("동네 맛집", "문화 / 여가", "인기 술집", "카테고리1", "카테고리2", "카페 / 베이커리", "카테고리3", "카테고리4", "카테고리6", "카테고리5");
     }
 
     @Test
@@ -198,7 +197,6 @@ public class CategoryRepositoryTest {
 
         assertThat(check).isTrue();
     }
-
 
     @Test
     @DisplayName("카테고리 명은 같지만 카테고리 뎁스가 다른 카테고리 등록 시, 중복이 아니므로 false 반환")
@@ -264,7 +262,8 @@ public class CategoryRepositoryTest {
         linkCategoryAndStore(category, storeZ);
 
         List<CategoryOfStore> categoryOfStoreList = storeZ.getCategoryOfStoreList();
-        List<Category> result = categoryOfStoreList.stream().map(CategoryOfStore::getCategory).collect(Collectors.toList());
+        List<Category> result = categoryOfStoreList.stream()
+                .map(CategoryOfStore::getCategory).collect(Collectors.toList());
 
         assertThat(result).containsExactly(category);
     }

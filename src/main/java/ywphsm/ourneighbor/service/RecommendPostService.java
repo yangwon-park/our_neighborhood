@@ -3,7 +3,6 @@ package ywphsm.ourneighbor.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +14,7 @@ import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.recommendpost.RecommendPostRepository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.getHashtagNameList;
 
@@ -50,14 +47,13 @@ public class RecommendPostService {
 
                     newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
                 } else {
-                    newHashtag = hashtagRepository.findByName(name);
+                    newHashtag = hashtagRepository.findByName(name)
+                            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
                 }
 
                 entity.addHashtag(newHashtag);
             }
         }
-
-        log.info("entity={}", entity.getHashtagList().get(0));
 
         return recommendPostRepository.save(entity).getId();
     }
@@ -67,9 +63,10 @@ public class RecommendPostService {
 
         RecommendKind cond = getRecommendKind(skyStatus, pm10Value, tmp, pcp);
 
-//      참고 (페이징 기능을 활용한 랜덤으로 게시글 조회하는 방법)
-//      https://stackoverflow.com/questions/24279186/fetch-random-records-using-spring-data-jpa
-//      https://kapentaz.github.io/jpa/Spring-Data-JPA-%EC%B9%B4%EC%9A%B4%ED%8A%B8-%EC%BF%BC%EB%A6%AC-%EC%97%86%EC%9D%B4-%ED%8E%98%EC%9D%B4%EC%A7%95-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0/#
+        /*   참고 (페이징 기능을 활용한 랜덤으로 게시글 조회하는 방법)
+             https://stackoverflow.com/questions/24279186/fetch-random-records-using-spring-data-jpa
+             https://kapentaz.github.io/jpa/Spring-Data-JPA-%EC%B9%B4%EC%9A%B4%ED%8A%B8-%EC%BF%BC%EB%A6%AC-%EC%97%86%EC%9D%B4-%ED%8E%98%EC%9D%B4%EC%A7%95-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0/#
+        */
         Long count = recommendPostRepository.countByRecommendKind(cond);
 
         int idx = (int) (Math.random() * count);
@@ -87,8 +84,6 @@ public class RecommendPostService {
             return RecommendPostDTO.Simple.of(recommendPostRepository.findByRecommendKind(RecommendKind.NORMAL, pageRequest).get(0));
         }
     }
-
-
 
     private static RecommendKind getRecommendKind(String skyStatus, String pm10Value, String tmp, String pcp) {
         double rainCriteria = 7.6;

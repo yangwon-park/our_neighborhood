@@ -34,7 +34,6 @@ public class RecommendPost extends BaseEntity {
     @OneToMany(mappedBy = "recommendPost", fetch = FetchType.LAZY)
     private List<Hashtag> hashtagList = new ArrayList<>();
 
-
     @Builder
     public RecommendPost(Long id, RecommendKind recommendKind,
                          String header, String content,

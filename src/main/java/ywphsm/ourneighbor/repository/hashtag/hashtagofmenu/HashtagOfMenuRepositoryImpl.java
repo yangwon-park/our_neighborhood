@@ -24,12 +24,4 @@ public class HashtagOfMenuRepositoryImpl implements HashtagOfMenuRepositoryCusto
                 .where(hashtagOfMenu.menu.id.eq(menuId))
                 .fetch();
     }
-
-    @Override
-    public Long deleteByHashtagIdByMenuId(Long menuId) {
-        return queryFactory
-                .delete(hashtagOfMenu)
-                .where(hashtagOfMenu.menu.id.eq(menuId))
-                .execute();
-    }
 }

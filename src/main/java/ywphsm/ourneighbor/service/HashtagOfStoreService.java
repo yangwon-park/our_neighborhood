@@ -21,14 +21,12 @@ public class HashtagOfStoreService {
         return hashtagOfStoreRepository.findHashtagAndCountByStoreIdTop9(storeId);
     }
 
-    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreId(Long storeId) {
-        return hashtagOfStoreRepository.findAllHashtagAndCountByStoreId(storeId);
+    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(Long storeId) {
+        return hashtagOfStoreRepository.findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(storeId);
     }
 
     @Transactional
     public Long deleteHashtagOfStore(Long hashtagId, Long storeId) {
         return hashtagOfStoreRepository.deleteByHashtagIdByStoreId(hashtagId, storeId);
     }
-
-
 }

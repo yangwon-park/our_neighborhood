@@ -170,7 +170,15 @@ var main = {
             let currentTmp = resp.data.tmp;
             let currentPop = resp.data.pop;
             let currentPcp = resp.data.pcp;
-            let pm10Value = resp.data.pm10Value;
+            let pm10Value;
+
+            console.log(resp.data.pm10Value);
+
+            if (resp.data.pm10Value === "-") {
+                pm10Value = 50;
+            } else {
+                pm10Value = resp.data.pm10Value;
+            }
 
             cookie.setCookie("skyStatus", skyStatus, 1);
             cookie.setCookie("tmp", currentTmp, 1);

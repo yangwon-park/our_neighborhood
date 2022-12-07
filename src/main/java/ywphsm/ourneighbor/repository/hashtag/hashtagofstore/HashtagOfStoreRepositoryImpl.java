@@ -34,7 +34,7 @@ public class HashtagOfStoreRepositoryImpl implements HashtagOfStoreRepositoryCus
     }
 
     @Override
-    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreId(Long storeId) {
+    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(Long storeId) {
         return queryFactory
                 .select(
                         Projections.constructor(HashtagOfStoreDTO.WithCount.class,
@@ -44,7 +44,7 @@ public class HashtagOfStoreRepositoryImpl implements HashtagOfStoreRepositoryCus
                 .from(hashtagOfStore)
                 .groupBy(hashtagOfStore.hashtag, hashtagOfStore.store)
                 .having(hashtagOfStore.store.id.eq(storeId))
-                .orderBy(hashtagOfStore.id.count().desc())
+                .orderBy(hashtagOfStore.id.count().desc(), hashtagOfStore.hashtag.name.asc())
                 .fetch();
     }
 

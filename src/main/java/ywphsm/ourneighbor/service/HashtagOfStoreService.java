@@ -21,8 +21,8 @@ public class HashtagOfStoreService {
         return hashtagOfStoreRepository.findHashtagAndCountByStoreIdTop9(storeId);
     }
 
-    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreId(Long storeId) {
-        return hashtagOfStoreRepository.findAllHashtagAndCountByStoreId(storeId);
+    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(Long storeId) {
+        return hashtagOfStoreRepository.findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(storeId);
     }
 
     @Transactional

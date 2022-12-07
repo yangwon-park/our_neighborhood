@@ -8,6 +8,7 @@ var main = {
 
         let loadingImg = document.createElement("img");
         loadingImg.id = "spinner";
+        loadingImg.alt = "spinner";
         loadingImg.src = path;
 
         mask.append(loadingImg);

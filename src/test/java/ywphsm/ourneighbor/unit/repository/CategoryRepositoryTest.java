@@ -155,7 +155,7 @@ public class CategoryRepositoryTest {
         Category findCategory = categoryRepository.findByNameAndDepth("카테고리1", 1L)
                 .orElseThrow(() -> new IllegalArgumentException("해당 뎁스의 카테고리를 찾지 못했습니다."));
 
-        assertThat(findCategory.getName()).isEqualTo("카테고리1");
+        assertThat(findCategory.getName()).isEqualTo(findCategory.getName());
     }
 
     @Test
@@ -177,7 +177,7 @@ public class CategoryRepositoryTest {
         List<String> result = categoryList.stream()
                 .map(Category::getName).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("동네 맛집", "카페 / 베이커리", "인기 술집", "문화 / 여가", "카테고리1", "카테고리2");
+        assertThat(result).hasSize(6).containsExactly("동네 맛집", "카페 / 베이커리", "인기 술집", "문화 / 여가", "카테고리1", "카테고리2");
     }
 
     @Test
@@ -187,7 +187,7 @@ public class CategoryRepositoryTest {
         List<String> result = categoryList.stream()
                 .map(Category::getName).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("동네 맛집", "문화 / 여가", "인기 술집", "카테고리1", "카테고리2", "카페 / 베이커리", "카테고리3", "카테고리4", "카테고리6", "카테고리5");
+        assertThat(result).hasSize(10).containsExactly("동네 맛집", "문화 / 여가", "인기 술집", "카테고리1", "카테고리2", "카페 / 베이커리", "카테고리3", "카테고리4", "카테고리6", "카테고리5");
     }
 
     @Test
@@ -215,7 +215,6 @@ public class CategoryRepositoryTest {
         assertThat(check).isTrue();
     }
 
-
     @Test
     @DisplayName("카테고리 명은 같지만 부모 카테고리가 다른 카테고리 등록 시, 중복이 아니므로 false 반환")
     void should_IsFalse_When_AddACategoryByNameEqualsAndParentNot() {
@@ -238,7 +237,7 @@ public class CategoryRepositoryTest {
         List<String> result = categoryList.stream()
                 .map(Category::getName).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("동네 맛집", "카페 / 베이커리", "인기 술집", "문화 / 여가");
+        assertThat(result).hasSize(4).containsExactly("동네 맛집", "카페 / 베이커리", "인기 술집", "문화 / 여가");
     }
 
     @Test
@@ -277,30 +276,6 @@ public class CategoryRepositoryTest {
         List<String> result = categoryOfStoreList.stream()
                 .map(cs -> cs.getCategory().getName()).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("카테고리1", "카테고리3", "카테고리5");
+        assertThat(result).hasSize(3).containsExactly("카테고리1", "카테고리3", "카테고리5");
     }
-
-//    @Test
-//    @DisplayName("매장X에 등록돼있는 카테고리 등록 해제")
-//    void should_DeleteCategories_When_InStoreX() {
-//        Store storeX = storeRepository.findByName("매장X").get(0);
-//        List<CategoryOfStore> beforeList = storeX.getCategoryOfStoreList();
-//
-//        List<Category> categoryList = beforeList.stream()
-//                .map(CategoryOfStore::getCategory).collect(Collectors.toList());
-//
-//        for (Category category : categoryList) {
-//            categoryRepository.deleteByCategoryLinkedCategoryOfStore(category);
-//            System.out.println("category.getId() = " + category.getId());
-//            System.out.println("category.getId() = " + category.getName());
-//        }
-//
-//        List<CategoryOfStore> afterList = storeX.getCategoryOfStoreList();
-//
-//        for (CategoryOfStore categoryOfStore : afterList) {
-//            System.out.println("categoryOfStore = " + categoryOfStore.getId());
-//            System.out.println("categoryOfStore = " + categoryOfStore.getCategory().getName());
-//            System.out.println("categoryOfStore = " + categoryOfStore.getStore().getName());
-//        }
-//    }
 }

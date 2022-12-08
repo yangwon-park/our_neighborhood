@@ -185,7 +185,7 @@ public class MenuRepositoryTest {
 
         menu0.updateWithoutImage(updateMenu);
 
-        assertThat(menu0.getName()).isEqualTo("업데이트 메뉴");
+        assertThat(menu0.getName()).isEqualTo(updateMenu.getName());
     }
 
     @Test
@@ -266,7 +266,7 @@ public class MenuRepositoryTest {
         List<Menu> result = menuRepository.findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(xId);
         List<String> menuNameList = result.stream().map(Menu::getName).collect(Collectors.toList());
 
-        assertThat(menuNameList).containsExactly("메뉴1", "메뉴2", "메뉴3", "메뉴4", "메뉴5");
+        assertThat(menuNameList).hasSize(5).containsExactly("메뉴1", "메뉴2", "메뉴3", "메뉴4", "메뉴5");
     }
 
     @Test

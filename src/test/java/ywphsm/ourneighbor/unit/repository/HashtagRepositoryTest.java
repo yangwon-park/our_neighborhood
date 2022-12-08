@@ -134,7 +134,7 @@ public class HashtagRepositoryTest {
 
         Hashtag savedHashtag = hashtagRepository.save(hashtag);
 
-        assertThat(savedHashtag.getName()).isEqualTo("해쉬태그");
+        assertThat(savedHashtag.getName()).isEqualTo(hashtag.getName());
     }
 
     @Test
@@ -164,7 +164,7 @@ public class HashtagRepositoryTest {
         List<String> result = allHashtagByMenuId.stream()
                 .map(hashtagOfMenu -> hashtagOfMenu.getHashtag().getName()).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("해쉬태그1", "해쉬태그2");
+        assertThat(result).hasSize(2).containsExactly("해쉬태그1", "해쉬태그2");
     }
     
     @Test
@@ -203,6 +203,6 @@ public class HashtagRepositoryTest {
         List<String> result = dtoList.stream()
                 .map(HashtagOfStoreDTO.WithCount::getHashtagName).collect(Collectors.toList());
 
-        assertThat(result).containsExactly("해쉬태그2", "해쉬태그1", "해쉬태그3");
+        assertThat(result).hasSize(3).containsExactly("해쉬태그2", "해쉬태그1", "해쉬태그3");
     }
 }

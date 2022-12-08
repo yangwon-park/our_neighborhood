@@ -28,6 +28,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.geolatte.geom.builder.DSL.*;
@@ -62,7 +63,7 @@ public class StoreRepositoryTest {
             store1 ~ store7까지 범위에 포함되는 매장들
          */
         Store store1 = Store.builder()
-                .name("테스트 매장 1")
+                .name("매장1")
                 .address(new Address("테스트 로", "11111", "48017", "상세 주소"))
                 .lat(35.1710366410643)
                 .lon(129.175759994618)
@@ -73,7 +74,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store2 = Store.builder()
-                .name("테스트 매장 2")
+                .name("매장2")
                 .address(new Address("테스트 로", "22222", "48017", "상세 주소"))
                 .lat(35.174816681475)
                 .lon(129.196027224944)
@@ -84,7 +85,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store3 = Store.builder()
-                .name("테스트 매장 3")
+                .name("매장3")
                 .address(new Address("테스트 로", "33333", "48017", "상세 주소"))
                 .lat(35.173114068165)
                 .lon(129.175206373038)
@@ -95,7 +96,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store4 = Store.builder()
-                .name("매장 4")
+                .name("매장4")
                 .address(new Address("테스트 로", "44444", "48017", "상세 주소"))
                 .lat(35.1746804545724)
                 .lon(129.196552443575)
@@ -106,7 +107,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store5 = Store.builder()
-                .name("매장 5")
+                .name("매장5")
                 .address(new Address("테스트 로", "55555", "48017", "상세 주소"))
                 .lat(35.176595357839)
                 .lon(129.169832029527)
@@ -117,7 +118,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store6 = Store.builder()
-                .name("매장 6")
+                .name("매장6")
                 .address(new Address("테스트 로", "66666", "48017", "상세 주소"))
                 .lat(35.1712314290717)
                 .lon(129.172098256716)
@@ -128,7 +129,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store7 = Store.builder()
-                .name("매장 7")
+                .name("매장7")
                 .address(new Address("테스트 로", "77777", "48017", "상세 주소"))
                 .lat(35.1637214604028)
                 .lon(129.162621202408)
@@ -139,7 +140,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store8 = Store.builder()
-                .name("매장 8")
+                .name("매장8")
                 .address(new Address("테스트 로", "88888", "48017", "상세 주소"))
                 .lat(33.48)
                 .lon(123.48)
@@ -150,7 +151,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store9 = Store.builder()
-                .name("매장 9")
+                .name("매장9")
                 .address(new Address("테스트 로", "99999", "48017", "상세 주소"))
                 .lat(33.49)
                 .lon(123.49)
@@ -161,7 +162,7 @@ public class StoreRepositoryTest {
                 .build();
 
         Store store10 = Store.builder()
-                .name("매장 10")
+                .name("매장10")
                 .address(new Address("테스트 로", "12121", "48017", "상세 주소"))
                 .lat(33.50)
                 .lon(123.50)
@@ -238,12 +239,12 @@ public class StoreRepositoryTest {
         linkCategoryAndStore(category1, store10);
 
         Hashtag hashtag1 = Hashtag.builder()
-                                    .name("해쉬태그 1")
+                                    .name("해쉬태그1")
                                     .hashtagOfStoreList(new ArrayList<>())
                                     .build();
 
         Hashtag hashtag2 = Hashtag.builder()
-                                    .name("해쉬태그 2")
+                                    .name("해쉬태그2")
                                     .hashtagOfStoreList(new ArrayList<>())
                                     .build();
 
@@ -266,7 +267,7 @@ public class StoreRepositoryTest {
     @DisplayName("매장 저장")
     void should_SaveAStore() {
         Store store = Store.builder()
-                .name("테스트 매장 n")
+                .name("매장n")
                 .address(new Address("테스트 로", "11111", "48017", "상세 주소"))
                 .lat(33.45)
                 .lon(123.45)
@@ -276,14 +277,14 @@ public class StoreRepositoryTest {
 
         Store savedStore = storeRepository.save(store);
 
-        assertThat(savedStore.getName()).isEqualTo("테스트 매장 n");
+        assertThat(savedStore.getName()).isEqualTo(store.getName());
     }
 
     @Test
     @DisplayName("매장 수정")
     void should_UpdateAStore() {
         Store store = Store.builder()
-                .name("테스트 매장 n")
+                .name("매장n")
                 .address(new Address("테스트 로", "11111", "48017", "상세 주소"))
                 .lat(33.45)
                 .lon(123.45)
@@ -304,14 +305,14 @@ public class StoreRepositoryTest {
 
         store.update(updateStore);
 
-        assertThat(store.getName()).isEqualTo("업데이트된 매장 이름");
+        assertThat(store.getName()).isEqualTo(updateStore.getName());
     }
 
     @Test
     @DisplayName("매장 삭제시 IsEmpty 확인")
     void should_IsEmpty_When_DeleteAStore() {
         Store store = Store.builder()
-                .name("테스트 매장 4")
+                .name("매장4")
                 .address(new Address("테스트 로", "11111", "48017", "상세 주소"))
                 .lat(33.45)
                 .lon(123.45)
@@ -324,6 +325,7 @@ public class StoreRepositoryTest {
         storeRepository.deleteById(store.getId());
 
         Optional<Store> findStore = storeRepository.findById(store.getId());
+
         assertThat(findStore).isEmpty();
     }
 
@@ -338,9 +340,10 @@ public class StoreRepositoryTest {
     @Test
     @DisplayName("키워드로 매장 조회")
     void should_FindStores_When_ContainsKeyword() {
-        List<Store> result = storeRepository.searchByKeyword("테스트");
+        List<Store> storeList = storeRepository.searchByKeyword("매장1");
+        List<String> result = storeList.stream().map(Store::getName).collect(Collectors.toList());
 
-        assertThat(result.size()).isEqualTo(3);
+        assertThat(result).hasSize(2).contains("매장1", "매장10");
     }
 
     @Test
@@ -366,13 +369,15 @@ public class StoreRepositoryTest {
     @DisplayName("범위 내에 있는 매장을 카테고리로 조회")
     void should_FindStores_When_InPolygonAndByCategoryId() {
         Long categoryId = categoryRepository.findByName("카테고리1").getId();
-        List<Store> result = storeRepository.searchTopNByCategories(getPolygon(), categoryId);
+        List<Store> storeList = storeRepository.searchTopNByCategories(getPolygon(), categoryId);
+
+        List<String> result = storeList.stream().map(Store::getName).collect(Collectors.toList());
 
         /*
             카테고리1인 store는 총 4개
             이 중 범위 내에 포함되는 store는 1개 (store1)
          */
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).hasSize(1).contains("매장1");
     }
 
     @Test
@@ -381,12 +386,14 @@ public class StoreRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 10);
         List<Long> hashtagIdList = new ArrayList<>();
 
-        hashtagIdList.add(hashtagRepository.findByName("해쉬태그 1")
+        hashtagIdList.add(hashtagRepository.findByName("해쉬태그1")
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다.")).getId());
 
-        List<SimpleSearchStoreDTO> result = storeRepository.searchByHashtag(hashtagIdList, getPolygon(), pageRequest).getContent();
+        List<SimpleSearchStoreDTO> storeList = storeRepository.searchByHashtag(hashtagIdList, getPolygon(), pageRequest).getContent();
 
-        assertThat(result.size()).isEqualTo(4);
+        List<String> result = storeList.stream().map(SimpleSearchStoreDTO::getName).collect(Collectors.toList());
+
+        assertThat(result).hasSize(4).contains("매장1", "매장3", "매장5", "매장7");
     }
 
     private static Polygon<G2D> getPolygon() {

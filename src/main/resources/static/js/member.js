@@ -1,5 +1,6 @@
 import validation from "./validation.js";
 import mask from "./mask.js";
+import menu from "./menu.js";
 
 var main = {
     init: async function () {
@@ -242,6 +243,7 @@ var main = {
         const signUpForm = document.getElementById("sign-up-add-form");
 
         let formData = new FormData(signUpForm);
+        menu.createDefaultImg(formData);
 
         axios({
             method: "post",
@@ -322,6 +324,7 @@ var main = {
 
         const email = document.getElementById("email");
         const nickname = document.getElementById("nickname");
+        const file = document.getElementById("file");
 
         const emailValid = document.getElementById("sign-up-email-valid");
         const nicknameValid = document.getElementById("sign-up-nickname-valid");
@@ -335,14 +338,14 @@ var main = {
         let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
         let emailValidation = emailRegExp.test(email.value);
 
-        if (nickname.value !== "" && emailValidation ) {
+        const memberEditForm = document.getElementById("member-edit-form");
+        let formData = new FormData(memberEditForm);
+
+        if (nickname.value !== "" && emailValidation) {
             axios({
                 method: "put",
                 url: "/member/edit",
-                params: {
-                    nickname: nickname.value,
-                    email: email.value
-                }
+                data: formData
             }).then((resp) => {
                 let check = resp.data;
 

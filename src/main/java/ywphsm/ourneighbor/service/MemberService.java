@@ -9,13 +9,17 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.controller.form.EditForm;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
+import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
+import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.email.EmailService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -31,18 +35,19 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
+    private final AwsS3FileStore awsS3FileStore;
+
     // 회원 가입
     @Transactional
-    public Long save(MemberDTO.Add dto) {
+    public Long save(MemberDTO.Add dto) throws IOException {
 
         int age = ChangeBirthToAge(dto.getBirthDate());
         //패스워드 암호화
         String encodedPassword = encodedPassword(dto.getPassword());
-
-        Member member = new Member(dto.getUsername(), dto.getBirthDate(),
-                age, dto.getPhoneNumber(),
-                dto.getGender(), dto.getUserId(), encodedPassword,
-                dto.getEmail(), dto.getNickname(), Role.USER);
+        Member member = dto.toEntity(age, encodedPassword);
+        UploadFile uploadFile = awsS3FileStore.storeFile(dto.getFile());
+        uploadFile.addMember(member);
+        member.setFile(uploadFile);
 
         memberRepository.save(member);
         return member.getId();
@@ -89,10 +94,18 @@ public class MemberService {
 
     //회원수정시 닉네임 변경
     @Transactional
-    public void updateMember (Long id, String nickname, String email) {
+    public void updateMember (Long id, EditForm editForm) throws IOException {
         Member member = findById(id);
 
-        member.updateMember(nickname, email);
+        UploadFile uploadFile = awsS3FileStore.storeFile(editForm.getFile());
+        if (uploadFile != null) {
+            awsS3FileStore.deleteFile(member.getFile().getStoredFileName());
+            member.getFile().updateUploadedFileName(
+                    uploadFile.getStoredFileName(), uploadFile.getUploadedFileName(),
+                    uploadFile.getUploadImageUrl());
+        }
+
+        member.updateMember(editForm.getNickname(), editForm.getEmail());
     }
 
     //회원수정시 전화번호 변경

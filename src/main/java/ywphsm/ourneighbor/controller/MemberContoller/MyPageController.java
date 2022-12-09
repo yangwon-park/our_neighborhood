@@ -28,8 +28,8 @@ public class MyPageController {
     public String myPage(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                          Model model) {
 
-        Member byId = memberService.findById(member.getId());
-        MemberDTO.Detail detail = new MemberDTO.Detail(byId);
+        Member findMember = memberService.findById(member.getId());
+        MemberDTO.Detail detail = new MemberDTO.Detail(findMember);
         model.addAttribute("memberDetail", detail);
         return "member/my_page";
     }

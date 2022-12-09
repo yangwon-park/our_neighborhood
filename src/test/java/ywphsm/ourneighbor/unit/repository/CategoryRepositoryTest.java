@@ -19,6 +19,7 @@ import ywphsm.ourneighbor.repository.store.StoreRepository;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
@@ -42,53 +43,64 @@ public class CategoryRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
+        Category parent = Category.builder()
+                .name("부모")
+                .depth(1L)
+                .categoryOfStoreList(new ArrayList<>())
+                .build();
 
         Category restaurant = Category.builder()
                 .name("동네 맛집")
-                .depth(1L)
+                .depth(2L)
+                .parent(parent)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Category cafe = Category.builder()
                 .name("카페 / 베이커리")
-                .depth(1L)
+                .depth(2L)
+                .parent(parent)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Category bar = Category.builder()
                 .name("인기 술집")
-                .depth(1L)
+                .depth(2L)
+                .parent(parent)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Category leisure = Category.builder()
                 .name("문화 / 여가")
-                .depth(1L)
+                .depth(2L)
+                .parent(parent)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Category category1 = Category.builder()
                 .name("카테고리1")
-                .depth(1L)
+                .depth(2L)
+                .parent(parent)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Category category2 = Category.builder()
                 .name("카테고리2")
-                .depth(1L)
+                .depth(2L)
+                .parent(parent)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Category category3 = Category.builder()
                 .name("카테고리3")
-                .depth(2L)
+                .depth(3L)
                 .parent(category1)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
         Category category4 = Category.builder()
                 .name("카테고리4")
-                .depth(2L)
+                .depth(3L)
                 .parent(category2)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
@@ -96,7 +108,7 @@ public class CategoryRepositoryTest {
         Category category5 = Category.builder()
                 .name("카테고리5")
                 .parent(category3)
-                .depth(3L)
+                .depth(4L)
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
@@ -107,6 +119,7 @@ public class CategoryRepositoryTest {
                 .categoryOfStoreList(new ArrayList<>())
                 .build();
 
+        tem.persist(parent);
         tem.persist(restaurant);
         tem.persist(cafe);
         tem.persist(bar);
@@ -173,11 +186,9 @@ public class CategoryRepositoryTest {
         /*
             Depth가 1L인 카테고리는 부모 카테고리가 없음
          */
-        List<Category> categoryList = categoryRepository.findByParentIsNull();
-        List<String> result = categoryList.stream()
-                .map(Category::getName).collect(Collectors.toList());
+        Category result = categoryRepository.findByParentIsNull().get();
 
-        assertThat(result).hasSize(6).containsExactly("동네 맛집", "카페 / 베이커리", "인기 술집", "문화 / 여가", "카테고리1", "카테고리2");
+        assertThat(result.getName()).isEqualTo("부모");
     }
 
     @Test

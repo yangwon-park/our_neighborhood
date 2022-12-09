@@ -18,7 +18,6 @@ public class CategoryDTO {
 
         private Long categoryId;
 
-        //    @NotBlank
         private String name;
 
         private Long depth;
@@ -26,7 +25,6 @@ public class CategoryDTO {
         private Long parentId;
 
         private List<CategoryDTO.Detail> children;
-
 
         @Builder
         public Detail(Long categoryId, String name, Long depth,
@@ -45,7 +43,9 @@ public class CategoryDTO {
                     .build();
         }
 
-        // 자식 Category를 고려하지 않고 Entity로 변환하고자 할 때 사용할 생성자 메소드
+        /*
+            자식 Category를 고려하지 않고 Entity로 변환하고자 할 때 사용할 생성자 메소드
+         */
         public Detail(Category category) {
             categoryId = category.getId();
             name = category.getName();
@@ -58,7 +58,9 @@ public class CategoryDTO {
             }
         }
 
-        // Entity를 DTO로 변환하는 메소드
+        /*
+            Entity를 DTO로 변환하는 메소드
+         */
         public static CategoryDTO.Detail of(Category entity) {
             if (entity.getParent() == null) {
                 return CategoryDTO.Detail.builder()

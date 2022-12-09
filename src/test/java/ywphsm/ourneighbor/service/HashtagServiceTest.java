@@ -51,8 +51,6 @@ class HashtagServiceTest {
     @Autowired
     HashtagOfStoreService hashtagOfStoreService;
 
-
-
     @BeforeEach
     void before() {
         queryFactory = new JPAQueryFactory(em);

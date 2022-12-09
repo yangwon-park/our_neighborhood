@@ -28,8 +28,8 @@ public class HashtagApiController {
     }
 
     @GetMapping("/hashtags")
-    public ResultClass<?> findHashtagsByMenuId(@RequestParam Long menuId) {
-        List<HashtagDTO> hashtags = hashtagOfMenuService.findHashtagsByMenuId(menuId);
+    public ResultClass<?> findAllHashtagByMenuId(@RequestParam Long menuId) {
+        List<HashtagDTO> hashtags = hashtagOfMenuService.findAllHashtagByMenuId(menuId);
         return new ResultClass<>(hashtags);
     }
 

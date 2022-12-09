@@ -56,10 +56,5 @@ public class HashtagOfMenu {
         hashtag.getHashtagOfMenuList().add(hashtagOfMenu);
         menu.getHashtagOfMenuList().add(hashtagOfMenu);
     }
-
-    public void updateHashtag(Hashtag hashtag) {
-        this.hashtag = hashtag;
-    }
-
 }
 

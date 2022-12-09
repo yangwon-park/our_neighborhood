@@ -15,7 +15,9 @@ public class CustomMultipartFile implements MultipartFile {
     private final byte[] bytes;
     private final String name;
     private final String originalFilename;
+
     private String contentType;
+
     private final boolean isEmpty;
     private final long size;
 

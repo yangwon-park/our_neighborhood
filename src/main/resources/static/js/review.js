@@ -137,9 +137,6 @@ var main = {
 
         menu.createDefaultImg(formData);
         
-        let file = formData.get("file");
-        console.log(file);
-
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",

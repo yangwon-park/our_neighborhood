@@ -185,7 +185,7 @@ var main = {
             data: formData
         }).then((resp) => {
             alert("메뉴가 등록됐습니다.")
-            // window.location.reload();
+            window.location.reload();
             mask.closeMask();
         }).catch((error) => {
             console.log(error)

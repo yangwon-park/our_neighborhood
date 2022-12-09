@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -39,6 +40,7 @@ public class FileUtil {
         bi = resizeImages(bi, TARGET_IMAGE_WIDTH, TARGET_IMAGE_HEIGHT);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
         boolean check = ImageIO.write(bi, IMAGE_TYPE, baos);
 
         log.info("check={}",check);

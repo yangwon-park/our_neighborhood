@@ -31,6 +31,7 @@
                         <form th:object="${request}" id="request-add-store-form" class="form-floating">
                             <div class="form-group">
                                 <div class="">
+                                    <label class="mb-2" for="name">매장 이름</label>
                                     <input th:field="*{name}" class="form-control"
                                            placeholder="매장 이름을 입력해주세요." type="text">
                                 </div>
@@ -38,6 +39,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="mb-2" for="zipcode">우편 번호</label>
                                 <div class="d-flex">
                                     <input th:field="*{zipcode}" class="form-control zipcode"
                                            placeholder="우편 번호" type="text" readonly>
@@ -50,6 +52,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="">
+                                    <label class="mb-2" for="roadAddr">도로명 주소</label>
                                     <input th:field="*{roadAddr}" class="form-control roadAddr"
                                            placeholder="도로명 주소" type="text" readonly>
                                     <div id="store-roadAddr-valid" class="my-1 valid-custom">
@@ -58,6 +61,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="">
+                                    <label class="mb-2" for="numberAddr">지번 주소</label>
                                     <input th:field="*{numberAddr}" class="form-control numberAddr"
                                            placeholder="지번 주소" type="text">
                                     <div id="store-numberAddr-valid" class="my-1 valid-custom">
@@ -65,6 +69,15 @@
                                 </div>
                                 <span id="guide" style="color:#999;display:none"></span>
                             </div>
+                            <div class="form-group" style="height: 10rem">
+                                <div class="mb-3">
+                                    <label class="mb-2" for="content">가게 설명</label>
+                                    <textarea class="form-control" style="height: 100%" placeholder="200자 이하여야 합니다"
+                                              id="content" th:field="*{content}" rows="5" maxlength="200">
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div id="store-content-valid" class="my-1 valid-custom"></div>
                             <div class="text-center">
                                 <button id="request-add-store" type="button"
                                         class="btn btn-main-color mt-4 float-end">가게 요청

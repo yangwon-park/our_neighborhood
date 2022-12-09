@@ -22,6 +22,8 @@ public class RequestAddStore extends BaseEntity {
 
     private String name;
 
+    private String content;
+
     @Embedded
     private Address address;
 
@@ -30,10 +32,11 @@ public class RequestAddStore extends BaseEntity {
     private Member member;
 
     @Builder
-    public RequestAddStore(Long id, String name, Address address, Member member) {
+    public RequestAddStore(Long id, String name, Address address, Member member, String content) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.member = member;
+        this.content = content;
     }
 }

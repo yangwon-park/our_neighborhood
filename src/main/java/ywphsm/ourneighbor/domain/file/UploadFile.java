@@ -3,7 +3,8 @@ package ywphsm.ourneighbor.domain.file;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ywphsm.ourneighbor.domain.Review;
+import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.domain.store.Review;
 import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.store.Store;
 
@@ -36,6 +37,10 @@ public class UploadFile {
     @JoinColumn(name = "review_id")
     private Review review;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     public UploadFile(String uploadedFileName, String storedFileName, String uploadImageUrl) {
         this.uploadedFileName = uploadedFileName;
         this.storedFileName = storedFileName;
@@ -62,6 +67,11 @@ public class UploadFile {
 
     public void addReview(Review review) {
         this.review = review;
+    }
+
+    public void addMember(Member member) {
+        this.member = member;
+        member.setFile(this);
     }
 
     /*

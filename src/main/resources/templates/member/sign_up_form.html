@@ -28,8 +28,18 @@
                         <span class="h3 mb-2 text-dark fw-bold">회원 가입</span>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form th:object="${dto}" id="sign-up-add-form" class="form-floating">
+                        <small>프로필 사진</small>
+                        <form th:object="${dto}" id="sign-up-add-form" class="form-floating"
+                              enctype="multipart/form-data">
                             <div class="form-group">
+                                <div class="mb-3">
+                                    <input th:field="*{file}"
+                                           class="form-control"
+                                           type="file"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <small>비밀번호</small>
                                 <div class="">
                                     <input class="form-control" placeholder="아이디" type="text" th:field="*{userId}">
                                 </div>
@@ -43,6 +53,7 @@
                                 <div id="sign-up-password-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
+                                <small>비밀번호 확인</small>
                                 <div class="">
                                     <input class="form-control" placeholder="비밀번호 확인" type="password"
                                            th:field="*{passwordCheck}">
@@ -50,12 +61,14 @@
                                 <div id="sign-up-passwordCheck-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
+                                <small>이메일</small>
                                 <div class="">
                                     <input class="form-control" placeholder="이메일" type="email" th:field="*{email}">
                                 </div>
                                 <div id="sign-up-email-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
+                                <small>이름</small>
                                 <div class="">
                                     <input class="form-control" placeholder="이름" type="text" th:field="*{username}">
                                 </div>
@@ -72,6 +85,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <small>닉네임</small>
                                 <div class="">
                                     <input class="form-control" placeholder="닉네임" type="text" th:field="*{nickname}"
                                            th:errorclass="field-error">
@@ -79,16 +93,18 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <small>생년월일</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="생년월일 예)20001212" type="text"
+                                    <input class="form-control" placeholder="생년월일 예)20000101" type="text"
                                            th:field="*{birthDate}">
                                     <div id="sign-up-birthDate-valid" class="my-1 valid-custom"></div>
                                 </div>
                             </div>
                             <div class="form-group">
+                                <small>전화번호</small>
                                 <div class="d-flex">
                                     <input th:field="*{phoneNumber}" class="form-control"
-                                           placeholder="전화번호 예)01012341234" type="text">
+                                           placeholder="전화번호 01012341234" type="text">
                                     <button type="button" class="text-center btn btn-main-color ms-3"
                                             style="height: 3rem" id="send-SMS">인증번호 받기
                                     </button>
@@ -96,8 +112,9 @@
                                 <div id="sign-up-phoneNumber-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
+                                <small>인증번호</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="인증번호" type="text"
+                                    <input class="form-control" placeholder="000000" type="text"
                                            th:field="*{certifiedNumber}">
                                     <div id="sign-up-certifiedNumber-valid" class="my-1 valid-custom"></div>
                                 </div>

@@ -19,6 +19,7 @@ public class EditController {
         editForm.setNickname(member.getNickname());
         editForm.setEmail(member.getEmail());
         editForm.setPhoneNumber(member.getPhoneNumber());
+        editForm.setImgUrl(member.getFile().getUploadImageUrl());
 
         return "member/edit/edit_form";
     }

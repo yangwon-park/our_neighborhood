@@ -296,7 +296,6 @@ var main = {
          */
         cookie.setCookie("customCheck", true, 1);
 
-
         /*
             직접 설정한 주소값을 쿠키에 저장하는 조건
                 1. 기존의 쿠키값이 없는 경우 (공백, null)

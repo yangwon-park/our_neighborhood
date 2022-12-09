@@ -35,7 +35,7 @@ public class HashtagApiController {
 
     @PostMapping("/seller/hashtag/{storeId}")
     public Long saveHashtag(@PathVariable Long storeId, HashtagDTO dto) {
-        return hashtagService.simpleSaveLinkedStore(storeId, dto);
+        return hashtagService.simpleSaveHashtagLinkedStore(storeId, dto);
     }
 
     @DeleteMapping("/seller/hashtag/{hashtagId}")

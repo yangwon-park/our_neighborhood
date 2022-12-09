@@ -39,7 +39,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("부모 카테고리가 없고, 기존에 ROOT 카테고리도 없는 경우에 카테고리 등록")
-    void should_FindACategory_When_ParentIdIsNullAndRootCategoryNotExists() {
+    void should_FindCategory_When_ParentIdIsNullAndRootCategoryNotExists() {
         /*
             이 테스트 케이스는 최초로 카테고리를 등록하는 경우
          */
@@ -79,7 +79,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("부모 카테고리가 없고, 기존에 ROOT 카테고리는 있는 경우에 카테고리 등록")
-    void should_FindACategory_When_ParentIdIsNullAndRootCategoryExists() {
+    void should_FindCategory_When_ParentIdIsNullAndRootCategoryExists() {
         // given
         Category root = Category.builder()
                 .name("ROOT")
@@ -157,7 +157,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("categoryId로 카테고리 삭제")
-    void should_DeleteACategory_When_ById() {
+    void should_DeleteCategory_When_ById() {
         // given
         CategoryDTO.Detail dto = CategoryDTO.Detail.builder()
                 .name("카테고리")
@@ -184,7 +184,7 @@ public class CategoryServiceTest {
 
     @Test
     @DisplayName("categoryId로 카테고리 조회")
-    void should_FindACategory_When_ById() {
+    void should_FindCategory_When_ById() {
         // given
         CategoryDTO.Detail dto = CategoryDTO.Detail.builder()
                 .name("카테고리")

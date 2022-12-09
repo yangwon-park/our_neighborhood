@@ -165,10 +165,10 @@ public class CategoryRepositoryTest {
     @Test
     @DisplayName("카테고리 명, 카테고리 뎁스로 조회 성공")
     void should_FindACategory_When_ByCategoryNameAndDepth() {
-        Category findCategory = categoryRepository.findByNameAndDepth("카테고리1", 1L)
+        Category findCategory = categoryRepository.findByNameAndDepth("카테고리1", 2L)
                 .orElseThrow(() -> new IllegalArgumentException("해당 뎁스의 카테고리를 찾지 못했습니다."));
 
-        assertThat(findCategory.getName()).isEqualTo(findCategory.getName());
+        assertThat(findCategory).isNotInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -198,13 +198,13 @@ public class CategoryRepositoryTest {
         List<String> result = categoryList.stream()
                 .map(Category::getName).collect(Collectors.toList());
 
-        assertThat(result).hasSize(10).containsExactly("동네 맛집", "문화 / 여가", "인기 술집", "카테고리1", "카테고리2", "카페 / 베이커리", "카테고리3", "카테고리4", "카테고리6", "카테고리5");
+        assertThat(result).hasSize(11).containsExactly("부모", "동네 맛집", "문화 / 여가", "인기 술집", "카테고리1", "카테고리2", "카페 / 베이커리", "카테고리3", "카테고리4", "카테고리6", "카테고리5");
     }
 
     @Test
     @DisplayName("카테고리 명, 카테고리 뎁스가 같은 카테고리 등록 시, 중복으로 인한 true 반환")
     void should_IsTrue_When_AddACategoryByNameEqualsAndByDepthEquals() {
-        Boolean check = categoryRepository.existsByNameAndDepth("카테고리1", 1L);
+        Boolean check = categoryRepository.existsByNameAndDepth("카테고리1", 2L);
 
         assertThat(check).isTrue();
     }
@@ -212,7 +212,7 @@ public class CategoryRepositoryTest {
     @Test
     @DisplayName("카테고리 명은 같지만 카테고리 뎁스가 다른 카테고리 등록 시, 중복이 아니므로 false 반환")
     void should_IsFalse_When_AddACategoryByNameEqualsAndDepthNot() {
-        Boolean check = categoryRepository.existsByNameAndDepth("카테고리1", 2L);
+        Boolean check = categoryRepository.existsByNameAndDepth("카테고리1", 77L);
 
         assertThat(check).isFalse();
     }
@@ -243,7 +243,7 @@ public class CategoryRepositoryTest {
                 동네 맛집, 카페 / 베이커리, 인기 술집, 문화 / 여가, 나머지...
          */
         Long depth = 1L;
-        List<Category> categoryList = categoryRepository.findByDepthCaseByOrderByName(1L);
+        List<Category> categoryList = categoryRepository.findByDepthCaseByOrderByName(2L);
 
         List<String> result = categoryList.stream()
                 .map(Category::getName).collect(Collectors.toList());
@@ -266,7 +266,7 @@ public class CategoryRepositoryTest {
 
         tem.persist(storeZ);
 
-        Category category = categoryRepository.findByNameAndDepth("카테고리1", 1L)
+        Category category = categoryRepository.findByNameAndDepth("카테고리1", 2L)
                 .orElseThrow(() -> new IllegalArgumentException("카테고리가 없습니다."));
 
         linkCategoryAndStore(category, storeZ);

@@ -5,11 +5,13 @@ var main = {
         let mainBody = document.getElementById("main-body");
         let mask = document.createElement("div");
         mask.id = "mask";
+        mask.style.zIndex = "9000";
 
         let loadingImg = document.createElement("img");
         loadingImg.id = "spinner";
         loadingImg.alt = "spinner";
         loadingImg.src = path;
+        loadingImg.style.zIndex = "9000";
 
         mask.append(loadingImg);
         mainBody.append(mask);

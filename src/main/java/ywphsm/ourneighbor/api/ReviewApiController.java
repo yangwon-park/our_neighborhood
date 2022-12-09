@@ -26,7 +26,6 @@ public class ReviewApiController {
 
     @PostMapping("/user/review")
     public Long save(ReviewDTO.Add dto, @RequestParam String hashtag) throws IOException, ParseException {
-        log.info("dto = {}", dto.getFile());
         return reviewService.save(dto, hashtag);
     }
 

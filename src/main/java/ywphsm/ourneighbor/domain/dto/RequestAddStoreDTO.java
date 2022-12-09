@@ -22,6 +22,9 @@ public class RequestAddStoreDTO {
         private String name;
 
         @NotBlank
+        private String content;
+
+        @NotBlank
         private String zipcode;
 
         @NotBlank
@@ -33,12 +36,13 @@ public class RequestAddStoreDTO {
         private Member member;
 
         @Builder
-        public Add(String name, String zipcode, String roadAddr, String numberAddr, Member member) {
+        public Add(String name, String zipcode, String roadAddr, String numberAddr, Member member, String content) {
             this.name = name;
             this.zipcode = zipcode;
             this.roadAddr = roadAddr;
             this.numberAddr = numberAddr;
             this.member = member;
+            this.content = content;
         }
 
         public RequestAddStore toEntity() {
@@ -46,6 +50,7 @@ public class RequestAddStoreDTO {
                     .name(name)
                     .address(new Address(roadAddr, numberAddr, zipcode, null))
                     .member(member)
+                    .content(content)
                     .build();
         }
     }
@@ -58,6 +63,8 @@ public class RequestAddStoreDTO {
 
         private String name;
 
+        private String content;
+
         private String zipcode;
 
         private String roadAddr;
@@ -67,13 +74,14 @@ public class RequestAddStoreDTO {
         private String email;
 
         @QueryProjection
-        public Detail(Long id, String name, String zipcode, String roadAddr, String numberAddr, String email) {
+        public Detail(Long id, String name, String zipcode, String roadAddr, String numberAddr, String email, String content) {
             this.id = id;
             this.name = name;
             this.zipcode = zipcode;
             this.roadAddr = roadAddr;
             this.numberAddr = numberAddr;
             this.email = email;
+            this.content = content;
         }
 
 

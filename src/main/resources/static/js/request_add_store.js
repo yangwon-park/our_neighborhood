@@ -31,7 +31,8 @@ var main = {
             name: document.getElementById("name"),
             zipcode: document.getElementById("zipcode"),
             roadAddr: document.getElementById("roadAddr"),
-            numberAddr: document.getElementById("numberAddr")
+            numberAddr: document.getElementById("numberAddr"),
+            content: document.getElementById("content")
         }
         let memberId = document.getElementById("memberId").value;
 
@@ -40,7 +41,8 @@ var main = {
             nameValid: document.getElementById("store-name-valid"),
             zipcodeValid: document.getElementById("store-zipcode-valid"),
             roadAddrValid: document.getElementById("store-roadAddr-valid"),
-            numberAddrValid: document.getElementById("store-numberAddr-valid")
+            numberAddrValid: document.getElementById("store-numberAddr-valid"),
+            contentValid: document.getElementById("store-content-valid")
         }
 
         const requestAddStoreForm = document.getElementById("request-add-store-form");
@@ -55,7 +57,7 @@ var main = {
             validation.removeValidation(valids[v]);
         }
 
-        if (els["name"].value !== "" && els["zipcode"].value !== ""
+        if (els["name"].value !== "" && els["zipcode"].value !== "" && els["content"].value !== ""
             && els["roadAddr"].value !== "" && els["numberAddr"].value !== "")
         {
 

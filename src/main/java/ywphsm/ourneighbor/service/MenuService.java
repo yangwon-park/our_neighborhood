@@ -197,7 +197,7 @@ public class MenuService {
                 newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
             } else {
                 newHashtag = hashtagRepository.findByName(name)
-                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));;
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
             }
 
             linkHashtagAndMenu(newHashtag, menu);
@@ -218,7 +218,7 @@ public class MenuService {
              */
             if (duplicateCheck) {
                 hashtag = hashtagRepository.findByName(name)
-                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));;
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
 
                 Boolean duplicateHashtagOfStoreCheck = hashtagOfMenuRepository.existsByHashtagAndMenu(hashtag, menu);
 

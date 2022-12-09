@@ -36,6 +36,10 @@
         <div class="row store-info" style="font-size: 1.5rem">
             <div class="col-12 my-1">
                 <i class="fa-solid fa-map-location-dot main-color fa-sm"></i>
+                <img th:src="*{imgUrl}" width="180" height="180" alt="프로필 사진">
+            </div>
+            <div class="col-12 my-1">
+                <i class="fa-solid fa-map-location-dot main-color fa-sm"></i>
                 <span>아이디 : </span>
                 <span th:text="*{userId}"></span>
             </div>

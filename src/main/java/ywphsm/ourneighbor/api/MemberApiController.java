@@ -18,6 +18,7 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.io.IOException;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -99,7 +100,7 @@ public class MemberApiController {
     }
 
     @PostMapping("/member/add")
-    public Long save(MemberDTO.Add dto) {
+    public Long save(MemberDTO.Add dto) throws IOException {
         return memberService.save(dto);
     }
 
@@ -122,7 +123,7 @@ public class MemberApiController {
 
     @PutMapping("/member/edit")
     public String update(EditForm editForm,
-                         @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
+                         @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) throws IOException {
 
         if (memberService.doubleCheck(editForm.getNickname()) != null &&
                 !member.getNickname().equals(editForm.getNickname())) {
@@ -133,7 +134,7 @@ public class MemberApiController {
             return "이미 존재하는 이메일 입니다";
         }
 
-        memberService.updateMember(member.getId(), editForm.getNickname(), editForm.getEmail());
+        memberService.updateMember(member.getId(), editForm);
         return "성공";
     }
 

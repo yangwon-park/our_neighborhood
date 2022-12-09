@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import ywphsm.ourneighbor.domain.QReview;
 import ywphsm.ourneighbor.domain.dto.QReviewMemberDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.file.QUploadFile;
 import ywphsm.ourneighbor.domain.member.QMember;
+import ywphsm.ourneighbor.domain.store.QReview;
 import ywphsm.ourneighbor.domain.store.QStore;
 
 import java.util.List;

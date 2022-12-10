@@ -162,8 +162,6 @@ public class HashtagServiceTest {
         Long mockHashtagId = 1L;
         given(hashtagRepository.findById(1L)).willThrow(new IllegalArgumentException());
 
-        // when
-
         // then
         assertThatThrownBy(() -> hashtagService.findById(mockHashtagId)).isInstanceOf(IllegalArgumentException.class);
         then(hashtagRepository).should().findById(mockHashtagId);
@@ -223,15 +221,12 @@ public class HashtagServiceTest {
         then(hashtagRepository).should().findByName(dto.getName());
     }
 
-
     @Test
     @DisplayName("존재하지 않는 해쉬태그 이름으로 조회 시 예외 발생")
     void should_ThrowException_When_ExistsNotHashtagByName() {
         // given
         String name = "해쉬태그 이름";
         given(hashtagRepository.findByName(name)).willThrow(new IllegalArgumentException());
-
-        // when
 
         // then
         assertThatThrownBy(() -> hashtagService.findByName(name)).isInstanceOf(IllegalArgumentException.class);

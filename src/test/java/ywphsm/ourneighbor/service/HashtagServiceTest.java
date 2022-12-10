@@ -99,17 +99,13 @@ class HashtagServiceTest {
     @Test
     @DisplayName("매장 상위9개_해쉬태그_조회")
     void findTop9HashtagInAStore() {
-
         Long storeId = 28L;
 
         List<HashtagOfStoreDTO.WithCount> list =
-                hashtagOfStoreService.findHashtagAndCountByStoreIdTop9(storeId);
+                hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescTop9(storeId);
 
         for (HashtagOfStoreDTO.WithCount dto : list) {
             System.out.println("dto = " + dto);
         }
     }
-
-
-    
 }

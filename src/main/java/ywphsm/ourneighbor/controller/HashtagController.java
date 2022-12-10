@@ -21,7 +21,7 @@ public class HashtagController {
     @GetMapping("/seller/hashtag/{storeId}")
     public String getHashtag(@PathVariable Long storeId, Model model) {
         List<HashtagOfStoreDTO.WithCount> hashtagList =
-                hashtagOfStoreService.findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(storeId);
+                hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescOrderByHashtagName(storeId);
 
         model.addAttribute("hashtagList", hashtagList);
         model.addAttribute("storeId", storeId);

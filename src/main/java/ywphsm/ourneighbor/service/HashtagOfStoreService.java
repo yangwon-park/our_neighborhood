@@ -17,12 +17,12 @@ public class HashtagOfStoreService {
 
     private final HashtagOfStoreRepository hashtagOfStoreRepository;
 
-    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdTop9(Long storeId) {
-        return hashtagOfStoreRepository.findHashtagAndCountByStoreIdTop9(storeId);
+    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdOrderByCountDescTop9(Long storeId) {
+        return hashtagOfStoreRepository.findHashtagAndCountByStoreIdOrderByCountDescTop9(storeId);
     }
 
-    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(Long storeId) {
-        return hashtagOfStoreRepository.findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(storeId);
+    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdOrderByCountDescOrderByHashtagName(Long storeId) {
+        return hashtagOfStoreRepository.findHashtagAndCountByStoreIdOrderByCountDescOrderByHashtagName(storeId);
     }
 
     @Transactional

@@ -32,6 +32,7 @@ public class HashtagDTO {
     // 빈 ArrayList를 넣어줌으로써 해결
     public Hashtag toEntity() {
         return Hashtag.builder()
+                .id(hashtagId)
                 .name(name)
                 .hashtagOfStoreList(new ArrayList<>())
                 .hashtagOfMenuList(new ArrayList<>())

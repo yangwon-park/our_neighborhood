@@ -92,7 +92,7 @@ public class StoreController {
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
-        List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdTop9(storeId);
+        List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescTop9(storeId);
 
         List<Menu> menuList = menuService.findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(storeId);
 

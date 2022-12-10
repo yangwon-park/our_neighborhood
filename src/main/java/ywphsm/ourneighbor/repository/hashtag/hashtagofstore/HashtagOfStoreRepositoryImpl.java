@@ -18,7 +18,7 @@ public class HashtagOfStoreRepositoryImpl implements HashtagOfStoreRepositoryCus
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdTop9(Long storeId) {
+    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdOrderByCountDescTop9(Long storeId) {
         return queryFactory
                 .select(
                         Projections.constructor(HashtagOfStoreDTO.WithCount.class,
@@ -27,14 +27,14 @@ public class HashtagOfStoreRepositoryImpl implements HashtagOfStoreRepositoryCus
                 )
                 .from(hashtagOfStore)
                 .groupBy(hashtagOfStore.hashtag, hashtagOfStore.store)
+                .having(hashtagOfStore.store.id.eq(storeId))
                 .orderBy(hashtagOfStore.id.count().desc())
-                .where(hashtagOfStore.store.id.eq(storeId))
                 .limit(9)
                 .fetch();
     }
 
     @Override
-    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(Long storeId) {
+    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdOrderByCountDescOrderByHashtagName(Long storeId) {
         return queryFactory
                 .select(
                         Projections.constructor(HashtagOfStoreDTO.WithCount.class,

@@ -198,7 +198,7 @@ public class HashtagRepositoryTest {
     void should_FindHashtagsAndCount_When_InStoreX() {
         Long storeId = storeRepository.findByName("매장X").get(0).getId();
 
-        List<HashtagOfStoreDTO.WithCount> dtoList = hashtagOfStoreRepository.findAllHashtagAndCountByStoreIdOrderByIdCountDescOrderByHashtagName(storeId);
+        List<HashtagOfStoreDTO.WithCount> dtoList = hashtagOfStoreRepository.findHashtagAndCountByStoreIdOrderByCountDescOrderByHashtagName(storeId);
 
         List<String> result = dtoList.stream()
                 .map(HashtagOfStoreDTO.WithCount::getHashtagName).collect(Collectors.toList());

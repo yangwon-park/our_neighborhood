@@ -59,6 +59,14 @@ public class HashtagOfStoreDTO {
             this.storeId = storeId;
             this.count = count;
         }
+
+        public static WithCount of(HashtagOfStore entity) {
+            return WithCount.builder()
+                    .hashtagId(entity.getHashtag().getId())
+                    .hashtagName(entity.getHashtag().getName())
+                    .storeId(entity.getStore().getId())
+                    .build();
+        }
     }
 
 }

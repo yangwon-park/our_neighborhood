@@ -18,7 +18,7 @@ public class HashtagOfMenuService {
 
     private final HashtagOfMenuRepository hashtagOfMenuRepository;
 
-    public List<HashtagDTO> findHashtagsByMenuId(Long menuId) {
+    public List<HashtagDTO> findAllHashtagByMenuId(Long menuId) {
         return hashtagOfMenuRepository.findAllHashtagByMenuId(menuId)
                 .stream().map(hashtagOfMenu -> HashtagDTO.builder()
                             .hashtagId(hashtagOfMenu.getHashtag().getId())

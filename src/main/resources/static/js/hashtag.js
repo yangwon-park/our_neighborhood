@@ -33,15 +33,19 @@ var main = {
 
         const hashtagInput = document.getElementById("hashtag");
 
-        // 엔터키 입력하면 saveHashtag() 동작
-        hashtagInput.addEventListener("keydown", (e) => {
-            if (hashtagInput.value !== "") {
-                if (e.isComposing === false && e.code === "Enter") { // 한글 입력 시 이벤트 두번 발생 방지
-                    e.preventDefault();
-                    this.saveHashtag();
+        if (hashtagInput !== null) {
+            /*
+                엔터키 입력하면 saveHashtag() 동작
+            */
+            hashtagInput.addEventListener("keydown", (e) => {
+                if (hashtagInput.value !== "") {
+                    if (e.isComposing === false && e.code === "Enter") { // 한글 입력 시 이벤트 두번 발생 방지
+                        e.preventDefault();
+                        this.saveHashtag();
+                    }
                 }
-            }
-        });
+            });
+        }
 
     },
 
@@ -143,10 +147,10 @@ var main = {
             data: formData
         }).then((resp) => {
             if (resp.data === -1) {
-                alert("존재하는 카테고리입니다.");
+                alert("존재하는 해쉬태그입니다.");
                 window.location.reload();
             } else {
-                alert("카테고리 등록이 성공했습니다.");
+                alert("해쉬태그 등록이 성공했습니다.");
                 window.location.reload();
             }
         })

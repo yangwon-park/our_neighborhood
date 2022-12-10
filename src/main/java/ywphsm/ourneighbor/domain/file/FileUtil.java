@@ -31,20 +31,21 @@ public class FileUtil {
         이미지 리사이징 메소드
      */
     public static MultipartFile getResizedMultipartFile(MultipartFile multipartFile, String originalFileName) throws IOException {
+        if (multipartFile.getSize() < 1024 * 100) {
+            log.info("리사이징 동작 X = {}", originalFileName);
+            return multipartFile;
+        }
+
         log.info("리사이징 동작 = {}", originalFileName);
-        final int TARGET_IMAGE_WIDTH = 450;
-        final int TARGET_IMAGE_HEIGHT = 450;
+        final int TARGET_IMAGE_WIDTH = 250;
+        final int TARGET_IMAGE_HEIGHT = 250;
         final String IMAGE_TYPE = "png";
 
         BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
         bi = resizeImages(bi, TARGET_IMAGE_WIDTH, TARGET_IMAGE_HEIGHT);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        boolean check = ImageIO.write(bi, IMAGE_TYPE, baos);
-
-        log.info("check={}",check);
-
+        ImageIO.write(bi, IMAGE_TYPE, baos);
         baos.flush();
 
         return new CustomMultipartFile(baos.toByteArray(), multipartFile.getName(), originalFileName, "image/*", false, baos.toByteArray().length);

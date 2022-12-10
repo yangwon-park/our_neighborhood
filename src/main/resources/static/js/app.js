@@ -172,8 +172,6 @@ var main = {
             let currentPcp = resp.data.pcp;
             let pm10Value;
 
-            console.log(resp.data.pm10Value);
-
             if (resp.data.pm10Value === "-") {
                 pm10Value = 50;
             } else {

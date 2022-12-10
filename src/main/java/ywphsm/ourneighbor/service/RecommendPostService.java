@@ -60,7 +60,6 @@ public class RecommendPostService {
 
     public RecommendPostDTO.Simple getRecommendPost(String skyStatus, String pm10Value,
                                                     String tmp, String pcp) {
-
         RecommendKind cond = getRecommendKind(skyStatus, pm10Value, tmp, pcp);
 
         /*   참고 (페이징 기능을 활용한 랜덤으로 게시글 조회하는 방법)
@@ -68,19 +67,20 @@ public class RecommendPostService {
              https://kapentaz.github.io/jpa/Spring-Data-JPA-%EC%B9%B4%EC%9A%B4%ED%8A%B8-%EC%BF%BC%EB%A6%AC-%EC%97%86%EC%9D%B4-%ED%8E%98%EC%9D%B4%EC%A7%95-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0/#
         */
         Long count = recommendPostRepository.countByRecommendKind(cond);
+        PageRequest pageRequest;
 
-        int idx = (int) (Math.random() * count);
+        if (count != 0L) {              // 조건에 맞는 추천 양식이 있다면 (count가 0이 아니다) 그 중 1개를 랜덤으로 추천
+            int idx = (int) (Math.random() * count);
+            pageRequest = PageRequest.of(idx, 1);
 
-        PageRequest pageRequest = PageRequest.of(idx, 1);
+            List<RecommendPost> result = recommendPostRepository.findByRecommendKind(cond, pageRequest);
 
-        List<RecommendPost> result = recommendPostRepository.findByRecommendKind(cond, pageRequest);
-
-        // 조건에 맞는 추천 양식이 있다면 그걸로 추천
-        if (!result.isEmpty()) {
             return RecommendPostDTO.Simple.of(result.get(0));
+        } else {                        // 없으면 NORMAL 중 하나 추천
+            Long normalCnt = recommendPostRepository.countByRecommendKind(RecommendKind.NORMAL);
+            int idx = (int) (Math.random() * normalCnt);
+            pageRequest = PageRequest.of(idx, 1);
 
-        // 없으면 NORMAL 중 하나 추천
-        } else {
             return RecommendPostDTO.Simple.of(recommendPostRepository.findByRecommendKind(RecommendKind.NORMAL, pageRequest).get(0));
         }
     }

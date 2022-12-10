@@ -56,8 +56,6 @@ var main = {
                 })
             })
         }
-
-        // mask.closeMask();
     },
 
     save: function () {
@@ -385,7 +383,6 @@ var main = {
                 }
             }
         }
-
     },
 
     getSubCategories: function (midChildrenParam, categoryList) {

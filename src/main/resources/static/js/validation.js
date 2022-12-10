@@ -7,6 +7,7 @@ var main = {
     addValidation: function (el, text) {
         el.innerText = text;
         el.classList.add("valid-custom");
+        el.classList.add("text-bold");
         el.classList.remove("hidden");
     },
 }

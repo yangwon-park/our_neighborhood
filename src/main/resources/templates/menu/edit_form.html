@@ -145,13 +145,15 @@
                                             </div>
                                             <div class="">
                                                 <label class="fw-bold" th:for="|menu-edit-image${i.index+1}|">
-                                                    이미지 업로드
+                                                    이미지 업로드 (최대 용량 2MB)
                                                 </label>
                                                 <input th:id="|menu-edit-image${i.index+1}|"
                                                        name="file" type="file" disabled/>
                                                 <input id="storeId" th:value="${menu.storeId}" type="hidden"/>
                                                 <input th:id="|menuId${i.index+1}|" name="id" th:value="${menu.id}"
                                                        type="hidden"/>
+                                                <div th:id="|menu-edit-image${i.index+1}-valid|" class="my-1 valid-custom">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="float-end">

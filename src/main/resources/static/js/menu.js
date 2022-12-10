@@ -59,11 +59,13 @@ var main = {
         const price = document.getElementById("price");
         const type = document.getElementsByName("type");
         const feature = document.getElementsByName("feature")
+        const file = document.getElementById("file").files;
 
         const nameValid = document.getElementById("menu-name-valid");
         const priceValid = document.getElementById("menu-price-valid");
         const typeValid = document.getElementById("menu-type-valid");
         const featureValid = document.getElementById("menu-feature-valid");
+        const fileValid = document.getElementById("menu-file-valid");
 
         name.classList.remove("valid-custom");
         price.classList.remove("valid-custom");
@@ -72,6 +74,7 @@ var main = {
         validation.removeValidation(priceValid);
         validation.removeValidation(typeValid);
         validation.removeValidation(featureValid);
+        validation.removeValidation(fileValid);
 
         let typeCheck = false;
         let featureCheck = false;
@@ -91,10 +94,20 @@ var main = {
             }
         }
 
+        let fileSizeCheck;
+        let targetSize = 1024 * 1024 * 2;
+
+        if (file.length === 0) {
+            fileSizeCheck = true;
+        } else {
+            fileSizeCheck = file[0].size <= targetSize;
+        }
+
         const storeId = document.getElementById("storeId").value;
 
         if (name.value !== "" && storeId !== "" && price.value !== ""
-            && typeCheck === true && featureCheck === true && numRegCheck) {
+            && typeCheck === true && featureCheck === true && numRegCheck
+            && fileSizeCheck) {
             mask.loadingWithMask();
 
             axios({
@@ -140,6 +153,10 @@ var main = {
         if (featureCheck === false) {
             validation.addValidation(featureValid, "메뉴의 특징을 선택해주세요.");
         }
+
+        if (file.length !== 0 && file[0].size > targetSize) {
+            validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
+        }
     },
 
     createDefaultImg: function (formData) {
@@ -165,16 +182,6 @@ var main = {
 
         this.createDefaultImg(formData);
 
-        // FormData의 key 확인
-        for (let key of formData.keys()) {
-            console.log(key);
-        }
-
-        // FormData의 value 확인
-        for (let value of formData.values()) {
-            console.log(value);
-        }
-
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -198,13 +205,17 @@ var main = {
 
         const menuUpdateFormEls = {
             name: document.getElementById("menu-edit-name" + id),
-            price: document.getElementById("menu-edit-price" + id)
+            price: document.getElementById("menu-edit-price" + id),
         }
+
+        const file = document.getElementById("menu-edit-image" + id).files;
 
         const menuUpdateFormValids = {
             nameValid: document.getElementById("menu-edit-name" + id + "-valid"),
-            priceValid: document.getElementById("menu-edit-price" + id + "-valid")
+            priceValid: document.getElementById("menu-edit-price" + id + "-valid"),
         }
+        const fileValid =
+            document.getElementById("menu-edit-image" + id + "-valid")
 
         for (const el in menuUpdateFormEls) {
             menuUpdateFormEls[el].classList.remove("valid-custom");
@@ -214,7 +225,17 @@ var main = {
             validation.removeValidation(menuUpdateFormValids[el]);
         }
 
-        if (menuUpdateFormEls["name"].value !== "" && menuUpdateFormEls["price"].value !== "") {
+        let fileSizeCheck;
+        let targetSize = 1024 * 1024 * 2;
+
+        if (file.length === 0) {
+            fileSizeCheck = true;
+        } else {
+            fileSizeCheck = file[0].size <= targetSize;
+        }
+
+        if (menuUpdateFormEls["name"].value !== "" && menuUpdateFormEls["price"].value !== ""
+            && fileSizeCheck) {
             const menuForm = document.getElementById("menu-edit-form" + id);
             const storeIdVal = document.getElementById("storeId").value;
 
@@ -246,6 +267,10 @@ var main = {
                 menuUpdateFormEls[el].classList.add("valid-custom");
                 validation.addValidation(menuUpdateFormValids[el + "Valid"], "필수값입니다.");
             }
+        }
+
+        if (file.length !== 0 && file[0].size > targetSize) {
+            validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
         }
     },
 

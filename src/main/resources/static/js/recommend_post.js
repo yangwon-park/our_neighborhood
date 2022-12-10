@@ -1,4 +1,7 @@
-let main = {
+import validation from "./validation.js";
+import mask from "./mask.js";
+
+var main = {
     init: function () {
 
         let recommendSaveBtn = document.getElementById("recommend-post-save");
@@ -13,19 +16,76 @@ let main = {
     },
 
     saveRecommendPost: function () {
-        const form = document.getElementById("recommend-post-add-form");
-        const formData = new FormData(form);
+        console.log("동작중?");
+        const recommendPostFormEls = {
+            header: document.getElementById("header"),
+            content: document.getElementById("content"),
+            hashtag: document.getElementById("hashtag")
+        }
 
-        axios({
-            method: "post",
-            url: "/admin/recommend-post",
-            data: formData
-        }).then((resp) => {
-            alert("양식이 등록됐습니다.");
-            window.location.reload();
-        }).catch((error) => {
-           console.log(error)
-        });
+        const kind = document.getElementsByName("recommendKind");
+
+        const recommendPostFormValids = {
+            headerValid: document.getElementById("post-header-valid"),
+            contentValid: document.getElementById("post-content-valid"),
+            hashtagValid: document.getElementById("post-hashtag-valid")
+        }
+        const kindValid = document.getElementById("post-kind-valid");
+
+        for (const el in recommendPostFormEls) {
+            recommendPostFormEls[el].classList.remove("valid-custom");
+        }
+
+        for (const el in recommendPostFormValids) {
+            validation.removeValidation(recommendPostFormValids[el]);
+        }
+
+        let kindCheck = false;
+
+        for (let i = 0; i < kind.length; i++) {
+            if (kind[i].checked === true) {
+                kindCheck = true;
+            }
+        }
+
+        console.log(recommendPostFormEls["header"].value);
+        console.log(recommendPostFormEls["content"].value);
+        console.log(recommendPostFormEls["hashtag"].value);
+        console.log(kindCheck);
+
+        if (recommendPostFormEls["header"].value !== ""
+            && recommendPostFormEls["content"].value !== ""
+            && recommendPostFormEls["hashtag"].value !== ""
+            && kindCheck) {
+
+            const form = document.getElementById("recommend-post-add-form");
+            const formData = new FormData(form);
+
+            mask.loadingWithMask();
+            console.log("동작중?22");
+
+            axios({
+                method: "post",
+                url: "/admin/recommend-post",
+                data: formData
+            }).then((resp) => {
+                alert("양식이 등록됐습니다.");
+                window.location.reload();
+                mask.closeMask();
+            }).catch((error) => {
+                console.log(error)
+                mask.closeMask();
+            });
+        }
+
+        for (const el in recommendPostFormEls) {
+            if (recommendPostFormEls[el].value === "") {
+                recommendPostFormEls[el].classList.add("valid-custom");
+                validation.addValidation(recommendPostFormValids[el + "Valid"], "필수값입니다.");
+            }
+        }
+
+        validation.addValidation(kindValid, "종류를 선택해주세요.");
     },
 
     getRecommendPost: function () {

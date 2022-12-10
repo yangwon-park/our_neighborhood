@@ -106,8 +106,7 @@ var main = {
         const storeId = document.getElementById("storeId").value;
 
         if (name.value !== "" && storeId !== "" && price.value !== ""
-            && typeCheck === true && featureCheck === true && numRegCheck
-            && fileSizeCheck) {
+            && typeCheck && featureCheck && numRegCheck && fileSizeCheck) {
             mask.loadingWithMask();
 
             axios({

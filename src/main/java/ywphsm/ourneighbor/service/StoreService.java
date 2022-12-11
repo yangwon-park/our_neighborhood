@@ -22,6 +22,7 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 import ywphsm.ourneighbor.domain.store.distance.Location;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
+import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
@@ -49,6 +50,8 @@ public class StoreService {
     private final MemberOfStoreRepository memberOfStoreRepository;
 
     private final MemberService memberService;
+
+    private final MemberRepository memberRepository;
 
     private final CategoryService categoryService;
 
@@ -215,7 +218,7 @@ public class StoreService {
 
     public Store findById(Long storeId) {
         return storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
+                () -> new IllegalArgumentException("해당 가게가 없습니다. id = " + storeId));
     }
 
     public List<Store> findAllStores() {
@@ -287,41 +290,41 @@ public class StoreService {
 
     @Transactional
     public String addStoreOwner(String userId, Long storeId) {
-        try {
-            Member findMember = memberService.findByUserId(userId);
-            if (findMember.getRole() == Role.USER) {
-                return "가게를 관리할 권한이 없는 아이디입니다";
-            }
 
-            Store findStore = findById(storeId);
-            List<MemberOfStore> DuplicateCheck = findStore.getMemberOfStoreList().stream()
-                    .filter(memberOfStore -> memberOfStore.getMember().equals(findMember))
-                    .collect(Collectors.toList());
-
-            if (!DuplicateCheck.isEmpty()) {
-                long OwnerCount = DuplicateCheck.stream()
-                        .filter(MemberOfStore::isMyStore)
-                        .count();
-
-                long likeCount = DuplicateCheck.stream()
-                        .filter(MemberOfStore::isStoreLike)
-                        .count();
-                log.info("likeCount={}", likeCount);
-                if (OwnerCount > 0) {
-                    return "이미 등록된 관리자 입니다.";
-                }
-                if (likeCount > 0) {
-                    DuplicateCheck.get(0).updateMyStore(true);
-                    return "성공";
-                }
-            }
-            MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(findMember, findStore);
-            memberOfStore.updateMyStore(true);
-            memberOfStoreRepository.save(memberOfStore);
-
-        } catch (IllegalArgumentException e) {
+        Member findMember = memberRepository.findByUserId(userId).orElse(null);
+        if (findMember == null) {
             return "존재하지 않는 아이디 입니다";
         }
+        if (findMember.getRole() == Role.USER) {
+            return "가게를 관리할 권한이 없는 아이디입니다";
+        }
+
+        Store findStore = findById(storeId);
+        List<MemberOfStore> DuplicateCheck = findStore.getMemberOfStoreList().stream()
+                .filter(memberOfStore -> memberOfStore.getMember().equals(findMember))
+                .collect(Collectors.toList());
+
+        if (!DuplicateCheck.isEmpty()) {
+            long OwnerCount = DuplicateCheck.stream()
+                    .filter(MemberOfStore::isMyStore)
+                    .count();
+
+            long likeCount = DuplicateCheck.stream()
+                    .filter(MemberOfStore::isStoreLike)
+                    .count();
+            log.info("likeCount={}", likeCount);
+            if (OwnerCount > 0) {
+                return "이미 등록된 관리자 입니다.";
+            }
+            if (likeCount > 0) {
+                DuplicateCheck.get(0).updateMyStore(true);
+                return "성공";
+            }
+        }
+        MemberOfStore memberOfStore = MemberOfStore.linkMemberOfStore(findMember, findStore);
+        memberOfStore.updateMyStore(true);
+        memberOfStoreRepository.save(memberOfStore);
+
         return "성공";
     }
 

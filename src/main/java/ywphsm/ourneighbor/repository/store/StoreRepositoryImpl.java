@@ -49,7 +49,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .innerJoin(categoryOfStore.category, category)
                 .innerJoin(store.file, uploadFile)
                 .fetchJoin()
-                .where(categoryOfStore.category.id.eq(categoryId), categoryOfStore.store.id.eq(store.id))
+                .where(categoryOfStore.category.id.eq(categoryId))
                 .fetch();
     }
 
@@ -75,7 +75,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
      */
     @Override
     public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, Geometry<G2D> polygon, Pageable pageable) {
-
         BooleanBuilder builder = new BooleanBuilder();
 
         buildHashtagIdEq(hashtagIdList, builder);
@@ -131,7 +130,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     }
 
     @Override
-    public List<Store> findAllStores() {
+    public List<Store> findAllStoresJoinUploadFileFetchJoin() {
         return queryFactory
                 .select(store)
                 .from(store)
@@ -140,6 +139,9 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .fetch();
     }
 
+    /*
+        BooleanExpression
+     */
     private BooleanExpression stContains(Geometry<?> polygon) {
         return GeometryExpressions
                 .asGeometry(polygon)

@@ -46,24 +46,24 @@ var main = {
             }
         }
 
-        const zoomDiv = document.getElementById("modal-content");
-        let scale = 1;
-
-        function zoom(event) {
-            event.preventDefault();
-
-            scale += event.deltaY * -0.01;
-
-            // Restrict scale
-            scale = Math.min(Math.max(.125, scale), 4);
-
-            // Apply scale transform
-            zoomDiv.style.transform = `scale(${scale})`;
-        }
-
-        if (zoomDiv !== null) {
-            zoomDiv.onwheel = zoom;
-        }
+        // const zoomDiv = document.getElementById("modal-content");
+        // let scale = 1;
+        //
+        // function zoom(event) {
+        //     event.preventDefault();
+        //
+        //     scale += event.deltaY * -0.01;
+        //
+        //     // Restrict scale
+        //     scale = Math.min(Math.max(.125, scale), 4);
+        //
+        //     // Apply scale transform
+        //     zoomDiv.style.transform = `scale(${scale})`;
+        // }
+        //
+        // if (zoomDiv !== null) {
+        //     zoomDiv.onwheel = zoom;
+        // }
 
         mask.closeMask();
 
@@ -101,8 +101,7 @@ var main = {
         const reviewForm = document.getElementById("review-add-form");
 
         const formData = new FormData(reviewForm);
-        let rating_form = formData.get("rating");
-        console.log("rating = ", rating_form)
+        let ratingForm = formData.get("rating");
 
         const contentValid = document.getElementById("review-content-valid");
 
@@ -110,8 +109,7 @@ var main = {
 
         validation.removeValidation(contentValid);
 
-
-        if (content.value !== "" && rating_form !== null
+        if (content.value !== "" && ratingForm !== null
             && memberId !== "" && storeId !== "") {
             this.save();
         }
@@ -121,7 +119,7 @@ var main = {
             validation.addValidation(contentValid, "리뷰 내용을 작성해주세요.");
         }
 
-        if (rating_form === null) {
+        if (ratingForm === null) {
             alert("별점을 정해주세요.")
         }
 
@@ -281,6 +279,13 @@ var main = {
     },
 
     saveMainImage: function () {
+        if (!this.validMainImageUpload()) {
+            alert("이미지의 크기가 2MB를 넘습니다.");
+            return;
+        }
+
+        mask.loadingWithMask();
+
         const storeId = document.getElementById("storeId");
         const form = document.getElementById("main-image-form");
         const formData = new FormData(form);
@@ -296,12 +301,21 @@ var main = {
         }).then((resp) => {
             alert("메인 이미지가 등록됐습니다.");
             window.location.reload();
+            mask.closeMask();
         }).catch((error) => {
             console.log(error)
+            mask.closeMask();
         });
     },
 
     updateMainImage: function () {
+        if (!this.validMainImageUpload()) {
+            alert("이미지의 크기가 2MB를 넘습니다.");
+            return;
+        }
+
+        mask.loadingWithMask();
+
         const storeId = document.getElementById("storeId");
         const form = document.getElementById("main-image-form");
         const formData = new FormData(form);
@@ -316,10 +330,27 @@ var main = {
             data: formData
         }).then((resp) => {
             alert("메인 이미지가 수정됐습니다.");
+            mask.closeMask();
             window.location.reload();
         }).catch((error) => {
             console.log(error)
+            mask.closeMask();
         });
+    },
+
+    validMainImageUpload: function () {
+        const file = document.getElementById("file").files;
+
+        let fileSizeCheck;
+        let targetSize = 1024 * 1024 * 2;
+
+        if (file.length === 0) {
+            fileSizeCheck = true;
+        } else {
+            fileSizeCheck = file[0].size <= targetSize;
+        }
+
+        return fileSizeCheck;
     },
 };
 

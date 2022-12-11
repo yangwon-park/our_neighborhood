@@ -18,10 +18,12 @@
                 <div class="col-md-4 mb-4 footer-1 text-nowrap">
                     <ul class="contact mt-4 ms-4" style="list-style: none; padding-left: 0px;">
                         <li>
-                            <img src="/images/icon/gmail.svg" alt="Mail" width="38px" class="me-3"/> ywonp94@gmail.com
+                            <img src="/images/icon/gmail.svg" alt="Mail" width="38px" height="38px" class="me-3"/>
+                            ywonp94@gmail.com
                         </li>
                         <li>
-                            <img src="/images/icon/phone_ringing_icon.svg" alt="phone" width="38px" class="me-3"/>
+                            <img src="/images/icon/phone_ringing_icon.svg" alt="phone" width="38px" height="38px"
+                                 class="me-3"/>
                             010-6773-1582
                         </li>
                     </ul>
@@ -47,12 +49,10 @@
                         </ul>
                     </div>
                 </div>
-<!--                <div style="position:fixed; bottom:35px; z-index:99;">-->
-                    <a href="#" id="btn_gotop" class="float-end"
-                       style="position:fixed; bottom:50px; right:70px; width:40px; height:40px; z-index:1; opacity:0.8;">
-                        <img src="/images/icon/top_button.png" style="width:70px" alt="top-button">
-                    </a>
-<!--                </div>-->
+                <a href="#" id="btn_gotop" class="float-end"
+                   style="position:fixed; bottom:50px; right:70px; width:40px; height:40px; z-index:1; opacity:0.8;">
+                    <img src="/images/icon/top_button.png" style="width:70px; height: 70px;" alt="top-button">
+                </a>
             </div>
         </div>
     </div>
@@ -97,8 +97,6 @@
 
     <!-- Request 캐시 삭제 -->
     <script type="module" th:src="@{/js/login.js}"></script>
-
-
     <script>
         $(window).scroll(function () {
             if ($(this).scrollTop() > 300) {

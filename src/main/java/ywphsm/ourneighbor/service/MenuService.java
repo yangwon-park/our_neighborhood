@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.*;
 import static ywphsm.ourneighbor.domain.file.FileUtil.*;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.linkHashtagAndMenu;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
@@ -73,10 +74,6 @@ public class MenuService {
 
     @Transactional
     public Long update(Long storeId, MenuDTO.Update dto) throws IOException, ParseException {
-
-        log.info("dto={}", dto);
-        log.info("file={}", dto.getFile().getOriginalFilename());
-
         Menu entity = dto.toEntity();
 
         Menu menu = menuRepository.findById(dto.getId()).orElseThrow(
@@ -128,7 +125,6 @@ public class MenuService {
         }
 
         if (dto.getFile() != null) {
-            
             /*
                 기존 메뉴 이미지 삭제
              */
@@ -180,8 +176,8 @@ public class MenuService {
                 () -> new IllegalArgumentException("존재하지 않는 메뉴입니다. id = " + menuId));
     }
 
-    public List<Menu> findByStoreIdWithoutTypeMenuCaseByOrderByType(Long storeId) {
-        return menuRepository.findByStoreIdWithoutTypeMenuCaseByOrderByType(storeId);
+    public List<Menu> findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(Long storeId) {
+        return menuRepository.findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(storeId);
     }
 
     /*
@@ -200,7 +196,8 @@ public class MenuService {
 
                 newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
             } else {
-                newHashtag = hashtagRepository.findByName(name);
+                newHashtag = hashtagRepository.findByName(name)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
             }
 
             linkHashtagAndMenu(newHashtag, menu);
@@ -220,7 +217,8 @@ public class MenuService {
                 기존에 등록돼있던 해쉬태그인 경우
              */
             if (duplicateCheck) {
-                hashtag = hashtagRepository.findByName(name);
+                hashtag = hashtagRepository.findByName(name)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
 
                 Boolean duplicateHashtagOfStoreCheck = hashtagOfMenuRepository.existsByHashtagAndMenu(hashtag, menu);
 
@@ -252,22 +250,27 @@ public class MenuService {
             boolean containsCheck = hashtagNameList.contains(prevName);
 
             if (!(containsCheck)) {
-                hashtagOfMenuRepository.deleteByHashtag(hashtagRepository.findByName(prevName));
+                log.info("지금 동작중");
+                hashtagOfMenuRepository.deleteByHashtag(
+                        hashtagRepository.findByName(prevName)
+                                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다.")));
             }
         }
     }
 
-    public List<String> findMenuImg(Long storeId) {
-        return menuRepository.findMenuImg(storeId);
+    public List<String> findImageByMenuTypeIsMenu(Long storeId) {
+        return menuRepository.findImageByMenuTypeIsMenu(storeId);
     }
     
     /*
-        MenuType != 메뉴판인 경우에만 리사이징 적용
+        [MenuType != 메뉴판]인 경우에만 리사이징 적용
      */
     private UploadFile checkMenuTypeForResizing(MenuType type, MultipartFile file) throws IOException {
         UploadFile newUploadFile;
 
-        if (!type.equals(MenuType.MENU)) {
+        final String defaultFileName = "defaultImg.png";
+
+        if (!type.equals(MenuType.MENU) && !(requireNonNull(file.getOriginalFilename()).equals(defaultFileName))) {
             MultipartFile resizedMultipartFile = getResizedMultipartFile(file, file.getOriginalFilename());
             newUploadFile = awsS3FileStore.storeFile(resizedMultipartFile);
         } else {

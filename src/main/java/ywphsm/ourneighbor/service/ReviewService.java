@@ -22,6 +22,7 @@ import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.review.ReviewRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -39,6 +40,8 @@ public class ReviewService {
 
     private final StoreRepository storeRepository;
 
+    private final StoreService storeService;
+
     private final MemberRepository memberRepository;
 
     private final HashtagRepository hashtagRepository;
@@ -47,17 +50,18 @@ public class ReviewService {
 
     private final FileStore fileStore;
 
+    private final EntityManager entityManager;
+
     @Transactional
     public Long save(ReviewDTO.Add dto, String hashtag) throws IOException, ParseException {
         Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
         Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
 
         List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
-        log.info("newUploadFiles = {}", newUploadFiles);
-//        List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
 
         Review review = dto.toEntity(linkedStore, linkedMember);
         linkedStore.addReview(review);
+        linkedStore.updateRatingAverage(ratingAverage(linkedStore));
         linkedMember.addReview(review);
 
         review.addFile(newUploadFiles);
@@ -77,20 +81,24 @@ public class ReviewService {
     @Transactional
     public Long delete(Long storeId, Long reviewId) {
         Review review = findOne(reviewId);
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
+        Store store = storeService.findById(storeId);
         store.reviewDelete(review.getRating());
 
         review.getFileList().stream()
                 .map(UploadFile::getStoredFileName).forEach(awsS3FileStore::deleteFile);
 
         reviewRepository.delete(review);
+        entityManager.flush();
+
+        store = storeService.findById(storeId);
+        store.updateRatingAverage(ratingAverage(store));
 
         return reviewId;
     }
 
-   public Review findOne(Long reviewId) {
+    public Review findOne(Long reviewId) {
         return reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
-   }
+    }
 
     public List<Review> findAllReviews() {
         return reviewRepository.findAll();
@@ -107,8 +115,7 @@ public class ReviewService {
         return reviewRepository.myReview(memberId);
     }
 
-    public double ratingAverage(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
+    public double ratingAverage(Store store) {
 
         if (store.getReviewList().size() == 0) {
             return 0;
@@ -134,7 +141,8 @@ public class ReviewService {
 
                 newHashtag = hashtagRepository.save(hashtagDTO.toEntity());
             } else {
-                newHashtag = hashtagRepository.findByName(name);
+                newHashtag = hashtagRepository.findByName(name)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 해쉬태그입니다."));
             }
 
             linkHashtagAndStore(newHashtag, store);

@@ -72,52 +72,45 @@ public class SearchController {
         return new ResultClass<>(result.size(), result);
     }
 
+    @GetMapping("/search-topN-categories")
+    public ResultClass<?> searchTopNStoresByCategories(@RequestParam Long categoryId,
+                                                       @CookieValue(value = "lat", required = false) Double myLat,
+                                                       @CookieValue(value = "lon", required = false) Double myLon) {
+        if (myLat == null || myLon == null) {
+            return new ResultClass<>(0, new ArrayList<>());
+        }
+
+        double dist = 3;
+
+        List<Store> findStores = storeService.searchTopNByCategories(categoryId, dist, myLat, myLon);
+
+        List<SimpleSearchStoreDTO> result = findStores.stream()
+                .map(SimpleSearchStoreDTO::new)
+                .collect(Collectors.toList());
+
+        result.forEach(StoreUtil::autoUpdateStatus);
+
+        calculateHowFarToTheTarget(myLat, myLon, result);
+
+        return new ResultClass<>(result.size(), result);
+    }
+
     @GetMapping("/search-top7-random")
     public ResultClass<?> searchTop7Random(@CookieValue(value = "lat", required = false) Double myLat,
                                            @CookieValue(value = "lon", required = false) Double myLon) {
-        log.info("lat={}", myLat);
-        log.info("lat={}", myLon);
-
         final double dist = 3;
         List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, dist);
 
         return new ResultClass<>(result.size(), result);
     }
 
-    @GetMapping("/search-topN-categories")
-    public ResultClass<?> searchTopNStoresByCategories(@RequestParam Long categoryId,
-                                                       @CookieValue(value = "lat", required = false) Double myLat,
-                                                       @CookieValue(value = "lon", required = false) Double myLon) {
-        log.info("lat={}", myLat);
-        log.info("lat={}", myLon);
-
-        if (myLat == null || myLon == null) {
-            return new ResultClass<>(0, new ArrayList<>());
-        }
-            double dist = 3;
-
-            List<Store> findStores = storeService.searchTopNByCategories(categoryId, dist, myLat, myLon);
-
-            List<SimpleSearchStoreDTO> result = findStores.stream()
-                    .map(SimpleSearchStoreDTO::new)
-                    .collect(Collectors.toList());
-
-            result.forEach(StoreUtil::autoUpdateStatus);
-
-            calculateHowFarToTheTarget(myLat, myLon, result);
-
-            return new ResultClass<>(result.size(), result);
-    }
-
     @GetMapping("/get-cate-images")
     public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") Double myLat,
                                                               @CookieValue(value = "lon", required = false, defaultValue = "") Double myLon) {
-        log.info("lat={}", myLat);
-        log.info("lat={}", myLon);
-
+        final Long depth = 1L;
         final double dist = 3;
 
-        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(1L);
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepthCaseByOrderByName(depth);
 
         List<List<String>> categoryImageList = new ArrayList<>();
 

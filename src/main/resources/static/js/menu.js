@@ -55,19 +55,17 @@ var main = {
     },
 
     check: function () {
-        mask.loadingWithMask();
-
         const name = document.getElementById("name");
         const price = document.getElementById("price");
         const type = document.getElementsByName("type");
         const feature = document.getElementsByName("feature")
+        const file = document.getElementById("file").files;
 
         const nameValid = document.getElementById("menu-name-valid");
         const priceValid = document.getElementById("menu-price-valid");
         const typeValid = document.getElementById("menu-type-valid");
         const featureValid = document.getElementById("menu-feature-valid");
-
-        const storeId = document.getElementById("storeId").value;
+        const fileValid = document.getElementById("menu-file-valid");
 
         name.classList.remove("valid-custom");
         price.classList.remove("valid-custom");
@@ -76,6 +74,7 @@ var main = {
         validation.removeValidation(priceValid);
         validation.removeValidation(typeValid);
         validation.removeValidation(featureValid);
+        validation.removeValidation(fileValid);
 
         let typeCheck = false;
         let featureCheck = false;
@@ -95,8 +94,21 @@ var main = {
             }
         }
 
+        let fileSizeCheck;
+        let targetSize = 1024 * 1024 * 2;
+
+        if (file.length === 0) {
+            fileSizeCheck = true;
+        } else {
+            fileSizeCheck = file[0].size <= targetSize;
+        }
+
+        const storeId = document.getElementById("storeId").value;
+
         if (name.value !== "" && storeId !== "" && price.value !== ""
-            && typeCheck === true && featureCheck === true && numRegCheck) {
+            && typeCheck && featureCheck && numRegCheck && fileSizeCheck) {
+            mask.loadingWithMask();
+
             axios({
                 method: "get",
                 url: "/seller/menu/check",
@@ -140,6 +152,10 @@ var main = {
         if (featureCheck === false) {
             validation.addValidation(featureValid, "메뉴의 특징을 선택해주세요.");
         }
+
+        if (file.length !== 0 && file[0].size > targetSize) {
+            validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
+        }
     },
 
     createDefaultImg: function (formData) {
@@ -152,7 +168,7 @@ var main = {
         if (file.name === "") {
             formData.delete("file");
             let defaultFile = new File(["foo"], "defaultImg.png", {
-                type: "image/png"
+                type: "image/png",
             })
 
             formData.append("file", defaultFile);
@@ -160,23 +176,10 @@ var main = {
     },
 
     save: function () {
-        mask.loadingWithMask();
         const menuForm = document.getElementById("menu-add-form");
-
         const formData = new FormData(menuForm);
 
         this.createDefaultImg(formData);
-
-        // FormData의 key 확인
-        for (let key of formData.keys()) {
-            console.log(key);
-        }
-
-        // FormData의 value 확인
-        for (let value of formData.values()) {
-            console.log(value);
-        }
-
 
         axios({
             headers: {
@@ -197,31 +200,77 @@ var main = {
     },
 
     update: function (btnId) {
-        mask.loadingWithMask();
         const id = btnId.substring(13);
 
-        const menuForm = document.getElementById("menu-edit-form" + id);
-        const storeIdVal = document.getElementById("storeId").value;
+        const menuUpdateFormEls = {
+            name: document.getElementById("menu-edit-name" + id),
+            price: document.getElementById("menu-edit-price" + id),
+        }
 
-        let formData = new FormData(menuForm);
-        this.createDefaultImg(formData);
+        const file = document.getElementById("menu-edit-image" + id).files;
 
-        axios({
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Access-Control-Allow_Origin": "*"
-            },
-            method: "put",
-            url: "/seller/menu/" + storeIdVal,
-            data: formData
-        }).then((resp) => {
-            alert("메뉴 정보 수정이 완료됐습니다.");
-            window.location.reload();
-            mask.closeMask();
-        }).catch((error) => {
-            console.log(error);
-            mask.closeMask();
-        })
+        const menuUpdateFormValids = {
+            nameValid: document.getElementById("menu-edit-name" + id + "-valid"),
+            priceValid: document.getElementById("menu-edit-price" + id + "-valid"),
+        }
+        const fileValid =
+            document.getElementById("menu-edit-image" + id + "-valid")
+
+        for (const el in menuUpdateFormEls) {
+            menuUpdateFormEls[el].classList.remove("valid-custom");
+        }
+
+        for (const el in menuUpdateFormValids) {
+            validation.removeValidation(menuUpdateFormValids[el]);
+        }
+
+        let fileSizeCheck;
+        let targetSize = 1024 * 1024 * 2;
+
+        if (file.length === 0) {
+            fileSizeCheck = true;
+        } else {
+            fileSizeCheck = file[0].size <= targetSize;
+        }
+
+        if (menuUpdateFormEls["name"].value !== "" && menuUpdateFormEls["price"].value !== ""
+            && fileSizeCheck) {
+            const menuForm = document.getElementById("menu-edit-form" + id);
+            const storeIdVal = document.getElementById("storeId").value;
+
+            let formData = new FormData(menuForm);
+            this.createDefaultImg(formData);
+
+            mask.loadingWithMask();
+
+            axios({
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Access-Control-Allow_Origin": "*"
+                },
+                method: "put",
+                url: "/seller/menu/" + storeIdVal,
+                data: formData
+            }).then((resp) => {
+                alert("메뉴 정보 수정이 완료됐습니다.");
+                window.location.reload();
+                mask.closeMask();
+            }).catch((error) => {
+                console.log(error);
+                mask.closeMask();
+            })
+        }
+
+        for (const el in menuUpdateFormEls) {
+            if (menuUpdateFormEls[el].value === "") {
+                menuUpdateFormEls[el].classList.add("valid-custom");
+                validation.addValidation(menuUpdateFormValids[el + "Valid"], "필수값입니다.");
+            }
+        }
+
+        if (file.length !== 0 && file[0].size > targetSize) {
+            validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
+        }
     },
 
     delete: function (btnId) {
@@ -229,8 +278,6 @@ var main = {
         const id = btnId.substring(15);
         const storeId = document.getElementById("storeId").value;
         const menuId = document.getElementById("menuId" + id).value;
-
-        console.log(menuId);
 
         axios({
             method: "delete",

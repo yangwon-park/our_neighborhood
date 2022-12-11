@@ -28,14 +28,22 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
+        
+        # [1]
+      - name: Start MariaDB
+        uses: getong/mariadb-action@v1.1
+        with:                
+#           mariadb version: '10.6.12' # Optional, default value is "latest". The version of the MariaDB
+#           mysql database: 'some_test' # Optional, default value is "test". The specified database which will be create
+#           mysql root password: ${{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
+          mysql user: 'neighbor' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          mysql password: ${{ secrets.DB_PASSWORD }} # Required if "mysql user" exists. The password for the "mysql user"
 
         # [2]
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: build
-#         run: ./gradlew build
-#         shell: bash
 
         # [3]
       - name: Make zip file
@@ -47,8 +55,6 @@ jobs:
           cd before-deploy && zip -r before-deploy *
           cd ../ && mkdir -p deploy
           mv before-deploy/before-deploy.zip deploy/our_neighborhood.zip
-#         run: zip -r ./$GITHUB_SHA.zip .
-#         shell: bash
 
         # [4]
       - name: Configure AWS credentials
@@ -61,7 +67,6 @@ jobs:
         # [5]
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 deploy/our_neighborhood.zip s3://$S3_BUCKET_NAME/our_neighborhood.zip
-#         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
 
         # [6]
       - name: Code Deploy

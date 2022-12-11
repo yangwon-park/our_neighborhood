@@ -14,7 +14,6 @@ import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.List;
 
-
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -28,8 +27,7 @@ public class HomeController {
     public String index(Model model) {
         final long depth = 1L;
 
-        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepth(depth);
-
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepthCaseByOrderByName(depth);
         model.addAttribute("rootCategoryList", rootCategoryList);
 
         return "index";

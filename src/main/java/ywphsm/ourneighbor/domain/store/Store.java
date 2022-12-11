@@ -53,6 +53,8 @@ public class Store extends BaseEntity {
 
     private int ratingTotal;
 
+    private double ratingAverage;
+
     private String homePage;
 
 //    @OneToMany(mappedBy = "store")
@@ -116,7 +118,7 @@ public class Store extends BaseEntity {
      */
     @Builder
     public Store(Long id, String name, Double lat, Double lon,
-                 Point point, String phoneNumber, BusinessTime businessTime, String notice, String intro,
+                 Point<G2D> point, String phoneNumber, BusinessTime businessTime, String notice, String intro,
                  List<String> offDays, StoreStatus status, Address address,
                  ParkAvailable park, String parkDetail, String homePage,
                  List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,
@@ -168,6 +170,7 @@ public class Store extends BaseEntity {
         this.phoneNumber = store.getPhoneNumber();
         this.lat = store.getLat();
         this.lon = store.getLon();
+        this.point = store.getPoint();
         this.businessTime = store.getBusinessTime();
         this.notice = store.getNotice();
         this.intro = store.getIntro();
@@ -184,5 +187,9 @@ public class Store extends BaseEntity {
 
     public void reviewDelete(Integer rating) {
         this.ratingTotal -= rating;
+    }
+
+    public void updateRatingAverage(double ratingAverage) {
+        this.ratingAverage = ratingAverage;
     }
 }

@@ -1,4 +1,5 @@
 import mask from "./mask.js";
+import cookie from "./cookies.js";
 
 var main = {
     init: async function () {
@@ -7,14 +8,15 @@ var main = {
 
         this.initSlick();
 
-        let customCheckCookie = this.getCookie("customCheck");
-        let customLocationCookie = this.getCookie("customLocation");
+        let customCheckCookie = cookie.getCookie("customCheck");
+        let customLocationCookie = cookie.getCookie("customLocation");
+        let customLocationInput = document.getElementById("custom-location-input");
 
         /*
             위치 설정을 직접한 값이 있는 경우에만 input tag에 값을 넣어줌
          */
-        if (customLocationCookie !== null) {
-            document.getElementById("custom-location-input").value = decodeURIComponent(customLocationCookie);
+        if (customLocationCookie !== null && customLocationInput !== null) {
+            customLocationInput.value = decodeURIComponent(customLocationCookie);
         }
 
         if (customCheckCookie === "true") {
@@ -168,13 +170,19 @@ var main = {
             let currentTmp = resp.data.tmp;
             let currentPop = resp.data.pop;
             let currentPcp = resp.data.pcp;
-            let pm10Value = resp.data.pm10Value;
+            let pm10Value;
 
-            this.setCookie("skyStatus", skyStatus, 1);
-            this.setCookie("tmp", currentTmp, 1);
-            this.setCookie("pop", currentPop, 1);
-            this.setCookie("pcp", currentPcp, 1);
-            this.setCookie("pm10Value", pm10Value, 1);
+            if (resp.data.pm10Value === "-") {
+                pm10Value = 50;
+            } else {
+                pm10Value = resp.data.pm10Value;
+            }
+
+            cookie.setCookie("skyStatus", skyStatus, 1);
+            cookie.setCookie("tmp", currentTmp, 1);
+            cookie.setCookie("pop", currentPop, 1);
+            cookie.setCookie("pcp", currentPcp, 1);
+            cookie.setCookie("pm10Value", pm10Value, 1);
 
             this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, currentPcp, pm10Value);
 
@@ -189,11 +197,11 @@ var main = {
     },
 
     getWeatherInfoWithCookies: function () {
-        let skyStatus = this.getCookie("skyStatus");
-        let currentTmp = this.getCookie("tmp");
-        let currentPop = this.getCookie("pop");
-        let currentPcp = this.getCookie("pcp");
-        let pm10Value = this.getCookie("pm10Value");
+        let skyStatus = cookie.getCookie("skyStatus");
+        let currentTmp = cookie.getCookie("tmp");
+        let currentPop = cookie.getCookie("pop");
+        let currentPcp = cookie.getCookie("pcp");
+        let pm10Value = cookie.getCookie("pm10Value");
 
         this.setWeatherInfoInEl(skyStatus, currentTmp, currentPop, currentPcp, pm10Value);
 
@@ -279,27 +287,26 @@ var main = {
 
     changeCustomPosition: async function () {
         const customLocation = document.getElementById("custom-location-input");
-        let geocoder = new kakao.maps.services.Geocoder(); // 카카오맵 geocoder 라이브러리 객체 생성
+        let geocoder = new kakao.maps.services.Geocoder();      // 카카오맵 geocoder 라이브러리 객체 생성
 
         /*
             직접 설정한 위치인지 체크해주는 쿠키
          */
-        this.setCookie("customCheck", true, 1);
-
+        cookie.setCookie("customCheck", true, 1);
 
         /*
             직접 설정한 주소값을 쿠키에 저장하는 조건
                 1. 기존의 쿠키값이 없는 경우 (공백, null)
                 2. 새로 입력한 주소값과 기존의 주소값이 다른 경우
          */
-        let prevCustomLocationCookie = this.getCookie("customLocation");
+        let prevCustomLocationCookie = cookie.getCookie("customLocation");
 
         if (prevCustomLocationCookie === "" || prevCustomLocationCookie === null
             || customLocation.value !== decodeURIComponent(prevCustomLocationCookie)) {
-            this.setCookie("customLocation", customLocation.value, 1);
+            cookie.setCookie("customLocation", customLocation.value, 1);
         }
 
-        geocoder.addressSearch(decodeURIComponent(this.getCookie("customLocation")), async (result, status) => {
+        geocoder.addressSearch(decodeURIComponent(cookie.getCookie("customLocation")), async (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
                 let lat = result[0].y
                 let lon = result[0].x
@@ -317,14 +324,14 @@ var main = {
     },
 
     setMainData: async function (lat, lon) {
-        let prevNx = this.getCookie("nx");
-        let prevNy = this.getCookie("ny");
+        let prevNx = cookie.getCookie("nx");
+        let prevNy = cookie.getCookie("ny");
 
         await this.setCurrentPositionData(lat, lon);
 
-        let currentNx = this.getCookie("nx");
-        let currentNy = this.getCookie("ny");
-        let skyStatus = this.getCookie("skyStatus");
+        let currentNx = cookie.getCookie("nx");
+        let currentNy = cookie.getCookie("ny");
+        let skyStatus = cookie.getCookie("skyStatus");
 
         /*
             이전에 쿠키값과 현재 쿠키값이 다른 경우 API 호출
@@ -364,7 +371,7 @@ var main = {
 
     findCoords: async function () {
         let position = await this.getCoords();
-        this.setCookie("customCheck", false, 1);
+        cookie.setCookie("customCheck", false, 1);
         await this.setMainData(position.coords.latitude, position.coords.longitude);
     },
 
@@ -379,7 +386,7 @@ var main = {
 
         let sidoName = data.result[0].region_1depth_name;
 
-        this.setCookie("sidoName", sidoName, 1);
+        cookie.setCookie("sidoName", sidoName, 1);
     },
 
     getRegionCode: function (lat, lon) {
@@ -403,10 +410,10 @@ var main = {
         let nx = coords["nx"];
         let ny = coords["ny"];
 
-        this.setCookie("nx", nx, 1);
-        this.setCookie("ny", ny, 1);
-        this.setCookie("lat", lat, 1);
-        this.setCookie("lon", lon, 1);
+        cookie.setCookie("nx", nx, 1);
+        cookie.setCookie("ny", ny, 1);
+        cookie.setCookie("lat", lat, 1);
+        cookie.setCookie("lon", lon, 1);
 
         await this.getSidoName(lat, lon);
     },
@@ -499,27 +506,6 @@ var main = {
         }
 
         return rs;
-    },
-
-    setCookie: function (key, value, exp) {
-        let date = new Date();
-        date.setTime(date.getTime() + (exp * 1000 * 60 * 30)); // 1000 * 60 * 60 = 1시간, exp 1 => 1ms
-        document.cookie = key + "=" + value + "; path=/; expires=" + date.toUTCString() + ";";
-    },
-
-    getCookie: function (name) {
-        let cookieValue = null;
-
-        if (document.cookie) {
-            let array = document.cookie.split((encodeURI(name) + "="));
-
-            if (array.length >= 2) {
-                let arraySub = array[1].split(";");
-                cookieValue = encodeURI(arraySub[0]);
-            }
-        }
-
-        return cookieValue;
     },
 
     randomInt: function (min, max) {

@@ -20,14 +20,14 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Menu> findByStoreIdWithoutTypeMenuCaseByOrderByType(Long storeId) {
+    public List<Menu> findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(Long storeId) {
         NumberExpression<Integer> typeRank = new CaseBuilder()
                 .when(menu.type.eq(MenuType.MAIN)).then(1)
                 .when(menu.type.eq(MenuType.SIDE)).then(2)
                 .when(menu.type.eq(MenuType.DESSERT)).then(3)
                 .when(menu.type.eq(MenuType.BEVERAGE)).then(4)
                 .when(menu.type.eq(MenuType.DRINK)).then(5)
-                .otherwise(5);
+                .otherwise(6);
 
         return queryFactory
                 .selectFrom(menu)
@@ -39,7 +39,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     }
 
     @Override
-    public List<String> findMenuImg(Long storeId) {
+    public List<String> findImageByMenuTypeIsMenu(Long storeId) {
         return queryFactory
                 .select(menu.file.uploadImageUrl)
                 .from(menu)

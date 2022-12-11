@@ -18,23 +18,7 @@ public class HashtagOfStoreRepositoryImpl implements HashtagOfStoreRepositoryCus
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdTop9(Long storeId) {
-        return queryFactory
-                .select(
-                        Projections.constructor(HashtagOfStoreDTO.WithCount.class,
-                                hashtagOfStore.hashtag.id, hashtagOfStore.hashtag.name, hashtagOfStore.store.id,
-                                hashtagOfStore.id.count().as("count"))
-                )
-                .from(hashtagOfStore)
-                .groupBy(hashtagOfStore.hashtag, hashtagOfStore.store)
-                .orderBy(hashtagOfStore.id.count().desc())
-                .where(hashtagOfStore.store.id.eq(storeId))
-                .limit(9)
-                .fetch();
-    }
-
-    @Override
-    public List<HashtagOfStoreDTO.WithCount> findAllHashtagAndCountByStoreId(Long storeId) {
+    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdOrderByCountDescTop9(Long storeId) {
         return queryFactory
                 .select(
                         Projections.constructor(HashtagOfStoreDTO.WithCount.class,
@@ -45,6 +29,22 @@ public class HashtagOfStoreRepositoryImpl implements HashtagOfStoreRepositoryCus
                 .groupBy(hashtagOfStore.hashtag, hashtagOfStore.store)
                 .having(hashtagOfStore.store.id.eq(storeId))
                 .orderBy(hashtagOfStore.id.count().desc())
+                .limit(9)
+                .fetch();
+    }
+
+    @Override
+    public List<HashtagOfStoreDTO.WithCount> findHashtagAndCountByStoreIdOrderByCountDescOrderByHashtagName(Long storeId) {
+        return queryFactory
+                .select(
+                        Projections.constructor(HashtagOfStoreDTO.WithCount.class,
+                                hashtagOfStore.hashtag.id, hashtagOfStore.hashtag.name, hashtagOfStore.store.id,
+                                hashtagOfStore.id.count().as("count"))
+                )
+                .from(hashtagOfStore)
+                .groupBy(hashtagOfStore.hashtag, hashtagOfStore.store)
+                .having(hashtagOfStore.store.id.eq(storeId))
+                .orderBy(hashtagOfStore.id.count().desc(), hashtagOfStore.hashtag.name.asc())
                 .fetch();
     }
 

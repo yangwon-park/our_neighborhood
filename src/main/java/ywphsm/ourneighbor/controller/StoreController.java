@@ -27,7 +27,6 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,14 +92,14 @@ public class StoreController {
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
-        List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdTop9(storeId);
+        List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescTop9(storeId);
 
-        List<Menu> menuList = menuService.findByStoreIdWithoutTypeMenuCaseByOrderByType(storeId);
+        List<Menu> menuList = menuService.findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(storeId);
 
         /*
             메뉴판 조회
          */
-        List<String> menuImgList = menuService.findMenuImg(storeId);
+        List<String> menuImgList = menuService.findImageByMenuTypeIsMenu(storeId);
 
         List<MenuDTO.Detail> menuDTOList = menuList.stream()
                 .map(MenuDTO.Detail::of).collect(Collectors.toList());
@@ -109,7 +108,7 @@ public class StoreController {
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
         List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
 
-        double ratingAverage = reviewService.ratingAverage(storeId);
+        double ratingAverage = store.getRatingAverage();
 
         // 찜, 스토어 수정 권한
         if (member != null) {
@@ -174,12 +173,6 @@ public class StoreController {
         model.addAttribute("categoryList", categorySimpleDTOList);
 
         return "store/edit_form";
-    }
-
-    @GetMapping("/admin/store/list")
-    public String getStoreList(Model model) {
-        model.addAttribute("store", new StoreDTO.Detail());
-        return "list";
     }
 
     @GetMapping("/admin/store-owner/edit/{storeId}")

@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.spatial;
+package ywphsm.ourneighbor.unit.spatial;
 
 import org.geolatte.geom.*;
 import org.geolatte.geom.codec.Wkt;
@@ -6,22 +6,25 @@ import org.junit.jupiter.api.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.store.distance.Distance;
+import ywphsm.ourneighbor.domain.store.distance.Location;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.geolatte.geom.builder.DSL.*;
 import static org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84;
+import static ywphsm.ourneighbor.domain.store.distance.Direction.*;
+import static ywphsm.ourneighbor.domain.store.distance.Direction.SOUTHEAST;
+import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
 @ActiveProfiles("test")
-@Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GeolatteTest {
 
     @Test
     @DisplayName("WKT 읽기")
     void fromWktTest() {
-        String pointFormat = String.format("POINT(%f %f)", 35.1710366410643, 129.175759994618);
-        String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156);
-        String polygonFormat = String.format("POLYGON((%f %f, %f %f, %f %f))", 35.182416023937336, 129.20790463400292, 35.14426110121965, 129.16123271344156, 35.182416023937336, 129.20790463400292);
+        String pointFormat = String.format("POINT(%f %f)", 129.175759994618, 35.1710366410643);
+        String lineStringFormat = String.format("LINESTRING(%f %f, %f %f)", 129.20790463400292, 35.182416023937336, 129.16123271344156, 35.14426110121965);
+        String polygonFormat = String.format("POLYGON((%f %f, %f %f, %f %f))", 129.20790463400292, 35.182416023937336, 129.16123271344156, 35.14426110121965, 129.20790463400292, 35.182416023937336);
 
         Geometry<?> point = Wkt.fromWkt(pointFormat);
         Geometry<?> lineString = Wkt.fromWkt(lineStringFormat);

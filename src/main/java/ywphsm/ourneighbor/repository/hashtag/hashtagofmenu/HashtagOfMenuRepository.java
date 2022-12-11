@@ -5,18 +5,15 @@ import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 import ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu;
 import ywphsm.ourneighbor.domain.menu.Menu;
 
-import java.util.List;
-
 public interface HashtagOfMenuRepository extends JpaRepository<HashtagOfMenu, Long>, HashtagOfMenuRepositoryCustom {
 
-    HashtagOfMenu findByHashtag(Hashtag hashtag);
-
-    List<HashtagOfMenu> findByMenu(Menu menu);
+    HashtagOfMenu findByHashtagAndMenu(Hashtag hashtag, Menu menu);
 
     void deleteByMenu(Menu menu);
 
     void deleteByHashtag(Hashtag hashtag);
 
-    Boolean existsByHashtagAndMenu(Hashtag hashtag, Menu menu);
+    void deleteByHashtagAndMenu(Hashtag hashtag, Menu menu);
 
+    Boolean existsByHashtagAndMenu(Hashtag hashtag, Menu menu);
 }

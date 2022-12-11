@@ -30,25 +30,29 @@
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <form th:object="${recommend}" id="recommend-post-add-form" class="form-floating">
-                            <div class="form-group">
+                            <div class="">
                                 <div class="">
                                     <input th:field="*{header}" class="form-control"
                                            placeholder="제목을 입력해주세요." type="text">
                                 </div>
                             </div>
-                            <div class="form-group" style="height: 10rem">
+                            <div id="post-header-valid" class="my-1 valid-custom">
+                            </div>
+                            <div class="" style="height: 10rem">
                                 <div class="mb-3">
                                     <label for="content" class="mb-2">내용 작성</label>
                                     <textarea class="form-control" style="height: 100%" placeholder="50자 이하여야 합니다"
                                               id="content" th:field="*{content}" rows="5"></textarea>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div id="post-content-valid" class="my-1 valid-custom">
+                            </div>
+                            <div class="mt-2">
                                 <span class="fw-bold mb-3">
                                     추천 양식 종류
                                 </span>
                             </div>
-                            <div class="form-group d-flex text-nowrap mt-3">
+                            <div class="d-flex text-nowrap mt-3">
                                 <div class="row">
                                     <div class="col-3" th:each="r : ${recommendKinds}">
                                         <input type="radio" th:field="*{recommendKind}"
@@ -58,12 +62,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div id="post-kind-valid" class="my-1 valid-custom">
+                            </div>
+                            <div class="mt-2">
                                 <span class="mb-2">해쉬태그 추가</span>
                                 <div class="mb-3">
                                     <input id="hashtag" class="tagify--outside"
                                            name="hashtag" type="hidden" style="width: 100%">
                                 </div>
+                            </div>
+                            <div id="post-hashtag-valid" class="my-1 valid-custom">
                             </div>
                             <div class="text-center">
                                 <button id="recommend-post-save" type="button"

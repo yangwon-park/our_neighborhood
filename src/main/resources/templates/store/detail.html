@@ -84,7 +84,8 @@
                                             <img id="main-image" style="width: 100%"
                                                  th:src="*{uploadImgUrl}" alt="대표 이미지">
                                         </div>
-                                        <div>
+                                        <div class="mt-2">
+                                            <label>이미지의 크기는 2MB를 넘을 수 없습니다.</label>
                                             <input th:field="*{file}" class="form-control" type="file"/>
                                         </div>
                                     </div>

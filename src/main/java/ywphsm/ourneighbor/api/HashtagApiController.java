@@ -28,14 +28,14 @@ public class HashtagApiController {
     }
 
     @GetMapping("/hashtags")
-    public ResultClass<?> findHashtagsByMenuId(@RequestParam Long menuId) {
-        List<HashtagDTO> hashtags = hashtagOfMenuService.findHashtagsByMenuId(menuId);
+    public ResultClass<?> findAllHashtagByMenuId(@RequestParam Long menuId) {
+        List<HashtagDTO> hashtags = hashtagOfMenuService.findAllHashtagByMenuId(menuId);
         return new ResultClass<>(hashtags);
     }
 
     @PostMapping("/seller/hashtag/{storeId}")
     public Long saveHashtag(@PathVariable Long storeId, HashtagDTO dto) {
-        return hashtagService.simpleSaveLinkedStore(storeId, dto);
+        return hashtagService.simpleSaveHashtagLinkedStore(storeId, dto);
     }
 
     @DeleteMapping("/seller/hashtag/{hashtagId}")

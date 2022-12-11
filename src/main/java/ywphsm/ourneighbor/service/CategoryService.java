@@ -19,21 +19,14 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Category findById(Long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. id = " + categoryId));
-    }
-
     // 카테고리 등록
     @Transactional
     public Long save(CategoryDTO.Detail dto) {
-
         // parent, child는 빠져있음
         Category category = dto.toEntity();
 
         // 가장 상위 (depth : 1L) 카테고리 생성
         if (dto.getParentId() == null) {
-
             // 모든 카테고리를 다 볼 수 있는 루트 카테고리
             // 없으면 생성함
             Category root = categoryRepository.findByNameAndDepth("ROOT", 0L)
@@ -62,7 +55,6 @@ public class CategoryService {
 
     @Transactional
     public Long delete(Long categoryId) {
-
         // findById + delete 조합 => 에러 발생 시 개발자가 직접 커스텀 가능
         Category category = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new IllegalArgumentException("해당 카테고리가 없습니다. categoryId = " + categoryId));
@@ -72,38 +64,45 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteByCategory(Category category) {
-        categoryRepository.deleteByCategory(category);
+    public void deleteByCategoryLinkedCategoryOfStore(Category category) {
+        categoryRepository.deleteByCategoryLinkedCategoryOfStore(category);
     }
 
-    public CategoryDTO.Detail findByName(String name) {
-        return new CategoryDTO.Detail(categoryRepository.findByName(name));
+    public Category findById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. id = " + categoryId));
     }
 
-    public List<CategoryDTO.Simple> findByDepth(Long depth) {
-        List<Category> category = categoryRepository.findByDepth(depth);
-        return category.stream().map(CategoryDTO.Simple::of).collect(Collectors.toList());
+    public List<CategoryDTO.Simple> findByDepthCaseByOrderByName(Long depth) {
+        return categoryRepository.findByDepthCaseByOrderByName(depth).stream()
+                .map(CategoryDTO.Simple::of).collect(Collectors.toList());
     }
 
     /*
-        단순히 모든 카테고리들을 보여주는 쿼리
+        모든 카테고리들을 조건에 맞게 정렬하여 보여주는 쿼리
+        카테고리 등록 시, 카테고리 리스트 보여줄 때 사용
      */
-    public List<CategoryDTO.Detail> findAll() {
+    public List<CategoryDTO.Detail> findAllByOrderByDepthAscParentIdAscNameAsc() {
         return categoryRepository.findAllByOrderByDepthAscParentIdAscNameAsc().stream()
                 .map(CategoryDTO.Detail::new).collect(Collectors.toList());
     }
 
     /*
         하나의 쿼리로 모든 하위 카테고리를 연쇄적으로 뽑아내기 위한 쿼리
+        ParentIsNull인 Category는 ROOT 밖에 없음
+        ROOT를 찾은 다음 그의 자식 카테고리를 계속 찾으면 전체 카테고리를 다 찾을 수 있음
      */
-    public List<CategoryDTO.Detail> findAllCategoriesHier() {
-        return categoryRepository.findByCategories().stream().map(CategoryDTO.Detail::of).collect(Collectors.toList());
+    public CategoryDTO.Detail findAllCategoriesHier() {
+        Category category = categoryRepository.findByParentIsNull()
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다."));
+
+        return CategoryDTO.Detail.of(category);
     }
 
     /*
         카테고리 중복 체크 로직
      */
-    public boolean checkCategoryDuplicate(String categoryName, Category parent) {
-        return categoryRepository.existsByNameAndParent(categoryName, parent);
+    public boolean checkCategoryDuplicateByNameAndParent(String name, Category parent) {
+        return categoryRepository.existsByNameAndParent(name, parent);
     }
 }

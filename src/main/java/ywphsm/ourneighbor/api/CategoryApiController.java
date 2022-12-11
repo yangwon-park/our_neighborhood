@@ -18,27 +18,26 @@ public class CategoryApiController {
     private final CategoryService categoryService;
 
     @GetMapping("/categories")
-    public ResultClass<?> findAllCategories() {
-        List<CategoryDTO.Detail> categories = categoryService.findAll();
+    public ResultClass<?> findAllByOrderByDepthAscParentIdAscNameAsc() {
+        List<CategoryDTO.Detail> categories = categoryService.findAllByOrderByDepthAscParentIdAscNameAsc();
         return new ResultClass<>(categories);
     }
 
     @GetMapping("/categories-hier")
     public CategoryDTO.Detail findAllCategoriesHier() {
-        return categoryService.findAllCategoriesHier().get(0);
+        return categoryService.findAllCategoriesHier();      // 대분류
     }
 
     @GetMapping("/categories-hier-edit")
     public Long findCategoryParentId(Long categoryId) {
         Category category = categoryService.findById(categoryId);
-        log.info("parentId={}", category.getParent().getId());
         return category.getParent().getId();
     }
 
     @GetMapping("/category-check")
     public ResponseEntity<Boolean> checkCategoryDuplicate(String name, Long parentId) {
         Category parent = categoryService.findById(parentId);
-        return ResponseEntity.ok(categoryService.checkCategoryDuplicate(name, parent));
+        return ResponseEntity.ok(categoryService.checkCategoryDuplicateByNameAndParent(name, parent));
     }
 
 

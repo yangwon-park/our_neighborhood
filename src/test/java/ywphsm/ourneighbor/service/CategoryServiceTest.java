@@ -49,32 +49,31 @@ class CategoryServiceTest {
     @Autowired
     CategoryService categoryService;
 
-    @Test
-    @WithMockUser(username = "admin", roles = "ADMIN")
-    @DisplayName("카테고리 등록")
-    void save() throws Exception {
-
-        String name = "test";
-        Long parentId = 5L;
-
-        CategoryDTO.Detail dto = CategoryDTO.Detail.builder()
-                .name(name)
-                .parent_id(parentId)
-                .build();
-
-        String url = "http://localhost:" + port + "/admin/category";
-
-        mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(dto)))
-                .andDo(print())
-                .andExpect(status().isOk());
-
-        CategoryDTO.Detail findCategory = categoryService.findByName(name);
-
-        assertThat(findCategory.getDepth()).isEqualTo(3L);
-        assertThat(findCategory.getParentId()).isEqualTo(5L);
-    }
+//    @Test
+//    @WithMockUser(username = "admin", roles = "ADMIN")
+//    @DisplayName("카테고리 등록")
+//    void save() throws Exception {
+//        String name = "test";
+//        Long parentId = 5L;
+//
+//        CategoryDTO.Detail dto = CategoryDTO.Detail.builder()
+//                .name(name)
+//                .parent_id(parentId)
+//                .build();
+//
+//        String url = "http://localhost:" + port + "/admin/category";
+//
+//        mvc.perform(post(url)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(new ObjectMapper().writeValueAsString(dto)))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//
+//        CategoryDTO.Detail findCategory = categoryService.findByName(name);
+//
+//        assertThat(findCategory.getDepth()).isEqualTo(3L);
+//        assertThat(findCategory.getParentId()).isEqualTo(5L);
+//    }
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")

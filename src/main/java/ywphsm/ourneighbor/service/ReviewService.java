@@ -38,8 +38,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    private final StoreRepository storeRepository;
-
+    private final MemberService memberService;
     private final StoreService storeService;
 
     private final MemberRepository memberRepository;
@@ -54,8 +53,8 @@ public class ReviewService {
 
     @Transactional
     public Long save(ReviewDTO.Add dto, String hashtag) throws IOException, ParseException {
-        Store linkedStore = storeRepository.findById(dto.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 매장이 없어요"));
-        Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없어요"));
+        Store linkedStore = storeService.findById(dto.getStoreId());
+        Member linkedMember = memberService.findById(dto.getMemberId());
 
         List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
 
@@ -67,8 +66,7 @@ public class ReviewService {
         review.addFile(newUploadFiles);
 
         if (!hashtag.isEmpty()) {
-            Store findStore = storeRepository.findById(dto.getStoreId()).orElseThrow(
-                    () -> new IllegalArgumentException("해당 매장이 없습니다. storeId = " + dto.getStoreId()));
+            Store findStore = storeService.findById(dto.getStoreId());
 
             List<String> hashtagNameList = getHashtagNameList(hashtag);
 

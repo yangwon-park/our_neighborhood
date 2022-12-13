@@ -161,13 +161,14 @@
                         <span class="text-dark fw-bold ms-1">휴무일</span>
                     </div>
                     <div class="col-9">
-                        <th:block th:if="${not #lists.isEmpty(store.offDays)}" class="text-dark fw-bold ms-1">
-                            <span th:each="day : *{offDays}" class="me-2">
-                                <th:block th:text="${day}"></th:block> 휴무
+                        <th:block th:if="${not #lists.isEmpty(daysList)}" class="text-dark fw-bold ms-1">
+                            <span th:each="days : ${daysList}" class="me-1">
+                                <th:block th:text="${days}"></th:block>요일
                             </span>
+                            휴무
                         </th:block>
-                        <th:block th:if="${#lists.isEmpty(store.offDays)}" class="text-dark fw-bold ms-1">
-                            없음
+                        <th:block th:if="${#lists.isEmpty(daysList)}" class="text-dark fw-bold ms-1">
+                            휴무 없음
                         </th:block>
                     </div>
                 </div>

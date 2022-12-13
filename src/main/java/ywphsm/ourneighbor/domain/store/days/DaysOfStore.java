@@ -1,15 +1,14 @@
 package ywphsm.ourneighbor.domain.store.days;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ywphsm.ourneighbor.domain.store.Store;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-//@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class DaysOfStore {
 
     @Id
@@ -18,18 +17,37 @@ public class DaysOfStore {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "days_id")
+    private Days days;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "days_id")
-    private DaysEntity days;
+    @NotNull
+    private String daysName;
 
-    public DaysOfStore(DaysEntity days) {
+    public DaysOfStore(Days days, Store store) {
+        this.days = days;
+        this.daysName = days.getType().getDescription();
+        this.store = store;
+    }
+
+    public void updateDays(Days days) {
+        this.days = days;
+        this.daysName = days.getType().getDescription();
+    }
+
+    @Builder
+    public DaysOfStore(Long id, Store store, Days days) {
+        this.id = id;
+        this.store = store;
         this.days = days;
     }
 
-    public static DaysOfStore createDaysOfStore(DaysEntity days) {
-        return new DaysOfStore(days);
+    public static void linkDaysAndStore(Days days, Store store) {
+        DaysOfStore daysOfStore = new DaysOfStore(days, store);
+        days.getDaysOfStoreList().add(daysOfStore);
+        store.getDaysOfStoreList().add(daysOfStore);
     }
 }

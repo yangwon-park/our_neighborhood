@@ -23,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.store.StoreService;
 
 import java.io.FileInputStream;
 import java.util.List;

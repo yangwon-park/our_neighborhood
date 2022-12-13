@@ -22,14 +22,14 @@ public class StoreUtil {
 
         BusinessTime businessTime = dto.getBusinessTime();
 
-        if (!dto.getOffDays().isEmpty()) {
-            for (String offDay : dto.getOffDays()) {
-                if (today.equals(offDay)) {
-                    dto.setStatus(StoreStatus.CLOSED);
-                    return;
-                }
-            }
-        }
+//        if (!dto.getOffDays().isEmpty()) {
+//            for (String offDay : dto.getOffDays()) {
+//                if (today.equals(offDay)) {
+//                    dto.setStatus(StoreStatus.CLOSED);
+//                    return;
+//                }
+//            }
+//        }
 
         /*
             null인 경우를 처리하지 않으면 에러 발생

@@ -36,8 +36,7 @@
                                     <input th:field="*{name}" class="form-control"
                                            placeholder="매장 이름을 입력해주세요." type="text">
                                 </div>
-                                <div id="store-name-valid" class="my-1 valid-custom">
-                                </div>
+                                <div id="store-name-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
                                 <div class="d-flex mb-3">
@@ -47,31 +46,28 @@
                                             class="text-center btn btn-main-color ms-3"
                                             type="button" style="height: 3rem">우편 번호 찾기
                                     </button>
+                                <div id="store-zipcode-valid" class="my-1 valid-custom"></div>
                                 </div>
-                                <div id="store-zipcode-valid" class="my-1 valid-custom">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="">
-                                    <input th:field="*{roadAddr}" class="form-control roadAddr"
-                                           placeholder="도로명 주소" type="text" readonly>
-                                    <div id="store-roadAddr-valid" class="my-1 valid-custom">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="">
-                                    <input th:field="*{numberAddr}" class="form-control numberAddr"
-                                           placeholder="지번 주소" type="text">
-                                    <div id="store-numberAddr-valid" class="my-1 valid-custom">
-                                    </div>
-                                </div>
-                                <span id="guide" style="color:#999;display:none"></span>
                             </div>
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <input th:field="*{detail}" class="form-control" placeholder="상세 주소"
-                                           type="text">
+                                    <input th:field="*{roadAddr}" class="form-control roadAddr"
+                                           placeholder="도로명 주소" type="text" readonly>
+                                    <div id="store-roadAddr-valid" class="my-1 valid-custom"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="mb-3">
+                                    <input th:field="*{numberAddr}" class="form-control numberAddr"
+                                           placeholder="지번 주소" type="text">
+                                    <div id="store-numberAddr-valid" class="my-1 valid-custom"></div>
+                                </div>
+                            </div>
+                            <span id="guide" style="color:#999;display:none"></span>
+                            <div class="form-group">
+                                <div class="mb-3">
+                                    <input th:field="*{detail}" class="form-control detail"
+                                           placeholder="상세 주소" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -130,8 +126,7 @@
                                     <label for="openingTime" class="fw-bold px-2"
                                            style="font-size: 1rem">영업 시작</label>
                                     <input th:field="*{openingTime}" class="form-control" type="time">
-                                    <div id="store-openingTime-valid" class="my-1 valid-custom">
-                                    </div>
+                                    <div id="store-openingTime-valid" class="my-1 valid-custom"></div>
                                 </div>
                                 <div class="mx-3">
                                     <label for="closingTime" class="fw-bold px-2"
@@ -142,8 +137,7 @@
                                 </div>
                                 <div class="ms-3">
                                     <label for="lastOrder" class="fw-bold px-2"
-                                           style="font-size: 1rem">
-                                        라스트 오더</label>
+                                           style="font-size: 1rem"> 라스트 오더</label>
                                     <input th:field="*{lastOrder}"
                                            class="form-control input-time" type="time">
                                 </div>
@@ -166,16 +160,13 @@
                             </div>
                             <div class="form-group">
                                 <div class="mb-3 d-flex">
-                                    <select id="main-cate" name="categoryId"
-                                            class="form-select me-1">
+                                    <select id="main-cate" name="categoryId" class="form-select me-1">
                                         <option value="">대분류 선택</option>
                                     </select>
-                                    <select id="mid-cate" name="categoryId"
-                                            class="form-select me-1">
+                                    <select id="mid-cate" name="categoryId" class="form-select me-1">
                                         <option value="">중분류 선택</option>
                                     </select>
-                                    <select id="sub-cate" name="categoryId"
-                                            class="form-select">
+                                    <select id="sub-cate" name="categoryId" class="form-select">
                                         <option value="">소분류 선택</option>
                                     </select>
                                 </div>
@@ -186,12 +177,12 @@
                                     <h5 style="display: inline" class="fx-bold">휴무일 선택</h5>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <div th:each="day : ${offDays}"
+                                    <div th:each="days, i : ${daysList}"
                                          class="custom-control custom-checkbox mb-3 me-3">
                                         <input class="custom-control-input" type="checkbox"
-                                               th:field="${store.offDays}" th:value="${day.value}">
-                                        <label class="custom-control-label"
-                                               th:for="${#ids.prev('offDays')}" th:text="${day.key}">일</label>
+                                               th:id="|days${i.index+1}|" name="daysId" th:value="${days.daysId}">
+                                        <label class="custom-control-label text-dark fw-bold"
+                                               th:for="|days${i.index+1}|" th:text="${days.type.description}">일</label>
                                     </div>
                                 </div>
                             </div>
@@ -207,7 +198,6 @@
         </div>
     </div>
 </section>
-
 </body>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
@@ -215,5 +205,4 @@
 <script th:replace="layout/footer :: common_js(~{::script})"></script>
 <script type="module" th:src="@{/js/postcode.js}"></script>
 <script type="module" th:src="@{/js/store.js}"></script>
-
 </html>

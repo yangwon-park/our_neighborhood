@@ -13,7 +13,7 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreUtil;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
-import ywphsm.ourneighbor.service.StoreService;
+import ywphsm.ourneighbor.service.store.StoreService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

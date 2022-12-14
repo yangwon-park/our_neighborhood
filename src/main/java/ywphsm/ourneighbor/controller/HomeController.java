@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.domain.search.StoreSearchCond;
-import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
-import ywphsm.ourneighbor.service.StoreService;
+import ywphsm.ourneighbor.service.store.StoreService;
 
 import java.util.List;
 

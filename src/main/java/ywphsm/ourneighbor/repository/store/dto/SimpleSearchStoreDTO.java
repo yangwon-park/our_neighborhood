@@ -7,8 +7,6 @@ import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class SimpleSearchStoreDTO {
@@ -27,8 +25,6 @@ public class SimpleSearchStoreDTO {
 
     private BusinessTime businessTime;
 
-    private List<String> offDays = new ArrayList<>();
-
     private Address address;
 
     private Double distance;
@@ -46,7 +42,6 @@ public class SimpleSearchStoreDTO {
         phoneNumber = store.getPhoneNumber();
         status = store.getStatus();
         businessTime = store.getBusinessTime();
-        offDays = store.getOffDays();
         address = store.getAddress();
         average = store.getRatingTotal();
 
@@ -55,20 +50,9 @@ public class SimpleSearchStoreDTO {
         }
     }
 
-    public SimpleSearchStoreDTO(Long storeId, String name, Double lon, Double lat,
-                                String phoneNumber, StoreStatus status,
-                                Address address, int average, String uploadImgUrl) {
-        this.storeId = storeId;
-        this.name = name;
-        this.lon = lon;
-        this.lat = lat;
-        this.phoneNumber = phoneNumber;
-        this.status = status;
-        this.address = address;
-        this.average = average;
-        this.uploadImgUrl = uploadImgUrl;
-    }
-
+    /*
+        Projection에서 사용
+     */
     public SimpleSearchStoreDTO(Long storeId, String name, Double lon, Double lat,
                                 String phoneNumber, StoreStatus status, BusinessTime businessTime,
                                 Address address, int average, String uploadImgUrl) {

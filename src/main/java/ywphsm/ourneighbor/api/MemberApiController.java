@@ -12,16 +12,13 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 
 import ywphsm.ourneighbor.service.MemberService;
-import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import java.util.Random;
 
 @Slf4j

@@ -13,7 +13,6 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.service.HashtagService;
-import ywphsm.ourneighbor.service.StoreService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,7 @@ import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.file.FileStore;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.MenuService;
-import ywphsm.ourneighbor.service.StoreService;
+import ywphsm.ourneighbor.service.store.StoreService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

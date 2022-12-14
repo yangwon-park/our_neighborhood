@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.service;
+package ywphsm.ourneighbor.service.store;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.category.CategoryOfStore;
-import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.dto.store.StoreDTO;
 import ywphsm.ourneighbor.domain.file.AwsS3FileStore;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -20,10 +20,15 @@ import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.StoreStatus;
+import ywphsm.ourneighbor.domain.store.days.Days;
+import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 import ywphsm.ourneighbor.domain.store.distance.Location;
+import ywphsm.ourneighbor.repository.category.CategoryRepository;
 import ywphsm.ourneighbor.repository.member.MemberOfStoreRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
+import ywphsm.ourneighbor.repository.store.days.DaysRepository;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
+import ywphsm.ourneighbor.service.MemberService;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,6 +41,7 @@ import static org.geolatte.geom.crs.CoordinateReferenceSystems.*;
 import static ywphsm.ourneighbor.domain.category.CategoryOfStore.*;
 import static ywphsm.ourneighbor.domain.file.FileUtil.getResizedMultipartFile;
 import static ywphsm.ourneighbor.domain.member.MemberOfStore.*;
+import static ywphsm.ourneighbor.domain.store.days.DaysOfStore.linkDaysAndStore;
 import static ywphsm.ourneighbor.domain.store.distance.Direction.*;
 import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
@@ -47,16 +53,18 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
 
+    private final CategoryRepository categoryRepository;
+
+    private final DaysRepository daysRepository;
+
+    private final AwsS3FileStore awsS3FileStore;
+
     private final MemberOfStoreRepository memberOfStoreRepository;
 
     private final MemberService memberService;
 
-    private final CategoryService categoryService;
-
-    private final AwsS3FileStore awsS3FileStore;
-
     @Transactional
-    public Long save(StoreDTO.Add dto, List<Long> categoryIdList) {
+    public Long save(StoreDTO.Add dto, List<Long> categoryIdList, List<Long> daysIdList) {
         Store store = dto.toEntity();
         Member member = memberService.findById(dto.getMemberId());
 
@@ -65,6 +73,7 @@ public class StoreService {
 
         MemberOfStore memberOfStore = linkMemberOfStore(member, storeRepository.save(store));
         memberOfStore.updateMyStore(true);
+        memberOfStoreRepository.save(memberOfStore);
 
         List<Category> categoryList = getNotNullCategoryList(categoryIdList);
 
@@ -72,18 +81,28 @@ public class StoreService {
             linkCategoryAndStore(category, store);
         }
 
+        if (!(daysIdList == null)) {
+            List<Days> daysList = daysIdList.stream().map(id -> daysRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("잘못된 요일값입니다."))).collect(Collectors.toList());
+
+            for (Days days : daysList) {
+                linkDaysAndStore(days, store);
+            }
+        }
+
         // default: OPEN
         store.updateStatus(StoreStatus.OPEN);
-
-        memberOfStoreRepository.save(memberOfStore);
 
         return store.getId();
     }
 
     @Transactional
-    public Long update(Long storeId, StoreDTO.Update dto, List<Long> categoryIdList) {
+    public Long update(Long storeId, StoreDTO.Update dto,
+                       List<Long> categoryIdList, List<Long> daysIdList) {
         Store findStore = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
+        Point<G2D> point = point(WGS84, g(dto.getLon(), dto.getLat()));
+        dto.setPoint(point);
 
         /*
             먼저 카테고리를 업데이트
@@ -122,7 +141,56 @@ public class StoreService {
                 }
 
                 for (int j = i; j < prevCategoryOfStoreList.size(); j++) {
-                    categoryService.deleteByCategoryLinkedCategoryOfStore(prevCategoryOfStoreList.get(j).getCategory());
+                    categoryRepository.deleteByCategoryLinkedCategoryOfStore(prevCategoryOfStoreList.get(j).getCategory());
+                }
+            }
+        }
+
+        /*
+            다음 days 업데이트
+         */
+        List<DaysOfStore> prevDaysOfStoreList = findStore.getDaysOfStoreList();
+
+        /*
+            체크박스가 하나도 체크돼있지 않은데 기존의 휴무는 있는 경우
+            휴무가 존재했으나 없앴다 => 매장에 등록된 휴무 데이터를 다 삭제함
+         */
+        if (daysIdList == null) {
+            if (prevDaysOfStoreList != null) {
+                daysRepository.deleteByStoreId(findStore.getId());
+            }
+        } else {
+            List<Days> daysList = daysIdList.stream().map(id -> daysRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("잘못된 요일값입니다."))).collect(Collectors.toList());
+
+            if (prevDaysOfStoreList.size() == daysList.size()) {
+                for (int i = 0; i < prevDaysOfStoreList.size(); i++) {
+                    prevDaysOfStoreList.get(i).updateDays(daysList.get(i));
+                }
+            }
+
+            if (prevDaysOfStoreList.size() < daysList.size()) {
+                int i;
+
+                for (i = 0; i < prevDaysOfStoreList.size(); i++) {
+                    prevDaysOfStoreList.get(i).updateDays(daysList.get(i));
+                }
+
+                for (int j = i; j < daysList.size(); j++) {
+                    linkDaysAndStore(daysList.get(j), findStore);
+                }
+            }
+
+            // 현재 여기 버그발생
+            if (prevDaysOfStoreList.size() > daysList.size()) {
+                int i;
+
+                for (i = 0; i < daysList.size(); i++) {
+                    prevDaysOfStoreList.get(i).updateDays(daysList.get(i));
+                }
+
+                for (int j = i; j < prevDaysOfStoreList.size(); j++) {
+                    daysRepository.deleteByDaysIdLinkedDaysOfStore(prevDaysOfStoreList.get(j).getDays().getId());
                 }
             }
         }
@@ -143,7 +211,9 @@ public class StoreService {
         List<MemberOfStore> memberOfStoreList = store.getMemberOfStoreList();
         memberOfStoreRepository.deleteAll(memberOfStoreList);
 
-        awsS3FileStore.deleteFile(store.getFile().getStoredFileName());
+        if ((store.getFile().getStoredFileName() != null)) {
+            awsS3FileStore.deleteFile(store.getFile().getStoredFileName());
+        }
 
         storeRepository.delete(store);
 
@@ -363,7 +433,8 @@ public class StoreService {
         List<Long> collect = categoryIdList.stream().filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        return collect.stream().map(categoryService::findById)
+        return collect.stream().map(id -> categoryRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다 id = " +  id)))
                 .collect(Collectors.toList());
     }
 

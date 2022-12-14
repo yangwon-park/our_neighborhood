@@ -3,6 +3,8 @@ package ywphsm.ourneighbor.domain.dto.store;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.dto.category.CategoryOfStoreDTO;
@@ -297,6 +299,8 @@ public class StoreDTO {
 
         @NotNull
         private Double lon;
+        
+        private Point<G2D> point;
 
         @NotNull
         @DateTimeFormat(pattern = "HH:mm")
@@ -341,7 +345,7 @@ public class StoreDTO {
         private List<DaysOfStoreDTO> daysOfStoreDTOList;
 
         @Builder
-        public Update(String name, String phoneNumber, Double lat, Double lon,
+        public Update(String name, String phoneNumber, Double lat, Double lon, Point<G2D> point,
                       String homePage, LocalTime lastOrder,
                       LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd,
                       String notice, String intro, List<String> offDays,
@@ -352,6 +356,7 @@ public class StoreDTO {
             this.phoneNumber = phoneNumber;
             this.lat = lat;
             this.lon = lon;
+            this.point = point;
             this.homePage = homePage;
             this.lastOrder = lastOrder;
             this.openingTime = openingTime;
@@ -378,6 +383,7 @@ public class StoreDTO {
             phoneNumber = store.getPhoneNumber();
             lat = store.getLat();
             lon = store.getLon();
+            point = store.getPoint();
             homePage = store.getHomePage();
             openingTime = store.getBusinessTime().getOpeningTime();
             closingTime = store.getBusinessTime().getClosingTime();
@@ -407,6 +413,7 @@ public class StoreDTO {
                     .phoneNumber(phoneNumber)
                     .lat(lat)
                     .lon(lon)
+                    .point(point)
                     .homePage(homePage)
                     .businessTime(new BusinessTime(openingTime, closingTime, breakStart, breakEnd, lastOrder))
                     .notice(notice)

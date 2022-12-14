@@ -101,7 +101,8 @@ public class StoreService {
                        List<Long> categoryIdList, List<Long> daysIdList) {
         Store findStore = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 매장입니다. id = " + storeId));
-
+        Point<G2D> point = point(WGS84, g(dto.getLon(), dto.getLat()));
+        dto.setPoint(point);
 
         /*
             먼저 카테고리를 업데이트

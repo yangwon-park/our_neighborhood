@@ -49,4 +49,22 @@ public class SimpleSearchStoreDTO {
             uploadImgUrl = store.getFile().getUploadImageUrl();
         }
     }
+
+    /*
+        Projection에서 사용
+     */
+    public SimpleSearchStoreDTO(Long storeId, String name, Double lon, Double lat,
+                                String phoneNumber, StoreStatus status, BusinessTime businessTime,
+                                Address address, int average, String uploadImgUrl) {
+        this.storeId = storeId;
+        this.name = name;
+        this.lon = lon;
+        this.lat = lat;
+        this.phoneNumber = phoneNumber;
+        this.status = status;
+        this.businessTime = businessTime;
+        this.address = address;
+        this.average = average;
+        this.uploadImgUrl = uploadImgUrl;
+    }
 }

@@ -150,13 +150,10 @@ public class StoreService {
          */
         List<DaysOfStore> prevDaysOfStoreList = findStore.getDaysOfStoreList();
 
-        for (DaysOfStore daysOfStore : prevDaysOfStoreList) {
-            log.info("s={}", daysOfStore.getDaysName());
-            log.info("s={}", daysOfStore.getId());
-        }
-
-        log.info("daysUpdateIdList={}", daysIdList);
-
+        /*
+            체크박스가 하나도 체크돼있지 않은데 기존의 휴무는 있는 경우
+            휴무가 존재했으나 없앴다 => 매장에 등록된 휴무 데이터를 다 삭제함
+         */
         if (daysIdList == null) {
             if (prevDaysOfStoreList != null) {
                 daysRepository.deleteByStoreId(findStore.getId());
@@ -183,6 +180,7 @@ public class StoreService {
                 }
             }
 
+            // 현재 여기 버그발생
             if (prevDaysOfStoreList.size() > daysList.size()) {
                 int i;
 
@@ -195,8 +193,6 @@ public class StoreService {
                 }
             }
         }
-
-
 
         /*
             그 후, dto로 전달받은 수정된 정보를 별도로 업데이트 시킴

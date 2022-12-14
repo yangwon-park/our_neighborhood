@@ -299,7 +299,7 @@ public class StoreDTO {
 
         @NotNull
         private Double lon;
-        
+
         private Point<G2D> point;
 
         @NotNull

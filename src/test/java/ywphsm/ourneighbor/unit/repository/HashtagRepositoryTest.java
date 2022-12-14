@@ -14,6 +14,7 @@ import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 import ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu;
 import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
@@ -84,6 +85,7 @@ public class HashtagRepositoryTest {
         Menu menu1 = Menu.builder()
                 .name("메뉴1")
                 .price(10000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.MAIN)
                 .hashtagOfMenuList(new ArrayList<>())
                 .build();
@@ -91,6 +93,7 @@ public class HashtagRepositoryTest {
         Menu menu2 = Menu.builder()
                 .name("메뉴2")
                 .price(12000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.MAIN)
                 .hashtagOfMenuList(new ArrayList<>())
                 .build();

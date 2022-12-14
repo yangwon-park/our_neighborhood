@@ -12,6 +12,7 @@ import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.menu.MenuRepository;
@@ -47,42 +48,49 @@ public class MenuRepositoryTest {
         Menu menu1 = Menu.builder()
                 .name("메뉴1")
                 .price(10000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.MAIN)
                 .build();
 
         Menu menu2 = Menu.builder()
                 .name("메뉴2")
                 .price(12000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.SIDE)
                 .build();
 
         Menu menu3 = Menu.builder()
                 .name("메뉴3")
                 .price(15000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.DESSERT)
                 .build();
 
         Menu menu4 = Menu.builder()
                 .name("메뉴4")
                 .price(20000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.BEVERAGE)
                 .build();
 
         Menu menu5 = Menu.builder()
                 .name("메뉴5")
                 .price(50000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.DRINK)
                 .build();
 
         Menu menu6 = Menu.builder()
                 .name("메뉴6")
                 .price(0)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.MENU)
                 .build();
 
         Menu menu7 = Menu.builder()
                 .name("메뉴7")
                 .price(10000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.MAIN)
                 .build();
 
@@ -90,6 +98,7 @@ public class MenuRepositoryTest {
         Menu menu8 = Menu.builder()
                 .name("메뉴8")
                 .price(20000)
+                .feature(MenuFeat.SIGN)
                 .type(MenuType.DESSERT)
                 .build();
 
@@ -211,6 +220,7 @@ public class MenuRepositoryTest {
         Menu menu0 = Menu.builder()
                 .name("메뉴0")
                 .price(20000)
+                .feature(MenuFeat.BEST)
                 .type(MenuType.MAIN)
                 .build();
 
@@ -245,6 +255,7 @@ public class MenuRepositoryTest {
         Menu menu1 = Menu.builder()
                 .name("메뉴1")
                 .price(20000)
+                .feature(MenuFeat.BEST)
                 .type(MenuType.MAIN)
                 .build();
 

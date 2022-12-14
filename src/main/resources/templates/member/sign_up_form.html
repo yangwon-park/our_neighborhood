@@ -39,15 +39,16 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <small>비밀번호</small>
+                                <small>아이디</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="아이디" type="text" th:field="*{userId}">
+                                    <input class="form-control" placeholder="아이디를 입력해주세요." type="text" th:field="*{userId}">
                                 </div>
                                 <div id="sign-up-userId-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
+                                <small>비밀번호</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="비밀번호" type="password"
+                                    <input class="form-control" placeholder="비밀번호를 입력해주세요." type="password"
                                            th:field="*{password}">
                                 </div>
                                 <div id="sign-up-password-valid" class="my-1 valid-custom"></div>
@@ -55,7 +56,7 @@
                             <div class="form-group">
                                 <small>비밀번호 확인</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="비밀번호 확인" type="password"
+                                    <input class="form-control" placeholder="다시 한 번 비밀번호를 입력해주세요." type="password"
                                            th:field="*{passwordCheck}">
                                 </div>
                                 <div id="sign-up-passwordCheck-valid" class="my-1 valid-custom"></div>
@@ -63,16 +64,19 @@
                             <div class="form-group">
                                 <small>이메일</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="이메일" type="email" th:field="*{email}">
+                                    <input class="form-control" placeholder="이메일을 입력해주세요." type="email" th:field="*{email}">
                                 </div>
                                 <div id="sign-up-email-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
                                 <small>이름</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="이름" type="text" th:field="*{username}">
+                                    <input class="form-control" placeholder="이름을 입력해주세요." type="text" th:field="*{username}">
                                 </div>
                                 <div id="sign-up-username-valid" class="my-1 valid-custom"></div>
+                            </div>
+                            <div>
+                                <small>성별</small>
                             </div>
                             <div class="form-group d-flex text-nowrap">
                                 <div>
@@ -87,7 +91,7 @@
                             <div class="form-group">
                                 <small>닉네임</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="닉네임" type="text" th:field="*{nickname}"
+                                    <input class="form-control" placeholder="닉네임을 입력해주세요" type="text" th:field="*{nickname}"
                                            th:errorclass="field-error">
                                     <div id="sign-up-nickname-valid" class="my-1 valid-custom"></div>
                                 </div>
@@ -95,7 +99,7 @@
                             <div class="form-group">
                                 <small>생년월일</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="생년월일 예)20000101" type="text"
+                                    <input class="form-control" placeholder="생년월일을 입력해주세요. 예) 20000101" type="text"
                                            th:field="*{birthDate}">
                                     <div id="sign-up-birthDate-valid" class="my-1 valid-custom"></div>
                                 </div>
@@ -104,7 +108,7 @@
                                 <small>전화번호</small>
                                 <div class="d-flex">
                                     <input th:field="*{phoneNumber}" class="form-control"
-                                           placeholder="전화번호 01012341234" type="text">
+                                           placeholder="전화번호를 입력해주세요. 예) 01012341234" type="text">
                                     <button type="button" class="text-center btn btn-main-color ms-3"
                                             style="height: 3rem" id="send-SMS">인증번호 받기
                                     </button>
@@ -114,7 +118,7 @@
                             <div class="form-group">
                                 <small>인증번호</small>
                                 <div class="">
-                                    <input class="form-control" placeholder="000000" type="text"
+                                    <input class="form-control" placeholder="인증번호를 입력해주세요." type="text"
                                            th:field="*{certifiedNumber}">
                                     <div id="sign-up-certifiedNumber-valid" class="my-1 valid-custom"></div>
                                 </div>

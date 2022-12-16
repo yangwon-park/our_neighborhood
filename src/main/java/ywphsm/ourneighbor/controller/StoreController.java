@@ -11,6 +11,7 @@ import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.*;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
+import ywphsm.ourneighbor.domain.dto.category.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysDTO;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysOfStoreDTO;
@@ -30,6 +31,7 @@ import ywphsm.ourneighbor.service.store.StoreService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,18 +78,15 @@ public class StoreController {
         StoreDTO.Detail storeDTO = new StoreDTO.Detail(store);
 
         List<CategorySimpleDTO> categorySimpleDTOList = storeDTO.getCategoryList().stream()
-                .map(categoryOfStoreDTO ->
-                        categoryService.findById(categoryOfStoreDTO.getCategoryId()))
-                .map(CategorySimpleDTO::of).collect(Collectors.toList());
+                .map(categoryOfStoreDTO -> CategorySimpleDTO.builder()
+                        .categoryId(categoryOfStoreDTO.getCategoryId())
+                        .name(categoryOfStoreDTO.getCategoryName())
+                        .build())
+                .collect(Collectors.toList());
 
         List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO =
                 hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescTop9(storeId);
-
-//        List<DaysDTO> daysDTOList = storeDTO.getDaysOfStoreDTOList().stream()
-//                .map(daysOfStoreDTO ->
-//                        daysService.findById(daysOfStoreDTO.getDaysId()))
-//                .map(DaysDTO::of).collect(Collectors.toList());
-
+        
         List<String> daysList = storeDTO.getDaysOfStoreDTOList().stream()
                 .map(DaysOfStoreDTO::getDaysName).collect(Collectors.toList());
 

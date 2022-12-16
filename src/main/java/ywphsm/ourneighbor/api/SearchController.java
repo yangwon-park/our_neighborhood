@@ -31,6 +31,9 @@ public class SearchController {
 
     private final CategoryService categoryService;
 
+    /*
+        map.html에서 검색창에 조회 시 동작하는 API
+     */
     @GetMapping("/search-by-keyword")
     public ResultClass<?> searchByKeyword(@RequestParam String keyword,
                                           @CookieValue(value = "lat", required = false) Double myLat,
@@ -54,6 +57,10 @@ public class SearchController {
         return new ResultClass<>(result.size(), result);
     }
 
+    /*
+        map.html에서 카테고리를 선택하여 조회 시 동작하는 API
+        거리 조회 기능 리팩토링해야 함
+     */
     @GetMapping("/search-by-category")
     public ResultClass<?> searchByCategory(@RequestParam Long categoryId,
                                            @RequestParam double dist,
@@ -76,6 +83,9 @@ public class SearchController {
         return new ResultClass<>(result.size(), result);
     }
 
+    /*
+        주변 인기 스팟 추천 API (카테고리)
+     */
     @GetMapping("/search-topN-categories")
     public ResultClass<?> searchTopNStoresByCategories(@RequestParam Long categoryId,
                                                        @CookieValue(value = "lat", required = false) Double myLat,
@@ -99,39 +109,9 @@ public class SearchController {
         return new ResultClass<>(result.size(), result);
     }
 
-    @GetMapping("/search-top7-random")
-    public ResultClass<?> searchTop7Random(@CookieValue(value = "lat", required = false) Double myLat,
-                                           @CookieValue(value = "lon", required = false) Double myLon) {
-        final double dist = 3;
-        List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, dist);
-
-        return new ResultClass<>(result.size(), result);
-    }
-
-    @GetMapping("/recommend-post")
-    public Slice<SimpleSearchStoreDTO> getRecommendStoreByHashtag(@RequestParam String hashtagIdList,
-                                                                  @CookieValue(value = "lat", required = false) Double myLat,
-                                                                  @CookieValue(value = "lon", required = false) Double myLon) {
-        if (myLat == null || myLon == null) {
-            return new SliceImpl<>(null, null, false);
-        }
-
-        final double dist = 3;
-
-        List<Long> hashtagList = Arrays.stream(hashtagIdList.split(","))
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
-
-        Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(
-                hashtagList, 0, myLat, myLon, dist);
-
-//        result.forEach(StoreUtil::autoUpdateStatus);
-
-        calculateHowFarToTheTarget(myLat, myLon, result.getContent());
-
-        return result;
-    }
-
+    /*
+        주변 인기 스팟 추천 이미지 조회 API
+     */
     @GetMapping("/get-cate-images")
     public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") Double myLat,
                                                               @CookieValue(value = "lon", required = false, defaultValue = "") Double myLon) {
@@ -152,4 +132,42 @@ public class SearchController {
         return categoryImageList;
     }
 
+    /*
+        날씨에 어울리는 스팟 추천 API
+     */
+    @GetMapping("/recommend-post")
+    public Slice<SimpleSearchStoreDTO> getRecommendStoreByHashtag(@RequestParam String hashtagIdList,
+                                                                  @CookieValue(value = "lat", required = false) Double myLat,
+                                                                  @CookieValue(value = "lon", required = false) Double myLon) {
+        if (myLat == null || myLon == null) {
+            return new SliceImpl<>(null, null, false);
+        }
+
+        final double dist = 3;
+
+        List<Long> hashtagList = Arrays.stream(hashtagIdList.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(
+                hashtagList, 0, myLat, myLon, dist);
+
+        result.forEach(StoreUtil::autoUpdateStatus);
+
+        calculateHowFarToTheTarget(myLat, myLon, result.getContent());
+
+        return result;
+    }
+
+    /*
+        무작위 랜덤 추천 API
+     */
+    @GetMapping("/search-top7-random")
+    public ResultClass<?> searchTop7Random(@CookieValue(value = "lat", required = false) Double myLat,
+                                           @CookieValue(value = "lon", required = false) Double myLon) {
+        final double dist = 3;
+        List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, dist);
+
+        return new ResultClass<>(result.size(), result);
+    }
 }

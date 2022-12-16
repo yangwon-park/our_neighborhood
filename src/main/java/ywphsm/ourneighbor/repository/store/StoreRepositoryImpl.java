@@ -84,9 +84,8 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .select(constructor(SimpleSearchStoreDTO.class,
                         store.id, store.name, store.lon, store.lat, store.phoneNumber, store.status,
                         store.businessTime, store.address, store.ratingTotal, store.file.uploadImageUrl,
-                        list(Projections.constructor(DaysOfStoreDTO.class,
-                                daysOfStore.daysName
-                                ))
+                        list(constructor(DaysOfStoreDTO.class,
+                                daysOfStore.daysName))
                 )).distinct()
                 .from(store)
                 .leftJoin(store.daysOfStoreList, daysOfStore)

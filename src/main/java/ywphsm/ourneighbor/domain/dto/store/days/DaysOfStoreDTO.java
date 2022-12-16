@@ -16,7 +16,7 @@ public class DaysOfStoreDTO {
 
 
     /*
-        Projection에 사용
+        searchByHashtag - Projection에 사용
      */
     public DaysOfStoreDTO(String daysName) {
         this.daysName = daysName;

@@ -61,7 +61,7 @@ public class SimpleSearchStoreDTO {
     }
 
     /*
-        Projection에서 사용
+        searchTop7Random - Projection에 사용
      */
     public SimpleSearchStoreDTO(Long storeId, String name, Double lon, Double lat,
                                 String phoneNumber, StoreStatus status, BusinessTime businessTime,
@@ -78,6 +78,10 @@ public class SimpleSearchStoreDTO {
         this.uploadImgUrl = uploadImgUrl;
     }
 
+
+    /*
+        searchByHashtag - Projection에 사용
+    */
     public SimpleSearchStoreDTO(Long storeId, String name, Double lon, Double lat,
                                 String phoneNumber, StoreStatus status, BusinessTime businessTime,
                                 Address address, int average, String uploadImgUrl, List<DaysOfStoreDTO> daysOfStoreDTOList) {

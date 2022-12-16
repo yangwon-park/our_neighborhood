@@ -2,6 +2,7 @@ package ywphsm.ourneighbor.domain.dto.store.days;
 
 import lombok.Builder;
 import lombok.Data;
+import ywphsm.ourneighbor.domain.store.days.Days;
 import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 
 @Data
@@ -12,6 +13,14 @@ public class DaysOfStoreDTO {
     private Long storeId;
 
     private String daysName;
+
+
+    /*
+        Projection에 사용
+     */
+    public DaysOfStoreDTO(String daysName) {
+        this.daysName = daysName;
+    }
 
     @Builder
     public DaysOfStoreDTO(Long daysId, Long storeId, String daysName) {

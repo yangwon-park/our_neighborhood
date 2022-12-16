@@ -43,6 +43,10 @@ public class SearchController {
 
         result.forEach(StoreUtil::autoUpdateStatus);
 
+        for (SimpleSearchStoreDTO dto : result) {
+            log.info("dto={}", dto.getStatus());
+        }
+
         if (!(myLat == null) && !(myLon == null)) {
             calculateHowFarToTheTarget(myLat, myLon, result);
         }
@@ -104,6 +108,30 @@ public class SearchController {
         return new ResultClass<>(result.size(), result);
     }
 
+    @GetMapping("/recommend-post")
+    public Slice<SimpleSearchStoreDTO> getRecommendStoreByHashtag(@RequestParam String hashtagIdList,
+                                                                  @CookieValue(value = "lat", required = false) Double myLat,
+                                                                  @CookieValue(value = "lon", required = false) Double myLon) {
+        if (myLat == null || myLon == null) {
+            return new SliceImpl<>(null, null, false);
+        }
+
+        final double dist = 3;
+
+        List<Long> hashtagList = Arrays.stream(hashtagIdList.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(
+                hashtagList, 0, myLat, myLon, dist);
+
+//        result.forEach(StoreUtil::autoUpdateStatus);
+
+        calculateHowFarToTheTarget(myLat, myLon, result.getContent());
+
+        return result;
+    }
+
     @GetMapping("/get-cate-images")
     public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") Double myLat,
                                                               @CookieValue(value = "lon", required = false, defaultValue = "") Double myLon) {
@@ -124,27 +152,4 @@ public class SearchController {
         return categoryImageList;
     }
 
-    @GetMapping("/recommend-post")
-    public Slice<SimpleSearchStoreDTO> getRecommendStoreByHashtag(@RequestParam String hashtagIdList,
-                                                                  @CookieValue(value = "lat", required = false) Double myLat,
-                                                                  @CookieValue(value = "lon", required = false) Double myLon) {
-        if (myLat == null || myLon == null) {
-            return new SliceImpl<>(null, null, false);
-        }
-
-        final double dist = 3;
-
-        List<Long> hashtagList = Arrays.stream(hashtagIdList.split(","))
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
-
-        Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(
-                hashtagList, 0, myLat, myLon, dist);
-
-        result.forEach(StoreUtil::autoUpdateStatus);
-
-        calculateHowFarToTheTarget(myLat, myLon, result.getContent());
-
-        return result;
-    }
 }

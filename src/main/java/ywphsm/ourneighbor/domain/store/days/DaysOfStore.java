@@ -27,22 +27,26 @@ public class DaysOfStore {
     @NotNull
     private String daysName;
 
+    /*
+        Store와 매핑할 때 사용
+     */
     public DaysOfStore(Days days, Store store) {
         this.days = days;
         this.daysName = days.getType().getDescription();
         this.store = store;
     }
 
+    @Builder
+    public DaysOfStore(Long id, Days days, Store store, String daysName) {
+        this.id = id;
+        this.days = days;
+        this.store = store;
+        this.daysName = daysName;
+    }
+
     public void updateDays(Days days) {
         this.days = days;
         this.daysName = days.getType().getDescription();
-    }
-
-    @Builder
-    public DaysOfStore(Long id, Store store, Days days) {
-        this.id = id;
-        this.store = store;
-        this.days = days;
     }
 
     public static void linkDaysAndStore(Days days, Store store) {

@@ -10,11 +10,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.*;
 import org.springframework.data.domain.*;
+import ywphsm.ourneighbor.domain.dto.store.days.DaysOfStoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.domain.store.days.QDaysOfStore;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import java.util.List;
 
+import static com.querydsl.core.types.Projections.*;
 import static org.springframework.util.StringUtils.*;
 import static ywphsm.ourneighbor.domain.category.QCategory.*;
 import static ywphsm.ourneighbor.domain.category.QCategoryOfStore.*;
@@ -22,6 +25,7 @@ import static ywphsm.ourneighbor.domain.file.QUploadFile.*;
 import static ywphsm.ourneighbor.domain.hashtag.QHashtag.*;
 import static ywphsm.ourneighbor.domain.hashtag.QHashtagOfStore.*;
 import static ywphsm.ourneighbor.domain.store.QStore.*;
+import static ywphsm.ourneighbor.domain.store.days.QDaysOfStore.*;
 
 @RequiredArgsConstructor
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
@@ -77,11 +81,15 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         buildHashtagIdEq(hashtagIdList, builder);
 
         List<SimpleSearchStoreDTO> list = queryFactory
-                .select(Projections.constructor(SimpleSearchStoreDTO.class,
-                        store.id, store.name, store.lon, store.lat, store.phoneNumber,
-                        store.status, store.businessTime, store.address, store.ratingTotal, store.file.uploadImageUrl
+                .select(constructor(SimpleSearchStoreDTO.class,
+                        store.id, store.name, store.lon, store.lat, store.phoneNumber, store.status,
+                        store.businessTime, store.address, store.ratingTotal, store.file.uploadImageUrl,
+                        list(Projections.constructor(DaysOfStoreDTO.class,
+                                daysOfStore.daysName
+                                ))
                 )).distinct()
                 .from(store)
+                .leftJoin(store.daysOfStoreList, daysOfStore)
                 .innerJoin(store.hashtagOfStoreList, hashtagOfStore)
                 .innerJoin(hashtagOfStore.hashtag, hashtag)
                 .where(builder)
@@ -105,7 +113,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         final int dist = 3;
 
         return queryFactory
-                .select(Projections.constructor(SimpleSearchStoreDTO.class,
+                .select(constructor(SimpleSearchStoreDTO.class,
                         store.id, store.name, store.lon, store.lat, store.phoneNumber,
                         store.status, store.businessTime, store.address, store.ratingTotal, store.file.uploadImageUrl
                 )).distinct()

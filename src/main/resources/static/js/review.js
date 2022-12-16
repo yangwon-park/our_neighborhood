@@ -116,6 +116,7 @@ var main = {
         validation.removeValidation(fileValid);
 
         let fileSizeCheck;
+        let fileCountCheck = true;
         let targetSize = 1024 * 1024 * 2;
 
         if (file.length === 0) {
@@ -124,8 +125,13 @@ var main = {
             fileSizeCheck = file[0].size <= targetSize;
         }
 
+        if (file.length > 5) {
+            fileCountCheck = false
+        }
+
         if (content.value !== "" && ratingForm !== null
-            && memberId !== "" && storeId !== "" && fileSizeCheck) {
+            && memberId !== "" && storeId !== ""
+            && fileSizeCheck && fileCountCheck) {
             this.save();
         }
 
@@ -140,6 +146,10 @@ var main = {
 
         if (file.length !== 0 && file[0].size > targetSize) {
             validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
+        }
+
+        if (file.length > 5) {
+            validation.addValidation(fileValid, "이미지는 5개까지 넣을수 있습니다.");
         }
 
     },

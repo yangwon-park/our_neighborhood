@@ -46,24 +46,27 @@ var main = {
             }
         }
 
-        // const zoomDiv = document.getElementById("modal-content");
-        // let scale = 1;
-        //
-        // function zoom(event) {
-        //     event.preventDefault();
-        //
-        //     scale += event.deltaY * -0.01;
-        //
-        //     // Restrict scale
-        //     scale = Math.min(Math.max(.125, scale), 4);
-        //
-        //     // Apply scale transform
-        //     zoomDiv.style.transform = `scale(${scale})`;
-        // }
-        //
-        // if (zoomDiv !== null) {
-        //     zoomDiv.onwheel = zoom;
-        // }
+        /*
+            메뉴판 modal zoom 로직
+         */
+        const zoomDiv = document.getElementById("modal-content");
+        let scale = 1;
+
+        function zoom(event) {
+            event.preventDefault();
+
+            scale += event.deltaY * -0.01;
+
+            // Restrict scale
+            scale = Math.min(Math.max(.125, scale), 4);
+
+            // Apply scale transform
+            zoomDiv.style.transform = `scale(${scale})`;
+        }
+
+        if (zoomDiv !== null) {
+            zoomDiv.onwheel = zoom;
+        }
 
         mask.closeMask();
 

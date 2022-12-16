@@ -84,6 +84,8 @@ var main = {
     getRecommendPost: function () {
         let hashtagIdList = sessionStorage.getItem("hashtagIdList");
 
+        console.log(hashtagIdList);
+
         axios({
             method: "get",
             url: "/recommend-post",

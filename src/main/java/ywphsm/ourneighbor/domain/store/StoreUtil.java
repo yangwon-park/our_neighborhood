@@ -18,7 +18,7 @@ public class StoreUtil {
          => DB 자체 값은 항상 OPEN
          
          조건
-            0. Default: OPEN => 오픈 시간으로 인한 OPEN 조건은 고려하지 않는다.
+            0. Default: OPEN
             1. 휴무일이면 CLOSED
             2. 오픈 시간, 닫는 시간이 NULL: NULL로 반환 (알 수 없음 - NOT NULL이라 올바른 데이터가 아님)
             3. 오픈 시간 ~ 닫는 시간 사이가 아니면 CLOSE
@@ -29,11 +29,14 @@ public class StoreUtil {
     public static StoreStatus autoUpdateStatus(BusinessTime businessTime, List<String> offDays) {
         String today = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);             // 오늘 요일 한글로 변경
         LocalTime currentTime = LocalTime.now();
+        LocalTime openingTime = businessTime.getOpeningTime();
+        LocalTime closingTime = businessTime.getClosingTime();
+        LocalTime breakStart = businessTime.getBreakStart();
+        LocalTime breakEnd = businessTime.getBreakEnd();
 
         if (!offDays.isEmpty()) {
             for (String offDay : offDays) {
                 if (today.equals(offDay)) {
-                    log.info("휴무입니다.");
                     return StoreStatus.CLOSED;
                 }
             }
@@ -43,8 +46,8 @@ public class StoreUtil {
             null인 경우를 처리하지 않으면 에러 발생
               => 검색 결과가 2개 이상인 경우 그냥 터져버림
          */
-        if (businessTime.getOpeningTime() == null
-                || businessTime.getClosingTime() == null) {
+        if (openingTime == null
+                || closingTime == null) {
             return null;
         }
 
@@ -52,27 +55,61 @@ public class StoreUtil {
             오픈 == 클로즈
                 => 24시간 영업이므로 OPEN으로 설정
          */
-        if (businessTime.getOpeningTime().equals(businessTime.getClosingTime())) {
+        if (openingTime.equals(closingTime)) {
             return StoreStatus.OPEN;
         }
 
-        if (!(currentTime.isAfter(businessTime.getOpeningTime())
-                && currentTime.isBefore(businessTime.getClosingTime()))) {
-            return StoreStatus.CLOSED;
+        /*
+            오픈이 클로즈보다 더 뒤인 경우의 조건
+                1. 오픈과 클로즈의 시간대가 모두 오전 또는 오후인 경우
+                    => 현재, 오픈, 클로즈 모두에 +12시간 후 오픈과 클로즈를 바꿔줌
+                2. 오픈이 오후이고 클로즈가 오전인 경우
+                    => 현재, 오픈, 클로즈 모두에 +12시간
+                이후 새로 만든 오픈과 클로즈 사이에 현재+12시가 있는지 보고 오픈 여부 판단
+
+         */
+        if (openingTime.isAfter(closingTime)) {
+            LocalTime newOpeningTime;
+            LocalTime newClosingTime;
+            LocalTime newCurrentTime;
+
+            if ((openingTime.getHour() < 12 && closingTime.getHour() < 12)      // 조건 1
+                    || openingTime.getHour() >= 12 && closingTime.getHour() >= 12) {
+                newOpeningTime = closingTime.plusHours(12);
+                newClosingTime = openingTime.plusHours(12);
+                newCurrentTime = currentTime.plusHours(12);
+
+                if (newCurrentTime.isAfter(newOpeningTime)
+                        && newCurrentTime.isBefore(newClosingTime)) {
+                    return StoreStatus.CLOSED;
+                }
+            } else {                                                            // 조건 2
+                newOpeningTime = openingTime.plusHours(12);
+                newClosingTime = closingTime.plusHours(12);
+                newCurrentTime = currentTime.plusHours(12);
+
+                if (!(newCurrentTime.isAfter(newOpeningTime)
+                        && newCurrentTime.isBefore(newClosingTime))) {
+                    return StoreStatus.CLOSED;
+                }
+            }
         }
 
-        if (businessTime.getBreakStart() == null || businessTime.getBreakEnd() == null) {
+        if (breakStart == null || businessTime.getBreakEnd() == null) {
             return StoreStatus.OPEN;
         }
 
         /*
             쉬는 시간에 포함되면 BREAK로 설정
          */
-        if (currentTime.isAfter(businessTime.getBreakStart())
+        if (currentTime.isAfter(breakStart)
                 && currentTime.isBefore(businessTime.getBreakEnd())) {
             return StoreStatus.BREAK;
         }
 
-        return null;
+        /*
+            어떤 경우에도 속하지 않으면 OPEN
+         */
+        return StoreStatus.OPEN;
     }
 }

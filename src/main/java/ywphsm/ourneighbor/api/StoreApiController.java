@@ -9,8 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.domain.dto.RequestAddStoreDTO;
 import ywphsm.ourneighbor.domain.dto.store.StoreDTO;
-import ywphsm.ourneighbor.domain.dto.store.days.DaysDTO;
-import ywphsm.ourneighbor.domain.store.days.Days;
 import ywphsm.ourneighbor.service.RequestAddStoreService;
 import ywphsm.ourneighbor.service.store.DaysService;
 import ywphsm.ourneighbor.service.store.StoreService;

@@ -24,8 +24,6 @@ import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.domain.store.StoreStatus;
-import ywphsm.ourneighbor.domain.store.StoreUtil;
 import ywphsm.ourneighbor.service.*;
 import ywphsm.ourneighbor.service.login.SessionConst;
 import ywphsm.ourneighbor.service.store.DaysService;
@@ -34,7 +32,6 @@ import ywphsm.ourneighbor.service.store.StoreService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -133,10 +130,10 @@ public class StoreController {
         model.addAttribute("categoryList", categorySimpleDTOList);
         model.addAttribute("hashtagList", hashtagGroupDTO);
         model.addAttribute("daysList", offDays);
+
         model.addAttribute("menuImgList", menuImgList);
         model.addAttribute("menuList", menuDTOList);
 
-        // review
         model.addAttribute("review", content);
         model.addAttribute("ratingAverage", ratingAverage);
 

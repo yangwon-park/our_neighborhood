@@ -15,7 +15,6 @@ import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysDTO;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysOfStoreDTO;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
-import ywphsm.ourneighbor.domain.menu.Menu;
 import ywphsm.ourneighbor.domain.dto.store.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
@@ -31,9 +30,7 @@ import ywphsm.ourneighbor.service.store.StoreService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -106,7 +103,7 @@ public class StoreController {
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
         List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
 
-        double ratingAverage = reviewService.ratingAverage(storeId);
+        double ratingAverage = store.getRatingAverage();
 
         // 찜, 스토어 수정 권한
         if (member != null) {

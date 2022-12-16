@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.domain.store.StoreStatus;
 import ywphsm.ourneighbor.domain.store.StoreUtil;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ywphsm.ourneighbor.domain.store.StoreUtil.*;
 import static ywphsm.ourneighbor.domain.store.distance.Distance.*;
 
 @Slf4j
@@ -44,7 +46,9 @@ public class SearchController {
                 .map(SimpleSearchStoreDTO::new)
                 .collect(Collectors.toList());
 
-        result.forEach(StoreUtil::autoUpdateStatus);
+        result.forEach(simpleSearchStoreDTO ->
+                simpleSearchStoreDTO.setStatus(
+                        autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
 
         for (SimpleSearchStoreDTO dto : result) {
             log.info("dto={}", dto.getStatus());
@@ -71,7 +75,9 @@ public class SearchController {
         List<SimpleSearchStoreDTO> dto = findStores.stream()
                 .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
 
-        dto.forEach(StoreUtil::autoUpdateStatus);
+        dto.forEach(simpleSearchStoreDTO ->
+                simpleSearchStoreDTO.setStatus(
+                        autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
 
         if (!(myLat == null) && !(myLon == null)) {
             calculateHowFarToTheTarget(myLat, myLon, dto);
@@ -102,7 +108,9 @@ public class SearchController {
                 .map(SimpleSearchStoreDTO::new)
                 .collect(Collectors.toList());
 
-        result.forEach(StoreUtil::autoUpdateStatus);
+        result.forEach(simpleSearchStoreDTO ->
+                simpleSearchStoreDTO.setStatus(
+                        autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
 
         calculateHowFarToTheTarget(myLat, myLon, result);
 
@@ -152,7 +160,9 @@ public class SearchController {
         Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(
                 hashtagList, 0, myLat, myLon, dist);
 
-        result.forEach(StoreUtil::autoUpdateStatus);
+        result.forEach(simpleSearchStoreDTO ->
+                simpleSearchStoreDTO.setStatus(
+                        autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
 
         calculateHowFarToTheTarget(myLat, myLon, result.getContent());
 

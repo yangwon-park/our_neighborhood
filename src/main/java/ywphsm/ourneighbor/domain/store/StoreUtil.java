@@ -2,11 +2,11 @@ package ywphsm.ourneighbor.domain.store;
 
 import lombok.extern.slf4j.Slf4j;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
-import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
+import java.util.List;
 import java.util.Locale;
 
 @Slf4j
@@ -17,19 +17,16 @@ public class StoreUtil {
          => 검색시 DTO에만 반영되게 만들고 DB에는 반영되지 않음
          => DB 자체 값은 항상 OPEN
      */
-    public static void autoUpdateStatus(SimpleSearchStoreDTO dto) {
+    public static StoreStatus autoUpdateStatus(BusinessTime businessTime, List<String> offDays) {
         String today = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);             // 오늘 요일 한글로 변경
 
         LocalTime currentTime = LocalTime.now();
 
-        BusinessTime businessTime = dto.getBusinessTime();
-
-        if (!dto.getOffDays().isEmpty()) {
-            for (String offDay : dto.getOffDays()) {
+        if (!offDays.isEmpty()) {
+            for (String offDay : offDays) {
                 if (today.equals(offDay)) {
                     log.info("휴무입니다.");
-                    dto.setStatus(StoreStatus.CLOSED);
-                    return;
+                    return StoreStatus.CLOSED;
                 }
             }
         }
@@ -39,25 +36,25 @@ public class StoreUtil {
               => 검색 결과가 2개 이상인 경우 그냥 터져버림
          */
         if (businessTime.getOpeningTime() == null || businessTime.getClosingTime() == null) {
-            return;
+            return null;
         }
 
         if (businessTime.getOpeningTime().equals(businessTime.getClosingTime())) {
-            dto.setStatus(StoreStatus.OPEN);
-            return;
+            return StoreStatus.OPEN;
         }
 
         if (!(currentTime.isAfter(businessTime.getOpeningTime()) && currentTime.isBefore(businessTime.getClosingTime()))) {
-            dto.setStatus(StoreStatus.CLOSED);
-            return;
+            return StoreStatus.CLOSED;
         }
 
         if (businessTime.getBreakStart() == null) {
-            return;
+            return null;
         }
 
         if (currentTime.isAfter(businessTime.getBreakStart()) && currentTime.isBefore(businessTime.getBreakEnd())) {
-            dto.setStatus(StoreStatus.BREAK);
+            return StoreStatus.BREAK;
         }
+
+        return null;
     }
 }

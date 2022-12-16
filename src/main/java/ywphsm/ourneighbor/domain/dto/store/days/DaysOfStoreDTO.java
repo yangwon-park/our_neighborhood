@@ -2,7 +2,6 @@ package ywphsm.ourneighbor.domain.dto.store.days;
 
 import lombok.Builder;
 import lombok.Data;
-import ywphsm.ourneighbor.domain.store.days.Days;
 import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 
 @Data

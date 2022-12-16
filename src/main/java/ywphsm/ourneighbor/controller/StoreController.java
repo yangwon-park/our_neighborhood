@@ -15,6 +15,7 @@ import ywphsm.ourneighbor.domain.dto.category.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysDTO;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysOfStoreDTO;
+import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.dto.store.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
@@ -23,6 +24,8 @@ import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
+import ywphsm.ourneighbor.domain.store.StoreStatus;
+import ywphsm.ourneighbor.domain.store.StoreUtil;
 import ywphsm.ourneighbor.service.*;
 import ywphsm.ourneighbor.service.login.SessionConst;
 import ywphsm.ourneighbor.service.store.DaysService;
@@ -34,6 +37,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ywphsm.ourneighbor.domain.store.StoreUtil.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -86,9 +91,13 @@ public class StoreController {
 
         List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO =
                 hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescTop9(storeId);
-        
-        List<String> daysList = storeDTO.getDaysOfStoreDTOList().stream()
+
+        List<String> offDays = storeDTO.getDaysOfStoreDTOList().stream()
                 .map(DaysOfStoreDTO::getDaysName).collect(Collectors.toList());
+
+        BusinessTime businessTime = new BusinessTime(storeDTO.getOpeningTime(), storeDTO.getClosingTime(), storeDTO.getBreakStart(), storeDTO.getBreakEnd());
+
+        storeDTO.setStatus(autoUpdateStatus(businessTime, offDays));
 
         /*
             메뉴판 이미지 URL 조회
@@ -123,7 +132,7 @@ public class StoreController {
         model.addAttribute("store", storeDTO);
         model.addAttribute("categoryList", categorySimpleDTOList);
         model.addAttribute("hashtagList", hashtagGroupDTO);
-        model.addAttribute("daysList", daysList);
+        model.addAttribute("daysList", offDays);
         model.addAttribute("menuImgList", menuImgList);
         model.addAttribute("menuList", menuDTOList);
 

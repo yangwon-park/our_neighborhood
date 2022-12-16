@@ -10,8 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.service.store.StoreService;
 
-import static org.mockito.ArgumentMatchers.any;
-
 @ExtendWith(MockitoExtension.class)
 public class StoreServiceTest {
 

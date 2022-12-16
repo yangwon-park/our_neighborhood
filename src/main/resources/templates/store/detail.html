@@ -161,12 +161,13 @@
                         <span class="text-dark fw-bold ms-1">휴무일</span>
                     </div>
                     <div class="col-9">
-                        <th:block th:if="${not #lists.isEmpty(store.offDays)}" class="text-dark fw-bold ms-1">
-                            <span th:each="day : *{offDays}" class="me-2">
-                                <th:block th:text="${day}"></th:block> 휴무
+                        <th:block th:if="${not #lists.isEmpty(daysList)}" class="text-dark fw-bold ms-1">
+                            <span th:each="days : ${daysList}" class="me-1">
+                                <th:block th:text="${days}"></th:block>요일
                             </span>
+                            휴무
                         </th:block>
-                        <th:block th:if="${#lists.isEmpty(store.offDays)}" class="text-dark fw-bold ms-1">
+                        <th:block th:if="${#lists.isEmpty(daysList)}" class="text-dark fw-bold ms-1">
                             없음
                         </th:block>
                     </div>
@@ -423,40 +424,44 @@
                     </span>
                 </div>
             </div>
-            <table class="table table-striped" id="more_list">
-                <thead>
-                <tr>
-                    <th>별점</th>
-                    <th>리뷰</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>사진</th>
-                </tr>
-                </thead>
-                <tr th:each="review : ${review}">
-                    <td th:if="${review.rating == 1}">★☆☆☆☆</td>
-                    <td th:if="${review.rating == 2}">★★☆☆☆</td>
-                    <td th:if="${review.rating == 3}">★★★☆☆</td>
-                    <td th:if="${review.rating == 4}">★★★★☆</td>
-                    <td th:if="${review.rating == 5}">★★★★★</td>
-                    <td th:text="${review.content}"></td>
-                    <td th:text="${review.username}"></td>
-                    <td th:text="${#strings.substring(review.createDate, 0, 10)}"></td>
-                    <td >
-                        <span th:each="imgUrl : ${review.uploadImgUrl}">
-                            <img th:src="${imgUrl}" width="180" height="180" alt="리뷰 사진">
-                        </span>
-                    </td>
-                    <th:block th:if="${session.loginMember ne null}">
-                        <td th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
+            <hr>
+            <div th:each="review : ${review}" id="more_list">
+                <div>
+                    <img th:src="${review.memberImgUrl}" width="70" height="70" alt="프로필 사진">
+                    <span th:text="${review.username}" class="text-dark fw-bold ms-1">이름</span>
+                    <div th:if="${session.loginMember ne null}">
+                        <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">
                             <button th:id="|review-delete-btn${review.reviewId}|"
-                                    type="button" class="btn btn-dark mt-4 review-delete">
+                                    type="button" class="btn btn-dark mt-4 review-delete float-end">
                                 삭제
                             </button>
-                        </td>
-                    </th:block>
-                </tr>
-            </table>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="wrap-star" >
+                    <span class="star-rating">
+                        <span th:style="${'width:' + (review.rating * 20) + '%'}"></span>
+                    </span>
+                </div>
+                <br>
+                <br>
+                <p th:text="${review.content}">
+                </p>
+                <div>
+                    <span th:each="imgUrl : ${review.uploadImgUrl}">
+                        <img th:src="${imgUrl}" width="180" height="180" alt="리뷰 사진">
+                    </span>
+                </div>
+                <br>
+                <br>
+                <div>
+                    <span class="text-dark fw-bold ms-1">작성일</span>
+                    <span th:text="${#strings.substring(review.createDate, 0, 10)}"></span>
+                </div>
+                <hr>
+            </div>
+            <div id="reviewBody">
+            </div>
             <button type="button" class="btn btn-main-color mt-4" id="review-more">더보기</button>
         </div>
     </div>

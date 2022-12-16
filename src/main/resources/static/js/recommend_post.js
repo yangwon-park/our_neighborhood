@@ -16,7 +16,6 @@ var main = {
     },
 
     saveRecommendPost: function () {
-        console.log("동작중?");
         const recommendPostFormEls = {
             header: document.getElementById("header"),
             content: document.getElementById("content"),
@@ -48,11 +47,6 @@ var main = {
             }
         }
 
-        console.log(recommendPostFormEls["header"].value);
-        console.log(recommendPostFormEls["content"].value);
-        console.log(recommendPostFormEls["hashtag"].value);
-        console.log(kindCheck);
-
         if (recommendPostFormEls["header"].value !== ""
             && recommendPostFormEls["content"].value !== ""
             && recommendPostFormEls["hashtag"].value !== ""
@@ -62,7 +56,6 @@ var main = {
             const formData = new FormData(form);
 
             mask.loadingWithMask();
-            console.log("동작중?22");
 
             axios({
                 method: "post",
@@ -90,6 +83,8 @@ var main = {
 
     getRecommendPost: function () {
         let hashtagIdList = sessionStorage.getItem("hashtagIdList");
+
+        console.log(hashtagIdList);
 
         axios({
             method: "get",

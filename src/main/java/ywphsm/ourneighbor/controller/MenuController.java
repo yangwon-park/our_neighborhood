@@ -15,7 +15,7 @@ import ywphsm.ourneighbor.domain.dto.MenuDTO;
 import ywphsm.ourneighbor.domain.menu.MenuFeat;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.service.StoreService;
+import ywphsm.ourneighbor.service.store.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;

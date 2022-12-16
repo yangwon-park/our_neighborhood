@@ -21,6 +21,7 @@ import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.review.ReviewRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
+import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;

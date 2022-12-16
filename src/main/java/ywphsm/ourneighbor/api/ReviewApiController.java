@@ -9,6 +9,7 @@ import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.service.ReviewService;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ReviewApiController {
     }
 
     @PostMapping("/user/review")
-    public Long save(ReviewDTO.Add dto, @RequestParam String hashtag) throws IOException, ParseException {
+    public Long save(@Valid ReviewDTO.Add dto, @RequestParam String hashtag) throws IOException, ParseException {
         return reviewService.save(dto, hashtag);
     }
 

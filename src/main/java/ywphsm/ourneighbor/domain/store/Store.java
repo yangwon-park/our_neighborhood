@@ -12,6 +12,7 @@ import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.hashtag.HashtagOfStore;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.menu.Menu;
+import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -57,12 +58,6 @@ public class Store extends BaseEntity {
 
     private String homePage;
 
-//    @OneToMany(mappedBy = "store")
-//    private List<DaysOfStore> daysOfStore;
-
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<String> offDays = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private StoreStatus status = StoreStatus.OPEN;               // 가게 오픈 상황 (default: OPEN)
 
@@ -92,23 +87,27 @@ public class Store extends BaseEntity {
     }
 
     // Menu (1:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
 
-    // Review(N:1)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // Review (N:1)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Review> reviewList = new ArrayList<>();
 
+    // Days (N:N)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    private List<DaysOfStore> daysOfStoreList = new ArrayList<>();
+
     // Category (N:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
     private List<CategoryOfStore> categoryOfStoreList = new ArrayList<>();
 
     // Hashtag (N:N)
-    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
     private List<HashtagOfStore> hashtagOfStoreList = new ArrayList<>();
 
     // Member (N:N)
-    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "store")
     private List<MemberOfStore> memberOfStoreList = new ArrayList<>();
 
 
@@ -119,10 +118,9 @@ public class Store extends BaseEntity {
     @Builder
     public Store(Long id, String name, Double lat, Double lon,
                  Point<G2D> point, String phoneNumber, BusinessTime businessTime, String notice, String intro,
-                 List<String> offDays, StoreStatus status, Address address,
-                 ParkAvailable park, String parkDetail, String homePage,
+                 StoreStatus status, Address address, ParkAvailable park, String parkDetail, String homePage,
                  List<Menu> menuList, List<CategoryOfStore> categoryOfStoreList,
-                 List<HashtagOfStore> hashtagOfStoreList) {
+                 List<HashtagOfStore> hashtagOfStoreList, List<DaysOfStore> daysOfStoreList) {
         this.id = id;
         this.name = name;
         this.lat = lat;
@@ -132,7 +130,6 @@ public class Store extends BaseEntity {
         this.businessTime = businessTime;
         this.notice = notice;
         this.intro = intro;
-        this.offDays = offDays;
         this.status = status;
         this.address = address;
         this.park = park;
@@ -141,6 +138,7 @@ public class Store extends BaseEntity {
         this.menuList = menuList;
         this.categoryOfStoreList = categoryOfStoreList;
         this.hashtagOfStoreList = hashtagOfStoreList;
+        this.daysOfStoreList = daysOfStoreList;
     }
 
     /*
@@ -177,7 +175,6 @@ public class Store extends BaseEntity {
         this.park = store.getPark();
         this.parkDetail = store.getParkDetail();
         this.homePage = store.getHomePage();
-        this.offDays = store.getOffDays();
         this.address = store.getAddress();
     }
 

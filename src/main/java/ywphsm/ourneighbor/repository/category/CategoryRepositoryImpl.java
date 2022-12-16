@@ -5,7 +5,6 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import ywphsm.ourneighbor.domain.category.Category;
-import ywphsm.ourneighbor.domain.category.CategoryOfStore;
 
 import java.util.List;
 

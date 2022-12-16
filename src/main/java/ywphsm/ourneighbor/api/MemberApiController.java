@@ -12,16 +12,14 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 
 import ywphsm.ourneighbor.service.MemberService;
-import ywphsm.ourneighbor.service.StoreService;
 import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import java.io.IOException;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import java.util.Random;
 
 @Slf4j
@@ -100,7 +98,7 @@ public class MemberApiController {
     }
 
     @PostMapping("/member/add")
-    public Long save(MemberDTO.Add dto) throws IOException {
+    public Long save(@Valid MemberDTO.Add dto) throws IOException {
         return memberService.save(dto);
     }
 

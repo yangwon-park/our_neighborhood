@@ -29,10 +29,12 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                         QReview.review.rating,
                         QReview.review.createdDate,
                         QMember.member.id.as("memberId"),
-                        QMember.member.username))
+                        QMember.member.username,
+                        QMember.member.file.uploadImageUrl.as("memberImgUrl")))
                 .from(QReview.review)
                 .where(storeIdEq(storeId))
                 .leftJoin(QReview.review.member, QMember.member)
+                .leftJoin(QReview.review.member.file, QUploadFile.uploadFile)
                 .orderBy(QReview.review.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1) // limit보다 데이터를 1개 더 들고와서, 해당 데이터가 있다면 hasNext 변수에 true를 넣어 알림

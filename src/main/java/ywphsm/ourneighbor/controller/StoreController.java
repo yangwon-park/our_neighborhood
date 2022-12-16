@@ -12,9 +12,10 @@ import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.*;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
+import ywphsm.ourneighbor.domain.dto.store.days.DaysDTO;
+import ywphsm.ourneighbor.domain.dto.store.days.DaysOfStoreDTO;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
-import ywphsm.ourneighbor.domain.menu.Menu;
-import ywphsm.ourneighbor.domain.dto.StoreDTO;
+import ywphsm.ourneighbor.domain.dto.store.StoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.domain.menu.MenuFeat;
@@ -23,13 +24,13 @@ import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.*;
 import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.store.DaysService;
+import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -46,6 +47,8 @@ public class StoreController {
     private final ReviewService reviewService;
 
     private final MemberService memberService;
+
+    private final DaysService daysService;
 
     private final HashtagOfStoreService hashtagOfStoreService;
 
@@ -66,21 +69,6 @@ public class StoreController {
         return ParkAvailable.values();
     }
 
-    @ModelAttribute("offDays")
-    public Map<String, String> offDays() {
-        Map<String, String> offDays = new LinkedHashMap<>();
-
-        offDays.put("일", "일요일");
-        offDays.put("월", "월요일");
-        offDays.put("화", "화요일");
-        offDays.put("수", "수요일");
-        offDays.put("목", "목요일");
-        offDays.put("금", "금요일");
-        offDays.put("토", "토요일");
-
-        return offDays;
-    }
-
     @GetMapping("/store/{storeId}")
     public String storeDetail(@PathVariable Long storeId, Model model,
                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
@@ -92,17 +80,24 @@ public class StoreController {
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
-        List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO = hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescTop9(storeId);
+        List<HashtagOfStoreDTO.WithCount> hashtagGroupDTO =
+                hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescTop9(storeId);
 
-        List<Menu> menuList = menuService.findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(storeId);
+//        List<DaysDTO> daysDTOList = storeDTO.getDaysOfStoreDTOList().stream()
+//                .map(daysOfStoreDTO ->
+//                        daysService.findById(daysOfStoreDTO.getDaysId()))
+//                .map(DaysDTO::of).collect(Collectors.toList());
+
+        List<String> daysList = storeDTO.getDaysOfStoreDTOList().stream()
+                .map(DaysOfStoreDTO::getDaysName).collect(Collectors.toList());
 
         /*
-            메뉴판 조회
+            메뉴판 이미지 URL 조회
          */
         List<String> menuImgList = menuService.findImageByMenuTypeIsMenu(storeId);
 
-        List<MenuDTO.Detail> menuDTOList = menuList.stream()
-                .map(MenuDTO.Detail::of).collect(Collectors.toList());
+        List<MenuDTO.Detail> menuDTOList = menuService.findByStoreIdWithoutMenuTypeIsMenuCaseByOrderByType(storeId)
+                .stream().map(MenuDTO.Detail::of).collect(Collectors.toList());
 
         // review paging
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
@@ -127,12 +122,14 @@ public class StoreController {
         }
 
         model.addAttribute("store", storeDTO);
-        model.addAttribute("menuList", menuDTOList);
-        model.addAttribute("menuImgList", menuImgList);
         model.addAttribute("categoryList", categorySimpleDTOList);
         model.addAttribute("hashtagList", hashtagGroupDTO);
+        model.addAttribute("daysList", daysList);
+        model.addAttribute("menuImgList", menuImgList);
+        model.addAttribute("menuList", menuDTOList);
 
         // review
+        log.info("content = {}", content);
         model.addAttribute("review", content);
         model.addAttribute("ratingAverage", ratingAverage);
 
@@ -144,7 +141,12 @@ public class StoreController {
                            @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
         StoreDTO.Add add = new StoreDTO.Add();
         add.setMemberId(member.getId());
+
+        List<DaysDTO> daysList = daysService.findAllByOrderByIdAsc();
+
         model.addAttribute("store", add);
+        model.addAttribute("daysList", daysList);
+
         return "store/add_form";
     }
 
@@ -169,8 +171,11 @@ public class StoreController {
                         categoryService.findById(categoryOfStoreDTO.getCategoryId()))
                 .map(CategorySimpleDTO::of).collect(Collectors.toList());
 
+        List<DaysDTO> daysList = daysService.findAllByOrderByIdAsc();
+
         model.addAttribute("store", store);
         model.addAttribute("categoryList", categorySimpleDTOList);
+        model.addAttribute("daysList", daysList);
 
         return "store/edit_form";
     }

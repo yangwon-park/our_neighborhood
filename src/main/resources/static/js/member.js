@@ -81,6 +81,7 @@ var main = {
         const birthDate = document.getElementById("birthDate");
         const phoneNumber = document.getElementById("phoneNumber");
         const certifiedNumber = document.getElementById("certifiedNumber");
+        const file = document.getElementById("file").files;
 
         const userIdValid = document.getElementById("sign-up-userId-valid");
         const passwordValid = document.getElementById("sign-up-password-valid");
@@ -91,6 +92,7 @@ var main = {
         const birthDateValid = document.getElementById("sign-up-birthDate-valid");
         const phoneNumberValid = document.getElementById("sign-up-phoneNumber-valid");
         const certifiedNumberValid = document.getElementById("sign-up-certifiedNumber-valid");
+        const fileValid = document.getElementById("sign-up-file-valid");
 
         userId.classList.remove("valid-custom");
         password.classList.remove("valid-custom");
@@ -111,6 +113,7 @@ var main = {
         validation.removeValidation(birthDateValid);
         validation.removeValidation(phoneNumberValid);
         validation.removeValidation(certifiedNumberValid);
+        validation.removeValidation(fileValid);
 
         let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
         let emailValidation = emailRegExp.test(email.value);
@@ -128,13 +131,23 @@ var main = {
             passwordCheckValidation = false;
         }
 
+        let fileSizeCheck;
+        let targetSize = 1024 * 1024 * 2;
+
+        if (file.length === 0) {
+            fileSizeCheck = true;
+        } else {
+            fileSizeCheck = file[0].size <= targetSize;
+        }
+
         const signUpForm = document.getElementById("sign-up-add-form");
         let formData = new FormData(signUpForm);
 
         if (userId.value !== "" && username.value !== ""
             && nickname.value !== "" && passwordCheckValidation === true
         && emailValidation && birthDateValidation && passwordCheckValidation
-        && passwordValidation && phoneNumberValidation && certifiedNumberValidation) {
+        && passwordValidation && phoneNumberValidation
+            && certifiedNumberValidation && fileSizeCheck) {
 
             axios({
                 method: "get",
@@ -209,6 +222,10 @@ var main = {
         if (nickname.value === "") {
             nickname.classList.add("valid-custom");
             validation.addValidation(nicknameValid, "닉네임을 입력해주세요.");
+        }
+
+        if (file.length !== 0 && file[0].size > targetSize) {
+            validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
         }
 
     },
@@ -324,24 +341,35 @@ var main = {
 
         const email = document.getElementById("email");
         const nickname = document.getElementById("nickname");
-        const file = document.getElementById("file");
+        const file = document.getElementById("file").files;
 
         const emailValid = document.getElementById("sign-up-email-valid");
         const nicknameValid = document.getElementById("sign-up-nickname-valid");
+        const fileValid = document.getElementById("member-edit-file-valid");
 
         email.classList.remove("valid-custom");
         nickname.classList.remove("valid-custom");
 
         validation.removeValidation(emailValid);
         validation.removeValidation(nicknameValid);
+        validation.removeValidation(fileValid);
 
         let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
         let emailValidation = emailRegExp.test(email.value);
 
+        let fileSizeCheck;
+        let targetSize = 1024 * 1024 * 2;
+
+        if (file.length === 0) {
+            fileSizeCheck = true;
+        } else {
+            fileSizeCheck = file[0].size <= targetSize;
+        }
+
         const memberEditForm = document.getElementById("member-edit-form");
         let formData = new FormData(memberEditForm);
 
-        if (nickname.value !== "" && emailValidation) {
+        if (nickname.value !== "" && emailValidation && fileSizeCheck) {
             axios({
                 method: "put",
                 url: "/member/edit",
@@ -364,9 +392,14 @@ var main = {
             email.classList.add("valid-custom");
             validation.addValidation(emailValid, "올바른 이메일 형식이 아닙니다.");
         }
+
         if (nickname.value === "") {
             nickname.classList.add("valid-custom");
             validation.addValidation(nicknameValid, "닉네임을 입력해주세요.");
+        }
+
+        if (file.length !== 0 && file[0].size > targetSize) {
+            validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
         }
 
     },

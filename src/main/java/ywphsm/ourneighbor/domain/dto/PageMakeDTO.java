@@ -14,7 +14,7 @@ public class PageMakeDTO {
     /* 이전 페이지, 다음 페이지 존재유무 */
     private boolean prev, next;
 
-    /*전체 게시물 수*/
+    /* 전체 게시물 수 */
     private long total;
 
     //현재 페이지

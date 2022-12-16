@@ -46,24 +46,27 @@ var main = {
             }
         }
 
-        // const zoomDiv = document.getElementById("modal-content");
-        // let scale = 1;
-        //
-        // function zoom(event) {
-        //     event.preventDefault();
-        //
-        //     scale += event.deltaY * -0.01;
-        //
-        //     // Restrict scale
-        //     scale = Math.min(Math.max(.125, scale), 4);
-        //
-        //     // Apply scale transform
-        //     zoomDiv.style.transform = `scale(${scale})`;
-        // }
-        //
-        // if (zoomDiv !== null) {
-        //     zoomDiv.onwheel = zoom;
-        // }
+        /*
+            메뉴판 modal zoom 로직
+         */
+        const zoomDiv = document.getElementById("modal-content");
+        let scale = 1;
+
+        function zoom(event) {
+            event.preventDefault();
+
+            scale += event.deltaY * -0.01;
+
+            // Restrict scale
+            scale = Math.min(Math.max(.125, scale), 4);
+
+            // Apply scale transform
+            zoomDiv.style.transform = `scale(${scale})`;
+        }
+
+        if (zoomDiv !== null) {
+            zoomDiv.onwheel = zoom;
+        }
 
         mask.closeMask();
 
@@ -99,18 +102,30 @@ var main = {
         const storeId = document.getElementById("storeId").value;
         const memberId = document.getElementById("memberId").value;
         const reviewForm = document.getElementById("review-add-form");
+        const file = document.getElementById("file").files;
 
         const formData = new FormData(reviewForm);
         let ratingForm = formData.get("rating");
 
         const contentValid = document.getElementById("review-content-valid");
+        const fileValid = document.getElementById("review-file-valid");
 
         content.classList.remove("valid-custom");
 
         validation.removeValidation(contentValid);
+        validation.removeValidation(fileValid);
+
+        let fileSizeCheck;
+        let targetSize = 1024 * 1024 * 2;
+
+        if (file.length === 0) {
+            fileSizeCheck = true;
+        } else {
+            fileSizeCheck = file[0].size <= targetSize;
+        }
 
         if (content.value !== "" && ratingForm !== null
-            && memberId !== "" && storeId !== "") {
+            && memberId !== "" && storeId !== "" && fileSizeCheck) {
             this.save();
         }
 
@@ -121,6 +136,10 @@ var main = {
 
         if (ratingForm === null) {
             alert("별점을 정해주세요.")
+        }
+
+        if (file.length !== 0 && file[0].size > targetSize) {
+            validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
         }
 
     },
@@ -197,51 +216,37 @@ var main = {
                 let reviewMore = document.getElementById("review-more");
                 reviewMore.remove();
             }
-            const table = document.getElementById("more_list");
+            let reviewBody = document.getElementById("reviewBody");
+
             for (let contentElement of data.content) {
-                let row = table.insertRow(table.rows.length);
-
-                let cell1 = row.insertCell(0);
-                let cell2 = row.insertCell(1);
-                let cell3 = row.insertCell(2);
-                let cell4 = row.insertCell(3);
-                let cell5 = row.insertCell(4);
-                let cell6 = row.insertCell(5);
-
-                switch (contentElement.rating) {
-                    case 1:
-                        cell1.innerHTML = "<td>★☆☆☆☆</td>";
-                        break;
-                    case 2:
-                        cell1.innerHTML = "<td>★★☆☆☆</td>";
-                        break;
-                    case 3:
-                        cell1.innerHTML = "<td>★★★☆☆</td>";
-                        break;
-                    case 4:
-                        cell1.innerHTML = "<td>★★★★☆</td>";
-                        break;
-                    case 5:
-                        cell1.innerHTML = "<td>★★★★★</td>";
-                        break;
-                }
-                cell2.innerHTML = "<td>" + contentElement.content + "</td>";
-
-                cell3.innerHTML = "<td>" + contentElement.username + "</td>";
-
-                cell4.innerHTML = "<td>" + contentElement.createDate.substring(0, 10) + "</td>";
-
-                cell5.innerHTML = '<td>'
-                for (let uploadImgUrl of contentElement.uploadImgUrl) {
-                    cell5.innerHTML += '<img src="' + uploadImgUrl + '" width="180" height="180" alt="리뷰 사진">';
-                }
-                cell5.innerHTML += '<td>'
-
+                reviewBody.innerHTML += "<div><img src='" + contentElement.memberImgUrl + "' width='70' height='70' alt='프로필 사진'>";
+                reviewBody.innerHTML += "<span class='text-dark fw-bold ms-1'>" + contentElement.username + "</span>";
                 if (loginMember !== null) {
                     if (loginMember === "ADMIN") {
-                        cell6.innerHTML = '<td><button id="review-delete-btn' + contentElement.reviewId + '" type="button" class="btn btn-dark mt-4 review-delete"> 삭제 </button></td>';
+                        reviewBody.innerHTML += "<button id='review-delete-btn" + contentElement.reviewId + "' type='button' class='btn btn-dark mt-4 review-delete float-end'> 삭제 </button>";
                     }
                 }
+                reviewBody.innerHTML += "</div>" +
+                    "<div class='wrap-star' >" +
+                    "<span class='star-rating'>" +
+                    "<span style='width: " + contentElement.rating * 20 + "%'></span>" +
+                    "</span>" +
+                    "</div>" +
+                    "<br>" +
+                    "<br>" +
+                    "<p>" + contentElement.content + "</p>" +
+                    "<div>"
+                for (let uploadImgUrl of contentElement.uploadImgUrl) {
+                    reviewBody.innerHTML += '<img src="' + uploadImgUrl + '" width="180" height="180" alt="리뷰 사진">';
+                }
+                reviewBody.innerHTML += "</div>" +
+                    "<br>" +
+                    "<br>" +
+                    "<div>" +
+                    "<span class='text-dark fw-bold ms-1'>작성일</span>" +
+                    "<span>" + contentElement.createDate.substring(0, 10) + "</span>" +
+                    "</div>" +
+                    "<hr>";
             }
 
             const reviewDeleteBtnList = document.querySelectorAll(".review-delete");
@@ -355,4 +360,3 @@ var main = {
 };
 
 main.init();
-

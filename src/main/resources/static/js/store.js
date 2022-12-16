@@ -56,6 +56,10 @@ var main = {
                 })
             })
         }
+
+        const storeId = document.getElementById("store-id").innerText;
+
+        this.setDaysByStoreId(storeId);
     },
 
     save: function () {
@@ -133,9 +137,6 @@ var main = {
     },
 
     update: function () {
-        mask.loadingWithMask();
-
-        // input 태그
         const els = {
             name: document.getElementById("name"),
             zipcode: document.getElementById("zipcode"),
@@ -145,7 +146,6 @@ var main = {
             closingTime: document.getElementById("closingTime")
         }
 
-        // input 아래의 validation을 담을 div 태그
         const valids = {
             nameValid: document.getElementById("store-name-valid"),
             zipcodeValid: document.getElementById("store-zipcode-valid"),
@@ -180,6 +180,7 @@ var main = {
             const formData = new FormData(storeForm);
             const storeIdVal = document.getElementById("storeId").value;
 
+            mask.loadingWithMask();
 
             axios({
                 method: "put",
@@ -225,6 +226,36 @@ var main = {
         })
     },
 
+    setDaysByStoreId: function (storeId) {
+        mask.loadingWithMask();
+
+        const daysCheckBox = document.getElementsByName("daysId");
+
+        axios({
+            method: "get",
+            url: "/user/days",
+            params: {
+                storeId: storeId
+            }
+        }).then((resp) => {
+            console.log(resp.data);
+
+            for (const id of resp.data) {
+                for (const box of daysCheckBox) {
+                    if (id.toString() === box.value) {
+                        console.log(typeof(box));
+                        box.checked = true;
+                    }
+                }
+            }
+
+            mask.closeMask();
+        }).catch((error) => {
+            console.error(error);
+            mask.closeMask();
+        });
+    },
+
     mainChildren: [],
 
     midChildren: [],
@@ -266,7 +297,6 @@ var main = {
                 if (mainOption.value === categoryList[0]) {
                     mainOption.selected = true;
                     this.storeEditCheck = true;
-                    console.log("true");
                 }
             }
             this.categoryLayerEl.main.appendChild(mainOption);
@@ -300,7 +330,6 @@ var main = {
             }
 
             this.changeMidCategories(this.midChildren);
-
         });
     },
 
@@ -348,7 +377,7 @@ var main = {
     getMidCategories: function (mainChildrenParam, categoryList) {
 
         let midParentId;
-        if (categoryList[1] !== '') {
+        if (categoryList[1] !== "") {
             axios({
                 method: "get",
                 url: "/categories-hier-edit",
@@ -449,7 +478,7 @@ var main = {
                     alert(check);
                 }
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         }
 
@@ -479,7 +508,7 @@ var main = {
                 alert(check);
             }
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         })
     },
 };

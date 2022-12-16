@@ -4,14 +4,12 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.spatial.GeometryExpressions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.*;
 import org.springframework.data.domain.*;
-import org.springframework.data.support.PageableExecutionUtils;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
@@ -25,7 +23,6 @@ import static ywphsm.ourneighbor.domain.hashtag.QHashtag.*;
 import static ywphsm.ourneighbor.domain.hashtag.QHashtagOfStore.*;
 import static ywphsm.ourneighbor.domain.store.QStore.*;
 
-@Slf4j
 @RequiredArgsConstructor
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
 

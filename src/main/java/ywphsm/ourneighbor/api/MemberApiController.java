@@ -17,6 +17,7 @@ import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import java.io.IOException;
 import java.util.Random;
@@ -97,7 +98,7 @@ public class MemberApiController {
     }
 
     @PostMapping("/member/add")
-    public Long save(MemberDTO.Add dto) throws IOException {
+    public Long save(@Valid MemberDTO.Add dto) throws IOException {
         return memberService.save(dto);
     }
 

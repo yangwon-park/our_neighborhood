@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
 import ywphsm.ourneighbor.service.RecommendPostService;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -26,7 +28,7 @@ public class RecommendApiController {
     }
 
     @PostMapping("/admin/recommend-post")
-    public Long saveRecommendPost(RecommendPostDTO.Add dto) throws ParseException {
+    public Long saveRecommendPost(@Valid RecommendPostDTO.Add dto) throws ParseException {
         return recommendPostService.save(dto);
     }
 }

@@ -13,6 +13,7 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.MenuService;
 import ywphsm.ourneighbor.service.store.StoreService;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -36,7 +37,7 @@ public class MenuApiController {
     }
 
     @PostMapping("/seller/menu")
-    public Long save(MenuDTO.Add dto) throws IOException, ParseException {
+    public Long save(@Valid MenuDTO.Add dto) throws IOException, ParseException {
         return menuService.save(dto);
     }
 

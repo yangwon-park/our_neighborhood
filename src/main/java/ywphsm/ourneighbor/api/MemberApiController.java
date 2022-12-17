@@ -12,6 +12,7 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 
 import ywphsm.ourneighbor.service.MemberService;
+import ywphsm.ourneighbor.service.ValidationService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 import ywphsm.ourneighbor.service.store.StoreService;
 
@@ -32,6 +33,8 @@ public class MemberApiController {
 
     private final StoreService storeService;
 
+    private final ValidationService validationService;
+
     @PutMapping("/user/like")
     public String likeAdd(boolean likeStatus, Long memberId, Long storeId) {
         log.info("likeStatus={}", likeStatus);
@@ -43,31 +46,9 @@ public class MemberApiController {
                         String phoneNumber, String certifiedNumber, String userId,
                         @SessionAttribute(name = SessionConst.PHONE_CERTIFIED, required = false)
                             PhoneCertifiedForm certifiedForm) {
-        if (certifiedForm == null) {
-            return "인증번호를 발송해 주세요.";
-        }
 
-        if (memberService.doubleCheck(nickname) != null) {
-            return "이미 있는 닉네임 입니다.";
-        }
-
-        if (!phoneNumber.equals(certifiedForm.getPhoneNumber()) ||
-                !certifiedNumber.equals(certifiedForm.getCertifiedNumber())) {
-            return "전화번호 또는 인증번호가 일치하지 않습니다.";
-        }
-
-        if (memberService.findByPhoneNumber(phoneNumber) != null) {
-            return "이미 있는 전화번호 입니다";
-        }
-
-        if (memberService.findByEmail(email) != null) {
-            return "이미 있는 이메일 입니다";
-        }
-
-        if (memberService.userIdCheck(userId) != null) {
-            return "이미 있는 아이디 입니다";
-        }
-        return "성공";
+        return validationService.memberSaveValid(nickname, email, phoneNumber, certifiedNumber,
+                userId, certifiedForm);
     }
 
     @GetMapping("/member/send-sms")
@@ -108,51 +89,44 @@ public class MemberApiController {
                      @SessionAttribute(name = SessionConst.PHONE_CERTIFIED, required = false) PhoneCertifiedForm certifiedForm,
                      @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
-        if (certifiedForm == null) {
-            return "인증번호를 발송해주세요.";
-        }
-        if (!phoneNumber.equals(certifiedForm.getPhoneNumber()) ||
-                !certifiedNumber.equals(certifiedForm.getCertifiedNumber())) {
-            return "전화번호 또는 인증번호가 일치하지 않습니다.";
+        String valid = validationService.memberUpdatePnValid(phoneNumber, certifiedNumber, certifiedForm, member);
+
+        if (!valid.equals("성공")) {
+            return valid;
         }
 
         memberService.updatePhoneNumber(member.getId(), phoneNumber);
-        return "성공";
+        return valid;
     }
 
     @PutMapping("/member/edit")
     public String update(EditForm editForm,
                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) throws IOException {
 
-        if (memberService.doubleCheck(editForm.getNickname()) != null &&
-                !member.getNickname().equals(editForm.getNickname())) {
-            return "이미 존재하는 닉네임입니다.";
-        }
-        if (memberService.findByEmail(editForm.getEmail()) != null
-                && !member.getEmail().equals(editForm.getEmail())) {
-            return "이미 존재하는 이메일 입니다";
+        String valid = validationService.memberUpdateValid(editForm, member);
+
+        if (!valid.equals("성공")) {
+            return valid;
         }
 
         memberService.updateMember(member.getId(), editForm);
-        return "성공";
+        return valid;
     }
 
     @PutMapping("/member/edit/password")
     public String updatePassword(PasswordEditForm editForm,
                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member) {
 
-        if (!memberService.passwordCheck(member.getPassword(), editForm.getBeforePassword())) {
-            return "기존 비밀번호가 일치하지 않습니다.";
-        }
+        String valid = validationService.memberUpdatePwValid(editForm, member);
 
-        if (!editForm.getAfterPassword().equals(editForm.getPasswordCheck())) {
-            return "새로운 비밀번호와 비밀번호 확인이 일치하지 않습니다";
+        if (!valid.equals("성공")) {
+            return valid;
         }
 
         String encodedPassword = memberService.encodedPassword(editForm.getAfterPassword());
-
         memberService.updatePassword(member.getId(), encodedPassword);
-        return "성공";
+
+        return valid;
     }
 
     @DeleteMapping("/member/withdrawal")

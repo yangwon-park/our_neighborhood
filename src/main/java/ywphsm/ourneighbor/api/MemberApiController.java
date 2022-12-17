@@ -15,6 +15,7 @@ import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 import ywphsm.ourneighbor.service.store.StoreService;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -176,5 +177,11 @@ public class MemberApiController {
     @PutMapping("/admin/member-role/edit")
     public String memberRoleEdit(String userId, Role role) {
         return memberService.updateRole(userId, role);
+    }
+
+    @GetMapping("/delete-certified-number")
+    public void deleteCertifiedNumber(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.removeAttribute(SessionConst.PHONE_CERTIFIED);
     }
 }

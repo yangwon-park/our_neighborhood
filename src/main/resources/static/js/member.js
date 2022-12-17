@@ -260,7 +260,7 @@ var main = {
         }
 
         let display = document.getElementById("send-SMS-time");
-        let leftSec = 10;
+        let leftSec = 5;
 
         if (this.isRunning) {
             clearInterval(this.timer)
@@ -274,36 +274,30 @@ var main = {
 
     timer : null,
     isRunning : false,
+    isPaused : false,
 
     startTimer: function (count, display) {
         let minutes, seconds;
-        const signUpForm = document.getElementById("sign-up-add-form");
-        let formData = new FormData(signUpForm);
+        this.isPaused = false;
 
         this.timer = setInterval(function () {
-            console.log("timer 실행")
-            count--;
-            minutes = parseInt(count / 60, 10);
-            seconds = parseInt(count % 60, 10);
+            if (!this.isPaused) {
+                count--;
+                minutes = parseInt(count / 60, 10);
+                seconds = parseInt(count % 60, 10);
 
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
 
-            display.innerText = minutes + ":" + seconds;
+                display.innerText = minutes + ":" + seconds;
 
-            if (count === 0) {
-                clearInterval(this.timer);
-                alert("인증번호 시간 초과");
-                display.innerText = "시간초과";
-                this.isRunning = false;
-                window.location.reload();
-                axios({
-                    method: "get",
-                    url: "/delete-certified-number",
-                    data: formData
-                }).catch((e) => {
-                    console.error(e);
-                });
+                if (count === 0) {
+                    clearInterval(this.timer);
+                    alert("인증번호 시간 초과");
+                    this.isPaused = true;
+                    this.isRunning = false;
+                    display.innerText = "시간초과";
+                }
             }
 
         }, 1000);

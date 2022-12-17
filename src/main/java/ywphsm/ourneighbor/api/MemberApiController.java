@@ -54,7 +54,7 @@ public class MemberApiController {
     @GetMapping("/member/send-sms")
     public boolean sendSMS(@RequestParam String phoneNumber, HttpServletRequest request) {
 
-        if (memberService.findByPhoneNumber(phoneNumber) != null) {
+        if (memberService.findByPhoneNumber(phoneNumber).isPresent()) {
             return false;
         }
 

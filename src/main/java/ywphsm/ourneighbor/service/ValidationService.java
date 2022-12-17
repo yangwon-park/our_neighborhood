@@ -19,7 +19,7 @@ public class ValidationService {
             return "인증번호를 발송해 주세요.";
         }
 
-        if (memberService.doubleCheck(nickname) != null) {
+        if (memberService.findByNickName(nickname).isPresent()) {
             return "이미 있는 닉네임 입니다.";
         }
 
@@ -28,15 +28,15 @@ public class ValidationService {
             return "전화번호 또는 인증번호가 일치하지 않습니다.";
         }
 
-        if (memberService.findByPhoneNumber(phoneNumber) != null) {
+        if (memberService.findByPhoneNumber(phoneNumber).isPresent()) {
             return "이미 있는 전화번호 입니다";
         }
 
-        if (memberService.findByEmail(email) != null) {
+        if (memberService.findByEmail(email).isPresent()) {
             return "이미 있는 이메일 입니다";
         }
 
-        if (memberService.userIdCheck(userId) != null) {
+        if (memberService.findByUserId(userId).isPresent()) {
             return "이미 있는 아이디 입니다";
         }
         return "성공";
@@ -58,12 +58,12 @@ public class ValidationService {
 
     public String memberUpdateValid(EditForm editForm, Member member) {
 
-        if (memberService.doubleCheck(editForm.getNickname()) != null &&
+        if (memberService.findByNickName(editForm.getNickname()).isPresent() &&
                 !member.getNickname().equals(editForm.getNickname())) {
             return "이미 존재하는 닉네임입니다.";
         }
 
-        if (memberService.findByEmail(editForm.getEmail()) != null
+        if (memberService.findByEmail(editForm.getEmail()).isPresent()
                 && !member.getEmail().equals(editForm.getEmail())) {
             return "이미 존재하는 이메일 입니다";
         }

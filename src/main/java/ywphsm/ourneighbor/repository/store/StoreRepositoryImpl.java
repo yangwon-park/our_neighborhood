@@ -13,6 +13,7 @@ import org.springframework.data.domain.*;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysOfStoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.domain.store.days.QDaysOfStore;
+import ywphsm.ourneighbor.repository.OrderByNull;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
 import java.util.List;
@@ -94,6 +95,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .where(builder)
                 .where(stContains(polygon), stDistance(polygon).loe(3))
                 .groupBy(store.name)
+                .orderBy(OrderByNull.DEFAULT)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();

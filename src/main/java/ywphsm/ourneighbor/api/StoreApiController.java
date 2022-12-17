@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.domain.dto.RequestAddStoreDTO;
 import ywphsm.ourneighbor.domain.dto.store.StoreDTO;
+import ywphsm.ourneighbor.domain.dto.store.days.DaysDTO;
+import ywphsm.ourneighbor.domain.store.days.Days;
 import ywphsm.ourneighbor.service.RequestAddStoreService;
 import ywphsm.ourneighbor.service.store.DaysService;
 import ywphsm.ourneighbor.service.store.StoreService;
@@ -19,6 +21,7 @@ import ywphsm.ourneighbor.service.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -46,7 +49,7 @@ public class StoreApiController {
                        @RequestParam(value = "categoryId") List<Long> categoryIdList,
                        @RequestParam(value = "daysId", required = false) List<Long> daysIdList,
                        @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-                       HttpServletRequest request, HttpServletResponse response) throws IOException {
+                       HttpServletResponse response) throws IOException {
 
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
@@ -61,7 +64,7 @@ public class StoreApiController {
     @PostMapping("/seller/store/edit-image/{storeId}")
     public Long saveMainImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-                            HttpServletRequest request, HttpServletResponse response) throws IOException {
+                            HttpServletResponse response) throws IOException {
 
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
@@ -76,7 +79,7 @@ public class StoreApiController {
     @PutMapping("/seller/store/edit-image/{storeId}")
     public Long updateMainImage(@PathVariable Long storeId, @RequestParam MultipartFile file,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-                            HttpServletRequest request, HttpServletResponse response) throws IOException {
+                            HttpServletResponse response) throws IOException {
 
         if (member.getRole().equals(Role.SELLER)) {
             boolean storeOwner = storeService.OwnerCheck(member, storeId);
@@ -104,7 +107,7 @@ public class StoreApiController {
     }
 
     @PostMapping("/user/request-add-store")
-    public Long requestAddStore(RequestAddStoreDTO.Add requestAddStoreDTO, Long memberId) {
+    public Long requestAddStore(@Valid RequestAddStoreDTO.Add requestAddStoreDTO, Long memberId) {
         return requestAddStoreService.save(requestAddStoreDTO, memberId);
     }
 

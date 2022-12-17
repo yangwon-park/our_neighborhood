@@ -12,7 +12,6 @@ import ywphsm.ourneighbor.domain.store.days.DaysOfStore;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Data
 public class SimpleSearchStoreDTO {
 

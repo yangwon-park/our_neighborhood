@@ -13,7 +13,6 @@ public class DaysOfStoreDTO {
 
     private String daysName;
 
-
     /*
         searchByHashtag - Projection에 사용
      */

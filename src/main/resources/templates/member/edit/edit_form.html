@@ -34,6 +34,7 @@
                     </div>
                     <form th:object="${editForm}" id="member-edit-form" class="form-floating"
                           enctype="multipart/form-data">
+                        <input id="memberId" th:value="${session.loginMember.id}" type="hidden">
                         <div class="col-12 my-1">
                             <img th:src="*{imgUrl}" width="180" height="180" alt="프로필 사진">
                         </div>
@@ -43,6 +44,8 @@
                                 <input th:field="*{file}"
                                        class="form-control"
                                        type="file"/>
+                            </div>
+                            <div id="member-edit-file-valid" class="my-1 valid-custom">
                             </div>
                         </div>
                         <div class="form-group">

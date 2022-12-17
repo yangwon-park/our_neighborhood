@@ -86,13 +86,14 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                         store.businessTime, store.address, store.ratingTotal, store.file.uploadImageUrl,
                         list(constructor(DaysOfStoreDTO.class,
                                 daysOfStore.daysName))
-                )).distinct()
+                ))
                 .from(store)
-                .leftJoin(store.daysOfStoreList, daysOfStore)
+                .leftJoin(store.daysOfStoreList, daysOfStore).distinct()
                 .innerJoin(store.hashtagOfStoreList, hashtagOfStore)
                 .innerJoin(hashtagOfStore.hashtag, hashtag)
                 .where(builder)
                 .where(stContains(polygon), stDistance(polygon).loe(3))
+                .groupBy(store.name)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();

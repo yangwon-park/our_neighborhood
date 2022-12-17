@@ -16,4 +16,11 @@ public class BusinessTime {
     private LocalTime breakStart;             // 쉬는 시간 시작
     private LocalTime breakEnd;               // 쉬는 시간 끝
     private LocalTime lastOrder;
+
+    public BusinessTime(LocalTime openingTime, LocalTime closingTime, LocalTime breakStart, LocalTime breakEnd) {
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.breakStart = breakStart;
+        this.breakEnd = breakEnd;
+    }
 }

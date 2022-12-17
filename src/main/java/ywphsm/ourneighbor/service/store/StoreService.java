@@ -93,8 +93,7 @@ public class StoreService {
             }
         }
 
-        // default: OPEN
-        store.updateStatus(StoreStatus.OPEN);
+        store.updateStatus(StoreStatus.OPEN);           // default: OPEN
 
         return store.getId();
     }

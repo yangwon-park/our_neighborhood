@@ -13,6 +13,13 @@ public class DaysOfStoreDTO {
 
     private String daysName;
 
+    /*
+        searchByHashtag - Projection에 사용
+     */
+    public DaysOfStoreDTO(String daysName) {
+        this.daysName = daysName;
+    }
+
     @Builder
     public DaysOfStoreDTO(Long daysId, Long storeId, String daysName) {
         this.daysId = daysId;

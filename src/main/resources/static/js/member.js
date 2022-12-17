@@ -232,11 +232,15 @@ var main = {
 
     sendSMS: function () {
         const phoneNumber = document.getElementById("phoneNumber");
+        let phoneNumberRegExp = /^01(0|1|[6-9]?)([0-9]{3,4})([0-9]{4})$/;
+        let phoneNumberValidation = phoneNumberRegExp.test(phoneNumber.value);
 
         if (phoneNumber.value === "") {
             alert("전화번호를 입력해주세요.")
-            window.location.reload()
-        }else {
+        }
+        else if (phoneNumberValidation) {
+            alert("전화번호를 올바르게 입력해주세요.")
+        } else {
             axios({
                 method: "get",
                 url: "/member/send-sms",

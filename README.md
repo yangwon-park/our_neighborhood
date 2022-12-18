@@ -35,3 +35,7 @@
 ## 시스템 아키텍쳐
 
 <p align="center"><img src="https://user-images.githubusercontent.com/97505799/208282507-d150b044-f898-4076-94c8-ea408dbc7845.PNG" alt="시스템 아키텍쳐" width="100%"></p>
+
+## ERD
+
+<p align="center"><img src="https://user-images.githubusercontent.com/97505799/208287746-5088d14c-8330-479f-82d9-530411d41b2c.png" alt="ERD" width="100%"></p>

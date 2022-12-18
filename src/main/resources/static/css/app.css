@@ -673,6 +673,23 @@ input[type=radio] {
     vertical-align: top;
 }
 
+.star-rating2 {
+    width: 131px;
+}
+
+.star-rating2, .star-rating2 span {
+    display: inline-block;
+    height: 25px;
+    overflow: hidden;
+    background: url("/images/star/star2.png") no-repeat;
+}
+
+.star-rating2 span {
+    background-position: left bottom;
+    line-height: 0;
+    vertical-align: top;
+}
+
 a{
     text-decoration:none; color:inherit; cursor: pointer;
 }
@@ -762,3 +779,11 @@ a{
     color: black;
     text-decoration: underline;
 }
+
+#more_list {
+    border: 1px solid black;
+    margin: 4px;
+    padding: 20px;
+    background-color: #f7fafc;
+}
+

@@ -229,31 +229,33 @@ var main = {
             let reviewBody = document.getElementById("reviewBody");
 
             for (let contentElement of data.content) {
-                reviewBody.innerHTML += "<div><div>" +
-                    "<small class='text-dark fw-bold ms-1'>작성일 : </small>" +
-                    "<small class='text-dark fw-bold ms-1'>" + contentElement.dateDifference + "</small>" +
-                    "</div>"
-                reviewBody.innerHTML += "<img src='" + contentElement.memberImgUrl + "' width='70' height='70' alt='프로필 사진'>";
-                reviewBody.innerHTML += "<span class='text-dark fw-bold ms-1'>" + contentElement.username + "</span>";
+                let section = document.createElement('section');
+                section.setAttribute('id', 'more_list')
+                section.innerHTML += "<div>" +
+                    "<small class='text-dark fw-bold ms-1 float-end'>" + contentElement.dateDifference + "</small>" +
+                    "<small class='text-dark fw-bold ms-1 float-end'>작성일 : </small>" +
+                    "<img src='" + contentElement.memberImgUrl + "' width='70' height='70' alt='프로필 사진'>" +
+                    "<span class='text-dark fw-bold ms-1'>" + contentElement.username + "</span>";
                 if (loginMember !== null) {
                     if (loginMember === "ADMIN") {
-                        reviewBody.innerHTML += "<button id='review-delete-btn" + contentElement.reviewId + "' type='button' class='btn btn-dark mt-4 review-delete float-end'> 삭제 </button>";
+                        section.innerHTML += "<button id='review-delete-btn" + contentElement.reviewId + "' type='button' class='btn btn-dark mt-4 review-delete float-end'> 삭제 </button>";
                     }
                 }
-                reviewBody.innerHTML += "</div>" +
+                section.innerHTML += "</div>" +
+                    "<br>" +
                     "<div class='wrap-star' >" +
-                    "<span class='star-rating'>" +
+                    "<span class='star-rating2'>" +
                     "<span style='width: " + contentElement.rating * 20 + "%'></span>" +
                     "</span>" +
                     "</div>" +
                     "<br>" +
-                    "<br>" +
                     "<p>" + contentElement.content + "</p>" +
-                    "<div>"
+                    "<div>";
                 for (let uploadImgUrl of contentElement.uploadImgUrl) {
-                    reviewBody.innerHTML += '<img src="' + uploadImgUrl + '" width="180" height="180" alt="리뷰 사진">';
+                    section.innerHTML += '<img src="' + uploadImgUrl + '" width="180" height="180" alt="리뷰 사진">';
                 }
-                reviewBody.innerHTML += "</div><hr>";
+                section.innerHTML += "</div></section>";
+                reviewBody.appendChild(section);
             }
 
             const reviewDeleteBtnList = document.querySelectorAll(".review-delete");

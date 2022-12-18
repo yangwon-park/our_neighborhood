@@ -17,7 +17,7 @@ public class RequestAddStore extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "requset_add_store_id")
+    @Column(name = "request_add_store_id")
     private Long id;
 
     private String name;

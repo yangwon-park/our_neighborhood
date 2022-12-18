@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ywphsm.ourneighbor.config.DateUtils;
 import ywphsm.ourneighbor.domain.store.Review;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
@@ -20,7 +21,6 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.review.ReviewRepository;
-import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.persistence.EntityManager;
@@ -107,6 +107,8 @@ public class ReviewService {
         PageRequest pageRequest = PageRequest.of(page, 5);
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, storeId);
         findImg(reviewMemberDTOS.getContent());
+        dateDifference(reviewMemberDTOS.getContent());
+
         return reviewMemberDTOS;
     }
 
@@ -148,11 +150,17 @@ public class ReviewService {
         }
     }
 
-    public List<ReviewMemberDTO> findImg(List<ReviewMemberDTO> content) {
+    public void findImg(List<ReviewMemberDTO> content) {
         for (ReviewMemberDTO reviewMemberDTO : content) {
             List<String> imgUrl = reviewRepository.reviewImageUrl(reviewMemberDTO.getReviewId());
             reviewMemberDTO.setUploadImgUrl(imgUrl);
         }
-        return content;
+    }
+
+    public void dateDifference(List<ReviewMemberDTO> content) {
+        for (ReviewMemberDTO reviewMemberDTO : content) {
+            String difference = DateUtils.periodDate(reviewMemberDTO.getCreateDate());
+            reviewMemberDTO.setDateDifference(difference);
+        }
     }
 }

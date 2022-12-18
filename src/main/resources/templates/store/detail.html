@@ -457,6 +457,7 @@
                 <div>
                     <span class="text-dark fw-bold ms-1">작성일</span>
                     <span th:text="${#strings.substring(review.createDate, 0, 10)}"></span>
+                    <span th:text="${review.dateDifference}" class="text-dark fw-bold ms-1"></span>
                 </div>
                 <hr>
             </div>

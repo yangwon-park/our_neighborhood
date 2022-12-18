@@ -32,6 +32,8 @@ public class ReviewMemberDTO {
 
     private String memberImgUrl;
 
+    private String dateDifference;
+
     @QueryProjection
     public ReviewMemberDTO(Long reviewId, String content, Integer rating,
                            LocalDateTime createDate, Long memberId, String username, String memberImgUrl) {

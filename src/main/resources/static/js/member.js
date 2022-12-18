@@ -260,7 +260,7 @@ var main = {
         }
 
         let display = document.getElementById("send-SMS-time");
-        let leftSec = 5;
+        let leftSec = 120;
 
         if (this.isRunning) {
             clearInterval(this.timer)

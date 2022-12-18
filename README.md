@@ -2,16 +2,22 @@
 
 ## Description
 
-우리에게 익숙한 주변이든 여행을 간 낯선 곳이든, 별 계획없이 하루를 맞이할 때 `'뭘하면 좋을까?'` 라는 고민을 하면서 많은 시간을 낭비하곤 합니다. 그럼 우리는 PC 혹은 스마트폰으로 근처의 맛집이나 명소들을 찾게 되죠. 하지만 이 기술 문명으로 얻게된 수많은 정보들이 오히려 우리에겐 새로운 유형의 선택 장애를 일으키곤 합니다. 또한 신빙성이 떨어지는 정보들과 무수히 많은 상업적 광고들을 접하게 되죠. 이 고민들을 해결하기 위해 직접 현재 자신의 위치 기반으로 본인이 원하는 카테고리에 알맞게 깊은 고민을 하지 않아도 되는 좋은 친구같은 서비스를 만들었습니다.
+우리에게 익숙한 주변이든 여행을 간 낯선 곳이든, 별 계획없이 하루를 맞이할 때 `뭘하면 좋을까?` 라는 고민을 하면서 많은 시간을 낭비하곤 합니다. 그럼 우리는 PC 혹은 스마트폰으로 근처의 맛집이나 명소들을 찾게 되죠. 하지만 이 기술 문명으로 얻게된 수많은 정보들이 오히려 우리에겐 새로운 유형의 선택 장애를 일으키곤 하죠. 또한 신빙성이 떨어지는 정보들과 무수히 많은 상업적 광고들을 접하게 되죠. 이 고민들을 해결하기 위해 직접 현재 자신의 위치 기반으로 본인이 원하는 카테고리에 알맞게 깊은 고민을 하지 않아도 되는 좋은 친구같은 서비스를 만들었습니다.
 
-<h4>안녕하세요. 우리 동네입니다.</h4>
+<h3>안녕하세요. 우리 동네입니다.</h3>
 
 ## How To Use
 
 ### [[우리 동네 바로가기]](https://www.neighbor.tk/)
 
 - 현재 **Chrome 브라우저**에서만 정상 작동합니다!
-- 또한 데이터를 꾸준하게 채우고 있으나 전반적으로 턱없이 부족한 상황입니다. 현재 제 거주지 주변의 데이터가 비교적 많으므로 위치 설정을 **[메인 화면 - 원하는 위치 설정 - 예시에 적힌 주소 (부산광역시 해운대구 좌동순환로)]**로 설정해주세요!
+- 또한 데이터를 꾸준하게 채우고 있으나 전반적으로 턱없이 부족한 상황입니다. 현재 거주지 주변의 데이터가 비교적 많으므로 위치 설정 아래와 같이 설정해주세요. 
+
+---
+
+<p align="center">[메인 화면 - 원하는 위치 설정 - 예시에 적힌 주소 (부산광역시 해운대구 좌동순환로)]</p>
+
+---
 
 ## Tech Stack
 
@@ -25,4 +31,5 @@
 	<a href="https://git-scm.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="50" height="50"/> </a>
     	<a href="https://aws.amazon.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="aws" width="50" height="50"/> </a> 
 	<a href="https://mariadb.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/mariadb/mariadb-icon.svg" alt="mariadb" width="50" height="50"/> </a> </p>
+## 시스템 아키텍쳐
 

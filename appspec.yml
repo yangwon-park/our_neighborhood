@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: /   # 루트로 지정하면 전체 파일
+  - source: /                     # 루트로 지정하면 전체 파일
     destination: /home/ec2-user/app/final/zip/
     overwrite: yes
 

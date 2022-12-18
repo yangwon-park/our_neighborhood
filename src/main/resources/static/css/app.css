@@ -294,7 +294,7 @@ input[type=radio] {
 .btn-main-color:not(:disabled):not(.disabled):active {
     color: #fff;
     border-color: #F01D04;
-    background-color: #EBE40D;
+    background-color: #F01D04;
 }
 
 .btn-main-color:not(:disabled):not(.disabled):active:focus {

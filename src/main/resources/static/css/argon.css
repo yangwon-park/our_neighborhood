@@ -198,7 +198,7 @@ small,
 }
 
 .arg-navbar {
-    background-color: #FD7E14;
+    background-color: #F01D04;
 }
 
 .arg-navbar li,
@@ -524,12 +524,12 @@ small,
 }
 
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #F01D04;
     border: none;
-    background-color: #FD7E14;
 }
 
 .custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
-    background-color: #FD7E14;
+    background-color: #F01D04;
     box-shadow: none;
 }
 

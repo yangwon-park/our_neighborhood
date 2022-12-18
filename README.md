@@ -31,6 +31,7 @@
 	<a href="https://git-scm.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="50" height="50"/> </a>
     	<a href="https://aws.amazon.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="aws" width="50" height="50"/> </a> 
 	<a href="https://mariadb.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/mariadb/mariadb-icon.svg" alt="mariadb" width="50" height="50"/> </a> </p>
+
 ## 시스템 아키텍쳐
 
 <p align="center"><img src="https://user-images.githubusercontent.com/97505799/208282507-d150b044-f898-4076-94c8-ea408dbc7845.PNG" alt="시스템 아키텍쳐" width="100%"></p>

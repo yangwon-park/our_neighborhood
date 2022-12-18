@@ -229,7 +229,11 @@ var main = {
             let reviewBody = document.getElementById("reviewBody");
 
             for (let contentElement of data.content) {
-                reviewBody.innerHTML += "<div><img src='" + contentElement.memberImgUrl + "' width='70' height='70' alt='프로필 사진'>";
+                reviewBody.innerHTML += "<div><div>" +
+                    "<small class='text-dark fw-bold ms-1'>작성일 : </small>" +
+                    "<small class='text-dark fw-bold ms-1'>" + contentElement.dateDifference + "</small>" +
+                    "</div>"
+                reviewBody.innerHTML += "<img src='" + contentElement.memberImgUrl + "' width='70' height='70' alt='프로필 사진'>";
                 reviewBody.innerHTML += "<span class='text-dark fw-bold ms-1'>" + contentElement.username + "</span>";
                 if (loginMember !== null) {
                     if (loginMember === "ADMIN") {
@@ -249,14 +253,7 @@ var main = {
                 for (let uploadImgUrl of contentElement.uploadImgUrl) {
                     reviewBody.innerHTML += '<img src="' + uploadImgUrl + '" width="180" height="180" alt="리뷰 사진">';
                 }
-                reviewBody.innerHTML += "</div>" +
-                    "<br>" +
-                    "<br>" +
-                    "<div>" +
-                    "<span class='text-dark fw-bold ms-1'>작성일</span>" +
-                    "<span>" + contentElement.createDate.substring(0, 10) + "</span>" +
-                    "</div>" +
-                    "<hr>";
+                reviewBody.innerHTML += "</div><hr>";
             }
 
             const reviewDeleteBtnList = document.querySelectorAll(".review-delete");

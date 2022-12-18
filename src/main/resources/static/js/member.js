@@ -253,23 +253,21 @@ var main = {
                     alert("이미 있는 번호입니다.");
                 } else {
                     alert("인증번호가 발송됐습니다.");
+                    let display = document.getElementById("send-SMS-time");
+                    let leftSec = 120;
+
+                    if (this.isRunning) {
+                        clearInterval(this.timer)
+                        display.innerText = "";
+                        this.startTimer(leftSec, display);
+                    } else {
+                        this.startTimer(leftSec, display);
+                    }
                 }
             }).catch((e) => {
                 console.error(e);
             });
         }
-
-        let display = document.getElementById("send-SMS-time");
-        let leftSec = 120;
-
-        if (this.isRunning) {
-            clearInterval(this.timer)
-            display.innerText = "";
-            this.startTimer(leftSec, display);
-        } else {
-            this.startTimer(leftSec, display);
-        }
-
     },
 
     timer : null,

@@ -33,3 +33,4 @@
 	<a href="https://mariadb.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/mariadb/mariadb-icon.svg" alt="mariadb" width="50" height="50"/> </a> </p>
 ## 시스템 아키텍쳐
 
+<p align="center"><img src="https://user-images.githubusercontent.com/97505799/208282382-8f365712-33c4-46b5-b4f0-c1d6b7a12783.PNG" alt="시스템 아키텍쳐" width="100%"></p>

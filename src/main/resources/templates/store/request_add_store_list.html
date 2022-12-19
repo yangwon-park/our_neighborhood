@@ -9,11 +9,9 @@
 </head>
 <link rel="stylesheet" th:href="@{/css/argon.css}">
 <body id="main-body" class="bg-default">
-<!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
-<!-- Header -->
 <section class="header">
-    <div class="header py-5">
+    <div class="header py-7">
 
     </div>
 </section>
@@ -59,28 +57,26 @@
         <div class="pageInfo_wrap">
             <div class="pageInfo_area">
                 <ul id="pageInfo" class="pageInfo">
-                    <!-- 이전페이지 버튼 -->
+                    <!--/* 이전페이지 버튼 */-->
                     <th:block th:if="${pageMake.isPrev()}">
                         <li class="pageInfo_btn previous">
                             <a th:href="|/admin/request-add-store-list?page=${pageMake.pageNum - 1}|" id="previous">Previous</a>
                         </li>
                     </th:block>
-                    <!-- 페이지 번호 -->
+                    <!--/* 페이지 번호 */-->
                     <th:block th:if="${count != 0}" th:each="num : ${#numbers.sequence(pageMake.getStartPage(),pageMake.getEndPage())}">
                         <li class="pageInfo_btn" th:if="${num != 0}" th:classappend="${pageMake.pageNum == num} ? 'active' : ''">
                             <a th:href="|/admin/request-add-store-list?page=${num}|" th:text="${num}"
                                class="page-number"></a>
                         </li>
                     </th:block>
-
-                    <!-- 다음페이지 버튼 -->
+                    <!--/* 다음페이지 버튼 */-->
                     <th:block th:if="${pageMake.isNext()}">
                         <li class="pageInfo_btn next">
                             <a th:href="|/admin/request-add-store-list?page=${pageMake.pageNum + 1}|" id="next">Next</a>
                         </li>
                     </th:block>
                 </ul>
-
                 <th:block th:if="${count == 0}">
                     <div class="col-12 my-1">
                         <span class="text-dark fw-bold" style="font-size: 1.5rem">

@@ -7,14 +7,11 @@ assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**추가하고자 하는 기능에 대하여 상세하게 기술 **
+추가 기능을 기술해주세요.
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+**필요한 세부 기능 또는 라이브러리**
+기능에 필요한 세부 기능 또는 라이브러리를 추천하세요.
+**추가 사항**
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+기타 사항

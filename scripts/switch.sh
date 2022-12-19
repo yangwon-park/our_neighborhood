@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 ABSPATH=$(realink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh

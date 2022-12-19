@@ -60,42 +60,42 @@
 
 <th:block th:fragment="common_js(script)">
 
-    <!--
+    <!--/*
         defer 옵션
         화면 로딩이 다 끝난 시점부터 script를 불러옴
         화면 로딩을 더 빨리 할 수 있는 장점이 있음
         로딩할 페이지에 script 기능이 필요한 경우 defer 옵션을 사용하면 정상적으로 작동하지 않을 수 있음
             (아래의 카카오맵의 경우 defer를 걸어버리면 다른 스크립트와 호출 순서에 문제가 생겨 버그 발생)
-     -->
+     */-->
 
-    <!--  npm - axios 경로 -->
+    <!--/*  npm - axios 경로 */-->
     <script defer th:src="@{/node_modules/axios/dist/axios.js}"></script>
 
-    <!-- 다음 우편 번호 API -->
+    <!--/* 다음 우편 번호 API */-->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-    <!-- fontAwesome -->
+    <!--/* fontAwesome */-->
     <script defer src="https://kit.fontawesome.com/ba4b7b559a.js" crossorigin="anonymous"></script>
 
-    <!-- jQuery CDN -->
+    <!--/* jQuery CDN */-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
             integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <!-- tagify -->
+    <!--/* tagify */-->
     <script defer th:src="@{/node_modules/@yaireo/tagify/dist/tagify.js}"></script>
     <script defer th:src="@{/node_modules/@yaireo/tagify/dist/tagify.polyfills.min.js}"></script>
 
-    <!-- bootstrap js   -->
+    <!--/* bootstrap js */-->
     <script defer th:src="@{/node_modules/bootstrap/dist/js/bootstrap.bundle.js}"></script>
 
-    <!-- 사이드바 js   -->
+    <!--/* 사이드바 js */-->
     <script defer th:src="@{/js/sidebars.js}"></script>
 
-    <!-- slick   -->
+    <!--/* slick */-->
     <script defer th:src="@{/plugin/slick/slick.min.js}"></script>
 
-    <!-- Request 캐시 삭제 -->
+    <!--/* Request 캐시 삭제 */-->
     <script type="module" th:src="@{/js/login.js}"></script>
     <script>
         $(window).scroll(function () {

@@ -52,10 +52,6 @@ public class SearchController {
                 simpleSearchStoreDTO.setStatus(
                         autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
 
-        for (SimpleSearchStoreDTO dto : result) {
-            log.info("dto={}", dto.getStatus());
-        }
-
         if (!(myLat == null) && !(myLon == null)) {
             calculateHowFarToTheTarget(myLat, myLon, result);
         }
@@ -75,7 +71,8 @@ public class SearchController {
         List<Store> findStores = storeService.searchByCategory(categoryId);
 
         List<SimpleSearchStoreDTO> dto = findStores.stream()
-                .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
+                .map(SimpleSearchStoreDTO::new)
+                .collect(Collectors.toList());
 
         dto.forEach(simpleSearchStoreDTO ->
                 simpleSearchStoreDTO.setStatus(

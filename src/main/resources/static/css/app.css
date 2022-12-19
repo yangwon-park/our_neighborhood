@@ -699,7 +699,8 @@ input[type=radio] {
 
 a{
     text-decoration:none; color:inherit; cursor: pointer;
-}
+
+
 .right_area .icon{
     display: flex;
     align-items: center;

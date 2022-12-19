@@ -5,7 +5,7 @@
         <a href="/" class="navbar-brand align-middle fw-bold" style="color: #ffffff;">
             우리동네
         </a>
-        <!-- 화면 작아지면 햄버거 버튼으로 변경      -->
+        <!--/* 화면 작아지면 햄버거 버튼으로 변경 */-->
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,6 @@
                 </li>
                 <th:block th:if="${session.loginMember eq null}">
                     <li class="nav-item">
-                        <!--       <a class="nav-link" data-bs-toggle="modal" href="#modal">-->
                         <a href="/login" class="nav-link nav-font">
                             로그인
                         </a>

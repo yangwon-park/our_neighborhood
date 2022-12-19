@@ -119,10 +119,18 @@ var main = {
         let fileCountCheck = true;
         let targetSize = 1024 * 1024 * 2;
 
+        console.log("files =", file)
         if (file.length === 0) {
             fileSizeCheck = true;
         } else {
-            fileSizeCheck = file[0].size <= targetSize;
+            fileSizeCheck = true;
+            for (let i = 0; i < file.length; i++) {
+                fileSizeCheck = file[i].size <= targetSize;
+                if (!fileSizeCheck) {
+                    console.log("용량초과")
+                    break;
+                }
+            }
         }
 
         if (file.length > 5) {
@@ -144,7 +152,7 @@ var main = {
             alert("별점을 정해주세요.")
         }
 
-        if (file.length !== 0 && file[0].size > targetSize) {
+        if (!fileSizeCheck) {
             validation.addValidation(fileValid, "이미지의 크기는 2MB를 넘을 수 없습니다.");
         }
 

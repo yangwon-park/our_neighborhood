@@ -5,41 +5,41 @@
 
 /* Global */
 :root {
---blue: #5e72e4;
---indigo: #5603ad;
---purple: #8965e0;
---pink: #f3a4b5;
---red: #f5365c;
---orange: #fb6340;
---yellow: #ffd600;
---green: #2dce89;
---teal: #11cdef;
---cyan: #2bffc6;
---white: #fff;
---gray: #8898aa;
---gray-dark: #32325d;
---light: #ced4da;
---lighter: #e9ecef;
---primary: #5e72e4;
---secondary: #f7fafc;
---success: #2dce89;
---info: #11cdef;
---warning: #fb6340;
---danger: #f5365c;
---light: #adb5bd;
---dark: #212529;
---default: #172b4d;
---white: #fff;
---neutral: #fff;
---darker: black;
---breakpoint-xs: 0;
---breakpoint-sm: 576px;
---breakpoint-md: 768px;
---breakpoint-lg: 992px;
---breakpoint-xl: 1200px;
---bs-font-sans-serif: "s-core";
---font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-accent-color: #F01D04;
+    --blue: #5e72e4;
+    --indigo: #5603ad;
+    --purple: #8965e0;
+    --pink: #f3a4b5;
+    --red: #f5365c;
+    --orange: #fb6340;
+    --yellow: #ffd600;
+    --green: #2dce89;
+    --teal: #11cdef;
+    --cyan: #2bffc6;
+    --white: #fff;
+    --gray: #8898aa;
+    --gray-dark: #32325d;
+    --light: #ced4da;
+    --lighter: #e9ecef;
+    --primary: #5e72e4;
+    --secondary: #f7fafc;
+    --success: #2dce89;
+    --info: #11cdef;
+    --warning: #fb6340;
+    --danger: #f5365c;
+    --light: #adb5bd;
+    --dark: #212529;
+    --default: #172b4d;
+    --white: #fff;
+    --neutral: #fff;
+    --darker: black;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --bs-font-sans-serif: "s-core";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    accent-color: #F01D04;
 }
 
 html {
@@ -157,13 +157,6 @@ input[type=radio] {
 
 .text-muted {
     color: #8898aa !important;
-}
-
-#login-form {
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    align-items: center
 }
 
 #map-input {
@@ -301,7 +294,7 @@ input[type=radio] {
 .btn-main-color:not(:disabled):not(.disabled):active {
     color: #fff;
     border-color: #F01D04;
-    background-color: #F01D04;
+    background-color: #EBE40D;
 }
 
 .btn-main-color:not(:disabled):not(.disabled):active:focus {
@@ -699,8 +692,7 @@ input[type=radio] {
 
 a{
     text-decoration:none; color:inherit; cursor: pointer;
-
-
+}
 .right_area .icon{
     display: flex;
     align-items: center;
@@ -795,3 +787,9 @@ a{
     background-color: #f7fafc;
 }
 
+#login-form {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center
+}

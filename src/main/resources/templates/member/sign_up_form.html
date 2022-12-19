@@ -9,12 +9,16 @@
 </head>
 <link rel="stylesheet" th:href="@{../css/argon.css}">
 <body id="main-body" class="bg-default">
+<!-- Navbar -->
 <nav th:replace="layout/navbar :: common_navbar"></nav>
+<!-- Header -->
 <section class="header">
-    <div class="header py-7">
+    <div class="header py-5">
 
     </div>
 </section>
+<!-- Page content -->
+<!-- Table -->
 <section class="sign-up">
     <div class="container-fluid mt--8 pb-5">
         <div class="row justify-content-center">
@@ -110,6 +114,7 @@
                                     <button type="button" class="text-center btn btn-main-color ms-3"
                                             style="height: 3rem" id="send-SMS">인증번호 받기
                                     </button>
+                                    <div id="sign-up-phoneNumber-valid" class="my-1 valid-custom"></div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -120,7 +125,7 @@
                                 </div>
                                 <span id="send-SMS-time"></span>
                             </div>
-
+                            <div id="sign-up-certifiedNumber-valid" class="my-1 valid-custom"></div>
                             <div class="text-center">
                                 <button type="button" class="btn btn-main-color mt-4" id="sign-up-save">회원가입</button>
                             </div>

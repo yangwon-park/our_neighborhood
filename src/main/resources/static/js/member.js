@@ -15,6 +15,7 @@ var main = {
         const findUserIdBtn = document.getElementById("find-userId");
         const findPasswordBtn = document.getElementById("find-password");
         const memberRoleEditBtn = document.getElementById("member-role-edit");
+        const adminMemberDeleteBtn = document.getElementById("admin-member-delete");
 
         if (signUpSaveBtn !== null) {
             signUpSaveBtn.addEventListener("click", () => {
@@ -67,6 +68,12 @@ var main = {
         if (memberRoleEditBtn !== null) {
             memberRoleEditBtn.addEventListener("click", () => {
                 _this.memberRoleEdit();
+            });
+        }
+
+        if (adminMemberDeleteBtn !== null) {
+            adminMemberDeleteBtn.addEventListener("click", () => {
+                _this.adminDelete();
             });
         }
     },
@@ -232,11 +239,15 @@ var main = {
 
     sendSMS: function () {
         const phoneNumber = document.getElementById("phoneNumber");
+        let phoneNumberRegExp = /^01(0|1|[6-9]?)([0-9]{3,4})([0-9]{4})$/;
+        let phoneNumberValidation = phoneNumberRegExp.test(phoneNumber.value);
 
         if (phoneNumber.value === "") {
             alert("전화번호를 입력해주세요.")
-            window.location.reload()
-        }else {
+        }
+        else if (!phoneNumberValidation) {
+            alert("전화번호를 올바르게 입력해주세요.")
+        } else {
             axios({
                 method: "get",
                 url: "/member/send-sms",
@@ -249,11 +260,54 @@ var main = {
                     alert("이미 있는 번호입니다.");
                 } else {
                     alert("인증번호가 발송됐습니다.");
+                    let display = document.getElementById("send-SMS-time");
+                    let leftSec = 120;
+
+                    if (this.isRunning) {
+                        clearInterval(this.timer)
+                        display.innerText = "";
+                        this.startTimer(leftSec, display);
+                    } else {
+                        this.startTimer(leftSec, display);
+                    }
                 }
             }).catch((e) => {
                 console.error(e);
             });
         }
+    },
+
+    timer : null,
+    isRunning : false,
+    isPaused : false,
+
+    startTimer: function (count, display) {
+        let minutes, seconds;
+        this.isPaused = false;
+
+        this.timer = setInterval(function () {
+            if (!this.isPaused) {
+                count--;
+                minutes = parseInt(count / 60, 10);
+                seconds = parseInt(count % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.innerText = minutes + ":" + seconds;
+
+                if (count === 0) {
+                    clearInterval(this.timer);
+                    alert("인증번호 시간 초과");
+                    this.isPaused = true;
+                    this.isRunning = false;
+                    display.innerText = "시간초과";
+                }
+            }
+
+        }, 1000);
+
+        this.isRunning = true;
     },
 
     save: function () {
@@ -407,8 +461,6 @@ var main = {
     delete: function () {
         const memberId = document.getElementById("memberId")
 
-        console.log(memberId);
-
         axios({
             method: "delete",
             url: "/member/withdrawal",
@@ -421,6 +473,37 @@ var main = {
         }).catch((error) => {
             console.log(error);
         })
+    },
+
+    adminDelete: function () {
+        const userId = document.getElementById("userId");
+
+        const userIdValid = document.getElementById("member-role-edit-userId-valid");
+
+        validation.removeValidation(userIdValid);
+
+
+        axios({
+            method: "delete",
+            url: "/admin/withdrawal",
+            params: {
+                userId: userId.value
+            }
+        }).then((resp) => {
+            let check = resp.data;
+            if (check) {
+                alert("회원 탈퇴가 완료됐습니다.");
+            } else {
+                alert("존재하지 않는 아이디 입니다.");
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
+
+        if (userId.value === "") {
+            userId.classList.add("valid-custom");
+            validation.addValidation(userIdValid, "아이디를 입력해주세요.");
+        }
     },
 
     findUserId: function () {

@@ -107,6 +107,7 @@ public class StoreController {
         // review paging
         Slice<ReviewMemberDTO> reviewMemberDTOS = reviewService.pagingReview(storeId, 0);
         List<ReviewMemberDTO> content = reviewMemberDTOS.getContent();
+        log.info("content={}", content);
 
         double ratingAverage = store.getRatingAverage();
 

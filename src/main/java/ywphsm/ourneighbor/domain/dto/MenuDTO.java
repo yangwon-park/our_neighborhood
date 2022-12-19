@@ -29,7 +29,6 @@ public class MenuDTO {
         @NotNull
         private Integer price;
 
-        @NotBlank
         private MenuType type;
 
         private MenuFeat feature;

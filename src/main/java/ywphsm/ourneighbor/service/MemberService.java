@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -65,8 +66,8 @@ public class MemberService {
     }
 
     // 닉네임 중복 체크
-    public Member doubleCheck(String nickname) {
-        return memberRepository.findByNickname(nickname).orElse(null);
+    public Optional<Member> findByNickName(String nickname) {
+        return memberRepository.findByNickname(nickname);
     }
 
     //생년월일 나이 계산
@@ -83,13 +84,8 @@ public class MemberService {
         return passwordEncoder.encode(password);
     }
 
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email).orElse(null);
-    }
-
-    public Member findByUserId(String userId) {
-        return memberRepository.findByUserId(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + userId));
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     //회원수정시 닉네임 변경
@@ -129,8 +125,8 @@ public class MemberService {
     }
 
     //비밀번호 찾기시 있는 아이디인지 확인
-    public Member userIdCheck(String userId) {
-        return memberRepository.findByUserId(userId).orElse(null);
+    public Optional<Member> findByUserId(String userId) {
+        return memberRepository.findByUserId(userId);
     }
 
     //휴대폰에 인증번호 발송
@@ -157,8 +153,8 @@ public class MemberService {
     }
 
     //휴대폰번호 중복검사
-    public Member findByPhoneNumber(String phoneNumber) {
-        return memberRepository.findByPhoneNumber(phoneNumber).orElse(null);
+    public Optional<Member> findByPhoneNumber(String phoneNumber) {
+        return memberRepository.findByPhoneNumber(phoneNumber);
     }
 
     //아이디 찾기
@@ -223,14 +219,25 @@ public class MemberService {
     }
 
     @Transactional
+    public boolean adminWithdrawal(String userId) {
+        Optional<Member> memberOptional = findByUserId(userId);
+        if (memberOptional.isPresent()) {
+            memberOptional.ifPresent(memberRepository::delete);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
     public String updateRole(String userId, Role role) {
-        try {
-            Member findMember = findByUserId(userId);
-            findMember.updateRole(role);
-        } catch (IllegalArgumentException e) {
+
+        Optional<Member> findMember = findByUserId(userId);
+        if (findMember.isPresent()) {
+            findMember.get().updateRole(role);
+            return "성공";
+        } else {
             return "존재하지 않는 아이디 입니다";
         }
-        return "성공";
     }
 
     //찜 상태 확인 - detail에 뿌리기 위함

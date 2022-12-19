@@ -111,15 +111,14 @@
                                             style="height: 3rem" id="send-SMS">인증번호 받기
                                     </button>
                                 </div>
-                                <div id="sign-up-phoneNumber-valid" class="my-1 valid-custom"></div>
                             </div>
                             <div class="form-group">
                                 <small>인증번호</small>
                                 <div class="">
                                     <input class="form-control" placeholder="인증번호를 입력해주세요." type="text"
                                            th:field="*{certifiedNumber}">
-                                    <div id="sign-up-certifiedNumber-valid" class="my-1 valid-custom"></div>
                                 </div>
+                                <span id="send-SMS-time"></span>
                             </div>
 
                             <div class="text-center">

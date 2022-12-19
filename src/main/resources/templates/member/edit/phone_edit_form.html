@@ -27,24 +27,24 @@
                     </div>
                     <form th:object="${form}" id="phoneNumber-edit-form" class="form-floating">
                         <div class="form-group">
-                            <div class="input-group input-group-alternative mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
-                                </div>
-                                <input class="form-control" placeholder="전화번호" type="text" th:field="*{phoneNumber}">
-                                <div id="sign-up-phoneNumber-valid" class="my-1 valid-custom"></div>
+                            <small>전화번호</small>
+                            <div class="d-flex">
+                                <input th:field="*{phoneNumber}" class="form-control"
+                                       placeholder="전화번호를 입력해주세요. 예) 01012341234" type="text">
                                 <button type="button" class="text-center btn btn-main-color ms-3"
-                                        style="height: 3rem" id="send-SMS">인증번호 받기</button>
+                                        style="height: 3rem" id="send-SMS">인증번호 받기
+                                </button>
                             </div>
+                            <div id="edit-phoneNumber-valid" class="my-1 valid-custom"></div>
                         </div>
                         <div class="form-group">
-                            <div class="input-group input-group-alternative mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
-                                </div>
-                                <input class="form-control" placeholder="인증번호" type="text" th:field="*{certifiedNumber}">
-                                <div id="sign-up-certifiedNumber-valid" class="my-1 valid-custom"></div>
+                            <small>인증번호</small>
+                            <div class="">
+                                <input class="form-control" placeholder="인증번호를 입력해주세요." type="text"
+                                       th:field="*{certifiedNumber}">
+                                <div id="edit-certifiedNumber-valid" class="my-1 valid-custom"></div>
                             </div>
+                            <span id="send-SMS-time"></span>
                         </div>
                         <div class="text-center">
                             <button type="button" class="btn btn-main-color mt-4" id="phoneNumber-edit">전화번호 변경</button>

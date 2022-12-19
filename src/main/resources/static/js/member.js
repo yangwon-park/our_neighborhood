@@ -15,6 +15,7 @@ var main = {
         const findUserIdBtn = document.getElementById("find-userId");
         const findPasswordBtn = document.getElementById("find-password");
         const memberRoleEditBtn = document.getElementById("member-role-edit");
+        const adminMemberDeleteBtn = document.getElementById("admin-member-delete");
 
         if (signUpSaveBtn !== null) {
             signUpSaveBtn.addEventListener("click", () => {
@@ -67,6 +68,12 @@ var main = {
         if (memberRoleEditBtn !== null) {
             memberRoleEditBtn.addEventListener("click", () => {
                 _this.memberRoleEdit();
+            });
+        }
+
+        if (adminMemberDeleteBtn !== null) {
+            adminMemberDeleteBtn.addEventListener("click", () => {
+                _this.adminDelete();
             });
         }
     },
@@ -454,8 +461,6 @@ var main = {
     delete: function () {
         const memberId = document.getElementById("memberId")
 
-        console.log(memberId);
-
         axios({
             method: "delete",
             url: "/member/withdrawal",
@@ -468,6 +473,37 @@ var main = {
         }).catch((error) => {
             console.log(error);
         })
+    },
+
+    adminDelete: function () {
+        const userId = document.getElementById("userId");
+
+        const userIdValid = document.getElementById("member-role-edit-userId-valid");
+
+        validation.removeValidation(userIdValid);
+
+
+        axios({
+            method: "delete",
+            url: "/admin/withdrawal",
+            params: {
+                userId: userId.value
+            }
+        }).then((resp) => {
+            let check = resp.data;
+            if (check) {
+                alert("회원 탈퇴가 완료됐습니다.");
+            } else {
+                alert("존재하지 않는 아이디 입니다.");
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
+
+        if (userId.value === "") {
+            userId.classList.add("valid-custom");
+            validation.addValidation(userIdValid, "아이디를 입력해주세요.");
+        }
     },
 
     findUserId: function () {

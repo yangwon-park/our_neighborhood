@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -130,10 +131,8 @@ public class MemberApiController {
     }
 
     @DeleteMapping("/member/withdrawal")
-    public String delete(Long memberId) {
-
+    public void delete(Long memberId) {
         memberService.withdrawal(memberId);
-        return "redirect:/logout";
     }
 
     @PostMapping("/find-userid")
@@ -157,5 +156,10 @@ public class MemberApiController {
     public void deleteCertifiedNumber(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.removeAttribute(SessionConst.PHONE_CERTIFIED);
+    }
+
+    @DeleteMapping("/admin/withdrawal")
+    public boolean delete(String userId) {
+        return memberService.adminWithdrawal(userId);
     }
 }

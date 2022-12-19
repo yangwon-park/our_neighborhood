@@ -219,6 +219,16 @@ public class MemberService {
     }
 
     @Transactional
+    public boolean adminWithdrawal(String userId) {
+        Optional<Member> memberOptional = findByUserId(userId);
+        if (memberOptional.isPresent()) {
+            memberOptional.ifPresent(memberRepository::delete);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
     public String updateRole(String userId, Role role) {
 
         Optional<Member> findMember = findByUserId(userId);

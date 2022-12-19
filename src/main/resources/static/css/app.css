@@ -159,6 +159,13 @@ input[type=radio] {
     color: #8898aa !important;
 }
 
+#login-form {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center
+}
+
 #map-input {
     border: 1px solid #F01D04;
     border-radius: 10px;

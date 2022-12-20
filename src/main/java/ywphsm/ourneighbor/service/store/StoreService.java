@@ -62,14 +62,13 @@ public class StoreService {
 
     private final MemberOfStoreRepository memberOfStoreRepository;
 
-    private final MemberService memberService;
-
     private final MemberRepository memberRepository;
 
     @Transactional
     public Long save(StoreDTO.Add dto, List<Long> categoryIdList, List<Long> daysIdList) {
         Store store = dto.toEntity();
-        Member member = memberService.findById(dto.getMemberId());
+        Member member = memberRepository.findById(dto.getMemberId()).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + dto.getMemberId()));
 
         Point<G2D> point = point(WGS84, g(dto.getLon(), dto.getLat()));
         store.addPoint(point);
@@ -256,7 +255,8 @@ public class StoreService {
 
     @Transactional
     public String updateLike(boolean likeStatus, Long memberId, Long storeId) {
-        Member member = memberService.findById(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
         Store store = findById(storeId);
 
         List<MemberOfStore> collect = member.getMemberOfStoreList().stream()
@@ -399,7 +399,8 @@ public class StoreService {
     @Transactional
     public String deleteStoreOwner(Long memberId, Long storeId) {
         try {
-            Member findMember = memberService.findById(memberId);
+            Member findMember = memberRepository.findById(memberId).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
             Store findStore = findById(storeId);
             List<MemberOfStore> DuplicateCheck = findStore.getMemberOfStoreList().stream()
                     .filter(memberOfStore -> memberOfStore.getMember().equals(findMember))

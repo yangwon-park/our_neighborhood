@@ -217,8 +217,6 @@ var main = {
         let memberRoleList = document.querySelectorAll(".member-role");
         loginMember = memberRoleList.item(0).value
 
-        console.log("loginMember", loginMember);
-
         axios({
             method: "get",
             url: "/review/more",
@@ -242,7 +240,7 @@ var main = {
                 section.innerHTML += "<div>" +
                     "<small class='text-dark fw-bold ms-1 float-end'>" + contentElement.dateDifference + "</small>" +
                     "<small class='text-dark fw-bold ms-1 float-end'>작성일 : </small>" +
-                    "<img src='" + contentElement.memberImgUrl + "' width='70' height='70' alt='프로필 사진'>" +
+                    "<img src='" + contentElement.memberImgUrl + "' width='70' height='70' alt='프로필 사진' id='profile-img'>" +
                     "<span class='text-dark fw-bold ms-1'>" + contentElement.username + "</span>";
                 if (loginMember !== null) {
                     if (loginMember === "ADMIN") {

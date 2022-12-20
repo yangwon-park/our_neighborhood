@@ -807,3 +807,8 @@ a{
     justify-content: center;
     align-items: center
 }
+
+#profile-img {
+    border-radius: 70%;
+    overflow: hidden;
+}

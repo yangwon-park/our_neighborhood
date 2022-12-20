@@ -427,7 +427,7 @@
                     <div>
                         <small th:text="${review.dateDifference}" class="text-dark fw-bold ms-1 float-end"></small>
                         <small class="text-dark fw-bold ms-1 float-end">작성일 : </small>
-                        <img th:src="${review.memberImgUrl}" width="70" height="70" alt="프로필 사진">
+                        <img th:src="${review.memberImgUrl}" width="70" height="70" alt="프로필 사진" id="profile-img">
                         <span th:text="${review.username}" class="text-dark fw-bold ms-1">이름</span>
                         <div th:if="${session.loginMember ne null}">
                             <th:block th:if="${#strings.equals(session.loginMember.role, 'ADMIN')}">

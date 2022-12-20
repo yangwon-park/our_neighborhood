@@ -7,6 +7,7 @@
 
     </style>
 </head>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 <link rel="stylesheet" th:href="@{../css/argon.css}">
 <body id="main-body" class="bg-default">
 <nav th:replace="layout/navbar :: common_navbar"></nav>
@@ -18,30 +19,29 @@
                 <div class="card bg-secondary shadow border-0">
                     <div class="row card-header bg-transparent pb-5">
                         <div class="text-center mt-2 mb-4">
-                            <span class="mb-2 text-dark fw-bold fs-5">소셜 미디어로 로그인</span>
-                        </div>
-                        <div class="text-center my-1">
-                            <!--/* 카카오 로그인 */-->
-                            <a href="/oauth2/authorization/kakao">
-                                <img th:src="@{/images/login/kakao_login.png}" style="width: 55%; height:3rem"/>
-                            </a>
-                        </div>
-                        <div class="text-center my-1">
-                            <!--/* 네이버 로그인 */-->
-                            <a href="/oauth2/authorization/naver">
-                                <img th:src="@{/images/login/naver_login.png}" style="width: 55%; height:3rem"/>
-                            </a>
+                            <span class="mb-2 text-dark fw-bold fs-4">소셜 미디어로 로그인</span>
                         </div>
                         <div class="text-center my-1">
                             <!--/* 구글 로그인 */-->
                             <a href="/oauth2/authorization/google">
-                                <img th:src="@{/images/login/google_login.png}" style="width: 56%; height:3.3rem"/>
+                                <button class='btn-social-login' style='background:#D93025'><i
+                                        class="xi-2x xi-google"></i></button>
+                            </a>
+                            <!--/* 카카오 로그인 */-->
+                            <a href="/oauth2/authorization/kakao" class="mx-3">
+                                <button class='btn-social-login' style='background:#FFEB00'><i
+                                        class="xi-2x xi-kakaotalk text-dark"></i></button>
+                            </a>
+                            <!--/* 네이버 로그인 */-->
+                            <a href="/oauth2/authorization/naver">
+                                <button class='btn-social-login' style='background:#1FC700'><i
+                                        class="xi-2x xi-naver"></i></button>
                             </a>
                         </div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="text-center text-muted mb-4">
-                            <span class="mb-2 text-dark fw-bold fs-5">우리 동네 계정으로 로그인</span>
+                            <span class="mb-2 text-dark fw-bold fs-4">우리 동네 계정으로 로그인</span>
                         </div>
                         <form role="form" th:action="@{/loginSecurity}" th:object="${loginForm}" method="post">
                             <div class="form-group">
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-main-color my-4 w-100">로그인</button>
+                                <button type="submit" class="btn btn-main-color my-4 fw-bold w-100">로그인</button>
                             </div>
                         </form>
                         <br>

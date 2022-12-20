@@ -1,6 +1,7 @@
 @font-face {
-    font-family: "s-core";
-    src: url("../font/SCDream3.woff") format("woff");
+    font-family: "Cafe24Ssurround";
+    src: url("../font/Cafe24Ssurround.woff") format("woff");
+    /*src: url("../font/SCDream3.woff") format("woff");*/
 }
 
 /* Global */
@@ -37,13 +38,13 @@
     --breakpoint-md: 768px;
     --breakpoint-lg: 992px;
     --breakpoint-xl: 1200px;
-    --bs-font-sans-serif: "s-core";
+    --bs-font-sans-serif: "Cafe24Ssurround";
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     accent-color: #F01D04;
 }
 
 html {
-    font-family: "s-core", serif !important;
+    font-family: "Cafe24Ssurround", serif !important;
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;

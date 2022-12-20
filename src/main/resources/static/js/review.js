@@ -119,7 +119,6 @@ var main = {
         let fileCountCheck = true;
         let targetSize = 1024 * 1024 * 2;
 
-        console.log("files =", file)
         if (file.length === 0) {
             fileSizeCheck = true;
         } else {
@@ -169,9 +168,12 @@ var main = {
         const storeId = document.getElementById("storeId").value;
 
         let formData = new FormData(reviewForm);
+        let file = formData.get("file");
+        if (file.name === "") {
+            formData.delete("file");
+        }
+        console.log("file = ", file)
 
-        menu.createDefaultImg(formData);
-        
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -258,7 +260,9 @@ var main = {
                     "<p>" + contentElement.content + "</p>" +
                     "<div>";
                 for (let uploadImgUrl of contentElement.uploadImgUrl) {
-                    section.innerHTML += '<img src="' + uploadImgUrl + '" width="180" height="180" alt="리뷰 사진">';
+                    if (uploadImgUrl !== "" && uploadImgUrl !== "https://neighbor-build.s3.ap-northeast-2.amazonaws.com/images/defaultImg.png") {
+                        section.innerHTML += '<img src="' + uploadImgUrl + '" width="180" height="180" alt="리뷰 사진">';
+                    }
                 }
                 section.innerHTML += "</div></section>";
                 reviewBody.appendChild(section);

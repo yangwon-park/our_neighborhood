@@ -57,14 +57,16 @@ public class ReviewService {
         Store linkedStore = storeService.findById(dto.getStoreId());
         Member linkedMember = memberService.findById(dto.getMemberId());
 
-        List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
-
         Review review = dto.toEntity(linkedStore, linkedMember);
         linkedStore.addReview(review);
         linkedStore.updateRatingAverage(ratingAverage(linkedStore));
         linkedMember.addReview(review);
 
-        review.addFile(newUploadFiles);
+        log.info("dto.getFile = {}", dto.getFile());
+        if (dto.getFile() != null) {
+            List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
+            review.addFile(newUploadFiles);
+        }
 
         if (!hashtag.isEmpty()) {
             Store findStore = storeService.findById(dto.getStoreId());

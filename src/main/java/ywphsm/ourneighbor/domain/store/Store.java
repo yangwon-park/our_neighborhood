@@ -82,10 +82,6 @@ public class Store extends BaseEntity {
     @OneToOne(mappedBy = "store", cascade = CascadeType.ALL)
     private UploadFile file;
 
-    public void setFile(UploadFile file) {
-        this.file = file;
-    }
-
     // Menu (1:N)
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
@@ -153,6 +149,10 @@ public class Store extends BaseEntity {
         this.ratingTotal += review.getRating();
         review.setStore(this);
         reviewList.add(review);
+    }
+
+    public void setFile(UploadFile file) {
+        this.file = file;
     }
 
 

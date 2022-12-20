@@ -16,29 +16,28 @@
     </div>
 </section>
 <section class="main">
-    <div class="container px-0">
-        <div class="row store-head">
-            <div class="col-6 d-flex">
-                <h1 class="my-auto" th:text="|내가 찜한 가게 총 ${count}개|" style="font-size: 2.0rem">나의리뷰</h1>
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card bg-secondary shadow border-0">
+                <div class="card-header bg-transparent pb-5">
+                    <div class="text-center mt-2 mb-4">
+                        <div class="text-dark fw-bold text-center mt-2 fs-2" th:text="|내가 찜한 가게 총 ${count}개|" style="font-size: 2.0rem" >나의리뷰</div>
+                    </div>
+                    <th:block class="container px-0" th:each="myLike : ${like}">
+                        <div class="jb-wrap">
+                            <div class="jb-image">
+                                <img th:src="*{myLike.uploadImgUrl != null} ? *{myLike.uploadImgUrl} : 'https://neighbor-build.s3.ap-northeast-2.amazonaws.com/images/defaultImg.png'"
+                                     alt="대표 사진">
+                            </div>
+                            <div class="jb-text">
+                                <a th:href="@{/store/{storeId} (storeId = ${myLike.storeId})}"
+                                   th:text="*{myLike.name}" class="my-like-text"></a>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
             </div>
         </div>
-        <hr class="my-2">
-        <section class="container px-0" th:each="myLike : ${like}">
-            <div class="row store-info" style="font-size: 1.5rem">
-                <div class="col-12 my-1">
-                    <span>가게 이름 : </span>
-                    <a th:href="@{/store/{storeId} (storeId = ${myLike.storeId})}"
-                       th:text="*{myLike.name}" style="color: #000000">가게 이름</a>
-                </div>
-                <span class="ms-3 m-auto">
-          <th:block th:each="cate : ${myLike.categoryList}">
-            <a style="color: #6c757d" href="#" th:text="${cate.categoryName}"></a>
-            >
-          </th:block>
-        </span>
-            </div>
-            <hr class="my-2">
-        </section>
     </div>
 </section>
 <footer th:replace="layout/footer :: common_footer">

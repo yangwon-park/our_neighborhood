@@ -250,7 +250,7 @@ var main = {
         }
 
         _tmp.firstElementChild.innerText = "현재 기온";
-        _tmp.lastElementChild.innerText = currentTmp + "°";
+        _tmp.lastElementChild.innerText = currentTmp + "도";
 
         _pop.firstElementChild.innerText = "시간당 강수량";
         _pop.lastElementChild.innerText = currentPcp + " (강수 확률 : " + currentPop + "%)";

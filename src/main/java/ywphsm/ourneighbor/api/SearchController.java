@@ -33,6 +33,8 @@ public class SearchController {
 
     private final CategoryService categoryService;
 
+    private static final double DIST_TO_TARGET = 3;
+
     /*
         map.html에서 검색창에 조회 시 동작하는 API
      */
@@ -40,23 +42,13 @@ public class SearchController {
     public ResultClass<?> searchByKeyword(@RequestParam String keyword,
                                           @CookieValue(value = "lat", required = false) Double myLat,
                                           @CookieValue(value = "lon", required = false) Double myLon) {
+        if ((myLat == null) || (myLon == null)) {
+            return new ResultClass<>(0, new ArrayList<>());
+        }
+
         List<Store> findStores = storeService.searchByKeyword(keyword);
 
-        List<SimpleSearchStoreDTO> result = findStores.stream()
-                .map(SimpleSearchStoreDTO::new)
-                .collect(Collectors.toList());
-
-        result.forEach(simpleSearchStoreDTO ->
-                simpleSearchStoreDTO.setStatus(
-                        autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
-
-        for (SimpleSearchStoreDTO dto : result) {
-            log.info("dto={}", dto.getStatus());
-        }
-
-        if (!(myLat == null) && !(myLon == null)) {
-            calculateHowFarToTheTarget(myLat, myLon, result);
-        }
+        List<SimpleSearchStoreDTO> result = getSimpleSearchStoreDTOListAndUpdateStatusAndCalculateDist(myLat, myLon, findStores);
 
         return new ResultClass<>(result.size(), result);
     }
@@ -70,18 +62,13 @@ public class SearchController {
                                            @RequestParam double dist,
                                            @CookieValue(value = "lat", required = false) Double myLat,
                                            @CookieValue(value = "lon", required = false) Double myLon) {
+        if ((myLat == null) || (myLon == null)) {
+            return new ResultClass<>(0, new ArrayList<>());
+        }
+
         List<Store> findStores = storeService.searchByCategory(categoryId);
 
-        List<SimpleSearchStoreDTO> dto = findStores.stream()
-                .map(SimpleSearchStoreDTO::new).collect(Collectors.toList());
-
-        dto.forEach(simpleSearchStoreDTO ->
-                simpleSearchStoreDTO.setStatus(
-                        autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
-
-        if (!(myLat == null) && !(myLon == null)) {
-            calculateHowFarToTheTarget(myLat, myLon, dto);
-        }
+        List<SimpleSearchStoreDTO> dto = getSimpleSearchStoreDTOListAndUpdateStatusAndCalculateDist(myLat, myLon, findStores);
 
         List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
                 -> simpleSearchStoreDTO.getDistance() <= dist / 1000).collect(Collectors.toList());
@@ -100,19 +87,9 @@ public class SearchController {
             return new ResultClass<>(0, new ArrayList<>());
         }
 
-        double dist = 3;
+        List<Store> findStores = storeService.searchTopNByCategories(categoryId, DIST_TO_TARGET, myLat, myLon);
 
-        List<Store> findStores = storeService.searchTopNByCategories(categoryId, dist, myLat, myLon);
-
-        List<SimpleSearchStoreDTO> result = findStores.stream()
-                .map(SimpleSearchStoreDTO::new)
-                .collect(Collectors.toList());
-
-        result.forEach(simpleSearchStoreDTO ->
-                simpleSearchStoreDTO.setStatus(
-                        autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
-
-        calculateHowFarToTheTarget(myLat, myLon, result);
+        List<SimpleSearchStoreDTO> result = getSimpleSearchStoreDTOListAndUpdateStatusAndCalculateDist(myLat, myLon, findStores);
 
         return new ResultClass<>(result.size(), result);
     }
@@ -123,17 +100,16 @@ public class SearchController {
     @GetMapping("/get-cate-images")
     public List<List<String>> getTopNStoresImagesByCategories(@CookieValue(value = "lat", required = false, defaultValue = "") Double myLat,
                                                               @CookieValue(value = "lon", required = false, defaultValue = "") Double myLon) {
-        final Long depth = 1L;
-        final double dist = 3;
+        final Long DEPTH = 1L;
 
-        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepthCaseByOrderByName(depth);
+        List<CategoryDTO.Simple> rootCategoryList = categoryService.findByDepthCaseByOrderByName(DEPTH);
 
         List<List<String>> categoryImageList = new ArrayList<>();
 
         if (myLat != null && myLon != null) {
             for (CategoryDTO.Simple simple : rootCategoryList) {
                 categoryImageList.add(storeService.getTopNImageByCategories(
-                        (simple.getCategoryId()), dist, myLat, myLon));
+                        (simple.getCategoryId()), DIST_TO_TARGET, myLat, myLon));
             }
         }
 
@@ -151,14 +127,12 @@ public class SearchController {
             return new SliceImpl<>(null, null, false);
         }
 
-        final double dist = 3;
-
         List<Long> hashtagList = Arrays.stream(hashtagIdList.split(","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
 
         Slice<SimpleSearchStoreDTO> result = storeService.searchByHashtag(
-                hashtagList, 0, myLat, myLon, dist);
+                hashtagList, 0, myLat, myLon, DIST_TO_TARGET);
 
         result.forEach(simpleSearchStoreDTO ->
                 simpleSearchStoreDTO.setStatus(
@@ -175,9 +149,25 @@ public class SearchController {
     @GetMapping("/search-top7-random")
     public ResultClass<?> searchTop7Random(@CookieValue(value = "lat", required = false) Double myLat,
                                            @CookieValue(value = "lon", required = false) Double myLon) {
-        final double dist = 3;
-        List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, dist);
+        List<SimpleSearchStoreDTO> result = storeService.searchTop7Random(myLat, myLon, DIST_TO_TARGET);
 
         return new ResultClass<>(result.size(), result);
+    }
+
+    /*
+        조회한 매장을 SimpleSearchDTO
+     */
+    private static List<SimpleSearchStoreDTO> getSimpleSearchStoreDTOListAndUpdateStatusAndCalculateDist(Double myLat, Double myLon, List<Store> findStores) {
+        List<SimpleSearchStoreDTO> result = findStores.stream()
+                .map(SimpleSearchStoreDTO::new)
+                .collect(Collectors.toList());
+
+        result.forEach(simpleSearchStoreDTO ->
+                simpleSearchStoreDTO.setStatus(
+                        autoUpdateStatus(simpleSearchStoreDTO.getBusinessTime(), simpleSearchStoreDTO.getOffDays())));
+
+        calculateHowFarToTheTarget(myLat, myLon, result);
+
+        return result;
     }
 }

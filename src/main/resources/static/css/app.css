@@ -789,9 +789,10 @@ a{
 
 #more_list {
     border: 1px solid black;
-    margin: 4px;
+    margin: 15px;
     padding: 20px;
     background-color: #f7fafc;
+    border-radius: 12px;
 }
 
 #member-index {

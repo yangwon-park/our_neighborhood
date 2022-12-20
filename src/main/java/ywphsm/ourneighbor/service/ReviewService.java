@@ -115,7 +115,9 @@ public class ReviewService {
     }
 
     public List<ReviewMemberDTO> myReviewList(Long memberId) {
-        return reviewRepository.myReview(memberId);
+        List<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.myReview(memberId);
+        findImg(reviewMemberDTOS);
+        return dateDifference(reviewMemberDTOS);
     }
 
     public double ratingAverage(Store store) {
@@ -159,10 +161,11 @@ public class ReviewService {
         }
     }
 
-    public void dateDifference(List<ReviewMemberDTO> content) {
+    public List<ReviewMemberDTO> dateDifference(List<ReviewMemberDTO> content) {
         for (ReviewMemberDTO reviewMemberDTO : content) {
             String difference = DateUtils.periodDate(reviewMemberDTO.getCreateDate());
             reviewMemberDTO.setDateDifference(difference);
         }
+        return content;
     }
 }

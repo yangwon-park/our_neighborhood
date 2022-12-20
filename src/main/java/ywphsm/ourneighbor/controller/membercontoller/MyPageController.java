@@ -53,17 +53,14 @@ public class MyPageController {
     @GetMapping("/user/my-like")
     public String myLike(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                          Model model) {
-        Member findById = memberService.findById(member.getId());
+        Member findMember = memberService.findById(member.getId());
 
-        List<StoreDTO.Detail> likeList = findById.getMemberOfStoreList().stream()
+        List<StoreDTO.Detail> likeList = findMember.getMemberOfStoreList().stream()
                 .filter(MemberOfStore::isStoreLike)
                 .map(memberOfStore -> new StoreDTO.Detail(memberOfStore.getStore()))
                 .collect(Collectors.toList());
 
-        int count = 0;
-        if (!likeList.isEmpty()) {
-            count = likeList.size();
-        }
+        int count = likeList.size();
 
         model.addAttribute("like", likeList);
         model.addAttribute("count", count);
@@ -89,10 +86,7 @@ public class MyPageController {
 
         List<ReviewMemberDTO> content = reviewService.myReviewList(member.getId());
 
-        int count = 0;
-        if (!content.isEmpty()) {
-            count = content.size();
-        }
+        int count = content.size();
 
         model.addAttribute("review", content);
         model.addAttribute("count", count);

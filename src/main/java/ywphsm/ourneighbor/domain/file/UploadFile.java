@@ -47,6 +47,7 @@ public class UploadFile {
         this.uploadImageUrl = uploadImageUrl;
     }
 
+    //FileStore 사용
     public UploadFile(String uploadedFileName, String storedFileName) {
         this.uploadedFileName = uploadedFileName;
         this.storedFileName = storedFileName;

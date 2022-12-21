@@ -47,15 +47,6 @@
     accent-color: #F01D04;
 }
 
-/*html {*/
-/*    !*font-family: "Cafe24Ssurround", serif !important;*!*/
-/*    line-height: 1.15;*/
-/*    -webkit-text-size-adjust: 100%;*/
-/*    -ms-text-size-adjust: 100%;*/
-/*    -ms-overflow-style: scrollbar;*/
-/*    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
-/*}*/
-
 body {
     -ms-overflow-style: none;
     font-size: 1rem;
@@ -791,9 +782,17 @@ a{
 
 #more_list {
     border: 1px solid black;
-    margin: 4px;
+    margin: 15px;
     padding: 20px;
     background-color: #f7fafc;
+    border-radius: 12px;
+}
+
+#member-index {
+    border: 2px solid #F01D04;
+    margin: 4px;
+    padding: 20px;
+    border-radius: 12px;
 }
 
 #login-form {
@@ -801,6 +800,33 @@ a{
     height: 100vh;
     justify-content: center;
     align-items: center
+}
+
+#profile-img {
+    border-radius: 70%;
+    overflow: hidden;
+}
+
+.jb-wrap {
+    width: 60%;
+    margin: 10px auto;
+    position: relative;
+}
+.jb-wrap img {
+    width: 526px;
+    height: 300px;
+    vertical-align: middle;
+}
+.jb-text {
+    padding: 5px 10px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
 }
 
 .btn-social-login {

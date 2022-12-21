@@ -15,33 +15,46 @@
 
     </div>
 </section>
-<section class="main">
-    <div class="container px-0">
-        <button class="btn btn-orange float-end" style="font-size: 1.1rem; color: #ffffff"
-                th:onclick="|location.href='@{/seller/store/add}'|">상점 추가
-        </button>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-transparent pb-5">
+                <div class="text-center mt-2 mb-4">
+                    <div class="text-dark fw-bold text-center mt-2 fs-2" style="font-size: 2.0rem" >나의 가게</div>
+                </div>
+                <section class="main">
+                    <div class="container px-0">
+                        <button class="btn btn-orange float-end" style="font-size: 1.1rem; color: #ffffff"
+                                th:onclick="|location.href='@{/seller/store/add}'|">상점 추가
+                        </button>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>가게명</th>
+                            <th>대표 사진</th>
+                            <th>OPEN/CLOSE</th>
+                        </tr>
+                        </thead>
+                        <tr th:each="store : ${storeDto}">
+                            <td>
+                                <a th:text="${store.name}"
+                                   th:onclick="|location.href='@{/store/{storeId}(storeId=${store.storeId})}'|"></a>
+                            </td>
+                            <td>
+                                <img th:src="${store.uploadImgUrl}" width="180" height="180" alt="대표 사진">
+                            </td>
+                            <td>
+                        <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{store.status}"
+                              th:classappend="*{store.status}"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+            </div>
+        </div>
     </div>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>가게명</th>
-            <th>대표 사진</th>
-            <th>OPEN/CLOSE</th>
-        </tr>
-        </thead>
-        <tr th:each="store : ${storeDto}">
-            <td th:text="${store.name}"
-                th:onclick="|location.href='@{/store/{storeId}(storeId=${store.storeId})}'|"></td>
-            <td>
-                <img th:src="${store.uploadImgUrl}" width="180" height="180" alt="대표 사진">
-            </td>
-            <td>
-        <span class="badge ms-3 m-auto" style="font-size: 1.3rem" th:text="*{store.status}"
-              th:classappend="*{store.status}"></span>
-            </td>
-        </tr>
-    </table>
-</section>
+</div>
 <footer th:replace="layout/footer :: common_footer">
     템플릿 푸터
 </footer>

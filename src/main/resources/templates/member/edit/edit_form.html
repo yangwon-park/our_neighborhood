@@ -24,37 +24,39 @@
 
                 <div class="card-body px-lg-5 py-lg-5">
                     <div class="card-header bg-transparent pb-5">
-                        <div class="text-muted text-center mt-2 mb-4 fs-2">회원 수정</div>
+                        <div class="text-muted text-center mt-2 mb-4 fs-2">마이 페이지</div>
                     </div>
                     <form th:object="${editForm}" id="member-edit-form" class="form-floating"
                           enctype="multipart/form-data">
                         <input id="memberId" th:value="${session.loginMember.id}" type="hidden">
-                        <div class="col-12 my-1">
-                            <img th:src="*{imgUrl}" width="180" height="180" alt="프로필 사진">
-                        </div>
-                        <span class="fw-bold mb-2">프로필 사진을 변경하고 싶으실 때만 파일을 선택해주면 됩니다.</span>
-                        <div class="form-group">
-                            <div class="mb-3">
-                                <input th:field="*{file}"
-                                       class="form-control"
-                                       type="file"/>
+                        <div id="member-index">
+                            <div class="col-12 my-1">
+                                <img th:src="*{imgUrl}" width="180" height="180" alt="프로필 사진" id="profile-img">
+                                <button type="button" class="btn btn-main-color mt-4 text-center float-end" id="member-edit">회원정보 수정</button>
                             </div>
-                            <div id="member-edit-file-valid" class="my-1 valid-custom">
+                            <div class="form-group">
+                                <span class="fw-bold mb-2">프로필 사진을 변경하고 싶으실 때만 파일을 선택해주면 됩니다.</span>
+                                <div class="mb-3">
+                                    <input th:field="*{file}"
+                                           class="form-control"
+                                           type="file"/>
+                                </div>
+                                <div id="member-edit-file-valid" class="my-1 valid-custom"></div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <small>닉네임</small>
-                            <div class="">
-                                <input class="form-control" placeholder="닉네임" type="text" th:field="*{nickname}">
+                            <div class="form-group">
+                                <small>닉네임</small>
+                                <div class="">
+                                    <input class="form-control" placeholder="닉네임" type="text" th:field="*{nickname}">
+                                </div>
+                                <div id="sign-up-nickname-valid" class="my-1 valid-custom"></div>
                             </div>
-                            <div id="sign-up-nickname-valid" class="my-1 valid-custom"></div>
-                        </div>
-                        <div class="form-group">
-                            <small>이메일</small>
-                            <div>
-                                <input class="form-control" placeholder="이메일" type="text" th:field="*{email}">
+                            <div class="form-group">
+                                <small>이메일</small>
+                                <div>
+                                    <input class="form-control" placeholder="이메일" type="text" th:field="*{email}">
+                                </div>
+                                <div id="sign-up-email-valid" class="my-1 valid-custom"></div>
                             </div>
-                            <div id="sign-up-email-valid" class="my-1 valid-custom"></div>
                         </div>
                         <div class="form-group">
                             <small>전화번호</small>
@@ -67,17 +69,20 @@
                             </div>
                         </div>
                         <div class="col">
-                            <button class="w-100 btn btn-secondary btn-lg"
+                            <button class="btn btn-main-color btn-lg"
                                     th:onclick="|location.href='@{/user/member-edit/password}'|"
                                     type="button">비밀번호 변경</button>
-                        </div>
-                        <div class="text-center">
-                            <button type="button" class="btn btn-main-color mt-4" id="member-edit">회원정보 수정</button>
+                            <button class="btn btn-main-color btn-lg"
+                                    th:onclick="|location.href='@{/user/member-edit/review}'|"
+                                    type="button">리뷰 관리</button>
+                            <button class="btn btn-main-color btn-lg"
+                                    th:onclick="|location.href='@{/user/my-like}'|"
+                                    type="button">찜 목록</button>
                         </div>
                     </form>
                     <br>
                     <div class="text-center">
-                        <button type="button" class="btn btn-main-color mt-4" id="member-delete">회원탈퇴</button>
+                        <button type="button" class="btn btn-dark ms-3 float-end" id="member-delete">회원탈퇴</button>
                     </div>
                 </div>
             </div>

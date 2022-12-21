@@ -182,7 +182,7 @@ public class Store extends BaseEntity {
         this.status = status;
     }
 
-    public void reviewDelete(Integer rating) {
+    public void minusRatingTotal(Integer rating) {
         this.ratingTotal -= rating;
     }
 

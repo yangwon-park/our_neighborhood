@@ -1,6 +1,11 @@
 @font-face {
-    font-family: "s-core";
-    src: url("../font/SCDream3.woff") format("woff");
+    font-family: "Cafe24Ssurround";
+    src: url("../font/Cafe24Ssurround.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Cafe24SsurroundAir";
+    src: url("../font/Cafe24SsurroundAir.woff") format("woff");
 }
 
 /* Global */
@@ -37,18 +42,9 @@
     --breakpoint-md: 768px;
     --breakpoint-lg: 992px;
     --breakpoint-xl: 1200px;
-    --bs-font-sans-serif: "s-core";
+    --bs-font-sans-serif: "Cafe24Ssurround";
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     accent-color: #F01D04;
-}
-
-html {
-    font-family: "s-core", serif !important;
-    line-height: 1.15;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    -ms-overflow-style: scrollbar;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 body {
@@ -60,6 +56,10 @@ body {
     text-align: left;
     /*background-color: #f8f9fe;*/
     background-color: #ffffff;
+}
+
+.thin{
+    font-family: "Cafe24SsurroundAir";
 }
 
 input[type=radio] {
@@ -157,13 +157,6 @@ input[type=radio] {
 
 .text-muted {
     color: #8898aa !important;
-}
-
-#login-form {
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    align-items: center
 }
 
 #map-input {
@@ -301,7 +294,7 @@ input[type=radio] {
 .btn-main-color:not(:disabled):not(.disabled):active {
     color: #fff;
     border-color: #F01D04;
-    background-color: #F01D04;
+    background-color: #EBE40D;
 }
 
 .btn-main-color:not(:disabled):not(.disabled):active:focus {
@@ -834,4 +827,16 @@ a{
     color: white;
     font-size: 30px;
     font-weight: bold;
+}
+
+.btn-social-login {
+    transition: all .2s;
+    outline: 0;
+    border: 1px solid transparent;
+    padding: .5rem !important;
+    border-radius: 50%;
+    color: #fff;
+}
+.btn-social-login:focus {
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
 }

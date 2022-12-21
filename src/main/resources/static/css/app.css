@@ -68,7 +68,8 @@ body {
 }
 
 .thin{
-    font-family: "Cafe24SsurroundAir";
+    font-family: "Cafe24SsurroundAir", serif;
+    font-weight: 700;
 }
 
 input[type=radio] {
@@ -242,6 +243,7 @@ input[type=radio] {
 .nav-font {
     color: #ffffff !important;
     font-weight: bolder;
+    font-size: 25px;
 }
 
 .main-color {

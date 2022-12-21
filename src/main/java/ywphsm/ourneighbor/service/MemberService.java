@@ -16,11 +16,7 @@ import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
-import ywphsm.ourneighbor.domain.store.Review;
-import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
-import ywphsm.ourneighbor.repository.review.ReviewRepository;
-import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.service.email.EmailService;
 
 import java.io.IOException;
@@ -39,8 +35,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final AwsS3FileStore awsS3FileStore;
 
+    private final AwsS3FileStore awsS3FileStore;
 
     // 회원 가입
     @Transactional
@@ -142,7 +138,7 @@ public class MemberService {
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("to", phoneNumber);        // 수신전화번호
-        params.put("from", "010383523755");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("from", "01038352375");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
         params.put("type", "SMS");
         params.put("text", "Our neighborhood 휴대폰인증 메시지 : 인증번호는" + "[" + cerNum + "]" + "입니다.");
 
@@ -214,6 +210,22 @@ public class MemberService {
         log.info("비밀번호 찾기 이메일 발송 완료 임시비밀번호={}", temporaryPassword);
 
         return "성공";
+    }
+
+    //회원탈퇴
+    @Transactional
+    public void withdrawal(Long id) {
+        memberRepository.findById(id).ifPresent(memberRepository::delete);
+    }
+
+    @Transactional
+    public boolean adminWithdrawal(String userId) {
+        Optional<Member> memberOptional = findByUserId(userId);
+        if (memberOptional.isPresent()) {
+            memberOptional.ifPresent(memberRepository::delete);
+            return true;
+        }
+        return false;
     }
 
     @Transactional

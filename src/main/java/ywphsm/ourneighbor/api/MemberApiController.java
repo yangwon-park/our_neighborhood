@@ -11,7 +11,6 @@ import ywphsm.ourneighbor.domain.member.Member;
 
 import ywphsm.ourneighbor.domain.member.Role;
 
-import ywphsm.ourneighbor.service.MemberReviewService;
 import ywphsm.ourneighbor.service.MemberService;
 import ywphsm.ourneighbor.service.ValidationService;
 import ywphsm.ourneighbor.service.login.SessionConst;
@@ -32,7 +31,6 @@ import java.util.Random;
 public class MemberApiController {
 
     private final MemberService memberService;
-    private final MemberReviewService memberReviewService;
 
     private final StoreService storeService;
 
@@ -134,7 +132,7 @@ public class MemberApiController {
 
     @DeleteMapping("/member/withdrawal")
     public void delete(Long memberId) {
-        memberReviewService.withdrawal(memberId);
+        memberService.withdrawal(memberId);
     }
 
     @PostMapping("/find-userid")
@@ -162,6 +160,6 @@ public class MemberApiController {
 
     @DeleteMapping("/admin/withdrawal")
     public boolean delete(String userId) {
-        return memberReviewService.adminWithdrawal(userId);
+        return memberService.adminWithdrawal(userId);
     }
 }

@@ -21,7 +21,6 @@ import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.review.ReviewRepository;
-import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.persistence.EntityManager;
@@ -39,25 +38,28 @@ import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final MemberRepository memberRepository;
+
+    private final MemberService memberService;
     private final StoreService storeService;
 
-    private final StoreRepository storeRepository;
+    private final MemberRepository memberRepository;
+
     private final HashtagRepository hashtagRepository;
+
     private final AwsS3FileStore awsS3FileStore;
 
     private final FileStore fileStore;
+
     private final EntityManager entityManager;
 
     @Transactional
     public Long save(ReviewDTO.Add dto, String hashtag) throws IOException, ParseException {
         Store linkedStore = storeService.findById(dto.getStoreId());
-        Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + dto.getMemberId()));
+        Member linkedMember = memberService.findById(dto.getMemberId());
 
         Review review = dto.toEntity(linkedStore, linkedMember);
         linkedStore.addReview(review);
-        linkedStore.updateRatingAverage(ratingAverage(linkedStore, linkedStore.getReviewList().size()));
+        linkedStore.updateRatingAverage(ratingAverage(linkedStore));
         linkedMember.addReview(review);
 
         log.info("dto.getFile = {}", dto.getFile());
@@ -80,32 +82,23 @@ public class ReviewService {
     @Transactional
     public Long delete(Long storeId, Long reviewId) {
         Review review = findOne(reviewId);
-        Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
-        store.minusRatingTotal(review.getRating());
+        Store store = storeService.findById(storeId);
+        store.reviewDelete(review.getRating());
 
         review.getFileList().stream()
                 .map(UploadFile::getStoredFileName).forEach(awsS3FileStore::deleteFile);
 
-        double count = 0;
-        if (store.getReviewList().size() > 0) {
-            count = store.getReviewList().size() - 1;
-        }
-
-        store.updateRatingAverage(ratingAverage(store, count));
+        reviewRepository.delete(review);
         entityManager.flush();
-        entityManager.clear();
 
-        reviewRepository.deleteById(reviewId);
-        entityManager.flush();
-        entityManager.clear();
+        store = storeService.findById(storeId);
+        store.updateRatingAverage(ratingAverage(store));
 
         return reviewId;
     }
 
     public Review findOne(Long reviewId) {
-        return reviewRepository.findById(reviewId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 리뷰입니다. id = " + reviewId));
+        return reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
     }
 
     public List<Review> findAllReviews() {
@@ -127,13 +120,14 @@ public class ReviewService {
         return dateDifference(reviewMemberDTOS);
     }
 
-    public double ratingAverage(Store store, double count) {
+    public double ratingAverage(Store store) {
 
         if (store.getReviewList().size() == 0) {
             return 0;
         }
 
         double ratingTotal = store.getRatingTotal();
+        double count = store.getReviewList().size();
         double average = ratingTotal / count;
 
         return Math.round(average * 10) / 10.0;

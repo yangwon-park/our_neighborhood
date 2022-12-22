@@ -212,7 +212,7 @@ public class StoreService {
         List<MemberOfStore> memberOfStoreList = store.getMemberOfStoreList();
         memberOfStoreRepository.deleteAll(memberOfStoreList);
 
-        if ((store.getFile().getStoredFileName() != null)) {
+        if ((store.getFile() != null)) {
             awsS3FileStore.deleteFile(store.getFile().getStoredFileName());
         }
 

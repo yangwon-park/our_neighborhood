@@ -8,6 +8,12 @@
     src: url("../font/Cafe24SsurroundAir.woff") format("woff");
 }
 
+
+@font-face {
+    font-family: "s-core";
+    src: url("../font/SCDream4.woff") format("woff");
+}
+
 /* Global */
 :root {
     --blue: #5e72e4;
@@ -58,9 +64,13 @@ body {
     background-color: #ffffff;
 }
 
-.thin{
+.thin {
     font-family: "Cafe24SsurroundAir", serif;
     font-weight: 700;
+}
+
+.password {
+    font-family: "s-core", serif;
 }
 
 input[type=radio] {

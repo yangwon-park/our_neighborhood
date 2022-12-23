@@ -340,10 +340,10 @@ public class StoreRepositoryTest {
     @Test
     @DisplayName("키워드로 매장 조회")
     void should_FindStores_When_ContainsKeyword() {
-        List<Store> storeList = storeRepository.searchByKeyword("매장1");
+        List<Store> storeList = storeRepository.searchByKeyword("매장1", getPolygon(), 3);
         List<String> result = storeList.stream().map(Store::getName).collect(Collectors.toList());
 
-        assertThat(result).hasSize(2).contains("매장1", "매장10");
+        assertThat(result).hasSize(1).contains("매장1");
     }
 
     @Test

@@ -294,8 +294,9 @@ public class StoreService {
         return storeRepository.findAllStoresJoinUploadFileFetchJoin();
     }
 
-    public List<Store> searchByKeyword(String keyword) {
-        return storeRepository.searchByKeyword(keyword);
+    public List<Store> searchByKeyword(String keyword, double lat, double lon, double dist) {
+        Polygon<G2D> polygon = getPolygon(lat, lon, dist);
+        return storeRepository.searchByKeyword(keyword, polygon, dist);
     }
 
     public List<Store> searchByCategory(Long categoryId) {
@@ -336,7 +337,6 @@ public class StoreService {
                 .map(store -> store.getFile().getUploadImageUrl())
                 .collect(Collectors.toList());
     }
-
 
     /*
         매장주인이 맞는지 체크

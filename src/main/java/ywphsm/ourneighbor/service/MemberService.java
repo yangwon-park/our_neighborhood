@@ -40,7 +40,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final AwsS3FileStore awsS3FileStore;
-
+    private final ValidationService validationService;
 
     // 회원 가입
     @Transactional
@@ -165,11 +165,10 @@ public class MemberService {
     public String sendEmailByUserId(String email) {
 
         Member member = memberRepository.findByEmail(email).orElse(null);
-        if (member == null) {
-            return "없는 이메일 입니다.";
-        }
-        if (member.getUserId() == null) {
-            return "해당 계정은 아이디가 존재하지 않습니다";
+        String valid = validationService.findUserIdValid(member);
+
+        if (!valid.equals("성공")) {
+            return valid;
         }
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -179,7 +178,7 @@ public class MemberService {
         emailService.sendEmail(mailMessage);
         log.info("아이디 찾기 이메일 발송 완료 uesrId={}", member.getUserId());
 
-        return "성공";
+        return valid;
     }
 
     //비밀번호 찾기
@@ -194,11 +193,10 @@ public class MemberService {
         }
 
         Member member = memberRepository.findByEmail(email).orElse(null);
-        if (member == null) {
-            return "없는 이메일 입니다.";
-        }
-        if (!member.getUserId().equals(userId)) {
-            return "해당 계정의 아이디와 일치하지 않습니다";
+        String valid = validationService.findPasswordValid(member, userId);
+
+        if (!valid.equals("성공")) {
+            return valid;
         }
 
         //임시 비밀번호로 변경
@@ -213,7 +211,7 @@ public class MemberService {
         emailService.sendEmail(mailMessage);
         log.info("비밀번호 찾기 이메일 발송 완료 임시비밀번호={}", temporaryPassword);
 
-        return "성공";
+        return valid;
     }
 
     @Transactional

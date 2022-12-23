@@ -86,4 +86,25 @@ public class ValidationService {
         return "성공";
     }
 
+    public String findUserIdValid(Member member) {
+        if (member == null) {
+            return "없는 이메일 입니다.";
+        }
+        if (member.getUserId() == null) {
+            return "해당 계정은 아이디가 존재하지 않습니다";
+        }
+
+        return "성공";
+    }
+
+    public String findPasswordValid(Member member, String userId) {
+        if (member == null) {
+            return "없는 이메일 입니다.";
+        }
+        if (!member.getUserId().equals(userId)) {
+            return "해당 계정의 아이디와 일치하지 않습니다";
+        }
+
+        return "성공";
+    }
 }

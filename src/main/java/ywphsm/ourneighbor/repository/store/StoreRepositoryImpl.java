@@ -34,11 +34,11 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Store> searchByKeyword(String keyword) {
+    public List<Store> searchByKeyword(String keyword, Polygon<G2D> polygon, double dist) {
         return queryFactory
                 .select(store)
                 .from(store)
-                .where(keywordContains(keyword))
+                .where(stContains(polygon), stDistance(polygon).loe(dist), keywordContains(keyword))
                 .fetch();
     }
 

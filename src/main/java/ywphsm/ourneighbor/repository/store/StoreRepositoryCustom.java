@@ -14,7 +14,7 @@ public interface StoreRepositoryCustom {
 
     List<Store> findAllStoresJoinUploadFileFetchJoin();
 
-    List<Store> searchByKeyword(String keyword);
+    List<Store> searchByKeyword(String keyword, Polygon<G2D> polygon, double dist);
 
     List<Store> searchByCategory(Long categoryId);
 

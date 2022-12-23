@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.domain.store.StoreStatus;
-import ywphsm.ourneighbor.domain.store.StoreUtil;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import ywphsm.ourneighbor.service.CategoryService;
 import ywphsm.ourneighbor.service.store.StoreService;
@@ -46,7 +44,7 @@ public class SearchController {
             return new ResultClass<>(0, new ArrayList<>());
         }
 
-        List<Store> findStores = storeService.searchByKeyword(keyword);
+        List<Store> findStores = storeService.searchByKeyword(keyword, myLat, myLon, DIST_TO_TARGET);
 
         List<SimpleSearchStoreDTO> result = getSimpleSearchStoreDTOListAndUpdateStatusAndCalculateDist(myLat, myLon, findStores);
 
@@ -55,7 +53,7 @@ public class SearchController {
 
     /*
         map.html에서 카테고리를 선택하여 조회 시 동작하는 API
-        거리 조회 기능 리팩토링해야 함
+        거리 조회 기능 수정해야 함
      */
     @GetMapping("/search-by-category")
     public ResultClass<?> searchByCategory(@RequestParam Long categoryId,

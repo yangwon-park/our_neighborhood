@@ -91,19 +91,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .addLogoutHandler(new LogoutHandler() {
-                    @Override
-                    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-                        HttpSession session = request.getSession();
-                        session.invalidate();
-                    }
+                .addLogoutHandler((request, response, authentication) -> {
+                    HttpSession session = request.getSession();
+                    session.invalidate();
                 })
-                .logoutSuccessHandler(new LogoutSuccessHandler() {
-                    @Override
-                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        ScriptUtils.alertAndMovePage(response, "로그아웃되었습니다.", "/");
-                    }
-                })
+                .logoutSuccessHandler((request, response, authentication) -> ScriptUtils.alertAndMovePage(response, "로그아웃되었습니다.", "/"))
                 .deleteCookies("remember-me")
 
                 /*

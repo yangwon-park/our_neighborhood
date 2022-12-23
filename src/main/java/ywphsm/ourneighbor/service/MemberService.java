@@ -192,7 +192,8 @@ public class MemberService {
             temporaryPassword += ran;
         }
 
-        Member member = memberRepository.findByEmail(email).orElse(null);
+        Member member = memberRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. email = " + email));
         String valid = validationService.findPasswordValid(member, userId);
 
         if (!valid.equals("성공")) {

@@ -16,7 +16,7 @@ public interface StoreRepositoryCustom {
 
     List<Store> searchByKeyword(String keyword, Polygon<G2D> polygon, double dist);
 
-    List<Store> searchByCategory(Long categoryId);
+    List<Store> searchByCategory(Long categoryId, Polygon<G2D> polygon, double dist);
 
     List<Store> searchTopNByCategories(Polygon<G2D> polygon, Long categoryId);
 

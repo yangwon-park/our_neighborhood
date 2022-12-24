@@ -53,7 +53,6 @@ public class SearchController {
 
     /*
         map.html에서 카테고리를 선택하여 조회 시 동작하는 API
-        거리 조회 기능 수정해야 함
      */
     @GetMapping("/search-by-category")
     public ResultClass<?> searchByCategory(@RequestParam Long categoryId,
@@ -64,12 +63,9 @@ public class SearchController {
             return new ResultClass<>(0, new ArrayList<>());
         }
 
-        List<Store> findStores = storeService.searchByCategory(categoryId);
+        List<Store> findStores = storeService.searchByCategory(categoryId, myLat, myLon, dist);
 
-        List<SimpleSearchStoreDTO> dto = getSimpleSearchStoreDTOListAndUpdateStatusAndCalculateDist(myLat, myLon, findStores);
-
-        List<SimpleSearchStoreDTO> result = dto.stream().filter(simpleSearchStoreDTO
-                -> simpleSearchStoreDTO.getDistance() <= dist / 1000).collect(Collectors.toList());
+        List<SimpleSearchStoreDTO> result = getSimpleSearchStoreDTOListAndUpdateStatusAndCalculateDist(myLat, myLon, findStores);
 
         return new ResultClass<>(result.size(), result);
     }

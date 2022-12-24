@@ -1,18 +1,15 @@
 package ywphsm.ourneighbor.repository.store;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.spatial.GeometryExpressions;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.geolatte.geom.*;
 import org.springframework.data.domain.*;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysOfStoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
-import ywphsm.ourneighbor.domain.store.days.QDaysOfStore;
 import ywphsm.ourneighbor.repository.OrderByNull;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 
@@ -43,10 +40,11 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     }
 
     @Override
-    public List<Store> searchByCategory(Long categoryId) {
+    public List<Store> searchByCategory(Long categoryId, Polygon<G2D> polygon, double dist) {
         return queryFactory
                 .select(store)
                 .from(store)
+                .where(stContains(polygon), stDistance(polygon).loe(dist))
                 .innerJoin(store.categoryOfStoreList, categoryOfStore)
                 .innerJoin(categoryOfStore.category, category)
                 .innerJoin(store.file, uploadFile)

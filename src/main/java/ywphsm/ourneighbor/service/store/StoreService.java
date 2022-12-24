@@ -29,7 +29,6 @@ import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.repository.store.days.DaysRepository;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
-import ywphsm.ourneighbor.service.MemberService;
 
 import java.io.IOException;
 import java.util.List;
@@ -295,16 +294,15 @@ public class StoreService {
     }
 
     public List<Store> searchByKeyword(String keyword, double lat, double lon, double dist) {
-        Polygon<G2D> polygon = getPolygon(lat, lon, dist);
-        return storeRepository.searchByKeyword(keyword, polygon, dist);
+        return storeRepository.searchByKeyword(keyword, getPolygon(lat, lon, dist), dist);
     }
 
-    public List<Store> searchByCategory(Long categoryId) {
-        return storeRepository.searchByCategory(categoryId);
+    public List<Store> searchByCategory(Long categoryId, double lat, double lon, double dist) {
+        return storeRepository.searchByCategory(categoryId, getPolygon(lat, lon, dist), dist);
     }
 
-    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page, double lat,
-                                                       double lon, double dist) {
+    public Slice<SimpleSearchStoreDTO> searchByHashtag(List<Long> hashtagIdList, int page,
+                                                       double lat, double lon, double dist) {
         PageRequest pageRequest = PageRequest.of(page, 10);
         return storeRepository.searchByHashtag(hashtagIdList, getPolygon(lat, lon, dist), pageRequest);
     }

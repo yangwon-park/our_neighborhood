@@ -17,13 +17,11 @@ import ywphsm.ourneighbor.service.ValidationService;
 import ywphsm.ourneighbor.service.login.SessionConst;
 import ywphsm.ourneighbor.service.store.StoreService;
 
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -37,6 +35,8 @@ public class MemberApiController {
     private final StoreService storeService;
 
     private final ValidationService validationService;
+
+
 
     @PutMapping("/user/like")
     public String likeAdd(boolean likeStatus, Long memberId, Long storeId) {

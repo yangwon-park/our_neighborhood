@@ -75,7 +75,7 @@ public class HashtagOfMenuServiceTest {
         List<HashtagDTO> result = hashtagOfMenuService.findAllHashtagByMenuId(mockMenuId);
 
         // then
-        assertThat(result).hasSize(2).contains(dto1, dto2);
         then(hashtagOfMenuRepository).should().findAllHashtagByMenuId(mockMenuId);
+        assertThat(result).hasSize(2).contains(dto1, dto2);
     }
 }

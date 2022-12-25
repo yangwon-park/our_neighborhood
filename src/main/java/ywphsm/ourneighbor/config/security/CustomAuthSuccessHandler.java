@@ -10,10 +10,9 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
-import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.service.email.security.MemberDetailsImpl;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.login.security.MemberDetailsImpl;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

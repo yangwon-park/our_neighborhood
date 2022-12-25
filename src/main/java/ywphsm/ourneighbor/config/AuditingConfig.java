@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

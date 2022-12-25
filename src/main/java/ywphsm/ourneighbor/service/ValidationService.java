@@ -6,8 +6,7 @@ import ywphsm.ourneighbor.controller.form.EditForm;
 import ywphsm.ourneighbor.controller.form.PasswordEditForm;
 import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.member.Member;
-
-import java.util.Optional;
+import ywphsm.ourneighbor.service.member.MemberService;
 
 @Service
 @RequiredArgsConstructor

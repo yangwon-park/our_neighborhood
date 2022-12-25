@@ -12,7 +12,7 @@ import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.controller.form.LoginForm;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

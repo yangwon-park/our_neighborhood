@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.service;
+package ywphsm.ourneighbor.service.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +16,10 @@ import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
-import ywphsm.ourneighbor.domain.store.Review;
-import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
-import ywphsm.ourneighbor.repository.review.ReviewRepository;
-import ywphsm.ourneighbor.repository.store.StoreRepository;
-import ywphsm.ourneighbor.service.email.EmailService;
+import ywphsm.ourneighbor.service.ValidationService;
+import ywphsm.ourneighbor.service.member.email.VerificationNumberConst;
+import ywphsm.ourneighbor.service.member.email.EmailService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -135,9 +133,7 @@ public class MemberService {
 
     //휴대폰에 인증번호 발송
     public void certifiedPhoneNumber(String phoneNumber, String cerNum) {
-        String api_key = "NCS0EUZ1M5AZKUFA";
-        String api_secret = "YOHXWEBYGAWYTGPCTUXKXJOEZOF7VYKZ";
-        Message coolsms = new Message(api_key, api_secret);
+        Message coolsms = new Message(VerificationNumberConst.API_KEY, VerificationNumberConst.API_SECRET);
 
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<String, String>();
@@ -164,20 +160,15 @@ public class MemberService {
     //아이디 찾기
     public String sendEmailByUserId(String email) {
 
-        Member member = memberRepository.findByEmail(email).orElse(null);
+        Member member = memberRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다. email = " + email));
         String valid = validationService.findUserIdValid(member);
 
         if (!valid.equals("성공")) {
             return valid;
         }
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(email);   //보낼 이메일주소 추가
-        mailMessage.setSubject("아이디 찾기 Our neighborhood");  //제목
-        mailMessage.setText("회원님의 아이디는 " + member.getUserId() + "입니다.");
-        emailService.sendEmail(mailMessage);
-        log.info("아이디 찾기 이메일 발송 완료 uesrId={}", member.getUserId());
-
+        emailService.findUserIdSendEmail(email, member.getUserId());
         return valid;
     }
 
@@ -200,18 +191,8 @@ public class MemberService {
             return valid;
         }
 
-        //임시 비밀번호로 변경
-        member.updatePassword(encodedPassword(temporaryPassword));
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(email);   //보낼 이메일주소 추가
-        mailMessage.setSubject("비밀번호 찾기 Our neighborhood");  //제목
-        mailMessage.setText("임시 비밀번호를 발급했습니다.\n" +
-            "임시 비밀번호는 " + temporaryPassword + "입니다.\n" +
-            "로그인후 마이페이지에서 비밀번호를 변경해 주세요.");
-        emailService.sendEmail(mailMessage);
-        log.info("비밀번호 찾기 이메일 발송 완료 임시비밀번호={}", temporaryPassword);
-
+        member.updatePassword(encodedPassword(temporaryPassword)); //임시 비밀번호로 변경
+        emailService.findPasswordSendEmail(email, temporaryPassword);
         return valid;
     }
 

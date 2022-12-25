@@ -29,7 +29,6 @@ import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
 import ywphsm.ourneighbor.repository.store.days.DaysRepository;
 import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
-import ywphsm.ourneighbor.service.MemberService;
 
 import java.io.IOException;
 import java.util.List;

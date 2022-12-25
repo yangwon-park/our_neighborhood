@@ -11,10 +11,10 @@ import ywphsm.ourneighbor.domain.member.Member;
 
 import ywphsm.ourneighbor.domain.member.Role;
 
-import ywphsm.ourneighbor.service.MemberReviewService;
-import ywphsm.ourneighbor.service.MemberService;
+import ywphsm.ourneighbor.service.member.MemberReviewService;
+import ywphsm.ourneighbor.service.member.MemberService;
 import ywphsm.ourneighbor.service.ValidationService;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.servlet.http.HttpServletRequest;

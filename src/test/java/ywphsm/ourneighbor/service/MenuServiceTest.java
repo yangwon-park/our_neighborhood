@@ -22,7 +22,8 @@ import ywphsm.ourneighbor.domain.menu.Menu;
 import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.MemberService;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 import ywphsm.ourneighbor.service.store.StoreService;
 
 import java.io.FileInputStream;

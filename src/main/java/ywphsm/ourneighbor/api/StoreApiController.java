@@ -9,17 +9,14 @@ import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.domain.dto.RequestAddStoreDTO;
 import ywphsm.ourneighbor.domain.dto.store.StoreDTO;
-import ywphsm.ourneighbor.domain.dto.store.days.DaysDTO;
-import ywphsm.ourneighbor.domain.store.days.Days;
 import ywphsm.ourneighbor.service.RequestAddStoreService;
 import ywphsm.ourneighbor.service.store.DaysService;
 import ywphsm.ourneighbor.service.store.StoreService;
 
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;

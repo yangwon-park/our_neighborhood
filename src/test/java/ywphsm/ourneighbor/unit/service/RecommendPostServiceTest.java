@@ -84,12 +84,12 @@ public class RecommendPostServiceTest {
         Long id = recommendPostService.save(dto);
 
         // then
-        assertThat(mockPostId).isEqualTo(id);
-
         for (String name : hashtagNameList) {
             then(hashtagRepository).should().existsByName(name);
             then(hashtagRepository).should().findByName(name);
         }
+
+        assertThat(mockPostId).isEqualTo(id);
     }
 
     @Test
@@ -132,9 +132,9 @@ public class RecommendPostServiceTest {
         RecommendPostDTO.Simple dto = recommendPostService.getRecommendPost(skyStatus, pm10Value, tmp, pcp);
 
         // then
-        assertThat(RecommendPostDTO.Simple.of(list.get(0))).isEqualTo(dto);
         then(recommendPostRepository).should().countByRecommendKind(cond);
         then(recommendPostRepository).should().findByRecommendKind(cond, pageRequest);
+        assertThat(RecommendPostDTO.Simple.of(list.get(0))).isEqualTo(dto);
     }
 
     @Test
@@ -173,10 +173,10 @@ public class RecommendPostServiceTest {
         System.out.println("dto = " + dto);
 
         // then
-        assertThat(RecommendPostDTO.Simple.of(list.get(0))).isEqualTo(dto);
         then(recommendPostRepository).should().countByRecommendKind(cond);
         then(recommendPostRepository).should().countByRecommendKind(NORMAL);
         then(recommendPostRepository).should().findByRecommendKind(NORMAL, pageRequest);
+        assertThat(RecommendPostDTO.Simple.of(list.get(0))).isEqualTo(dto);
     }
 
 

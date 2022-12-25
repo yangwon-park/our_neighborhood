@@ -68,10 +68,9 @@ public class HashtagOfStoreServiceTest {
         // when
         List<HashtagOfStoreDTO.WithCount> result = hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescTop9(mockStoreId);
 
-
         // then
-        assertThat(result).hasSize(2).containsExactly(withCountDto2, withCountDto1);                // dto1이 2개, dto2가 3개 => dto2가 먼저 나옴
         then(hashtagOfStoreRepository).should().findHashtagAndCountByStoreIdOrderByCountDescTop9(mockStoreId);
+        assertThat(result).hasSize(2).containsExactly(withCountDto2, withCountDto1);                // dto1이 2개, dto2가 3개 => dto2가 먼저 나옴
     }
 
     @Test
@@ -119,8 +118,8 @@ public class HashtagOfStoreServiceTest {
         List<HashtagOfStoreDTO.WithCount> result = hashtagOfStoreService.findHashtagAndCountByStoreIdOrderByCountDescOrderByHashtagName(mockStoreId);
 
         // then
-        assertThat(result).hasSize(3).containsExactly(withCountDto3, withCountDto1, withCountDto2);
         then(hashtagOfStoreRepository).should().findHashtagAndCountByStoreIdOrderByCountDescOrderByHashtagName(mockStoreId);
+        assertThat(result).hasSize(3).containsExactly(withCountDto3, withCountDto1, withCountDto2);
     }
 
     /*

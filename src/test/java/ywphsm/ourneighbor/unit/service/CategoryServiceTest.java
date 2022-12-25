@@ -147,12 +147,12 @@ public class CategoryServiceTest {
         Category findCategory = categoryService.findById(mockId);
 
         // then
-        assertThat(dto.getName()).isEqualTo(findCategory.getName());
-        assertThat(parent.getName()).isEqualTo(findParent.getName());
-
         then(categoryRepository).should().save(any());
         then(categoryRepository).should(times(2)).findById(parentMockId);           // Service 계층에서 조회 1번, when에서 조회 1번 => 총 2번
         then(categoryRepository).should(times(1)).findById(mockId);                 // 부모를 조회하는 경우는 when에서 1번만 발생하고 Service 자체에서는 수행되지 않음 => 총 1번
+
+        assertThat(dto.getName()).isEqualTo(findCategory.getName());
+        assertThat(parent.getName()).isEqualTo(findParent.getName());
     }
 
     @Test
@@ -177,9 +177,9 @@ public class CategoryServiceTest {
         Long categoryId = categoryService.delete(mockId);
 
         // then
-        assertThat(entity.getId()).isEqualTo(categoryId);
         then(categoryRepository).should().findById(mockId);
         then(categoryRepository).should().delete(entity);
+        assertThat(entity.getId()).isEqualTo(categoryId);
     }
 
     @Test
@@ -203,8 +203,8 @@ public class CategoryServiceTest {
         Category findCategory = categoryService.findById(mockId);
 
         // then
-        assertThat(entity.getName()).isEqualTo(findCategory.getName());
         then(categoryRepository).should().findById(mockId);
+        assertThat(entity.getName()).isEqualTo(findCategory.getName());
     }
 
     @Test
@@ -232,8 +232,8 @@ public class CategoryServiceTest {
         List<CategoryDTO.Simple> result = categoryService.findByDepthCaseByOrderByName(depth);
 
         // then
-        assertThat(result).hasSize(2).contains(CategoryDTO.Simple.of(category1), CategoryDTO.Simple.of(category2));
         then(categoryRepository).should().findByDepthCaseByOrderByName(depth);
+        assertThat(result).hasSize(2).contains(CategoryDTO.Simple.of(category1), CategoryDTO.Simple.of(category2));
     }
 
     @Test
@@ -316,8 +316,8 @@ public class CategoryServiceTest {
         List<CategoryDTO.Detail> dtoList = categoryService.findAllByOrderByDepthAscParentIdAscNameAsc();
 
         // then
-        assertThat(dtoList).hasSize(5).containsExactly(dto1, dto2, dto3, dto5, dto4);
         then(categoryRepository).should().findAllByOrderByDepthAscParentIdAscNameAsc();
+        assertThat(dtoList).hasSize(5).containsExactly(dto1, dto2, dto3, dto5, dto4);
     }
 
     @Test
@@ -392,7 +392,6 @@ public class CategoryServiceTest {
 
         // then
         assertThat(result.getName()).isEqualTo(parent.getName());
-
     }
 
 

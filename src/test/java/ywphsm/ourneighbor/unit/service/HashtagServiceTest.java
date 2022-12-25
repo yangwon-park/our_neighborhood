@@ -55,8 +55,8 @@ public class HashtagServiceTest {
         Hashtag hashtag = hashtagService.save(dto);
 
         // then
-        assertThat(dto.getName()).isEqualTo(hashtag.getName());
         then(hashtagRepository).should().save(any());
+        assertThat(dto.getName()).isEqualTo(hashtag.getName());
     }
 
     @Test
@@ -88,10 +88,10 @@ public class HashtagServiceTest {
         Long hashtagId = hashtagService.simpleSaveHashtagLinkedStore(mockStoreId, dto);
 
         // then
-        assertThat(dto.getHashtagId()).isEqualTo(hashtagId);
         then(storeRepository).should().findById(mockStoreId);
         then(hashtagRepository).should().existsByName(dto.getName());
         then(hashtagRepository).should().findByName(dto.getName());
+        assertThat(dto.getHashtagId()).isEqualTo(hashtagId);
     }
 
     @Test
@@ -123,10 +123,10 @@ public class HashtagServiceTest {
         Long hashtagId = hashtagService.simpleSaveHashtagLinkedStore(mockStoreId, dto);
 
         // then
-        assertThat(dto.getHashtagId()).isEqualTo(hashtagId);
         then(storeRepository).should().findById(mockStoreId);
         then(hashtagRepository).should().existsByName(dto.getName());
         then(hashtagRepository).should().save(any());
+        assertThat(dto.getHashtagId()).isEqualTo(hashtagId);
     }
 
     @Test
@@ -149,9 +149,9 @@ public class HashtagServiceTest {
         Long hashtagId = hashtagService.delete(mockHashtagId);
 
         // then
-        assertThat(dto.getHashtagId()).isEqualTo(hashtagId);
         then(hashtagRepository).should().findById(mockHashtagId);
         then(hashtagRepository).should().delete(entity);
+        assertThat(dto.getHashtagId()).isEqualTo(hashtagId);
     }
 
     @Test
@@ -162,8 +162,8 @@ public class HashtagServiceTest {
         given(hashtagRepository.findById(1L)).willThrow(new IllegalArgumentException());
 
         // then
-        assertThatThrownBy(() -> hashtagService.findById(mockHashtagId)).isInstanceOf(IllegalArgumentException.class);
         then(hashtagRepository).should().findById(mockHashtagId);
+        assertThatThrownBy(() -> hashtagService.findById(mockHashtagId)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -194,8 +194,8 @@ public class HashtagServiceTest {
         List<HashtagDTO> dtoList = hashtagService.findAll();
 
         // then
-        assertThat(dtoList).hasSize(2).contains(dto1, dto2);
         then(hashtagRepository).should().findAll();
+        assertThat(dtoList).hasSize(2).contains(dto1, dto2);
     }
 
     @Test
@@ -216,8 +216,8 @@ public class HashtagServiceTest {
         Hashtag hashtag = hashtagService.findByName(dto.getName());
 
         // then
-        assertThat(dto.getName()).isEqualTo(hashtag.getName());
         then(hashtagRepository).should().findByName(dto.getName());
+        assertThat(dto.getName()).isEqualTo(hashtag.getName());
     }
 
     @Test
@@ -228,7 +228,7 @@ public class HashtagServiceTest {
         given(hashtagRepository.findByName(name)).willThrow(new IllegalArgumentException());
 
         // then
-        assertThatThrownBy(() -> hashtagService.findByName(name)).isInstanceOf(IllegalArgumentException.class);
         then(hashtagRepository).should().findByName(name);
+        assertThatThrownBy(() -> hashtagService.findByName(name)).isInstanceOf(IllegalArgumentException.class);
     }
 }

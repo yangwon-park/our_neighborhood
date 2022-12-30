@@ -26,6 +26,7 @@
 //import ywphsm.ourneighbor.domain.menu.Menu;
 //import ywphsm.ourneighbor.domain.menu.MenuType;
 //import ywphsm.ourneighbor.domain.store.*;
+//import ywphsm.ourneighbor.service.member.MemberService;
 //import ywphsm.ourneighbor.service.store.StoreService;
 //
 //import javax.persistence.EntityManager;

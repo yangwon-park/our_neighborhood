@@ -40,12 +40,10 @@ public class ReviewDTO {
             this.file = file;
         }
 
-        public Review toEntity(Store store, Member member) {
+        public Review toEntity() {
             return Review.builder()
                     .content(content)
                     .rating(rating)
-                    .store(store)
-                    .member(member)
                     .build();
         }
     }

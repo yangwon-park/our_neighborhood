@@ -1,3 +1,4 @@
+
 package ywphsm.ourneighbor.unit.service;
 
 import org.assertj.core.api.Assertions;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
@@ -26,6 +28,7 @@ import static org.mockito.BDDMockito.then;
 import static org.springframework.test.util.ReflectionTestUtils.*;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfMenu.*;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class HashtagOfMenuServiceTest {
 

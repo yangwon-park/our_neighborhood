@@ -7,16 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.context.ActiveProfiles;
 import ywphsm.ourneighbor.api.dto.RecommendKind;
 import ywphsm.ourneighbor.api.dto.SkyStatus;
 import ywphsm.ourneighbor.domain.RecommendPost;
 import ywphsm.ourneighbor.domain.dto.RecommendPostDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
-import ywphsm.ourneighbor.domain.hashtag.HashtagUtil;
 import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.recommendpost.RecommendPostRepository;
 import ywphsm.ourneighbor.service.RecommendPostService;
@@ -33,6 +31,7 @@ import static org.springframework.test.util.ReflectionTestUtils.*;
 import static ywphsm.ourneighbor.api.dto.RecommendKind.*;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class RecommendPostServiceTest {
 

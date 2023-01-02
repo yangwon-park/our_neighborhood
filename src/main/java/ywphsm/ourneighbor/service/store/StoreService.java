@@ -114,14 +114,17 @@ public class StoreService {
         /*
             카테고리는 무조건 1개 이상 존재해야 함
          */
-        if (prevCategoryOfStoreList != null) {
+//        if (prevCategoryOfStoreList != null) {
+        if (prevCategoryOfStoreList.size() > 0) {
             if (prevCategoryOfStoreList.size() == categoryList.size()) {
+                log.info("기존과 같은 경우");
                 for (int i = 0; i < prevCategoryOfStoreList.size(); i++) {
                     prevCategoryOfStoreList.get(i).updateCategory(categoryList.get(i));
                 }
             }
 
             if (prevCategoryOfStoreList.size() < categoryList.size()) {
+                log.info("기존보다 카테고리를 추가한 경우");
                 int i;
 
                 for (i = 0; i < prevCategoryOfStoreList.size(); i++) {
@@ -134,6 +137,7 @@ public class StoreService {
             }
 
             if (prevCategoryOfStoreList.size() > categoryList.size()) {
+                log.info("기존보다 카테고리를 줄인 경우");
                 int i;
 
                 for (i = 0; i < categoryList.size(); i++) {
@@ -181,7 +185,9 @@ public class StoreService {
                 }
             }
 
-            // 현재 여기 버그발생
+            /*
+                현재 여기 버그발생
+             */
             if (prevDaysOfStoreList.size() > daysList.size()) {
                 int i;
 

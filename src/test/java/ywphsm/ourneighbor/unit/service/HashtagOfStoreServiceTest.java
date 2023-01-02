@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -22,6 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.util.ReflectionTestUtils.*;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class HashtagOfStoreServiceTest {
 

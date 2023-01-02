@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagDTO;
 import ywphsm.ourneighbor.domain.hashtag.Hashtag;
 import ywphsm.ourneighbor.domain.store.Store;
@@ -24,6 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.util.ReflectionTestUtils.*;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class HashtagServiceTest {
 
@@ -159,11 +161,11 @@ public class HashtagServiceTest {
     void should_ThrowException_When_ExistsNotHashtagById() {
         // given
         Long mockHashtagId = 1L;
-        given(hashtagRepository.findById(1L)).willThrow(new IllegalArgumentException());
+        given(hashtagRepository.findById(mockHashtagId)).willThrow(new IllegalArgumentException());
 
         // then
-        then(hashtagRepository).should().findById(mockHashtagId);
         assertThatThrownBy(() -> hashtagService.findById(mockHashtagId)).isInstanceOf(IllegalArgumentException.class);
+        then(hashtagRepository).should().findById(mockHashtagId);
     }
 
     @Test
@@ -228,7 +230,7 @@ public class HashtagServiceTest {
         given(hashtagRepository.findByName(name)).willThrow(new IllegalArgumentException());
 
         // then
-        then(hashtagRepository).should().findByName(name);
         assertThatThrownBy(() -> hashtagService.findByName(name)).isInstanceOf(IllegalArgumentException.class);
+        then(hashtagRepository).should().findByName(name);
     }
 }

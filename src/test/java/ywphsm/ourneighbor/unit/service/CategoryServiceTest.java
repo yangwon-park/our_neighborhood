@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 import ywphsm.ourneighbor.domain.category.Category;
 import ywphsm.ourneighbor.domain.dto.category.CategoryDTO;
 import ywphsm.ourneighbor.repository.category.CategoryRepository;
@@ -23,6 +24,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.util.ReflectionTestUtils.*;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
 

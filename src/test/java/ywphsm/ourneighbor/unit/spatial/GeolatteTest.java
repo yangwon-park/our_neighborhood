@@ -11,9 +11,6 @@ import ywphsm.ourneighbor.domain.store.distance.Location;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.geolatte.geom.builder.DSL.*;
 import static org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84;
-import static ywphsm.ourneighbor.domain.store.distance.Direction.*;
-import static ywphsm.ourneighbor.domain.store.distance.Direction.SOUTHEAST;
-import static ywphsm.ourneighbor.domain.store.distance.Distance.calculatePoint;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

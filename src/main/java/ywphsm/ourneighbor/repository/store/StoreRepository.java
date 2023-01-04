@@ -20,4 +20,7 @@ public interface StoreRepository extends JpaRepository<Store, Long>, StoreReposi
      */
     @Lock(value = LockModeType.OPTIMISTIC)
     Optional<Store> findWithOptimisticLockById(Long id);
+
+    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    Optional<Store> findWithPessimisticLockById(Long id);
 }

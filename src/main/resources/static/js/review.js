@@ -295,8 +295,13 @@ var main = {
                 storeId: storeId
             }
         }).then((resp) => {
-            let check = resp.data;
-            // alert(check);
+            // let check = resp.data;
+            // if (check) {
+            //     alert("가게가 찜 등록이 되었습니다.");
+            // } else {
+            //     alert("가게가 찜 등록이 취소되었습니다.");
+            // }
+
         }).catch((error) => {
             console.log(error);
         });

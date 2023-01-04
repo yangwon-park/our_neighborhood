@@ -33,6 +33,7 @@ import ywphsm.ourneighbor.repository.store.dto.SimpleSearchStoreDTO;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.geolatte.geom.builder.DSL.*;
@@ -253,35 +254,39 @@ public class StoreService {
     }
 
     @Transactional
-    public String updateLike(boolean likeStatus, Long memberId, Long storeId) {
+    public boolean updateLike(boolean likeStatus, Long memberId, Long storeId) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
         Store store = findById(storeId);
-
-        List<MemberOfStore> collect = member.getMemberOfStoreList().stream()
-                .filter(memberOfStore -> memberOfStore.getStore().getId().equals(storeId))
-                .collect(Collectors.toList());
+        Optional<MemberOfStore> findMemberOfStore = memberOfStoreRepository.findByStoreIdAndMemberId(storeId, memberId);
 
         if (likeStatus) {
-            if (!collect.isEmpty()) {
-                collect.get(0).updateStoreLike(true);
-                return "가게가 찜 등록이 되었습니다.";
+            if (findMemberOfStore.isPresent()) {
+                findMemberOfStore.get().updateStoreLike(true);
+                return true;
             }
 
             MemberOfStore memberOfStore = linkMemberOfStore(member, store);
             memberOfStore.updateStoreLike(true);
             memberOfStoreRepository.save(memberOfStore);
-            return "가게가 찜 등록이 되었습니다.";
+
+            return true;
+        } else {
+            if (findMemberOfStore.isPresent()) {
+                MemberOfStore memberOfStore = findMemberOfStore.get();
+                if (!memberOfStore.isMyStore()) {
+                    memberOfStoreRepository.delete(memberOfStore);
+                    return false;
+                }
+
+                memberOfStore.updateStoreLike(false);
+                return false;
+            }else {
+                throw new IllegalArgumentException(
+                        "MemberOfStore 값을 찾을수 없습니다. storeId = " + storeId + "memberId = " + memberId);
+            }
         }
 
-        MemberOfStore memberOfStore = collect.get(0);
-        if (!memberOfStore.isMyStore()) {
-            memberOfStoreRepository.delete(memberOfStore);
-            return "가게가 찜 등록이 취소되었습니다.";
-        }
-
-        memberOfStore.updateStoreLike(false);
-        return "가게가 찜 등록이 취소되었습니다.";
     }
 
     public Store findById(Long storeId) {

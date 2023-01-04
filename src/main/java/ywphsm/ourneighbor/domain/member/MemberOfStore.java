@@ -33,7 +33,7 @@ public class MemberOfStore {
 
     public static MemberOfStore linkMemberOfStore(Member member, Store store) {
         MemberOfStore memberOfStore = new MemberOfStore(member, store);
-        member.getMemberOfStoreList().add(memberOfStore);
+        member.getMemberOfStoreList( ).add(memberOfStore);
         store.getMemberOfStoreList().add(memberOfStore);
 
         return memberOfStore;

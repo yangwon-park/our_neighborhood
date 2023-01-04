@@ -157,29 +157,6 @@ public class Store extends BaseEntity {
         this.file = file;
     }
 
-
-    /*
-        === 생성 메소드 ===
-    */
-
-    /*
-        === 비즈니스 로직 추가 ===
-     */
-    public void update(Store store) {
-        this.name = store.getName();
-        this.phoneNumber = store.getPhoneNumber();
-        this.lat = store.getLat();
-        this.lon = store.getLon();
-        this.point = store.getPoint();
-        this.businessTime = store.getBusinessTime();
-        this.notice = store.getNotice();
-        this.intro = store.getIntro();
-        this.park = store.getPark();
-        this.parkDetail = store.getParkDetail();
-        this.homePage = store.getHomePage();
-        this.address = store.getAddress();
-    }
-
     public void updateStatus(StoreStatus status) {
         this.status = status;
     }
@@ -195,4 +172,31 @@ public class Store extends BaseEntity {
     public void updateRatingAverage(double ratingAverage) {
         this.ratingAverage = ratingAverage;
     }
+
+    public void updateRatingTotal(Integer rating) {
+        this.ratingTotal = rating;
+    }
+
+    /*
+        === 생성 메소드 ===
+    */
+    public void update(Store store) {
+        this.name = store.getName();
+        this.phoneNumber = store.getPhoneNumber();
+        this.lat = store.getLat();
+        this.lon = store.getLon();
+        this.point = store.getPoint();
+        this.businessTime = store.getBusinessTime();
+        this.notice = store.getNotice();
+        this.intro = store.getIntro();
+        this.park = store.getPark();
+        this.parkDetail = store.getParkDetail();
+        this.homePage = store.getHomePage();
+        this.address = store.getAddress();
+    }
+
+    /*
+        === 비즈니스 로직 추가 ===
+    */
+
 }

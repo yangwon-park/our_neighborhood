@@ -39,7 +39,7 @@ public class MemberApiController {
 
 
     @PutMapping("/user/like")
-    public String likeAdd(boolean likeStatus, Long memberId, Long storeId) {
+    public boolean likeAdd(boolean likeStatus, Long memberId, Long storeId) {
         log.info("likeStatus={}", likeStatus);
         return storeService.updateLike(likeStatus, memberId, storeId);
     }

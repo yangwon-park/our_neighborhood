@@ -122,12 +122,11 @@ public class MemberApiController {
 
         String valid = validationService.memberUpdatePwValid(editForm, member);
 
-        if (!valid.equals("성공")) {
+        if (valid.equals("성공")) {
+            String encodedPassword = memberService.encodedPassword(editForm.getAfterPassword());
+            memberService.updatePassword(member.getId(), encodedPassword);
             return valid;
         }
-
-        String encodedPassword = memberService.encodedPassword(editForm.getAfterPassword());
-        memberService.updatePassword(member.getId(), encodedPassword);
 
         return valid;
     }
@@ -163,5 +162,18 @@ public class MemberApiController {
     @DeleteMapping("/admin/withdrawal")
     public boolean delete(String userId) {
         return memberReviewService.adminWithdrawal(userId);
+    }
+
+    @PostMapping("/member/api-add")
+    public String apiSave(@Valid MemberDTO.ApiAdd dto,HttpServletRequest request,
+                          @SessionAttribute(name = SessionConst.API_MEMBER, required = false) Member member) {
+        String valid = validationService.memberNicknameValid(dto.getNickname());
+
+        if (valid.equals("성공")) {
+            memberService.apiSave(dto, member.getFile());
+            request.getSession().removeAttribute(SessionConst.API_MEMBER);
+            return valid;
+        }
+        return valid;
     }
 }

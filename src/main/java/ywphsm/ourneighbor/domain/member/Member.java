@@ -1,7 +1,6 @@
 package ywphsm.ourneighbor.domain.member;
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 import ywphsm.ourneighbor.domain.BaseTimeEntity;
 import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.store.Review;
@@ -62,19 +61,8 @@ public class Member extends BaseTimeEntity {
     private UploadFile file;
 
     // 생성 메소드
-    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender) {
-        this.userId = userId;
-        this.password = password;
-        this.username = username;
-        this.nickname = nickname;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.age = age;
-        this.gender = gender;
-    }
-
     @Builder
-    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender, Role role, String birthDate) {
+    public Member(String userId, String password, String username, String nickname, String email, String phoneNumber, int age, int gender, Role role, String birthDate, UploadFile file) {
         this.userId = userId;
         this.password = password;
         this.username = username;
@@ -85,20 +73,7 @@ public class Member extends BaseTimeEntity {
         this.age = age;
         this.gender = gender;
         this.role = role;
-    }
-
-    @Builder
-    public Member(String username, String email, Role role) {
-        this.username = username;
-        this.email = email;
-        this.role = role;
-    }
-
-    public Member updateOAuth(String name, String picture) {
-        this.username = name;
-//        this.picture = picture;
-
-        return this;
+        this.file = file;
     }
 
     //시큐리티 때매 추가

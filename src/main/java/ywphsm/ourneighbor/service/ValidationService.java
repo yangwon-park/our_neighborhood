@@ -8,6 +8,8 @@ import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.service.member.MemberService;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ValidationService {
@@ -80,6 +82,14 @@ public class ValidationService {
 
         if (!editForm.getAfterPassword().equals(editForm.getPasswordCheck())) {
             return "새로운 비밀번호와 비밀번호 확인이 일치하지 않습니다";
+        }
+
+        return "성공";
+    }
+
+    public String memberNicknameValid(String nickname) {
+        if (memberService.findByNickName(nickname).isPresent()) {
+            return "이미 있는 닉네임 입니다.";
         }
 
         return "성공";

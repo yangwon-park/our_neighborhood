@@ -44,7 +44,6 @@ public class MemberService {
     public Long save(MemberDTO.Add dto) throws IOException {
 
         int age = ChangeBirthToAge(dto.getBirthDate());
-        //패스워드 암호화
         String encodedPassword = encodedPassword(dto.getPassword());
         Member member = dto.toEntity(age, encodedPassword);
         UploadFile uploadFile = awsS3FileStore.storeFile(dto.getFile());
@@ -55,18 +54,27 @@ public class MemberService {
         return member.getId();
     }
 
-    // 회원 한명 조회
+    @Transactional
+    public Long apiSave(MemberDTO.ApiAdd dto, UploadFile file) {
+
+        int age = ChangeBirthToAge(dto.getBirthDate());
+        dto.setFile(file);
+        Member member = dto.toEntity(age);
+        dto.getFile().addMember(member);
+
+        memberRepository.save(member);
+        return member.getId();
+    }
+
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
     }
 
-    // 회원 전체 조회
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
-    // 닉네임 중복 체크
     public Optional<Member> findByNickName(String nickname) {
         return memberRepository.findByNickname(nickname);
     }
@@ -80,7 +88,6 @@ public class MemberService {
         return nowYear - Integer.parseInt(birthYear) + 1;
     }
 
-    //비밀번호 인코딩
     public String encodedPassword(String password) {
         return passwordEncoder.encode(password);
     }
@@ -89,9 +96,8 @@ public class MemberService {
         return memberRepository.findByEmail(email);
     }
 
-    //회원수정시 닉네임 변경
     @Transactional
-    public void updateMember (Long id, EditForm editForm) throws IOException {
+    public void updateMember(Long id, EditForm editForm) throws IOException {
         Member member = findById(id);
 
         UploadFile uploadFile = awsS3FileStore.storeFile(editForm.getFile());
@@ -105,7 +111,6 @@ public class MemberService {
         member.updateMember(editForm.getNickname(), editForm.getEmail());
     }
 
-    //회원수정시 전화번호 변경
     @Transactional
     public void updatePhoneNumber(Long id, String phoneNumber) {
         Member member = findById(id);
@@ -113,19 +118,16 @@ public class MemberService {
 
     }
 
-    //비밀번호 확인
     public boolean passwordCheck(String password, String beforePassword) {
         return passwordEncoder.matches(beforePassword, password);
     }
 
-    //비밀번호 수정 변경 감지(회원수정)
     @Transactional
     public void updatePassword(Long id, String encodedPassword) {
         Member member = findById(id);
         member.updatePassword(encodedPassword);
     }
 
-    //비밀번호 찾기시 있는 아이디인지 확인
     public Optional<Member> findByUserId(String userId) {
         return memberRepository.findByUserId(userId);
     }
@@ -151,7 +153,6 @@ public class MemberService {
 
     }
 
-    //휴대폰번호 중복검사
     public Optional<Member> findByPhoneNumber(String phoneNumber) {
         return memberRepository.findByPhoneNumber(phoneNumber);
     }

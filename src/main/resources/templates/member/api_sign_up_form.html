@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: common_header(~{::title}, ~{::style}) ">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>우리 동네</title>
+    <style>
+
+    </style>
+</head>
+<link rel="stylesheet" th:href="@{../css/argon.css}">
+<body id="main-body" class="bg-default">
+<nav th:replace="layout/navbar :: common_navbar"></nav>
+<section class="header">
+    <div class="header py-5">
+
+    </div>
+</section>
+<section class="sign-up">
+    <div class="container-fluid mt--8 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="text-center mt-2 mb-4">
+                        <span class="h3 mb-2 text-dark fw-bold">회원 가입</span>
+                    </div>
+                    <div class="card-body px-lg-5 py-lg-5">
+                        <small>프로필 사진</small>
+                        <form th:object="${member}" id="api-sign-up-add-form" class="form-floating"
+                              enctype="multipart/form-data">
+                            <div class="col-12 my-1">
+                                <img th:src="*{file.uploadImageUrl}" width="180" height="180" alt="프로필 사진" id="profile-img">
+                            </div>
+                            <div class="form-group">
+                                <small>이메일</small>
+                                <div class="">
+                                    <input class="form-control" placeholder="이메일을 입력해주세요." type="email" th:field="*{email}">
+                                </div>
+                                <div id="sign-up-email-valid" class="my-1 valid-custom"></div>
+                            </div>
+                            <div class="form-group">
+                                <small>이름</small>
+                                <div class="">
+                                    <input class="form-control" placeholder="이름을 입력해주세요." type="text" th:field="*{username}">
+                                </div>
+                                <div id="sign-up-username-valid" class="my-1 valid-custom"></div>
+                            </div>
+                            <div>
+                                <small>성별</small>
+                            </div>
+                            <div class="form-group d-flex text-nowrap">
+                                <div>
+                                    <input type="radio" th:checked="*{gender eq 0}" th:field="*{gender}" th:value="0">
+                                    <label th:for="gender" th:text="남 " class="form-check-label"></label>
+                                </div>
+                                <div>
+                                    <input type="radio" th:field="*{gender}" th:value="1">
+                                    <label th:for="gender" th:text=" 여" class="form-check-label"></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <small>닉네임</small>
+                                <div class="">
+                                    <input class="form-control" placeholder="닉네임을 입력해주세요" type="text" th:field="*{nickname}"
+                                           th:errorclass="field-error">
+                                    <div id="sign-up-nickname-valid" class="my-1 valid-custom"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <small>생년월일</small>
+                                <div class="">
+                                    <input class="form-control" placeholder="생년월일을 입력해주세요. 예) 20000101" type="text"
+                                           th:field="*{birthDate}">
+                                    <div id="sign-up-birthDate-valid" class="my-1 valid-custom"></div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-main-color mt-4" id="api-sign-up-save">회원가입</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+<footer th:replace="layout/footer :: common_footer">
+    템플릿 푸터
+</footer>
+<script th:replace="layout/footer :: common_js(~{::script})"></script>
+<script type="module" th:src="@{/js/member.js}"></script>
+
+</html>

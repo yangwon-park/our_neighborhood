@@ -2,6 +2,8 @@ package ywphsm.ourneighbor.controller.form;
 
 import lombok.Builder;
 import lombok.Data;
+import ywphsm.ourneighbor.domain.file.FileUtil;
+import ywphsm.ourneighbor.domain.file.UploadFile;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.Role;
 
@@ -81,19 +83,23 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) profile.get("nickname"))
                 .email((String) response.get("email"))
-                .picture((String) profile.get("profile_image-url"))
+                .picture((String) profile.get("profile_image_url"))
                 .gender(gender)
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }
 
-    public Member toEntity(){
+    public Member toDTO(){
+
+        UploadFile file = new UploadFile(name + " 사진",
+                FileUtil.createStoreFileName("api.png"), picture);
+
         return Member.builder()
                 .username(name)
                 .email(email)
-//                .picture(picture)
                 .role(Role.USER)
+                .file(file)
                 .build();
     }
 }

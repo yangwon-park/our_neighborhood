@@ -143,4 +143,51 @@ public class MemberDTO {
         }
 
     }
+
+    @Data
+    @NoArgsConstructor
+    public static class ApiAdd {
+
+        @NotBlank
+        private String username;
+
+        @NotBlank
+        private String nickname;
+
+        @NotBlank
+        private String birthDate;
+
+        @NotNull
+        private int gender;
+
+        private Role role;
+
+        @Email
+        @NotBlank
+        private String email;
+
+        private UploadFile file;
+
+        @Builder
+        public ApiAdd(Member member) {
+            this.username = member.getUsername();
+            this.role = member.getRole();
+            this.email = member.getEmail();
+            this.file = member.getFile();
+        }
+
+        public Member toEntity(int age) {
+            return Member.builder()
+                    .username(username)
+                    .nickname(nickname)
+                    .email(email)
+                    .gender(gender)
+                    .birthDate(birthDate)
+                    .age(age)
+                    .file(file)
+                    .role(Role.USER)
+                    .build();
+        }
+
+    }
 }

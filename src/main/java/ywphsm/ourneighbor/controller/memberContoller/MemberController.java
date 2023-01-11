@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.controller.membercontoller;
+package ywphsm.ourneighbor.controller.memberContoller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +37,7 @@ public class MemberController {
         }
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
+
         if (savedRequest != null && error == null) {
             ScriptUtils.alert(response, "로그인후 이용해 주세요.");
         }
@@ -59,6 +60,21 @@ public class MemberController {
     @GetMapping("/delete-request-cache")
     public void deleteRequestCache(HttpServletResponse response, HttpServletRequest request) {
         requestCache.removeRequest(request, response);
+    }
+
+    /**
+     *  API로그인시 가입되어있는지 확인
+     */
+    @GetMapping("/api-check")
+    public String apiCheck(@SessionAttribute(name = SessionConst.API_MEMBER, required = false) Member member,
+                           Model model) {
+        if (member != null) {
+            MemberDTO.ApiAdd dto = new MemberDTO.ApiAdd(member);
+            model.addAttribute("member", dto);
+            return "member/api_sign_up_form";
+        }
+
+        return "redirect:/";
     }
 
 }

@@ -1,6 +1,5 @@
 import validation from "./validation.js";
 import mask from "./mask.js";
-import menu from "./menu.js";
 
 var main = {
     init: async function () {
@@ -172,7 +171,6 @@ var main = {
         if (file.name === "") {
             formData.delete("file");
         }
-        console.log("file = ", file)
 
         axios({
             headers: {

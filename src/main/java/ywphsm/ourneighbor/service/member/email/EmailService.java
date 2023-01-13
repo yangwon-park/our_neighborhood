@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class EmailService {
     }
 
     public void findPasswordSendEmail(String email, String temporaryPassword) {
+
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);   //보낼 이메일주소 추가
         mailMessage.setSubject("비밀번호 찾기 Our neighborhood");  //제목

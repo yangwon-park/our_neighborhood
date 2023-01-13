@@ -140,9 +140,7 @@ class MemberServiceTest {
         //회원수정(전화번호)
         url = "http://localhost:" + port + "/member/edit/phone-number";
 
-        PhoneCertifiedForm certifiedForm = new PhoneCertifiedForm();
-        certifiedForm.setPhoneNumber("01012341234");
-        certifiedForm.setCertifiedNumber("123456");
+        PhoneCertifiedForm certifiedForm = new PhoneCertifiedForm("01012341234", "123456");
         session.setAttribute(SessionConst.PHONE_CERTIFIED, certifiedForm);
 
         ResultActions resultActions_edit_phoneNumber = mvc.perform(put(url)

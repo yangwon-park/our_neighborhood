@@ -2,10 +2,6 @@ package ywphsm.ourneighbor.service.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.nurigo.java_sdk.api.Message;
-import net.nurigo.java_sdk.exceptions.CoolsmsException;
-import org.json.simple.JSONObject;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +13,11 @@ import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
 import ywphsm.ourneighbor.domain.member.Role;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
-import ywphsm.ourneighbor.service.ValidationService;
-import ywphsm.ourneighbor.service.member.email.VerificationNumberConst;
 import ywphsm.ourneighbor.service.member.email.EmailService;
+import ywphsm.ourneighbor.service.validation.ValidationConst;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -43,7 +37,7 @@ public class MemberService {
     @Transactional
     public Long save(MemberDTO.Add dto) throws IOException {
 
-        int age = ChangeBirthToAge(dto.getBirthDate());
+        int age = ChangeBirthdateToAge(dto.getBirthDate());
         String encodedPassword = encodedPassword(dto.getPassword());
         Member member = dto.toEntity(age, encodedPassword);
         UploadFile uploadFile = awsS3FileStore.storeFile(dto.getFile());
@@ -55,15 +49,14 @@ public class MemberService {
     }
 
     @Transactional
-    public Long apiSave(MemberDTO.ApiAdd dto, UploadFile file) {
+    public void apiSave(MemberDTO.ApiAdd dto, UploadFile file) {
 
-        int age = ChangeBirthToAge(dto.getBirthDate());
+        int age = ChangeBirthdateToAge(dto.getBirthDate());
         dto.setFile(file);
         Member member = dto.toEntity(age);
         dto.getFile().addMember(member);
 
         memberRepository.save(member);
-        return member.getId();
     }
 
     public Member findById(Long memberId) {
@@ -80,7 +73,7 @@ public class MemberService {
     }
 
     //생년월일 나이 계산
-    public int ChangeBirthToAge(String birthDate) {
+    public int ChangeBirthdateToAge(String birthDate) {
 
         int nowYear = LocalDateTime.now().getYear();
         String birthYear = birthDate.substring(0, 4);
@@ -132,51 +125,22 @@ public class MemberService {
         return memberRepository.findByUserId(userId);
     }
 
-    //휴대폰에 인증번호 발송
-    public void certifiedPhoneNumber(String phoneNumber, String cerNum) {
-        Message coolsms = new Message(VerificationNumberConst.API_KEY, VerificationNumberConst.API_SECRET);
-
-        // 4 params(to, from, type, text) are mandatory. must be filled
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("to", phoneNumber);        // 수신전화번호
-        params.put("from", "010383523755");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
-        params.put("type", "SMS");
-        params.put("text", "Our neighborhood 휴대폰인증 메시지 : 인증번호는" + "[" + cerNum + "]" + "입니다.");
-
-        try {
-            JSONObject obj = (JSONObject) coolsms.send(params);
-            System.out.println(obj.toString());
-        } catch (CoolsmsException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCode());
-        }
-
-    }
-
     public Optional<Member> findByPhoneNumber(String phoneNumber) {
         return memberRepository.findByPhoneNumber(phoneNumber);
     }
 
     //아이디 찾기
-    public String sendEmailByUserId(String email) {
+    public void sendEmailByUserId(String email) {
 
         Member member = memberRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원입니다. email = " + email));
 
-        if (member == null) {
-            return "없는 이메일 입니다.";
-        }
-        if (member.getUserId() == null) {
-            return "해당 계정은 아이디가 존재하지 않습니다";
-        }
-
         emailService.findUserIdSendEmail(email, member.getUserId());
-        return "성공";
     }
 
     //비밀번호 찾기
     @Transactional
-    public String sendEmailByPassword(String email, String userId) {
+    public void sendEmailByPassword(String email) {
 
         Random rand = new Random();
         String temporaryPassword = "";
@@ -187,17 +151,8 @@ public class MemberService {
 
         Member member = memberRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원입니다. email = " + email));
-
-        if (member == null) {
-            return "없는 이메일 입니다.";
-        }
-        if (!member.getUserId().equals(userId)) {
-            return "해당 계정의 아이디와 일치하지 않습니다";
-        }
-
         member.updatePassword(encodedPassword(temporaryPassword)); //임시 비밀번호로 변경
         emailService.findPasswordSendEmail(email, temporaryPassword);
-        return "성공";
     }
 
     @Transactional
@@ -206,9 +161,9 @@ public class MemberService {
         Optional<Member> findMember = findByUserId(userId);
         if (findMember.isPresent()) {
             findMember.get().updateRole(role);
-            return "성공";
+            return ValidationConst.SUCCES;
         } else {
-            return "존재하지 않는 아이디 입니다";
+            return ValidationConst.USERID_NULL;
         }
     }
 

@@ -10,7 +10,6 @@ public interface ReviewRepositoryCustom {
 
     Slice<ReviewMemberDTO> reviewPage(Pageable pageable, Long storeId);
     List<ReviewMemberDTO> myReview(Long memberId);
-
     List<String> reviewImageUrl(Long reviewId);
 
 }

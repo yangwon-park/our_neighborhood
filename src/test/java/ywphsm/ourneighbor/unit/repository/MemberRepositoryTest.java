@@ -145,7 +145,7 @@ public class MemberRepositoryTest {
     void should_FindMember_When_Email() {
         Member member = memberRepository.findByEmail("email1@naver.com").get();
 
-        assertThat(member.getNickname()).isEqualTo("email1@naver.com");
+        assertThat(member.getEmail()).isEqualTo("email1@naver.com");
     }
 
     @Test
@@ -153,6 +153,6 @@ public class MemberRepositoryTest {
     void should_FindMember_When_PhoneNumber() {
         Member member = memberRepository.findByPhoneNumber("01011111111").get();
 
-        assertThat(member.getNickname()).isEqualTo("01011111111");
+        assertThat(member.getPhoneNumber()).isEqualTo("01011111111");
     }
 }

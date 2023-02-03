@@ -7,6 +7,7 @@ import ywphsm.ourneighbor.domain.store.Review;
 import ywphsm.ourneighbor.domain.store.RequestAddStore;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
 
     //(N:N) Store
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

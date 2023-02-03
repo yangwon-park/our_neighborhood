@@ -11,6 +11,7 @@ import ywphsm.ourneighbor.domain.member.Member;
 
 import ywphsm.ourneighbor.domain.member.Role;
 
+import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.member.MemberReviewService;
 import ywphsm.ourneighbor.service.member.MemberService;
 import ywphsm.ourneighbor.service.validation.ValidationConst;
@@ -24,6 +25,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,6 +41,8 @@ public class MemberApiController {
     private final ValidationService validationService;
 
     private final SmsService smsService;
+
+    private final MemberRepository memberRepository;
 
     @PutMapping("/user/like")
     public boolean likeAdd(boolean likeStatus, Long memberId, Long storeId) {

@@ -18,6 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 import ywphsm.ourneighbor.controller.form.PhoneCertifiedForm;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
+import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.service.member.MemberService;
 import ywphsm.ourneighbor.service.member.login.SessionConst;
 
@@ -51,6 +52,9 @@ class MemberServiceTest {
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @LocalServerPort
     private int port;

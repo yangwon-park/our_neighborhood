@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
+import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.embedded.Address;
 import ywphsm.ourneighbor.domain.embedded.BusinessTime;
 import ywphsm.ourneighbor.domain.file.UploadFile;
@@ -210,5 +213,38 @@ public class ReviewRepositoryTest {
         List<String> imageUrls = reviewRepository.reviewImageUrl(review.getId());
 
         assertThat(imageUrls.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("회원 리뷰 전체 조회")
+    void should_findReview_When_MemberId() {
+        List<Review> reviewList = reviewRepository.findByContent("리뷰내용1");
+
+        Review review = reviewList.get(0);
+
+        List<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.myReview(review.getMember().getId());
+
+        assertThat(reviewMemberDTOS.size()).isEqualTo(6);
+    }
+
+    @Test
+    @DisplayName("가게 리뷰 페이징으로 조회")
+    void should_findReview_When_StoreId_And_Pageable() {
+        List<Review> reviewList = reviewRepository.findByContent("리뷰내용1");
+
+        Review review = reviewList.get(0);
+
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Slice<ReviewMemberDTO> reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, review.getStore().getId());
+
+        assertThat(reviewMemberDTOS.hasNext()).isTrue();
+        assertThat(reviewMemberDTOS.getSize()).isEqualTo(5);
+        assertThat(reviewMemberDTOS.getNumber()).isEqualTo(0);
+
+        pageRequest = PageRequest.of(1, 5);
+        reviewMemberDTOS = reviewRepository.reviewPage(pageRequest, review.getStore().getId());
+
+        assertThat(reviewMemberDTOS.hasNext()).isFalse();
+        assertThat(reviewMemberDTOS.getNumber()).isEqualTo(1);
     }
 }

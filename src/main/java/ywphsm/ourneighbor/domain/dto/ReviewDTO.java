@@ -22,6 +22,7 @@ public class ReviewDTO {
     @NoArgsConstructor
     public static class Add {
 
+        private Long reviewId;
         @NotBlank
         @Size(max = 200)
         private String content;

@@ -46,7 +46,7 @@ public class ReviewService {
     private final EntityManager entityManager;
 
     @Transactional
-    public void save(ReviewDTO.Add dto, String hashtag) throws IOException, ParseException {
+    public Review save(ReviewDTO.Add dto, String hashtag) throws IOException, ParseException {
         Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + dto.getMemberId()));
 
@@ -68,7 +68,7 @@ public class ReviewService {
             saveHashtagLinkedStore(linkedStore, hashtagNameList);
         }
 
-        reviewRepository.save(review);
+        return reviewRepository.save(review);
     }
 
     @Transactional
@@ -100,16 +100,13 @@ public class ReviewService {
             count ++;
         } else {
             store.decreaseRatingTotal(review.getRating());
-            if (count > 0) {
-                count = store.getReviewList().size() - 1;
-            }
+            count = store.getReviewList().size() - 1;
         }
 
         if (count == 0) {
             store.updateRatingAverage(0);
             store.updateRatingTotal(0);
-            storeRepository.saveAndFlush(store);
-            return store;
+            return storeRepository.saveAndFlush(store);
         }
 
         double ratingTotal = store.getRatingTotal();
@@ -118,8 +115,7 @@ public class ReviewService {
 
         store.updateRatingAverage(reviewAverage);
 
-        storeRepository.saveAndFlush(store);
-        return store;
+        return storeRepository.saveAndFlush(store);
 
     }
 
@@ -170,11 +166,12 @@ public class ReviewService {
         }
     }
 
-    public void findImg(List<ReviewMemberDTO> content) {
+    public List<ReviewMemberDTO> findImg(List<ReviewMemberDTO> content) {
         for (ReviewMemberDTO reviewMemberDTO : content) {
             List<String> imgUrl = reviewRepository.reviewImageUrl(reviewMemberDTO.getReviewId());
             reviewMemberDTO.setUploadImgUrl(imgUrl);
         }
+        return content;
     }
 
     public List<ReviewMemberDTO> dateDifference(List<ReviewMemberDTO> content) {

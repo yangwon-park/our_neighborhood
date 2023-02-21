@@ -1,6 +1,7 @@
 package ywphsm.ourneighbor.domain.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ywphsm.ourneighbor.domain.file.UploadFile;
@@ -46,6 +47,7 @@ public class ReviewMemberDTO {
         this.memberImgUrl = memberImgUrl;
     }
 
+    @Builder
     @QueryProjection
     public ReviewMemberDTO(Long reviewId, String content, Integer rating,
                            LocalDateTime createDate, String storeName, Long storeId) {

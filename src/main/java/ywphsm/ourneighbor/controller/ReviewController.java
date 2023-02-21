@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ywphsm.ourneighbor.domain.dto.ReviewDTO;
 import ywphsm.ourneighbor.domain.member.Member;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 
 @Slf4j
 @RequiredArgsConstructor

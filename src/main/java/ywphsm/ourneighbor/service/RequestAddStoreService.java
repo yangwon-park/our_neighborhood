@@ -10,6 +10,7 @@ import ywphsm.ourneighbor.domain.dto.RequestAddStoreDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.RequestAddStore;
 import ywphsm.ourneighbor.repository.requestaddstore.RequestAddStoreRepository;
+import ywphsm.ourneighbor.service.member.MemberService;
 
 import java.util.List;
 

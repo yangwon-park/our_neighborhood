@@ -3,6 +3,8 @@ package ywphsm.ourneighbor.repository.member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ywphsm.ourneighbor.domain.member.Member;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
@@ -13,4 +15,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     Optional<Member> findByEmail(String email);
 
     Optional<Member> findByPhoneNumber(String phoneNumber);
+
+
 }

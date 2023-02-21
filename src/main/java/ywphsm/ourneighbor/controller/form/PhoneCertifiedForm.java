@@ -14,4 +14,9 @@ public class PhoneCertifiedForm {
     private String phoneNumber;
 
     private String certifiedNumber;
+
+    public PhoneCertifiedForm(String phoneNumber, String certifiedNumber) {
+        this.phoneNumber = phoneNumber;
+        this.certifiedNumber = certifiedNumber;
+    }
 }

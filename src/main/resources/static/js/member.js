@@ -16,6 +16,7 @@ var main = {
         const findPasswordBtn = document.getElementById("find-password");
         const memberRoleEditBtn = document.getElementById("member-role-edit");
         const adminMemberDeleteBtn = document.getElementById("admin-member-delete");
+        const apiSignUpSaveBtn = document.getElementById("api-sign-up-save");
 
         if (signUpSaveBtn !== null) {
             signUpSaveBtn.addEventListener("click", () => {
@@ -76,6 +77,12 @@ var main = {
                 _this.adminDelete();
             });
         }
+
+        if (apiSignUpSaveBtn !== null) {
+            apiSignUpSaveBtn.addEventListener("click", () => {
+                _this.apiSave();
+            });
+        }
     },
 
     check: function () {
@@ -132,11 +139,7 @@ var main = {
         let phoneNumberValidation = phoneNumberRegExp.test(phoneNumber.value);
         let certifiedNumberRegExp = /[0-9]{5}$/;
         let certifiedNumberValidation = certifiedNumberRegExp.test(certifiedNumber.value);
-        let passwordCheckValidation = true;
-
-        if (password.value !== passwordCheck.value) {
-            passwordCheckValidation = false;
-        }
+        let passwordCheckValidation = password.value === passwordCheck.value;
 
         let fileSizeCheck;
         let targetSize = 1024 * 1024 * 2;
@@ -645,6 +648,78 @@ var main = {
         if (userId.value === "") {
             userId.classList.add("valid-custom");
             validation.addValidation(userIdValid, "아이디를 입력해주세요.");
+        }
+
+    },
+
+    apiSave: function () {
+        const email = document.getElementById("email");
+        const username = document.getElementById("username");
+        const nickname = document.getElementById("nickname");
+        const birthDate = document.getElementById("birthDate");
+
+        const emailValid = document.getElementById("sign-up-email-valid");
+        const usernameValid = document.getElementById("sign-up-username-valid");
+        const nicknameValid = document.getElementById("sign-up-nickname-valid");
+        const birthDateValid = document.getElementById("sign-up-birthDate-valid");
+
+        email.classList.remove("valid-custom");
+        username.classList.remove("valid-custom");
+        nickname.classList.remove("valid-custom");
+        birthDate.classList.remove("valid-custom");
+
+        validation.removeValidation(emailValid);
+        validation.removeValidation(usernameValid);
+        validation.removeValidation(nicknameValid);
+        validation.removeValidation(birthDateValid);
+
+        let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        let emailValidation = emailRegExp.test(email.value);
+        let birthDateRegExp = /[0-9]{7}$/;
+        let birthDateValidation = birthDateRegExp.test(birthDate.value);
+
+        const signUpForm = document.getElementById("api-sign-up-add-form");
+        let formData = new FormData(signUpForm);
+
+        if (username.value !== "" && nickname.value !== ""
+            && emailValidation && birthDateValidation) {
+
+            axios({
+                method: "post",
+                url: "/member/api-add",
+                data: formData
+            }).then((resp) => {
+                let check = resp.data;
+                if (check === "성공") {
+                    alert("회원가입이 완료됐습니다.");
+                    window.location.href = "/login";
+                } else {
+                    alert(check)
+                }
+            }).catch((error) => {
+                console.log(error)
+            });
+        }
+
+
+        if (!emailValidation) {
+            email.classList.add("valid-custom");
+            validation.addValidation(emailValid, "올바른 이메일 형식이 아닙니다.");
+        }
+
+        if (!birthDateValidation) {
+            birthDate.classList.add("valid-custom");
+            validation.addValidation(birthDateValid, "생년월일 8자리의 숫자여야 합니다.");
+        }
+
+        if (username.value === "") {
+            username.classList.add("valid-custom");
+            validation.addValidation(usernameValid, "이름을 입력해주세요.");
+        }
+
+        if (nickname.value === "") {
+            nickname.classList.add("valid-custom");
+            validation.addValidation(nicknameValid, "닉네임을 입력해주세요.");
         }
 
     },

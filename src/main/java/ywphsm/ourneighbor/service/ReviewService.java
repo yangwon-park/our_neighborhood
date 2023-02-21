@@ -22,12 +22,10 @@ import ywphsm.ourneighbor.repository.hashtag.HashtagRepository;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
 import ywphsm.ourneighbor.repository.review.ReviewRepository;
 import ywphsm.ourneighbor.repository.store.StoreRepository;
-import ywphsm.ourneighbor.service.store.StoreService;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static ywphsm.ourneighbor.domain.hashtag.HashtagOfStore.linkHashtagAndStore;
 import static ywphsm.ourneighbor.domain.hashtag.HashtagUtil.*;
@@ -40,8 +38,6 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
-    private final StoreService storeService;
-
     private final StoreRepository storeRepository;
     private final HashtagRepository hashtagRepository;
     private final AwsS3FileStore awsS3FileStore;
@@ -50,49 +46,38 @@ public class ReviewService {
     private final EntityManager entityManager;
 
     @Transactional
-    public Long save(ReviewDTO.Add dto, String hashtag) throws IOException, ParseException {
-        Store linkedStore = storeService.findById(dto.getStoreId());
+    public Review save(ReviewDTO.Add dto, String hashtag) throws IOException, ParseException {
         Member linkedMember = memberRepository.findById(dto.getMemberId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + dto.getMemberId()));
 
-        Review review = dto.toEntity(linkedStore, linkedMember);
+
+        Review review = dto.toEntity();
+        Store linkedStore = updateStoreRating(dto.getStoreId(), review, true);
         linkedStore.addReview(review);
-        linkedStore.updateRatingAverage(ratingAverage(linkedStore, linkedStore.getReviewList().size()));
+        review.setStore(linkedStore);
+        review.setMember(linkedMember);
         linkedMember.addReview(review);
 
-        log.info("dto.getFile = {}", dto.getFile());
         if (dto.getFile() != null) {
             List<UploadFile> newUploadFiles = awsS3FileStore.storeFiles(dto.getFile());
             review.addFile(newUploadFiles);
         }
 
         if (!hashtag.isEmpty()) {
-            Store findStore = storeService.findById(dto.getStoreId());
-
             List<String> hashtagNameList = getHashtagNameList(hashtag);
-
-            saveHashtagLinkedStore(findStore, hashtagNameList);
+            saveHashtagLinkedStore(linkedStore, hashtagNameList);
         }
 
-        return reviewRepository.save(review).getId();
+        return reviewRepository.save(review);
     }
 
     @Transactional
     public Long delete(Long storeId, Long reviewId) {
-        Review review = findOne(reviewId);
-        Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + storeId));
-        store.minusRatingTotal(review.getRating());
-
+        Review review = findById(reviewId);
         review.getFileList().stream()
                 .map(UploadFile::getStoredFileName).forEach(awsS3FileStore::deleteFile);
 
-        double count = 0;
-        if (store.getReviewList().size() > 0) {
-            count = store.getReviewList().size() - 1;
-        }
-
-        store.updateRatingAverage(ratingAverage(store, count));
+        updateStoreRating(storeId, review, false);
         entityManager.flush();
         entityManager.clear();
 
@@ -103,7 +88,38 @@ public class ReviewService {
         return reviewId;
     }
 
-    public Review findOne(Long reviewId) {
+    @Transactional
+    public Store updateStoreRating(Long storeId, Review review, boolean saveOrDelete) {
+        Store store = storeRepository.findWithOptimisticLockById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 가게입니다. id = " + storeId));
+
+        double count = store.getReviewList().size();
+
+        if (saveOrDelete) {
+            store.increaseRatingTotal(review.getRating());
+            count ++;
+        } else {
+            store.decreaseRatingTotal(review.getRating());
+            count = store.getReviewList().size() - 1;
+        }
+
+        if (count == 0) {
+            store.updateRatingAverage(0);
+            store.updateRatingTotal(0);
+            return storeRepository.saveAndFlush(store);
+        }
+
+        double ratingTotal = store.getRatingTotal();
+        double average = ratingTotal / count;
+        double reviewAverage = Math.round(average * 10) / 10.0;
+
+        store.updateRatingAverage(reviewAverage);
+
+        return storeRepository.saveAndFlush(store);
+
+    }
+
+    public Review findById(Long reviewId) {
         return reviewRepository.findById(reviewId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 리뷰입니다. id = " + reviewId));
     }
@@ -127,17 +143,7 @@ public class ReviewService {
         return dateDifference(reviewMemberDTOS);
     }
 
-    public double ratingAverage(Store store, double count) {
 
-        if (store.getReviewList().size() == 0) {
-            return 0;
-        }
-
-        double ratingTotal = store.getRatingTotal();
-        double average = ratingTotal / count;
-
-        return Math.round(average * 10) / 10.0;
-    }
 
     private void saveHashtagLinkedStore(Store store, List<String> hashtagNameList) {
         for (String name : hashtagNameList) {
@@ -160,11 +166,12 @@ public class ReviewService {
         }
     }
 
-    public void findImg(List<ReviewMemberDTO> content) {
+    public List<ReviewMemberDTO> findImg(List<ReviewMemberDTO> content) {
         for (ReviewMemberDTO reviewMemberDTO : content) {
             List<String> imgUrl = reviewRepository.reviewImageUrl(reviewMemberDTO.getReviewId());
             reviewMemberDTO.setUploadImgUrl(imgUrl);
         }
+        return content;
     }
 
     public List<ReviewMemberDTO> dateDifference(List<ReviewMemberDTO> content) {

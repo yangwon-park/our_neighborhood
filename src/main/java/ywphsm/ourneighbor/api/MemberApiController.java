@@ -11,20 +11,22 @@ import ywphsm.ourneighbor.domain.member.Member;
 
 import ywphsm.ourneighbor.domain.member.Role;
 
-import ywphsm.ourneighbor.service.MemberReviewService;
-import ywphsm.ourneighbor.service.MemberService;
-import ywphsm.ourneighbor.service.ValidationService;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.repository.member.MemberRepository;
+import ywphsm.ourneighbor.service.member.MemberReviewService;
+import ywphsm.ourneighbor.service.member.MemberService;
+import ywphsm.ourneighbor.service.validation.ValidationConst;
+import ywphsm.ourneighbor.service.validation.ValidationService;
+import ywphsm.ourneighbor.service.member.SmsService;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 import ywphsm.ourneighbor.service.store.StoreService;
 
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.io.IOException;
-import java.util.Optional;
-import java.util.Random;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,8 +40,12 @@ public class MemberApiController {
 
     private final ValidationService validationService;
 
+    private final SmsService smsService;
+
+    private final MemberRepository memberRepository;
+
     @PutMapping("/user/like")
-    public String likeAdd(boolean likeStatus, Long memberId, Long storeId) {
+    public boolean likeAdd(boolean likeStatus, Long memberId, Long storeId) {
         log.info("likeStatus={}", likeStatus);
         return storeService.updateLike(likeStatus, memberId, storeId);
     }
@@ -61,24 +67,7 @@ public class MemberApiController {
             return false;
         }
 
-        Random rand = new Random();
-        String certifiedNumber = "";
-        for (int i = 0; i < 6; i++) {
-            String ran = Integer.toString(rand.nextInt(10));
-            certifiedNumber += ran;
-        }
-
-        log.info("수신자 번호:{}", phoneNumber);
-        log.info("인증 번호:{}", certifiedNumber);
-        memberService.certifiedPhoneNumber(phoneNumber, certifiedNumber);
-
-        PhoneCertifiedForm certifiedForm = new PhoneCertifiedForm();
-        certifiedForm.setPhoneNumber(phoneNumber);
-        certifiedForm.setCertifiedNumber(certifiedNumber);
-
-        HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.PHONE_CERTIFIED, certifiedForm);
-
+        smsService.certifiedPhoneNumber(phoneNumber, request);
         return true;
     }
 
@@ -94,7 +83,7 @@ public class MemberApiController {
 
         String valid = validationService.memberUpdatePnValid(phoneNumber, certifiedNumber, certifiedForm, member);
 
-        if (!valid.equals("성공")) {
+        if (!valid.equals(ValidationConst.SUCCES)) {
             return valid;
         }
 
@@ -108,7 +97,7 @@ public class MemberApiController {
 
         String valid = validationService.memberUpdateValid(editForm, member);
 
-        if (!valid.equals("성공")) {
+        if (!valid.equals(ValidationConst.SUCCES)) {
             return valid;
         }
 
@@ -122,12 +111,11 @@ public class MemberApiController {
 
         String valid = validationService.memberUpdatePwValid(editForm, member);
 
-        if (!valid.equals("성공")) {
+        if (valid.equals(ValidationConst.SUCCES)) {
+            String encodedPassword = memberService.encodedPassword(editForm.getAfterPassword());
+            memberService.updatePassword(member.getId(), encodedPassword);
             return valid;
         }
-
-        String encodedPassword = memberService.encodedPassword(editForm.getAfterPassword());
-        memberService.updatePassword(member.getId(), encodedPassword);
 
         return valid;
     }
@@ -140,13 +128,27 @@ public class MemberApiController {
     @PostMapping("/find-userid")
     public String findUserId(String email) {
 
-        return memberService.sendEmailByUserId(email);
+        String valid = validationService.findUserIdValid(email);
+
+        if (valid.equals(ValidationConst.SUCCES)) {
+            memberService.sendEmailByUserId(email);
+            return valid;
+        }
+
+        return valid;
     }
 
     @PostMapping("/find-password")
     public String findPassword(String email, String userId) {
 
-        return memberService.sendEmailByPassword(email, userId);
+        String valid = validationService.findPasswordValid(email, userId);
+
+        if (valid.equals(ValidationConst.SUCCES)) {
+            memberService.sendEmailByPassword(email);
+            return valid;
+        }
+
+        return valid;
     }
 
     @PutMapping("/admin/member-role/edit")
@@ -163,5 +165,18 @@ public class MemberApiController {
     @DeleteMapping("/admin/withdrawal")
     public boolean delete(String userId) {
         return memberReviewService.adminWithdrawal(userId);
+    }
+
+    @PostMapping("/member/api-add")
+    public String apiSave(@Valid MemberDTO.ApiAdd dto,HttpServletRequest request,
+                          @SessionAttribute(name = SessionConst.API_MEMBER, required = false) Member member) {
+        String valid = validationService.memberNicknameValid(dto.getNickname());
+
+        if (valid.equals(ValidationConst.SUCCES)) {
+            memberService.apiSave(dto, member.getFile());
+            request.getSession().removeAttribute(SessionConst.API_MEMBER);
+            return valid;
+        }
+        return valid;
     }
 }

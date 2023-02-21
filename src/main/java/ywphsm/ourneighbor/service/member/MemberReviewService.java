@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.service;
+package ywphsm.ourneighbor.service.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.store.Review;
 import ywphsm.ourneighbor.repository.member.MemberRepository;
+import ywphsm.ourneighbor.service.ReviewService;
 
 import java.util.List;
 import java.util.Optional;

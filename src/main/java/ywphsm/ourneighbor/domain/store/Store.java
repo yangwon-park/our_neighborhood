@@ -66,6 +66,9 @@ public class Store extends BaseEntity {
 
     private String parkDetail;
 
+    @Version
+    private Long version;
+
 
     /*
         임베디드 타입
@@ -146,7 +149,6 @@ public class Store extends BaseEntity {
     }
 
     public void addReview(Review review) {
-        this.ratingTotal += review.getRating();
         review.setStore(this);
         reviewList.add(review);
     }
@@ -155,14 +157,29 @@ public class Store extends BaseEntity {
         this.file = file;
     }
 
+    public void updateStatus(StoreStatus status) {
+        this.status = status;
+    }
+
+    public void decreaseRatingTotal(Integer rating) {
+        this.ratingTotal -= rating;
+    }
+
+    public void increaseRatingTotal(Integer rating) {
+        this.ratingTotal += rating;
+    }
+
+    public void updateRatingAverage(double ratingAverage) {
+        this.ratingAverage = ratingAverage;
+    }
+
+    public void updateRatingTotal(Integer rating) {
+        this.ratingTotal = rating;
+    }
 
     /*
         === 생성 메소드 ===
     */
-
-    /*
-        === 비즈니스 로직 추가 ===
-     */
     public void update(Store store) {
         this.name = store.getName();
         this.phoneNumber = store.getPhoneNumber();
@@ -178,15 +195,8 @@ public class Store extends BaseEntity {
         this.address = store.getAddress();
     }
 
-    public void updateStatus(StoreStatus status) {
-        this.status = status;
-    }
+    /*
+        === 비즈니스 로직 추가 ===
+    */
 
-    public void minusRatingTotal(Integer rating) {
-        this.ratingTotal -= rating;
-    }
-
-    public void updateRatingAverage(double ratingAverage) {
-        this.ratingAverage = ratingAverage;
-    }
 }

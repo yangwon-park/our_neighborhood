@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.service.email.security;
+package ywphsm.ourneighbor.service.member.login.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

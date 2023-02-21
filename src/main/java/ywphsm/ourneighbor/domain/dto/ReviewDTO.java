@@ -22,6 +22,7 @@ public class ReviewDTO {
     @NoArgsConstructor
     public static class Add {
 
+        private Long reviewId;
         @NotBlank
         @Size(max = 200)
         private String content;
@@ -40,12 +41,10 @@ public class ReviewDTO {
             this.file = file;
         }
 
-        public Review toEntity(Store store, Member member) {
+        public Review toEntity() {
             return Review.builder()
                     .content(content)
                     .rating(rating)
-                    .store(store)
-                    .member(member)
                     .build();
         }
     }

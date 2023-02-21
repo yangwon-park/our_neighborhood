@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.controller.membercontoller;
+package ywphsm.ourneighbor.controller.memberContoller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,12 +11,11 @@ import ywphsm.ourneighbor.controller.form.PasswordEditForm;
 import ywphsm.ourneighbor.controller.form.PhoneNumberEditForm;
 import ywphsm.ourneighbor.domain.dto.ReviewMemberDTO;
 import ywphsm.ourneighbor.domain.dto.store.StoreDTO;
-import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
 import ywphsm.ourneighbor.domain.member.Member;
 import ywphsm.ourneighbor.domain.member.MemberOfStore;
-import ywphsm.ourneighbor.service.MemberService;
+import ywphsm.ourneighbor.service.member.MemberService;
 import ywphsm.ourneighbor.service.ReviewService;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 
 import java.util.List;
 import java.util.stream.Collectors;

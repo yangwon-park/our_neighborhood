@@ -103,7 +103,7 @@ class ReviewServiceTest {
                         .param("reviewId", String.valueOf(reviewId)))
                 .andExpect(status().isOk());
 
-        assertThatThrownBy(() -> reviewService.findOne(reviewId))
+        assertThatThrownBy(() -> reviewService.findById(reviewId))
                 .isInstanceOf(NoSuchElementException.class);
     }
 }

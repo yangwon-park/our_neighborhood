@@ -11,7 +11,6 @@ import ywphsm.ourneighbor.config.ScriptUtils;
 import ywphsm.ourneighbor.controller.form.CategorySimpleDTO;
 import ywphsm.ourneighbor.domain.dto.*;
 import ywphsm.ourneighbor.domain.dto.Member.MemberDTO;
-import ywphsm.ourneighbor.domain.dto.category.CategoryOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.hashtag.HashtagOfStoreDTO;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysDTO;
 import ywphsm.ourneighbor.domain.dto.store.days.DaysOfStoreDTO;
@@ -25,7 +24,8 @@ import ywphsm.ourneighbor.domain.menu.MenuType;
 import ywphsm.ourneighbor.domain.store.ParkAvailable;
 import ywphsm.ourneighbor.domain.store.Store;
 import ywphsm.ourneighbor.service.*;
-import ywphsm.ourneighbor.service.login.SessionConst;
+import ywphsm.ourneighbor.service.member.MemberService;
+import ywphsm.ourneighbor.service.member.login.SessionConst;
 import ywphsm.ourneighbor.service.store.DaysService;
 import ywphsm.ourneighbor.service.store.StoreService;
 

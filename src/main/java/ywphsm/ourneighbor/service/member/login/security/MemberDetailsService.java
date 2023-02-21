@@ -1,4 +1,4 @@
-package ywphsm.ourneighbor.service.email.security;
+package ywphsm.ourneighbor.service.member.login.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
